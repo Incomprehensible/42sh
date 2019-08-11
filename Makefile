@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/08/12 01:54:28 by hgranule         ###   ########.fr        #
+#    Updated: 2019/08/12 02:07:02 by bomanyte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ WS_PATH = $(shell pwd)
 SRC_PATH = $(WS_PATH)/sources/
 OBJ_PATH = $(WS_PATH)/objects/
 INC_PATH = $(WS_PATH)/includes/
-LIB_PATH = $(WS_PATH)/libft/
+LIB_PATH = $(WS_PATH)/Libft/
 LIB_INC_PATH = $(LIB_PATH)includes/
 
 SRC = $(addprefix $(SRC_PATH), $(SRC_FILES))
