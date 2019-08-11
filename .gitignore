@@ -1,0 +1,6 @@
+42sh
+.vscode
+*.out
+objects
+*dSYM
+*.o
