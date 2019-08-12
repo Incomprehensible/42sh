@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/12 01:43:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/12 12:06:27 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ typedef enum		e_tk_type
 	empty, // Empty token
 	cmd, // cmd or arg
 	sep, // ;
-	pipe, // pipe |
+	pip, // pipe |
 	eof // end of file input
 }					t_tk_type;
 
