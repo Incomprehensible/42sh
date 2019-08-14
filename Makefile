@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/08/12 12:05:47 by hgranule         ###   ########.fr        #
+#    Updated: 2019/08/14 04:27:02 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,9 @@ OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 
-SRC_FILES = sh_main.c exe_calls.c
+SRC_FILES = sh_main.c exe_sys/exe_calls.c
+
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys)
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
@@ -61,6 +63,7 @@ $(NAME): $(OBJ)
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@echo "$(RED)$(UNDERLINE)CREATING >> $@$(ESCN)"
 	@mkdir -p $(OBJ_PATH)
+	@mkdir -p $(ADD_OBJ)
 	@gcc $(FLAGS) $(INC) $(INC_LIB) -o $@ -c $<
 
 make_lft:

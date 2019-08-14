@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:09:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/12 13:04:43 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/14 10:11:49 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,29 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <fcntl.h>
 # include "ft_dlist.h"
+# include "ft_avl_tree.h"
 
-# define COMMAND t_command
+# define EXPRESSION t_command
 # define REDIRECT t_redir
+# define IF t_if
+# define WHILE t_while
+# define FUNCTION t_function
 
 typedef enum		e_rd_type		// TYPES OF REDIRS
 {
-	rd_read,						// <&
-	rd_read_file,					// <
-	rd_write,						// >
-	rd_write_file,					// >&
-	rd_append,						// >>
-	rd_rw_open						// <>
+	r_rdr,
+	w_rdr,
+	rw_rdr,
+	a_rdr
 }					t_rdtype;
 
 typedef struct		s_redirection	// REDIR DESCRIPTOR!!
 {
-	char			*filepath;		// IF file-type redirection, name of file
-	int				fds[2];			// [0][>/<][1]. (-1)==stdin + stderr
+	char			*file;			// IF file-type redirection, name of file
+	int				fdl;			// left fd
+	int				fdr;			// right fd
 	t_rdtype		type;			// type of redirection
 }					t_redir;
 
@@ -45,6 +49,27 @@ typedef struct		s_command		// COMMAND DESCRIPTOR!!
 	t_dlist			*redirections;	// double-list with a content of t_redir (REDIRECT)
 }					t_command;
 
+typedef struct		s_if			// IF DESCRIPTOR (RESERVED)
+{
+	t_dlist			*cond_e;		// COND EXPR
+	t_dlist			*true_e;		// EXPR IF TRUE
+	t_dlist			*fls_e;			// EXPR IF FALSE
+	t_dlist			*next_e;		// AFTER COMMANDS
+}					t_if;
+
+typedef struct		s_while			// WHILE DESCRIPTOR (RESERVED)
+{
+	t_dlist			*cond_e;		// COND EXPR
+	t_dlist			*cnt_e;			// EXPR FOR LOOP
+	t_dlist			*next_e;		// AFTER COMMANDS
+}					t_while;
+
+typedef struct		s_function		// WHILE DESCRIPTOT (RESERVED)
+{
+	t_dlist			*cmd_e;			// CMDS_START
+	t_avl_tree		*f_locals;		// LOCAL_VARIABLES
+}					t_function;
+
 /*
 ** BLTN FUNC
 ** Functions executes command with COMMAND_DESCRIPTOR.
@@ -53,6 +78,8 @@ typedef struct		s_command		// COMMAND DESCRIPTOR!!
 ** Creates redirections following the redir_descriptor;
 ** Returns a child's pid.
 */
-int			exe_execute_pi(COMMAND *cmd, char **envp);
+int			exe_execute_pi(EXPRESSION *cmd, char **envp);
+void		exe_redir_ex(REDIRECT *rdr);
+int			exe_wait_cps(void);
 
 #endif
