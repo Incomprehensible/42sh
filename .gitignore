@@ -4,3 +4,4 @@
 objects
 *dSYM
 *.o
+exmpl.c

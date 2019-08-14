@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/08/12 02:07:02 by bomanyte         ###   ########.fr        #
+#    Updated: 2019/08/14 17:08:11 by gdaemoni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 
-SRC_FILES = sh_main.c
+SRC_FILES = sh_main.c sh_readline.c ft_concat.c 
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
@@ -76,6 +76,9 @@ fclean: clean
 	@make fclean -C $(LIB_PATH)
 
 re: fclean all
+
+ex:
+	gcc exmpl.c -lcurses -g -o 42sh -L libft -lft -I libft/includes
 
 appc: $(OBJ)
 	@make make_lft

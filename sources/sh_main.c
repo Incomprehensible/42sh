@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/12 01:52:06 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/14 21:45:32 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_token.h"
 #include "sh_req.h"
+#include "sh_readline.h"
 
-char			*sh_readline(void);
 int				sh_tokenizer(char *str, t_dlist **token_list);
 int				sh_tparser(t_dlist **token_list);
 
@@ -26,8 +26,10 @@ static void		sh_loop(void)
 	while (1)
 	{
 		line = sh_readline();
-		sh_tokenizer(line, token_list);
-		sh_tparser(token_list);
+		printf("\n%s\n", line);
+		// sh_tokenizer(line, token_list);
+		// sh_tparser(token_list);
+		
 		break ;
 	}
 }
