@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 17:02:34 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/14 21:05:14 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/15 21:45:41 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char			*ft_concat(const size_t n, const char *spec, ...)
 		return (NULL);
 	while (++size.n < n + 1)
 		ft_addstr(&rez, tmp[size.n], &size, spec);
-	rez[size.start] = '\0';
+	rez[size.start - ((spec[0] == '0') ? 0 : 1)] = '\0';
 	free(size.size);
 	va_end(arg);
 	return (rez);
@@ -87,7 +87,7 @@ char			*ft_concatarr(const size_t n, const char *spec, \
 	size.n = -1;
 	while (++size.n < n + 1)
 		ft_addstr(&rez, arr[size.n], &size, spec);
-	rez[size.start - 1] = '\0';
+	rez[size.start - ((spec[0] == '0') ? 0 : 1)] = '\0';
 	free(size.size);
 	return (rez);
 }

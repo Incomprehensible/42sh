@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/14 21:45:32 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/15 21:51:40 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,21 @@
 
 int				sh_tokenizer(char *str, t_dlist **token_list);
 int				sh_tparser(t_dlist **token_list);
+
+int		test_t_darr()
+{
+	char	*path;
+	t_darr	a;
+	
+	path = ".";
+	a = sh_dir_content(path);
+	ft_putendl(a.strings[0]->txt);
+	ft_putendl(a.strings[1]->txt);
+	ft_putendl(a.strings[2]->txt);
+	ft_putendl(a.strings[3]->txt);
+	ft_putendl(a.strings[4]->txt);
+	free_darr(a.strings);
+}
 
 static void		sh_loop(void)
 {
@@ -27,6 +42,7 @@ static void		sh_loop(void)
 	{
 		line = sh_readline();
 		printf("\n%s\n", line);
+		free(line);
 		// sh_tokenizer(line, token_list);
 		// sh_tparser(token_list);
 		
