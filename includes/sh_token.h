@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/12 01:43:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/15 16:41:11 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 typedef enum		e_tk_type
 {
-	empty, // Empty token
-	cmd, // cmd or arg
-	sep, // ;
-	pipe, // pipe |
-	eof // end of file input
+	empty_tk, // Empty token
+	cmd_tk, // cmd or arg
+	sep_tk, // ;
+	pipe_tk, // pipe |
+	eof_tk // end of file input
 }					t_tk_type;
 
 typedef struct		s_token
