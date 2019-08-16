@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:40:25 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/15 20:56:24 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/16 18:36:07 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,13 @@ t_darr		sh_dir_content(const char *path)
 
 	dir = opendir(path);
 	if (!dir)
+	{
 		ft_putendl("\n NO DIR\n");
+		return (rez);
+	}
 	rez.count = sh_count_file(path);
 	i = 0;
+    rez.maxlen = 0;
 	while ((entry = readdir(dir)) != NULL)
 	{
 		rez.strings[i] = dstr_new(entry->d_name);

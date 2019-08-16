@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/15 20:56:36 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/16 19:55:00 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ ssize_t			sh_del_char(DSTRING **buf, size_t index, const char flag);
 ssize_t			dstr_del_char(DSTRING **src, ssize_t n);
 ssize_t			sh_dstr_iscmd(const DSTRING *str);
 ssize_t			dstrrchr(const DSTRING *src, const int ch);
+DSTRING			*dstr_insert_cut(DSTRING *dst, DSTRING *src, ssize_t ind);
+DSTRING			*dstr_insert_scut(DSTRING *dst, char *src, ssize_t ind);
+DSTRING			*dstr_insert_ccut(DSTRING *dst, char src, ssize_t ind);
 
 t_darr			sh_dir_content(const char *path);
 void			free_darr(DSTRING **darr);
