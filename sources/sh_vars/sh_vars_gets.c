@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 13:02:20 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/15 18:24:42 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/16 11:59:25 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,49 +22,64 @@ void		free_darr(DSTRING **darr)
 	free(darr);
 }
 
-static void	sh_vars_parsepath(t_darr **res, char *path)
+static void	sh_lcmds_cmp_name(t_darr **res, int namelen)
+{
+	if ((size_t)namelen > (*res)->maxlen)
+		(*res)->maxlen = (size_t)namelen;
+	(*res)->allsize += (size_t)namelen;
+}
+
+static int	sh_vars_parsepath(t_darr **res, char *path)
 {
 	DIR				*dir;
 	struct dirent	*entry;
 	char			**spl;
 	int				i;
 
-	i = -1;	
-	spl = ft_strsplit(path, ':');
+	i = -1;
+	if ((spl = ft_strsplit(path, ':')) == 0)
+		return (0);
 	while (*spl)
 	{
-		dir = opendir(*spl);
+		if (!(dir = opendir(*spl)))
+			return (0);
 		while ((entry = readdir(dir)) != NULL)
 		{
-			if (entry->d_name[0] != '.')
-			{
-				(*res)->strings[++i] = dstr_new((char *)entry->d_name);
-				(*res)->count++;
-			}
-			if (entry->d_namlen > (*res)->maxlen)
-				(*res)->maxlen = (size_t)entry->d_namlen;
-			(*res)->allsize += (size_t)entry->d_namlen;
+			if (entry->d_name[0] == '.')
+				continue ;
+			(*res)->strings[++i] = dstr_new((char *)entry->d_name);
+			(*res)->count++;
+			sh_lcmds_cmp_name(res, (int)entry->d_namlen);
 		}
 		closedir(dir);
 		spl++;
 	}
 	(*res)->strings[++i] = NULL;
+	return (1);
 }
 
-t_darr		*get_list_cmds(t_envp	*envp)
+t_darr		*get_list_cmds(t_envp *envp)
 {
 	t_darr	*res;
-	
-	if(!(res = (t_darr*)malloc(sizeof(t_darr))))
-		exit (1);
+
+	if (!(res = (t_darr*)malloc(sizeof(t_darr))))
+		exit(1);
 	res->allsize = 0;
 	res->maxlen = 0;
 	res->maxlen = 0;
 	res->count = 0;
 	if (ft_avl_search(envp->global, "PATH") != 0)
-		sh_vars_parsepath(&res, (char *)ft_avl_search(envp->global, "PATH")->content);	
-	// else if (ft_avl_search(envp->local, "PATH") != 0)
-	// 	sh_vars_parsepath(&res, (char *)ft_avl_search(envp->local, "PATH")->content);	 
+	{
+		if ((sh_vars_parsepath(&res,\
+			(char *)ft_avl_search(envp->global, "PATH")->content)) == 0)
+			return (NULL);
+	}
+	else if (ft_avl_search(envp->local, "PATH") != 0)
+	{
+		if ((sh_vars_parsepath(&res,\
+			(char *)ft_avl_search(envp->local, "PATH")->content)) == 0)
+			return (NULL);
+	}
 	else
 		return (NULL);
 	return (res);
