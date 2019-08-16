@@ -6,7 +6,7 @@
 #    By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/08/15 20:34:15 by gdaemoni         ###   ########.fr        #
+#    Updated: 2019/08/17 15:13:57 by gdaemoni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,20 +34,23 @@ FLAGS = -g
 
 WS_PATH = $(shell pwd)
 SRC_PATH = $(WS_PATH)/sources/
+SRC_PATH_SH_VARS = $(SRC_PATH)/sh_vars/
 OBJ_PATH = $(WS_PATH)/objects/
 INC_PATH = $(WS_PATH)/includes/
 LIB_PATH = $(WS_PATH)/Libft/
 LIB_INC_PATH = $(LIB_PATH)includes/
 
 SRC = $(addprefix $(SRC_PATH), $(SRC_FILES))
+SRC_VAR = $(addprefix $(SRC_PATH_SH_VARS), $(SRC_VAR_FILES))
 OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 
 SRC_FILES = sh_main.c sh_readline.c ft_concat.c sh_term.c sh_dir_content.c \
 			sh_control_term.c sh_vars_gets.c sh_vars_init.c dstr.c
+SRC_VAR_FILES = sh_vars_gets.c sh_vars_init.c
 
-OBJ_FILES = $(SRC_FILES:.c=.o)
+OBJ_FILES = $(SRC_VAR_FILES:.c=.o) $(SRC_FILES:.c=.o) 
 
 # ************************************************************************** #
 #                                   Rules                                    #
@@ -58,6 +61,11 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	@make make_lft
 	@gcc $(FLAGS) -o $(NAME) $(INC) $(INC_LIB) $(OBJ) -L $(LIB_PATH) -lft -lncurses
+
+$(OBJ_PATH)%.o: $(SRC_PATH_SH_VARS)%.c
+	@echo "$(GREEN)$(UNDERLINE)CREATING >> $@$(ESCN)"
+	@mkdir -p $(OBJ_PATH)
+	@gcc $(FLAGS) $(INC) $(INC_LIB) -o $@ -c $<
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@echo "$(RED)$(UNDERLINE)CREATING >> $@$(ESCN)"
