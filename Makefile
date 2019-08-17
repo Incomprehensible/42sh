@@ -6,7 +6,7 @@
 #    By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/08/17 15:13:57 by gdaemoni         ###   ########.fr        #
+#    Updated: 2019/08/17 15:20:05 by gdaemoni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,8 +46,7 @@ OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 
-SRC_FILES = sh_main.c sh_readline.c ft_concat.c sh_term.c sh_dir_content.c \
-			sh_control_term.c sh_vars_gets.c sh_vars_init.c dstr.c
+SRC_FILES = sh_main.c
 SRC_VAR_FILES = sh_vars_gets.c sh_vars_init.c
 
 OBJ_FILES = $(SRC_VAR_FILES:.c=.o) $(SRC_FILES:.c=.o) 
