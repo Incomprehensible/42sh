@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/17 09:12:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/17 18:31:14 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,19 @@ int				main(const int argc, char **argv, char **envp)
 	t_tok	token;
 
 	token.type = cmd_tk;
-	token.value = ft_strdup("/bin/ls");
+	token.value = ft_strdup("/bin/echo");
 	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
 	token.type = cmd_tk;
-	token.value = ft_strdup("-l");
+	token.value = ft_strdup("huisadasdasdsd");
 	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
-
-	token.type = pipe_tk;
+	
+	token.type = rda_tk;
 	token.value = 0;
 	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
-	token.type = cmd_tk;
-	token.value = ft_strdup("/bin/cat");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
-
-	token.type = cmd_tk;
-	token.value = ft_strdup("-e");
+	token.type = filename_tk;
+	token.value = ft_strdup("huinya.txt");
 	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
 	token.type = eof_tk;
@@ -69,7 +65,6 @@ int				main(const int argc, char **argv, char **envp)
 	EXTAB	*tab = parser_get_from_tklist(tokens);
 
 	exe_execute_pi(tab->ex, envp);
-	exe_execute_pi(tab->next_e->next_e->ex, envp);
 
 	// TERMINATE
 	return (0);

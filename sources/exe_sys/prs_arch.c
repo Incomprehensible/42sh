@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/17 17:05:40 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/17 18:18:05 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ static int		prs_newdlst_rdr_init(t_dlist *token, t_dlist **res,\
 	t_rdtype	type;
 
 	type = (t_rdtype)token->content;
-	left = (t_tok *)token->prev;
-	right = (t_tok *)token->next;
-	if (!right->value)
+	left = token->prev ? (t_tok *)token->prev->content : 0;
+	right = token->next ? (t_tok *)token->next->content : 0;
+	if (!right || !right->value)
 		return (0);
-	if (((!left->value) || (!right->value)) && type == rw_rdr)
+	if ((!left || !right || ((!left->value) || (!right->value))) && type == rw_rdr)
 		return (0);
 	if (!((*res) = (t_dlist *)malloc(sizeof(t_dlist))))
 		return (0);
@@ -37,6 +37,17 @@ static int		prs_newdlst_rdr_init(t_dlist *token, t_dlist **res,\
 	return (1);
 }
 
+t_rdtype		prs_rdr_type(t_tok *tok)
+{
+	if (tok->type == rda_tk)
+		return (a_rdr);
+	if (tok->type == rdr_tk)
+		return (r_rdr);
+	if (tok->type == rdw_tk)
+		return (w_rdr);
+	return (rw_rdr);
+}
+
 t_dlist			*prs_newdlst_rdr(t_dlist *token)
 {
 	t_dlist		*res;
@@ -45,21 +56,23 @@ t_dlist			*prs_newdlst_rdr(t_dlist *token)
 	t_redir		*redir;
 	t_rdtype	type;
 
-	type = (t_rdtype)token->content;
-	left = (t_tok *)token->prev;
-	right = (t_tok *)token->next;
+	type = prs_rdr_type((t_tok *)token->content);
+	left = token->prev ? (t_tok *)token->prev->content : 0;
+	right = token->next ? (t_tok *)token->next->content : 0;
 	if (prs_newdlst_rdr_init(token, &res, &redir) == 0)
 		return (0);
-	if (!left->value && (type == w_rdr || type == a_rdr))
+	if ((!left || left->type != fd_tk) && (type == w_rdr || type == a_rdr))
 		redir->fdl = 1;
-	else if (!left->value && type == r_rdr)
+	else if ((!left || left->type != fd_tk) && type == r_rdr)
 		redir->fdl = 0;
-	if (left->value)
-		redir->fdl = (int)left->value;
-	if (right->type == filename_tk)
+	if (left->type == fd_tk)
+		redir->fdl = ft_atoi(left->value);
+	if (right && right->type == filename_tk)
 		redir->file = (char *)ft_strdup(right->value);
+	else if (right)
+		redir->fdr = ft_atoi(right->value);
 	else
-		redir->fdr = (int)right->value;
+		; // PARSE ERROR
 	redir->type = type;
 	res->content = (t_redir *)redir;
 	return (res);
@@ -104,6 +117,7 @@ static int		prs_parse_rdr(EXPRESSION *expr, t_dlist **tk)
 	REDIRECT	rdrd;
 
 	tki = *tk;
+	rdlist = 0;
 	while (tki && (tokn = tki->content)->type != sep_tk \
 	&& tokn->type != pipe_tk && tokn->type != eof_tk)
 	{
@@ -114,6 +128,7 @@ static int		prs_parse_rdr(EXPRESSION *expr, t_dlist **tk)
 		}
 		tki = tki->next;
 	}
+	expr->redirections = rdlist;
 	*tk = tki;
 	return (0);
 }
