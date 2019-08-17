@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_vars.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 13:00:33 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/17 12:58:51 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/17 16:04:04 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct	s_darr
 void		sh_init_vars(int argc, char **argv, char **envp, t_envp *env);
 
 /*	GET ALL CMDS FROM $PATH */
-t_darr		*get_list_cmds(t_envp	*envp);
+t_darr		get_list_cmds(t_envp *envp);
 
 /* PARSE ARGV */
 int			sh_parser_argv(int argc, char **argv, t_envp *env);

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 13:43:30 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/15 14:11:11 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/17 18:04:10 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 #define RIGHT	"C"
 #define CLEARL	"\x001b[0K"
 #define DELCHR	"\x001b[P"
+#define SAVECAR	"\x001b[s"
+#define LOADCAR "\x001b[u"
 
 #define BAKSP	127
 #define DEL		126

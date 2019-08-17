@@ -6,37 +6,19 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/17 12:05:20 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/17 16:06:57 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_token.h"
 #include "sh_req.h"
 #include "sh_readline.h"
+#include "sh_vars.h"
 
 int				sh_tokenizer(char *str, t_dlist **token_list);
 int				sh_tparser(t_dlist **token_list);
 
-int		test_t_darr()
-{
-	char	*path;
-	t_darr	a;
-	
-	path = ".";
-	a = sh_dir_content(path);
-	ft_putendl(a.strings[0]->txt);
-	ft_putendl(a.strings[1]->txt);
-	ft_putendl(a.strings[2]->txt);
-	ft_putendl(a.strings[3]->txt);
-	ft_putendl(a.strings[4]->txt);
-	ft_putendl(a.strings[5]->txt);
-	ft_putendl(a.strings[6]->txt);
-	ft_putendl(a.strings[7]->txt);
-	ft_putendl(a.strings[8]->txt);
-	free_darr(a.strings);
-}
-
-static void		sh_loop(void)
+static void		sh_loop(t_envp *env)
 {
 	char		*line;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
@@ -44,7 +26,7 @@ static void		sh_loop(void)
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
 	{
-		line = sh_readline();
+		line = sh_readline(env);
 		printf("\n%s\n", line);
 		free(line);
 		// sh_tokenizer(line, token_list);
@@ -54,13 +36,13 @@ static void		sh_loop(void)
 	}
 }
 
-int				main(const int argc, char *const *argv, char *const *envp)
+int				main(const int argc, char **argv, char **envp)
 {
+	t_envp	env;
 	// INIT
-
+	sh_init_vars(argc, argv, envp, &env);
 	// LOOP
-	sh_loop();
-	// test_t_darr();
+	sh_loop(&env);
 	// TERMINATE
 	return (0);
 }

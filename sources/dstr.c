@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:38:55 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/16 21:44:46 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/17 19:11:38 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,33 @@ ssize_t			dstr_del_char(DSTRING **src, const ssize_t n)
 	return (n - 1);
 }
 
+void			dstr_cutins_ch(DSTRING **dst, char ch, ssize_t ind)
+{
+	DSTRING *rez;
+
+	rez = dstr_chr_swpc((*dst), ch, ind);
+	dstr_del(dst);
+	(*dst) = rez;
+}
+
+void			dstr_cutins_dstr(DSTRING **dst, DSTRING *src, size_t ind)
+{
+	DSTRING	*rez;
+
+	rez = dstr_dstr_swpc((*dst), src, ind);
+	dstr_del(dst);
+	(*dst) = rez;
+}
+
+void			dstr_cutins_str(DSTRING **dst, char *src, ssize_t ind)
+{
+	DSTRING	*rez;
+
+	rez = dstr_str_swpc((*dst), src, ind);
+	dstr_del(dst);
+	(*dst) = rez;
+}
+
 ssize_t			dstrrchr(const DSTRING *src, const int ch)
 {
 	char		*points[2];
@@ -36,36 +63,6 @@ ssize_t			dstrrchr(const DSTRING *src, const int ch)
 	points[1] = ft_strrchr(src->txt, (char)ch);
 
 	return (points[1] - points[0]);
-}
-
-DSTRING			*dstr_insert_cut(DSTRING *dst, DSTRING *src, ssize_t ind)
-{
-	DSTRING		*dstr;
-
-	dstr = dstr_slice(dst, 0, ind);
-	dstr_insert_dstr(dstr, src, ind);
-	return (dstr);
-}
-
-DSTRING			*dstr_insert_scut(DSTRING *dst, char *src, ssize_t ind)
-{
-	DSTRING		*dstr;
-
-	dstr = dstr_slice(dst, ind, dst->strlen);
-	dstr_insert_str(dstr, src, ind);
-	return (dstr);
-}
-
-DSTRING			*dstr_insert_ccut(DSTRING *dst, char src, ssize_t ind)
-{
-	DSTRING		*dstr;
-    char		str[2];
-    
-	str[0] = src;
-	str[1] = '\0';
-	dstr = dstr_slice(dst, 0, dst->strlen);
-	dstr_insert_str(dstr, str, ind);
-	return (dstr);
 }
 
 ssize_t			sh_dstr_iscmd(const DSTRING *str)
