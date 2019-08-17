@@ -3,19 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   prs_arch.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/17 15:29:07 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/17 17:05:40 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "sh_token.h"
 
+static int		prs_newdlst_rdr_init(t_dlist *token, t_dlist **res,\
+									t_redir **redir)
+{
+	t_tok		*left;
+	t_tok		*right;
+	t_rdtype	type;
+
+	type = (t_rdtype)token->content;
+	left = (t_tok *)token->prev;
+	right = (t_tok *)token->next;
+	if (!right->value)
+		return (0);
+	if (((!left->value) || (!right->value)) && type == rw_rdr)
+		return (0);
+	if (!((*res) = (t_dlist *)malloc(sizeof(t_dlist))))
+		return (0);
+	if (!((*redir) = (t_redir *)malloc(sizeof(t_redir))))
+	{
+		//!!!!!!!!!!CLEAR res
+		return (0);
+	}
+	return (1);
+}
+
 t_dlist			*prs_newdlst_rdr(t_dlist *token)
 {
-	return (0);
+	t_dlist		*res;
+	t_tok		*left;
+	t_tok		*right;
+	t_redir		*redir;
+	t_rdtype	type;
+
+	type = (t_rdtype)token->content;
+	left = (t_tok *)token->prev;
+	right = (t_tok *)token->next;
+	if (prs_newdlst_rdr_init(token, &res, &redir) == 0)
+		return (0);
+	if (!left->value && (type == w_rdr || type == a_rdr))
+		redir->fdl = 1;
+	else if (!left->value && type == r_rdr)
+		redir->fdl = 0;
+	if (left->value)
+		redir->fdl = (int)left->value;
+	if (right->type == filename_tk)
+		redir->file = (char *)ft_strdup(right->value);
+	else
+		redir->fdr = (int)right->value;
+	redir->type = type;
+	res->content = (t_redir *)redir;
+	return (res);
 }
 
 static char		**prs_args_cr(t_dlist *tk)
