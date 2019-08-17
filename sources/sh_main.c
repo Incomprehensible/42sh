@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/17 18:31:14 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/17 20:06:08 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,33 +38,45 @@ static void		sh_loop(void)
 
 int				main(const int argc, char **argv, char **envp)
 {
-	t_dlist *tokens = 0;;
+/*
+	// t_dlist *tokens = 0;;
 
-	t_tok	token;
+	// t_tok	token;
 
-	token.type = cmd_tk;
-	token.value = ft_strdup("/bin/echo");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+	// token.type = cmd_tk;
+	// token.value = ft_strdup("/bin/echo");
+	// ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
-	token.type = cmd_tk;
-	token.value = ft_strdup("huisadasdasdsd");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+	// token.type = cmd_tk;
+	// token.value = ft_strdup("huisadasdasdsd");
+	// ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 	
-	token.type = rda_tk;
-	token.value = 0;
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+	// token.type = rda_tk;
+	// token.value = 0;
+	// ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
-	token.type = filename_tk;
-	token.value = ft_strdup("huinya.txt");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+	// token.type = filename_tk;
+	// token.value = ft_strdup("huinya.txt");
+	// ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
-	token.type = eof_tk;
-	token.value = 0;
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+	// token.type = eof_tk;
+	// token.value = 0;
+	// ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
-	EXTAB	*tab = parser_get_from_tklist(tokens);
+	// EXTAB	*tab = parser_get_from_tklist(tokens);
 
-	exe_execute_pi(tab->ex, envp);
+	// exe_execute_pi(tab->ex, envp);
+*/
+
+	t_avl_tree *tree = ft_avl_tree_create(free);
+
+	ft_avl_set(tree, ft_avl_node("PATH", "/usr/bin", 9));
+	ft_avl_set(tree, ft_avl_node("HOSTNAME", "Atlantis", 9));
+	ft_avl_set(tree, ft_avl_node("TERM", "iTerm2", 7));
+	ft_avl_set(tree, ft_avl_node("USER", "hgranule", 9));
+	ft_avl_set(tree, ft_avl_node("HOME", "/Users/hgranule", 16));
+
+	char	**warrr = ft_avl_tree_to_warr(tree, avln_todstring_key_val);
 
 	// TERMINATE
 	return (0);
