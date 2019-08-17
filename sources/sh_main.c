@@ -6,12 +6,16 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/12 01:52:06 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/17 09:12:24 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_token.h"
 #include "sh_req.h"
+#include "executer.h"
+#include "dstring.h"
+
+#include <stdio.h>
 
 char			*sh_readline(void);
 int				sh_tokenizer(char *str, t_dlist **token_list);
@@ -25,19 +29,47 @@ static void		sh_loop(void)
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
 	{
-		line = sh_readline();
-		sh_tokenizer(line, token_list);
-		sh_tparser(token_list);
+		//line = sh_readline();
+		//sh_tokenizer(line, token_list);
+		//sh_tparser(token_list);
 		break ;
 	}
 }
 
-int				main(const int argc, char *const *argv, char *const *envp)
+int				main(const int argc, char **argv, char **envp)
 {
-	// INIT
+	t_dlist *tokens = 0;;
 
-	// LOOP
-	sh_loop();
+	t_tok	token;
+
+	token.type = cmd_tk;
+	token.value = ft_strdup("/bin/ls");
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	token.type = cmd_tk;
+	token.value = ft_strdup("-l");
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	token.type = pipe_tk;
+	token.value = 0;
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	token.type = cmd_tk;
+	token.value = ft_strdup("/bin/cat");
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	token.type = cmd_tk;
+	token.value = ft_strdup("-e");
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	token.type = eof_tk;
+	token.value = 0;
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	EXTAB	*tab = parser_get_from_tklist(tokens);
+
+	exe_execute_pi(tab->ex, envp);
+	exe_execute_pi(tab->next_e->next_e->ex, envp);
 
 	// TERMINATE
 	return (0);
