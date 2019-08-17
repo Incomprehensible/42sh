@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/16 19:55:00 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/17 15:00:22 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void			init_vars(int argc, char **argv, char **envp, t_envp *env);
 t_darr			*get_list_cmds(t_envp	*envp);
 
 char			*sh_readline(void);
-void			sh_rewrait(const DSTRING *buf, const size_t index);
+void			sh_rewrite(const DSTRING *buf, const size_t index);
 
 
 ssize_t			sh_del_char(DSTRING **buf, size_t index, const char flag);
@@ -62,7 +62,10 @@ DSTRING			*dstr_insert_cut(DSTRING *dst, DSTRING *src, ssize_t ind);
 DSTRING			*dstr_insert_scut(DSTRING *dst, char *src, ssize_t ind);
 DSTRING			*dstr_insert_ccut(DSTRING *dst, char src, ssize_t ind);
 
-t_darr			sh_dir_content(const char *path);
+t_darr			sh_dir_content(char *path);
+char			sh_isdir(DSTRING *buf, ssize_t start_dir);
+char			sh_check_dot(const DSTRING *path);
+
 void			free_darr(DSTRING **darr);
 void			free_darr_n(DSTRING **darr, const size_t size);
 

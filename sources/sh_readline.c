@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/16 21:53:15 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/17 15:00:22 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,13 +146,7 @@ t_darr			sh_add_path(DSTRING *buf, size_t start_dir, size_t fl)
 	return (rez);
 }
 
-// 1. запомнить позицию курсора
-// 2. изменить буфер
-// 3. напечатать таблицу еси надо
-// 4. вернуть курсор на мето
-// 5. при повторном нажатии дописать путь или комнду
-
-void			write_name_buf(t_darr darr, DSTRING **buf, size_t start_dir)
+void			correct_namedir_buf(t_darr darr, DSTRING **buf, size_t start_dir)
 {
 	size_t		liter;
 	size_t		start_name;
@@ -177,9 +171,28 @@ void			write_name_buf(t_darr darr, DSTRING **buf, size_t start_dir)
 			break ;
 	}
 	name_dir = dstr_insert_cut(name_dir, name_file, start_name);
-	if (sh_isdir(name_dir, 0))
-        dstr_insert_str(name_dir, "/", name_dir->strlen + 1);
 	(*buf) = dstr_insert_cut((*buf), name_dir, start_dir);
+}
+
+// 1. запомнить позицию курсора
+// 2. изменить буфер
+// 3. напечатать таблицу еси надо
+// 4. вернуть курсор на мето
+// 5. при повторном нажатии дописать путь или комнду
+
+char			sh_check_back_slash(DSTRING *buf, const ssize_t start_dir)
+{
+	if (buf->txt[buf->strlen - 1] == '\\')
+	{
+		dstr_insert_scut(buf, "/", buf->strlen);
+		return (0);
+	}
+	if (sh_isdir(buf, start_dir) && buf->txt[buf->strlen-1] != '/')
+	{
+		dstr_insert_str(buf, "/", buf->strlen);
+		return (0);
+	}
+	return (1);
 }
 
 size_t			sh_tab(DSTRING **buf, size_t index)
@@ -189,9 +202,11 @@ size_t			sh_tab(DSTRING **buf, size_t index)
 	
 	if ((start_dir = sh_dstr_iscmd((*buf))) == -1)
 		ft_putendl("\nGET CMD");
-	else
+	else if (sh_check_back_slash((*buf), start_dir))
+	{
 		darr = sh_add_path((*buf), start_dir, 1);
-	write_name_buf(darr, buf, start_dir);
+		correct_namedir_buf(darr, buf, start_dir);
+	}
 	// printf("\n%zu\n", darr.count);
 	// free_darr(darr.strings);
 	return ((*buf)->strlen);
@@ -208,8 +223,6 @@ char			*sh_readline(void)
 
 	buf = dstr_new(0);
 	index = 0;
-	fl = 0;
-
 	while (1)
 	{
 		a[0] = ft_getch();
@@ -222,9 +235,9 @@ char			*sh_readline(void)
 			dstr_insert_str(buf, a, index++);
 		else if (a[0] == ESC)
 			index = sh_esc(index, buf->strlen);
-		if (a[0] == TAB && ++fl)
+		if (a[0] == TAB)
 			index = sh_tab(&buf, index);
-		sh_rewrait(buf, index);
+		sh_rewrite(buf, index);
 	}
 	char *rez = ft_strdup(buf->txt);
 	dstr_del(&buf);

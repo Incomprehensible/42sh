@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/16 12:51:02 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/17 12:05:20 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ int		test_t_darr()
 	ft_putendl(a.strings[2]->txt);
 	ft_putendl(a.strings[3]->txt);
 	ft_putendl(a.strings[4]->txt);
+	ft_putendl(a.strings[5]->txt);
+	ft_putendl(a.strings[6]->txt);
+	ft_putendl(a.strings[7]->txt);
+	ft_putendl(a.strings[8]->txt);
 	free_darr(a.strings);
 }
 
@@ -56,7 +60,7 @@ int				main(const int argc, char *const *argv, char *const *envp)
 
 	// LOOP
 	sh_loop();
-
+	// test_t_darr();
 	// TERMINATE
 	return (0);
 }
