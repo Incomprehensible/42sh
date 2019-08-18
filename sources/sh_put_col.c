@@ -6,19 +6,21 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/17 18:35:17 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/18 17:35:50 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
 #include "sh_termcomand.h"
+# include <sys/ioctl.h>
+
 
 // 1. запомнить позицию курсора
 
 // 4. вернуть курсор на мето
 // 5. при повторном нажатии дописать путь или комнду
 
-void		ft_strset(char **str, char c, size_t n)
+static void		ft_strset(char **str, char c, size_t n)
 {
 	int		i;
 
@@ -29,11 +31,13 @@ void		ft_strset(char **str, char c, size_t n)
 	(*str)[i] = '\0';
 }
 
-DSTRING		*sh_get_space(int n)
+static DSTRING	*sh_get_space(int max, int len)
 {
 	char	*str;
+	int		n;
 	DSTRING	*rez;
 	
+	n = max - len;
 	if (n > 0)
 	{
 		ft_strset(&str, ' ', n);
@@ -44,42 +48,55 @@ DSTRING		*sh_get_space(int n)
 	return (dstr_new(""));
 }
 
-void			put_col(t_darr darr)
+static ushort	get_col(const int lencol)
 {
-	int		col;
-	int		i;
-	int		j;
-	int		max_len;
-	int		cnt;
-	DSTRING	*space;
-	DSTRING	*colums;
+	struct winsize		term;
 
-	col = 6; /* get_coll */
-	max_len = 25; /* get_max_len */
-	i = 0;
-	j = 0;
-	cnt = 0;
-	colums = dstr_new("\n");
-	ft_putstr(SAVECAR);
-	while (1)
+	ioctl(0, TIOCGWINSZ, &term);
+	return (term.ws_col / lencol);
+}
+
+static DSTRING	*sh_get_col(t_darr dar, const ushort col, ushort iter)
+{
+	DSTRING		*colstr;
+	DSTRING		*space;
+	ushort		nstr;
+	uint		ind;
+	
+	nstr = -1;
+	colstr = dstr_new("\n");
+	while (++nstr < dar.count / col)
 	{
-		if (i < darr.count)
+		ind = nstr;
+		while (iter++ < col)
 		{
-			space = sh_get_space(max_len - darr.strings[i]->strlen);
-			dstr_insert_dstr(colums, darr.strings[i], colums->strlen);
+			if (ind < dar.count)
+			{
+				dstr_insert_dstr(colstr, dar.strings[ind], colstr->strlen);
+				space = sh_get_space(dar.maxlen + 2, dar.strings[ind]->strlen);
+				dstr_insert_dstr(colstr, space, colstr->strlen);
+				dstr_del(&space);
+			}
+			ind += dar.count / col;
 		}
-		dstr_insert_dstr(colums, space, colums->strlen);
-		i += darr.count / col + j;
-		cnt++;
-		if (cnt == col && (cnt = 0) == 0)
-		{
-			j++;
-			i = 0;
-			dstr_insert_str(colums, "\n", colums->strlen);
-		}
-		if (i == darr.count)
-			break ;
+		iter = 0;
+		dstr_insert_str(colstr, "\n", colstr->strlen);
 	}
-	ft_putstr(colums->txt);
+	return (colstr);
+}
+
+void			put_col(t_darr overlap)
+{
+	ushort		col;
+	int			iter;
+	DSTRING		*colstr;
+
+	iter = 0;
+	col = get_col(overlap.maxlen + 2);
+	
+	ft_putstr(SAVECAR);
+	colstr = sh_get_col(overlap, col, iter);
+	ft_putstr(colstr->txt);
+	dstr_del(&colstr);
 	ft_putstr(LOADCAR);
 }

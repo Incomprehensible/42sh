@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/17 19:13:19 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/18 20:27:22 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@
 
 # define S_DARR_STRINGS		2096
 
+typedef struct s_indch
+{
+	char	ch;
+	size_t	ind;
+}				t_indch;
 
 
 /* INIT GLOBAL AND LOCAL ENV
@@ -58,13 +63,18 @@ char			sh_check_dot(const DSTRING *path);
 
 void			free_darr(DSTRING **darr);
 void			free_darr_n(DSTRING **darr, const size_t size);
+int				sort_darr(t_darr *darr);
 
 size_t			sh_esc(size_t index, const size_t max);
 int				ft_getch(void);
 
 void			put_col(t_darr darr);
 
-size_t			sh_tab(DSTRING **buf, size_t index, t_envp *env);
+t_indch			sh_tab(DSTRING **buf, size_t index, t_envp *env);
+t_darr			sh_add_cmd(DSTRING **buf, t_envp *env);
+t_darr			sh_add_path(DSTRING **buf, size_t start_dir);
+char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
+int				sort_darr(t_darr *darr);
 
 t_darr			sh_cmp_darr(const t_darr darr, DSTRING *str);
 void			correct_namedir_buf(t_darr darr, DSTRING **buf, size_t start_dir);

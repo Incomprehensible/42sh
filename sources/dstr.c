@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:38:55 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/17 19:11:38 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/18 19:28:14 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void			dstr_cutins_ch(DSTRING **dst, char ch, ssize_t ind)
 	(*dst) = rez;
 }
 
-void			dstr_cutins_dstr(DSTRING **dst, DSTRING *src, size_t ind)
+void					dstr_cutins_dstr(DSTRING **dst, DSTRING *src, size_t ind)
 {
 	DSTRING	*rez;
 

@@ -6,7 +6,7 @@
 #    By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/08/17 19:02:53 by gdaemoni         ###   ########.fr        #
+#    Updated: 2019/08/17 22:02:23 by gdaemoni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make make_lft
-	@gcc $(FLAGS) -o $(NAME) $(INC) $(INC_LIB) $(OBJ) -L $(LIB_PATH) -lft -lncurses
+	@gcc $(FLAGS) -o $(NAME) $(INC) $(INC_LIB) $(OBJ) -L $(LIB_PATH) -lft -lncurses -g
 
 $(OBJ_PATH)%.o: $(SRC_PATH_SH_VARS)%.c
 	@echo "$(GREEN)$(UNDERLINE)CREATING >> $@$(ESCN)"

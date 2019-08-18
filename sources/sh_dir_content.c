@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:40:25 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/17 13:11:01 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/18 13:14:41 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,20 @@ void			free_darr_n(DSTRING **darr, const size_t size)
 	size_t		i;
 
 	i = -1;
-	while (i < size)
-		dstr_del(&darr[size]);
+	while (++i < size)
+		dstr_del(&(darr[i]));
 }
 
 void			free_darr(DSTRING **darr)
 {
-	size_t		size;
+	int		size;
 
 	size = -1;
-	while (darr[++size])
-		dstr_del(&darr[size]);
+	while (darr[size])
+	{
+		printf("%d", size);
+		dstr_del(&(darr[size]));
+	}
 }
 
 char		sh_check_dot(const DSTRING *path)

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/17 16:06:57 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/18 15:06:03 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "sh_req.h"
 #include "sh_readline.h"
 #include "sh_vars.h"
+# include <sys/ioctl.h>
 
 int				sh_tokenizer(char *str, t_dlist **token_list);
 int				sh_tparser(t_dlist **token_list);
@@ -44,5 +45,9 @@ int				main(const int argc, char **argv, char **envp)
 	// LOOP
 	sh_loop(&env);
 	// TERMINATE
+		struct winsize		term;
+
+
+	
 	return (0);
 }
