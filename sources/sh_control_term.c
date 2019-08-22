@@ -6,12 +6,13 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:35:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/15 18:41:36 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/22 19:06:32 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
 #include "sh_termcomand.h"
+#include <unistd.h>
 #include <termios.h>
 
 size_t			sh_esc(size_t index, const size_t max)
@@ -41,7 +42,8 @@ int				ft_getch(void)
 	newt = oldt;
 	newt.c_lflag &= ~(ECHO | ICANON);
 	tcsetattr(0, TCSANOW, &newt);
-	read(0, &ch, 1);
+	if ((read(0, &ch, 1)) <= 0)
+		ch = (char)0xff;
 	tcsetattr(0, TCSANOW, &oldt);
 	return ((int)ch);
 }

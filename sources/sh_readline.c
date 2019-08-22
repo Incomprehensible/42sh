@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/18 20:33:24 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/22 20:32:23 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,31 +24,46 @@
 // http://www.codenet.ru/progr/cpp/7/5.php
 // http://rus-linux.net/MyLDP/BOOKS/lpg-04/node8.htm
 
+t_indch			asterics_reg(DSTRING **buf)
+{
+	t_indch		indch;
+
+	return (indch);
+}
+
 char			*sh_readline(t_envp *env)
 {
 	DSTRING	*buf;
 	t_indch	indch;
 	char	*move;
 	char	fl;
+	char	asterics;
 
 	buf = dstr_new(0);
 	indch.ind = 0;
 	fl = 0;
+	asterics = 0;
 	while (1)
 	{
 		if (fl == 0)
 			indch.ch = ft_getch();
-		// printf("0x%hhX == [%c]\n", a[0], (a[0] < ' ' || a[0] > '~') ? '$' : a[0]);
+		// printf("0x%hhX == [%c]\n", indch.ch, (indch.ch < ' ' || indch.ch > '~') ? '$' : indch.ch);
+		if (indch.ch == (char)0x04)
+			break ; // вернуть строку "exit()"
 		if (indch.ch == '\n')
 			break ;
 		else if ((indch.ch == BAKSP || indch.ch == DEL) && (fl = 0) == 0)
 			indch.ind = sh_del_char(&buf, indch.ind, indch.ch);
-		else if ((ft_isprint(indch.ch) && indch.ch != '\t') && (fl = 0) == 0)
+		else if (ft_isprint(indch.ch) && (fl = 0) == 0)
 			dstr_insert_ch(buf, indch.ch, indch.ind++);
 		else if ((indch.ch == ESC) && (fl = 0) == 0)
 			indch.ind = sh_esc(indch.ind, buf->strlen);
-		if (indch.ch == TAB && fl++ == 0)
+		if (indch.ch == TAB && asterics == 0 && fl++ == 0)
 			indch = sh_tab(&buf, indch.ind, env);
+		if (indch.ch == '*')
+			asterics++;
+		if (indch.ch == TAB && asterics)
+			indch = asterics_reg(&buf);
 		sh_rewrite(buf, indch.ind);
 	}
 	char *rez = ft_strdup(buf->txt);

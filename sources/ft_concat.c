@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 17:02:34 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/15 21:45:41 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/22 18:19:26 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char			*ft_concat(const size_t n, const char *spec, ...)
 	char			*rez;
 
 	ft_bzero(&size, sizeof(t_concat));
-	size.size = (size_t*)malloc(sizeof(size_t) * n + 1);
+	size.size = (size_t*)malloc(sizeof(size_t) * (n + 1));
 	va_start(arg, spec);
 	while (++size.i < n + 1)
 	{

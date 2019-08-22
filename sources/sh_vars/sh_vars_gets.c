@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 13:02:20 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/17 21:40:47 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/22 18:53:49 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ static int	sh_vars_parsepath(t_darr *res, char *path)
 	DIR				*dir;
 	struct dirent	*entry;
 	char			**spl;
+	char			**spl_fr;
 	int				i;
 
 	i = -1;
 	if ((spl = ft_strsplit(path, ':')) == 0)
 		return (0);
+	spl_fr = spl;
 	while (*spl)
 	{
 		if (!(dir = opendir(*spl)))
@@ -45,6 +47,13 @@ static int	sh_vars_parsepath(t_darr *res, char *path)
 		spl++;
 	}
 	(res)->strings[++i] = NULL;
+	spl = spl_fr;
+	while (*spl_fr)//! need to free spl.
+	{
+		free(*spl_fr);
+		spl_fr++;
+	}
+	free(spl);
 	return (1);
 }
 

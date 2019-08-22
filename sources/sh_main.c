@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/18 15:06:03 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/22 18:54:30 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,10 @@ static void		sh_loop(t_envp *env)
 	while (1)
 	{
 		line = sh_readline(env);
-		printf("\n%s\n", line);
+		printf("\n\n\n\n\n%s\n", line);
 		free(line);
 		// sh_tokenizer(line, token_list);
 		// sh_tparser(token_list);
-		
 		break ;
 	}
 }
@@ -45,9 +44,7 @@ int				main(const int argc, char **argv, char **envp)
 	// LOOP
 	sh_loop(&env);
 	// TERMINATE
-		struct winsize		term;
-
-
-	
+	ft_avl_tree_free(env.global);
+	ft_avl_tree_free(env.local);
 	return (0);
 }

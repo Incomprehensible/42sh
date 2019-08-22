@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 13:43:30 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/17 18:04:10 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/22 13:55:29 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@
 #define DELCHR	"\x001b[P"
 #define SAVECAR	"\x001b[s"
 #define LOADCAR "\x001b[u"
+#define NEXTLIN "\x001b[1E"
+
 
 #define BAKSP	127
 #define DEL		126

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:38:55 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/18 19:28:14 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/22 20:58:33 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ void			dstr_cutins_str(DSTRING **dst, char *src, ssize_t ind)
 
 ssize_t			dstrrchr(const DSTRING *src, const int ch)
 {
-	char		*points[2];
-
-	points[0] = (char *)src->txt;
-	points[1] = ft_strrchr(src->txt, (char)ch);
-
-	return (points[1] - points[0]);
+	ssize_t		rez;
+	
+	rez = src->strlen;
+	while (rez--)
+	{
+		if (src->txt[rez] == ch)
+			return (rez);
+	}
+	return (-1);
 }
 
 ssize_t			sh_dstr_iscmd(const DSTRING *str)
@@ -80,7 +83,21 @@ ssize_t			sh_dstr_iscmd(const DSTRING *str)
 		++i;
 	while (str->txt[i] == ' ')
 		++i;
+	if (str->txt[i - 1] == ' ' && i == str->strlen)
+		return (i);
+	
 	if (ft_isalpha(str->txt[i]) || str->txt[i] == '/' || str->txt[i] == '.')
 		return (i);
 	return (-1);
 }
+
+// ssize_t			sh_dstr_iscmd(const DSTRING *str)
+// {
+// 	size_t		i;
+
+// 	if (str->strlen == 0)
+// 		return (-1);
+// 	if (ft_strchr(str->txt, ' '))
+// 		return (-1);
+// 	if ()
+// }

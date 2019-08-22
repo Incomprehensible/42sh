@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/18 17:35:50 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/22 16:53:47 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static DSTRING	*sh_get_col(t_darr dar, const ushort col, ushort iter)
 	
 	nstr = -1;
 	colstr = dstr_new("\n");
-	while (++nstr < dar.count / col)
+	while (++nstr < dar.count / col + 1 && (iter = 0) == 0)
 	{
 		ind = nstr;
 		while (iter++ < col)
@@ -77,12 +77,27 @@ static DSTRING	*sh_get_col(t_darr dar, const ushort col, ushort iter)
 				dstr_insert_dstr(colstr, space, colstr->strlen);
 				dstr_del(&space);
 			}
-			ind += dar.count / col;
+			ind += dar.count / col ? dar.count / col + 1 : 1;
 		}
-		iter = 0;
 		dstr_insert_str(colstr, "\n", colstr->strlen);
 	}
 	return (colstr);
+}
+
+void			free_lines_down()
+{
+	struct winsize		term;
+	int					lines;
+
+	ioctl(0, TIOCGWINSZ, &term);
+	ft_putstr(SAVECAR);
+	lines = term.ws_row;
+	while (lines--)
+	{
+		ft_putstr(NEXTLIN);
+		ft_putstr(CLEARL);
+	}
+	ft_putstr(LOADCAR);	
 }
 
 void			put_col(t_darr overlap)
@@ -93,9 +108,10 @@ void			put_col(t_darr overlap)
 
 	iter = 0;
 	col = get_col(overlap.maxlen + 2);
-	
+	free_lines_down();
 	ft_putstr(SAVECAR);
 	colstr = sh_get_col(overlap, col, iter);
+	dstr_cutins_ch(&colstr, '\0', colstr->strlen - 1);
 	ft_putstr(colstr->txt);
 	dstr_del(&colstr);
 	ft_putstr(LOADCAR);
