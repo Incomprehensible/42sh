@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/08/17 08:48:52 by hgranule         ###   ########.fr        #
+#    Updated: 2019/08/22 23:18:04 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,9 +44,9 @@ OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 
-SRC_FILES = sh_main.c exe_sys/exe_calls.c exe_sys/prs_arch.c
+SRC_FILES = sh_main.c exe_sys/exe_calls.c exe_sys/prs_arch.c free_me/rms.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me)
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

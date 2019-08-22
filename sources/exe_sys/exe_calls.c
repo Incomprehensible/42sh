@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_calls.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:03:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/17 18:30:46 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/22 23:15:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void			exe_redir_ex(REDIRECT *rdr)
 	dup2(fd, rdr->fdl);
 }
 
-static void		exe_b_child_alg(EXPRESSION *cmd, char **envp)
+static void		exe_b_child_alg(EXPRESSION *cmd, char **envp, char *path)
 {
 	t_dlist		*redrs;
 
@@ -56,14 +56,15 @@ static void		exe_b_child_alg(EXPRESSION *cmd, char **envp)
 		redrs = redrs->next;
 	}
 	if (cmd->ipipe_fds && (dup2(cmd->ipipe_fds[0], 0) >= 0))
-			close(cmd->ipipe_fds[1]);
-		if (cmd->opipe_fds && (dup2(cmd->opipe_fds[1], 1) >= 0))
-			close(cmd->opipe_fds[0]);
-		execve(cmd->args[0], cmd->args, envp);
-		exit(-1); // ERROR
+		close(cmd->ipipe_fds[1]);
+	if (cmd->opipe_fds && (dup2(cmd->opipe_fds[1], 1) >= 0))
+		close(cmd->opipe_fds[0]);
+	path == 0 ? path = cmd->args[0] : 0;
+	execve(path, cmd->args, envp);
+	exit(-1); // ERROR
 }
 
-int				exe_execute_pi(EXPRESSION *cmd, char **envp)
+int				exe_execute_pi(EXPRESSION *cmd, char **envp, char *path)
 {
 	pid_t		pid;
 
@@ -71,7 +72,7 @@ int				exe_execute_pi(EXPRESSION *cmd, char **envp)
 		pipe(cmd->opipe_fds);
 	pid = fork();
 	if (pid == 0)
-		exe_b_child_alg(cmd, envp);
+		exe_b_child_alg(cmd, envp, path);
 	if (pid < 0) // ERROR
 		return (-1);
 	cmd->ipipe_fds ? close(cmd->ipipe_fds[0]) : 0;
