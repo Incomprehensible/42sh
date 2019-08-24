@@ -6,17 +6,18 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/22 23:32:00 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/24 07:32:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rms.h"
 
-void		et_rm_rdr(void *rdir)
+void		et_rm_rdr(void *rdir, size_t type)
 {
 	REDIRECT	*redir;
 
 	redir = rdir;
+	type = 0;
 	if (redir)
 	{
 		if (redir->file)
@@ -51,12 +52,14 @@ void		et_rm_expr(EXPRESSION *expr)
 	}
 }
 
-void		et_rm_ett(void *et_cont)
+void		et_rm_ett(void *et_cont, size_t type)
 {
 	ETAB		*cnt;
 
 	if (!(cnt = et_cont))
 		return ;
-	if (cnt->type == ET_EXPR)
-		et_rm_expr(cnt->instruction);
+	if (type == ET_EXPR)
+		et_rm_expr((EXPRESSION *)et_cont);
+	else if (type == ET_PIPE)
+		free(et_cont);
 }

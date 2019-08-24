@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:56:29 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/22 23:32:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/24 07:29:31 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 /*
 ** FREES A REDIRECTION FROM parser.h
 */
-void		et_rm_rdr(void *redir);
+void		et_rm_rdr(void *redir, size_t type);
 
 /*
 ** FREES A CHAR** NULL TERMINATED ARRAY
@@ -37,6 +37,6 @@ void		et_rm_expr(EXPRESSION *expr);
 /*
 ** FREES A CONTENT OF ETAB * from executer.h
 */
-void		et_rm_ett(void *et_cont);
+void		et_rm_ett(void *et_cont, size_t type);
 
 #endif

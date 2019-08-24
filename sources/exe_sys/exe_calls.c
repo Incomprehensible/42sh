@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:03:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/22 23:15:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/24 09:00:59 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,28 @@
 ** I NEED TO CHECK FOR ERRORS!!!!!
 */
 
-int				exe_wait_cps(void)
+int				exe_wait_cps(pid_t cpid)
 {
-	int		status;
+	int		statloc;
+	int		estatus;
+	pid_t	pid;
 
-	while ((waitpid(-1, &status, WUNTRACED)) || 1)
-		if (WIFEXITED(status) || WIFSIGNALED(status))
+	while ((pid = waitpid(cpid, &statloc, WUNTRACED)) || 1)
+	{
+		estatus = WEXITSTATUS(statloc);
+		if (WIFEXITED(statloc))
 			break ;
-	return (status);
+		if (WIFSIGNALED(statloc))
+			break ;
+	}
+	while ((pid = waitpid(-1, &statloc, WUNTRACED)) || 1)
+	{
+		if (WIFEXITED(statloc))
+			break ;
+		if (WIFSIGNALED(statloc))
+			break ;
+	}
+	return (estatus);
 }
 
 void			exe_redir_ex(REDIRECT *rdr)

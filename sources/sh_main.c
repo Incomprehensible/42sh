@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/22 23:47:17 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/24 09:02:16 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,24 @@ static void		sh_loop(void)
 	}
 }
 
+void			free_token(void *tok, size_t sz)
+{
+	t_tok	*token;
+
+	token = tok;
+	sz = 0;
+	if (token->value)
+		free(token->value);
+	free(token);
+}
+
 int				main(const int argc, char **argv, char **envp)
 {
 	t_dlist *tokens = 0;
 
 	t_tok	token;
 
+/*
 	token.type = expr_tk;
 	token.value = ft_strdup("/bin/echo");
 	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
@@ -50,16 +62,37 @@ int				main(const int argc, char **argv, char **envp)
 	token.value = ft_strdup("huisadasdasdsd");
 	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
-	token.type = fd_tk;
-	token.value = ft_strdup("1");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
-
-	token.type = rd_w_tk;
+	token.type = pipe_tk;
 	token.value = 0;
 	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
-	token.type = filename_tk;
-	token.value = ft_strdup("PASHA.TXT");
+	token.type = expr_tk;
+	token.value = ft_strdup("/bin/cat");
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	token.type = expr_tk;
+	token.value = ft_strdup("-e");
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	token.type = eof_tk;
+	token.value = 0;
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+	*/
+
+	token.type = expr_tk;
+	token.value = ft_strdup("/bin/sleep");
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	token.type = expr_tk;
+	token.value = ft_strdup("3");
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	token.type = pipe_tk;
+	token.value = 0;
+	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+
+	token.type = expr_tk;
+	token.value = ft_strdup("/usr/bin/false");
 	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
 	token.type = eof_tk;
@@ -67,6 +100,8 @@ int				main(const int argc, char **argv, char **envp)
 	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
 	sh_tparse(tokens, envp);
+
+	ft_dlst_delf(&tokens, (size_t)-1, free_token);
 
 	// TERMINATE
 	return (0);

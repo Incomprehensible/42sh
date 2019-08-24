@@ -6,18 +6,20 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/22 23:49:50 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/24 10:31:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "sh_token.h"
+#include "ft_io.h"
 
 int			prs_is_a_instruction(t_tok *tok)
 {
 	if (tok && tok->type != pipe_tk && \
 	!(tok->type >= sep_tk && tok->type <= and_tk) && \
-	tok->type != eof_tk)
+	tok->type != eof_tk && tok->type != if_tk && tok->type != else_tk && \
+	tok->type != then_tk)
 		return (1);
 	return (0);
 }
@@ -220,10 +222,37 @@ static t_dlist	*prs_pipe(ETAB **tab, t_dlist *tk)
 	return (tk->next);
 }
 
+int			prs_executor(ETAB **etab, char **envp)
+{
+	ETAB		*etab_row;
+	ETAB		*pipe_free;
+	int			status;
+	pid_t		cpid;
+
+	etab_row = 0;
+	pipe_free = 0;
+	cpid = -1;
+	while (*etab != 0)
+	{
+		etab_row = (ETAB *)ft_dlstshift((t_dlist **)etab);
+		if (etab_row->type == ET_EXPR)
+			cpid = exe_execute_pi(etab_row->instruction, envp, 0);
+		if (etab_row->type == ET_PIPE)
+		{
+			ft_dlstunshift((t_dlist **)&pipe_free, (t_dlist *)etab_row);
+			etab_row = 0;
+		}
+		ft_dlst_delcut((t_dlist **)&etab_row, et_rm_ett);
+	}
+	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);
+	status = exe_wait_cps(cpid);
+	return (status);
+}
+
 void		sh_tparse(t_dlist *tokens, char **envp)
 {
 	ETAB		*etab;
-	ETAB		*trash;
+	int			status;
 	t_tok		*token;
 
 	etab = 0;
@@ -231,15 +260,7 @@ void		sh_tparse(t_dlist *tokens, char **envp)
 	{
 		if (token->type == sep_tk || token->type == eof_tk)
 		{
-			trash = 0;
-			while (etab != 0)
-			{
-				ft_dlstunshift((t_dlist **)&trash, ft_dlstshift((t_dlist **)&etab));
-				if (trash->type == ET_EXPR)
-					exe_execute_pi(trash->instruction, envp, 0);
-			}
-			exe_wait_cps();
-			ft_dlst_delf((t_dlist **)&trash, (size_t)-1, et_rm_ett);
+			status = prs_executor(&etab, envp);
 		}
 		tokens = token->type == eof_tk || token->type == sep_tk ? tokens->next : tokens;
 		tokens = token->type == expr_tk ? prs_expr(&etab, tokens) : tokens;
