@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/22 23:16:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/25 03:32:08 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PARSER_H
 
 # include "ft_dlist.h"
+# include "env.h"
 
 # define EXPRESSION t_command
 # define REDIRECT t_redir
@@ -53,11 +54,63 @@ typedef struct		s_pipe			// PIPE DESCRIPTOR
 # include <stdlib.h>
 # include <fcntl.h>
 # include "ft_mem.h"
+# include "sh_token.h"
 # include "ft_string.h"
 # include "ft_avl_tree.h"
 # include "executer.h"
 # include "rms.h"
 
-void		sh_tparse(t_dlist *tokens, char **envp);
+void		sh_tparse(t_dlist *tokens, ENV *vars);
+char		*sh_checkbins(const char *cmd, ENV *vars);
+
+/*
+** FUNCTION RETURNS TRUE IF THERE IS NO EXPR SEPS
+*/
+int			prs_is_a_instruction(t_tok *tok);
+
+/*
+** FUNCTION RETURNS ARGS WARR FOR EXPRESSIONS
+*/
+char		**prs_args(t_dlist *tokens);
+
+/*
+** FUNCTION RETURS TYPE FOR REDIRECTION DESCRIPTOR
+*/
+t_rdtype		prs_rdr_type(t_tok *tok);
+
+/*
+** Function creates a new t_dlist with REDIRECTION DESC.
+*/
+t_dlist			*prs_new_rdr_cr(t_dlist *tokens);
+
+/*
+** Function returns a full double-list with RDR DESCS
+*/
+t_dlist			*prs_rdrs(t_dlist **tokens);
+
+/*
+** CREATE REDIRECT_DS FOR '<>'
+*/
+REDIRECT		*prs_rdr_rw(t_dlist *tokens);
+
+/*
+** CREATE REDIRECT_DS FOR '<'
+*/
+REDIRECT		*prs_rdr_r(t_dlist *tokens);
+
+/*
+** CREATE REDIRECT_DS FOR '> >>'
+*/
+REDIRECT		*prs_rdr_wa(t_dlist *tokens);
+
+/*
+** PARSING OF A EXPRESSIONS ETT
+*/
+t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens);
+
+/*
+** PARSING OF A PIPES ETT
+*/
+t_dlist			*prs_pipe(ETAB **tab, t_dlist *tk);
 
 #endif

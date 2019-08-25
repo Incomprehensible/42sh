@@ -6,13 +6,13 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/24 07:32:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/24 21:59:12 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rms.h"
 
-void		et_rm_rdr(void *rdir, size_t type)
+void			et_rm_rdr(void *rdir, size_t type)
 {
 	REDIRECT	*redir;
 
@@ -26,7 +26,7 @@ void		et_rm_rdr(void *rdir, size_t type)
 	}
 }
 
-void		et_rm_warr(char **args)
+void			et_rm_warr(char **args)
 {
 	size_t		i;
 
@@ -38,9 +38,9 @@ void		et_rm_warr(char **args)
 	free((void *)args);
 }
 
-void		et_rm_expr(EXPRESSION *expr)
+void			et_rm_expr(EXPRESSION *expr)
 {
-	t_dlist	*redirs;
+	t_dlist		*redirs;
 
 	if (expr)
 	{
@@ -52,7 +52,7 @@ void		et_rm_expr(EXPRESSION *expr)
 	}
 }
 
-void		et_rm_ett(void *et_cont, size_t type)
+void			et_rm_ett(void *et_cont, size_t type)
 {
 	ETAB		*cnt;
 

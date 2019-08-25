@@ -6,16 +6,30 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/24 09:02:16 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/25 03:34:36 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_token.h"
 #include "sh_req.h"
+#include "env.h"
 #include "executer.h"
 #include "dstring.h"
 
 #include <stdio.h>
+
+#define UT_TOK_INIT()		t_dlist *tokens = 0;\
+							t_tok	token
+
+#define UT_TOK_CR(typ, str)	token.type = typ; \
+							if (str == 0) token.value = 0; \
+							else token.value = ft_strdup(str); \
+							ft_dlstpush(&tokens, \
+							ft_dlstnew(&token, sizeof(t_tok)))
+
+#define UT_TOK_END()		ft_dlst_delf(&tokens, (size_t)-1, free_token)
+
+#define UT_TOK				tokens
 
 char			*sh_readline(void);
 int				sh_tokenizer(char *str, t_dlist **token_list);
@@ -47,61 +61,53 @@ void			free_token(void *tok, size_t sz)
 	free(token);
 }
 
+int				bltn_exit(char **args, ENV *envr)
+{
+	exit(100);
+}
+
+int				bltn_echo(char **args, ENV *envr)
+{
+	size_t		i;
+
+	i = 0;
+	while (args[++i])
+	{
+		i != 1 ? ft_putstr(" ") : 0;
+		ft_putstr(args[i]);
+	}
+	ft_putstr("<>\n");
+	return (0);
+}
+
 int				main(const int argc, char **argv, char **envp)
 {
-	t_dlist *tokens = 0;
+	ENV			enviroment;
+	char		*pathes = "/Users/hgranule/.brew/bin:"
+	"/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:"
+	"/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/local/munki";
 
-	t_tok	token;
+	enviroment.globals = ft_avl_tree_create(free);
+	ft_avl_set(enviroment.globals, ft_avl_node("PATH", pathes, ft_strlen(pathes) + 1));
 
-/*
-	token.type = expr_tk;
-	token.value = ft_strdup("/bin/echo");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+	enviroment.locals = 0;
+	enviroment.builtns = ft_avl_tree_create(0);
+	ft_avl_set(enviroment.builtns, ft_avl_node_cc("exit", bltn_exit, sizeof(bltn_exit)));
+	ft_avl_set(enviroment.builtns, ft_avl_node_cc("echo", bltn_echo, sizeof(bltn_exit)));
+	enviroment.funcs = 0;
 
-	token.type = expr_tk;
-	token.value = ft_strdup("huisadasdasdsd");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
-	token.type = pipe_tk;
-	token.value = 0;
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
 
-	token.type = expr_tk;
-	token.value = ft_strdup("/bin/cat");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+	UT_TOK_INIT();
+	UT_TOK_CR(expr_tk, "echo");
+	UT_TOK_CR(expr_tk, "THIS IS FOR PASHA");
+	UT_TOK_CR(eof_tk, 0);
 
-	token.type = expr_tk;
-	token.value = ft_strdup("-e");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
+	sh_tparse(UT_TOK, &enviroment);
 
-	token.type = eof_tk;
-	token.value = 0;
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
-	*/
-
-	token.type = expr_tk;
-	token.value = ft_strdup("/bin/sleep");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
-
-	token.type = expr_tk;
-	token.value = ft_strdup("3");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
-
-	token.type = pipe_tk;
-	token.value = 0;
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
-
-	token.type = expr_tk;
-	token.value = ft_strdup("/usr/bin/false");
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
-
-	token.type = eof_tk;
-	token.value = 0;
-	ft_dlstpush(&tokens, ft_dlstnew(&token, sizeof(t_tok)));
-
-	sh_tparse(tokens, envp);
-
-	ft_dlst_delf(&tokens, (size_t)-1, free_token);
+	UT_TOK_END();
+	ft_avl_tree_free(enviroment.globals);
+	ft_avl_tree_free(enviroment.builtns);
 
 	// TERMINATE
 	return (0);
