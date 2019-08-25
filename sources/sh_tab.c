@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:36:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/22 20:08:20 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/23 14:34:11 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,37 @@ t_darr			sh_add_path(DSTRING **buf, size_t start_dir)
 	return (overlap);
 }
 
+int				ind_begin_cmd(DSTRING *buf)
+{
+	int			ind;
+	
+	if ((ind = dstrrchr(buf, ';')) != -1)
+	{
+		while (ft_isspace(buf->txt[ind + 1]))
+			++ind;
+		return (ind + 1);
+	}
+	ind = 0;
+	while (ft_isspace(buf->txt[ind]))
+		++ind;
+	return (ind);
+}
+
 t_darr			sh_add_cmd(DSTRING **buf, t_envp *env)
 {
 	t_darr		allcmd;
 	t_darr		overlap;
+	int			begin_cmd;
+	DSTRING		*cmd;
 
+	begin_cmd = ind_begin_cmd((*buf));
+	cmd = dstr_slice((*buf), begin_cmd, (*buf)->strlen);
 	allcmd = get_list_cmds(env);
-	overlap = sh_cmp_darr(allcmd, (*buf));
-	correct_namedir_buf(overlap, buf, 0);
+	overlap = sh_cmp_darr(allcmd, cmd);
+	correct_namedir_buf(overlap, &cmd, 0);
+	dstr_cutins_dstr(buf, cmd, begin_cmd);
 	free_darr_n(allcmd.strings, allcmd.count);
+	dstr_del(&cmd);
 	return (overlap);
 }
 
@@ -69,7 +91,19 @@ char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir)
 int				get_ind_name(DSTRING *buf)
 {
 	int			rez;
-	
+	int			i;
+	ssize_t		smcln;
+	ssize_t		space;
+
+	smcln = dstrrchr(buf, ';');
+	if (smcln != -1 && (i = smcln + 1))
+	{
+		space = dstrrchr(buf, ' ');
+		while (ft_isspace(buf->txt[i]))
+			i++;
+		if (i >= space + 1)
+			return (i);
+	}
 	if ((rez = dstrrchr(buf, '/')) != -1)
 		return (rez + 1);
 	else if ((rez = dstrrchr(buf, ' ')) != -1)

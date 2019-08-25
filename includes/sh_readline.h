@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/18 20:27:22 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/25 09:17:35 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,8 @@ DSTRING			*sh_get_path(DSTRING *buf, size_t start_dir);
 char			sh_isdir(DSTRING *buf, ssize_t start_dir);
 
 char			*ft_concat(const size_t n, const char *spec, ...);
+
+
+int			astr(DSTRING **buf);
 
 #endif

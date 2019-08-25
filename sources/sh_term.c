@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:14:42 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/22 18:04:12 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/23 15:01:22 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,16 @@ void			sh_move_del(const size_t n, const char *side)
 void			sh_rewrite(const DSTRING *buf, const size_t index)
 {
 	char		*move_cursor_begin;
+	char		*len;
 	
-	move_cursor_begin = ft_concat(3, "00", "\x1b[", "1000", LEFT);
+	len = ft_itoa(buf->strlen + 1000);
+	move_cursor_begin = ft_concat(3, "00", "\x1b[", len, LEFT);
 	ft_putstr(move_cursor_begin);
 	ft_putstr(CLEARL);
 	ft_putstr(buf->txt);
 	ft_putstr(move_cursor_begin);
 	free(move_cursor_begin);
+	free(len);
 	sh_move_cursor(index, RIGHT);
 }
 

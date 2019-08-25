@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:40:25 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/18 13:14:41 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/25 00:08:23 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,23 +76,30 @@ static	char		sh_insert_slash(const char *path, const DSTRING *name)
 	return (0);
 }
 
+char				is_sysdir(char *name)
+{
+	if (name[0] == '.' && name[1] == '\0')
+		return (1);
+	if (name[0] == '.' && name[1] == '.' && name[2] == '\0')
+		return (1);
+	return (0);
+}
+
 t_darr				sh_dir_content(char *path)
 {
-	DIR				*dir;
 	struct dirent	*entry;
+	DIR				*dir;
 	t_darr			rez;
 	size_t			i;
 
-	dir = opendir(path);
-	if ((rez.count = 0) == 0 && !dir)
-	{
-		ft_putendl("\n NO DIR\n");
-		return (rez);
-	}
 	i = 0;
+	rez.count = 0;
     rez.maxlen = 0;
+	dir = opendir(path);
 	while ((entry = readdir(dir)) != NULL)
 	{
+		if (is_sysdir(entry->d_name))
+			continue ;
 		rez.strings[i] = dstr_new(entry->d_name);
 		if (sh_insert_slash(path, rez.strings[i]))
 			dstr_insert_str(rez.strings[i], "/", rez.strings[i]->strlen);

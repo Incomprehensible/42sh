@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:38:55 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/22 20:58:33 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/23 14:59:30 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,34 +70,23 @@ ssize_t			dstrrchr(const DSTRING *src, const int ch)
 
 ssize_t			sh_dstr_iscmd(const DSTRING *str)
 {
-	size_t		i;
-
-	i = 0;
-	if (!str->txt)
-		return (-1);
-	while (str->txt[i] == ' ')
-		++i;
-	if (!ft_isalpha(str->txt[i]))
-		return (-1);
-	while (ft_isalpha(str->txt[i]))
-		++i;
-	while (str->txt[i] == ' ')
-		++i;
-	if (str->txt[i - 1] == ' ' && i == str->strlen)
-		return (i);
+	ssize_t		i;
+	ssize_t		space;
+	ssize_t		smcln;
 	
-	if (ft_isalpha(str->txt[i]) || str->txt[i] == '/' || str->txt[i] == '.')
-		return (i);
-	return (-1);
+	space = dstrrchr(str, ' ');
+	smcln = dstrrchr(str, ';');
+	if (smcln != -1 && (i = smcln + 1))
+	{
+		while (ft_isspace(str->txt[i]))
+			i++;
+		if (i >= space + 1)
+			return (-1);
+	}
+	i = 0;
+	while (str->txt[i] == ' ')
+		++i;
+	if (str->strlen == 0 || space == -1 || space + 1 == i)
+		return (-1);
+	return (space + 1);
 }
-
-// ssize_t			sh_dstr_iscmd(const DSTRING *str)
-// {
-// 	size_t		i;
-
-// 	if (str->strlen == 0)
-// 		return (-1);
-// 	if (ft_strchr(str->txt, ' '))
-// 		return (-1);
-// 	if ()
-// }

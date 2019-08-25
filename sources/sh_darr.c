@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:43:13 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/22 15:11:24 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/23 14:39:25 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ t_darr			sh_cmp_darr(const t_darr darr, DSTRING *str)
 
 void			correct_namedir_buf(t_darr darr, DSTRING **buf, size_t start_dir)
 {
-	size_t		liter;
-	size_t		start_name;
+	ssize_t		start_name;
 	t_darr		darrcopy;
 	DSTRING		*name_file;
 	DSTRING		*name_dir;
@@ -92,6 +91,7 @@ void			correct_namedir_buf(t_darr darr, DSTRING **buf, size_t start_dir)
 	name_dir = dstr_slice((*buf), start_dir, (*buf)->strlen);
 	start_name = dstrrchr(name_dir, '/');
 	name_file = dstr_slice(name_dir, ++start_name, name_dir->strlen);
+	darrcopy.count = 0;
 	while (darr.count)
 	{
 		dstr_cutins_ch(&name_file, darr.strings[0]->txt[name_file->strlen], name_file->strlen);
