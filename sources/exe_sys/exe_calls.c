@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:03:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/25 00:28:10 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 05:50:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int			exe_wait_cps(pid_t cpid)
 		if (WIFSIGNALED(statloc))
 			break ;
 	}
-	while ((pid = waitpid(-1, &statloc, WUNTRACED)) || 1)
+	while ((pid = waitpid(-1, &statloc, WUNTRACED)) && pid > 0)
 	{
 		if (WIFEXITED(statloc))
 			break ;

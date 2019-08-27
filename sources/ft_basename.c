@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 20:45:07 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/24 18:41:11 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 05:27:48 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ char		*sh_checkbins(const char *cmd, ENV *envir)
 	char		**pathes;
 	char		*str;
 
-	if (*cmd == '.' && *(cmd + 1) == '/' && access(cmd, F_OK) == 0)
+	if (((*cmd == '.' && *(cmd + 1) == '/') \
+	|| *cmd == '/') && access(cmd, F_OK) == 0)
 		return (ft_strdup(cmd));
 	else if (*cmd == '.' && *(cmd + 1) == '/')
 		return (0);

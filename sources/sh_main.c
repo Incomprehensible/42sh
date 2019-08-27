@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/25 03:34:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 09:10:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int				bltn_echo(char **args, ENV *envr)
 int				main(const int argc, char **argv, char **envp)
 {
 	ENV			enviroment;
+	int			status;
 	char		*pathes = "/Users/hgranule/.brew/bin:"
 	"/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:"
 	"/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/local/munki";
@@ -99,11 +100,31 @@ int				main(const int argc, char **argv, char **envp)
 
 
 	UT_TOK_INIT();
-	UT_TOK_CR(expr_tk, "echo");
-	UT_TOK_CR(expr_tk, "THIS IS FOR PASHA");
+	UT_TOK_CR(while_tk, 0);
+	UT_TOK_CR(expr_tk, "true");
+	UT_TOK_CR(sep_tk, 0);
+	UT_TOK_CR(do_tk, 0);
+		UT_TOK_CR(expr_tk, "echo");
+		UT_TOK_CR(expr_tk, "LOL");
+		UT_TOK_CR(sep_tk, 0);
+		UT_TOK_CR(if_tk, 0);
+		UT_TOK_CR(expr_tk, "true");
+		UT_TOK_CR(sep_tk, 0);
+		UT_TOK_CR(then_tk, 0);
+			UT_TOK_CR(expr_tk, "echo");
+			UT_TOK_CR(expr_tk, "BEFORE BREAK");
+			UT_TOK_CR(sep_tk, 0);
+			UT_TOK_CR(break_tk, 0);
+			UT_TOK_CR(sep_tk, 0);
+			UT_TOK_CR(expr_tk, "echo");
+			UT_TOK_CR(expr_tk, "AFTER BREAK");
+			UT_TOK_CR(sep_tk, 0);
+		UT_TOK_CR(fi_tk, 0);
+		UT_TOK_CR(sep_tk, 0);
+	UT_TOK_CR(done_tk, 0);
 	UT_TOK_CR(eof_tk, 0);
 
-	sh_tparse(UT_TOK, &enviroment);
+	sh_tparse(UT_TOK, &enviroment, eof_tk, &status);
 
 	UT_TOK_END();
 	ft_avl_tree_free(enviroment.globals);

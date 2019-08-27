@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/25 03:32:08 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 01:35:26 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct		s_pipe			// PIPE DESCRIPTOR
 # include "executer.h"
 # include "rms.h"
 
-void		sh_tparse(t_dlist *tokens, ENV *vars);
+t_dlist		*sh_tparse(t_dlist *tokens, ENV *vars, t_tk_type end_tk, int *status);
 char		*sh_checkbins(const char *cmd, ENV *vars);
 
 /*

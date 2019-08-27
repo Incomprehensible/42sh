@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/24 10:25:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 09:00:12 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef enum		e_tk_type
 	math_tk, //* '(()), let' arephmetic operator token.
 	subsh_tk, //* '()' sub-shell token.
 	deref_tk, //* '$' dereferencing token.
-	if_tk, then_tk, else_tk, fi_tk, while_tk, do_tk, done_tk, for_tk, in_tk, until_tk, //* flow_instructions tokens.
+	if_tk, then_tk, else_tk, fi_tk, while_tk, do_tk, done_tk, for_tk, in_tk, until_tk, break_tk, contin_tk, //* flow_instructions tokens.
 	exec_tk, function_tk, //* exec and function tokens.
 	apof_tk, dquote_tk, //* [ ', " ] - double-quotes and single-quotes tokens.
 	eof_tk, //* end_of_file(input) token.
