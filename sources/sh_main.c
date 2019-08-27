@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 18:14:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 21:29:07 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int				main(const int argc, char **argv, char **envp)
 
 	enviroment.globals = ft_avl_tree_create(free);
 	ft_avl_set(enviroment.globals, ft_avl_node("PATH", pathes, ft_strlen(pathes) + 1));
-	ft_avl_set(enviroment.globals, ft_avl_node("HOME", "/Users/hgranule", ft_strlen(pathes) + 1));
+	ft_avl_set(enviroment.globals, ft_avl_node("HOME", "/Users/hgranule", 16));
 
 	enviroment.locals = 0;
 	enviroment.builtns = ft_avl_tree_create(0);
@@ -87,18 +87,18 @@ int				main(const int argc, char **argv, char **envp)
 	ft_avl_set(enviroment.builtns, ft_avl_node_cc("echo", bltn_echo, sizeof(bltn_exit)));
 	enviroment.funcs = 0;
 
-
-
 	UT_TOK_INIT();
-	UT_TOK_CR(expr_tk, "echo");
+	UT_TOK_CR(expr_tk, "ls");
 	UT_TOK_CR(empty_tk, 0);
-	UT_TOK_CR(deref_tk, 0);
-	UT_TOK_CR(name_tk, "AAA");
-	UT_TOK_CR(deref_tk, 0);
-	UT_TOK_CR(name_tk, "AAA");
-	UT_TOK_CR(deref_tk, 0);
-	UT_TOK_CR(name_tk, "AAA");
-	UT_TOK_CR(expr_tk, "/Desktop");
+	UT_TOK_CR(expr_tk, "-lR");
+	UT_TOK_CR(empty_tk, 0);
+	UT_TOK_CR(expr_tk, "/");
+	UT_TOK_CR(empty_tk, 0);
+	UT_TOK_CR(pipe_tk, 0);
+	UT_TOK_CR(expr_tk, "cat");
+	UT_TOK_CR(empty_tk, 0);
+	UT_TOK_CR(expr_tk, "-e");
+	UT_TOK_CR(empty_tk, 0);
 	UT_TOK_CR(eof_tk, 0);
 
 	sh_tparse(UT_TOK, &enviroment, eof_tk, &status);

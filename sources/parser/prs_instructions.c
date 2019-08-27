@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:26:19 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 15:21:28 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 19:50:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs)
 	expr = (EXPRESSION *)nrow->instruction;
 	if (nrow->prev_e && nrow->prev_e->type == ET_PIPE)
 		expr->ipipe_fds = ((PIPE *)nrow->prev_e->instruction)->pirw;
-	if (!(expr->args = prs_args(&tokens, envs)))
+	if (!(expr->args = prs_args(tokens, envs)))
 		return (0); //! MALLOC CALL FAILED. (NOT SAFE.)
 	expr->redirections = prs_rdrs(&tokens);
 	return (tokens);

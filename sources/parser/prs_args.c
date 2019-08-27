@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 18:21:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 21:25:49 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ int				prs_deref_name(t_dlist **tks, ENV *envs)
 	return (0);
 }
 
-int				prs_vars_derefs(t_dlist **tks, ENV *envs)
+int				prs_vars_derefs(t_dlist *tks, ENV *envs)
 {
 	t_tok		*tok;
 	t_dlist		*it;
 
-	it = *tks;
+	it = tks;
 	while (it && prs_is_a_instruction((tok = it->content)))
 	{
 		if (tok->type == deref_tk)
@@ -55,56 +55,52 @@ int				prs_vars_derefs(t_dlist **tks, ENV *envs)
 	return (0);
 }
 
-int				prs_join_exprs(t_dlist **tks)
+int				prs_join_exprs(t_dlist *tks)
 {
-	char		*valu[2];
+	t_tok		*tok[2];
+	t_dlist		*tmp;
 	char		*newval;
-	t_dlist		*tki;
-	size_t		len;
 
-	valu[0] = ((t_tok *)(*tks)->content)->value;
-	valu[1] = ((t_tok *)(*tks)->next->content)->value;
-	if (!(newval = ft_strjoin(valu[0], valu[1])))
-		return(-1); //! MALLOC ERROR code -1
-	tki = (*tks)->next;
-	ft_dlst_delcut(tks, free_token);
-	free(valu[1]);
-	((t_tok *)tki->content)->value = newval;
-	((t_tok *)tki->content)->type = expr_tk;
-	if (!(len = ft_strlen(((t_tok *)tki->content)->value)))
-		ft_dlst_delcut(&tki, free_token);
-	return (0);
+	tok[0] = tks->content;
+	tok[1] = tks->next->content;
+	tmp = tks->next;
+	if (!(newval = ft_strjoin(tok[0]->value, tok[1]->value)))
+		return (-1);
+	ft_dlst_delcut(&tmp, free_token);
+	free(tok[0]->value);
+	tok[0]->value = newval;
+	tok[0]->type = expr_tk;
+	return (1);
 }
 
-int				prs_values_joins(t_dlist **tks)
+int				prs_values_joins(t_dlist *tks)
 {
 	t_tok		*tok;
-	t_dlist		*it;
-	size_t		len;
+	t_tok		*ntok;
+	t_dlist		*ntks;
 
-	it = *tks;
-	while (it && prs_is_a_instruction((tok = it->content)))
+	while (tks && tks->next && prs_is_a_instruction((tok = tks->content)))
 	{
-		if (tok->type == expr_tk || tok->type == value_tk)
+		ntks = tks->next;
+		ntok = ntks->content;
+		if (tok->type == value_tk && (ft_strlen(tok->value) == 0))
 		{
-			tok = it->next->content;
-			if (tok->type == value_tk || tok->type == expr_tk)
-				prs_join_exprs(&it); //TODO! NEED TO CONTROL MALLOC ERROR !!!!
-			else if (((t_tok *)it->content)->type == value_tk)
-			{
-				tok = it->content;
-				if ((len = ft_strlen(tok->value)) == 0)
-					ft_dlst_delcut(&it, free_token);
-				else
-					tok->type = expr_tk;
-			}
+			ft_dlst_delcut(&tks, free_token);
+			tks = ntks;
 		}
-		it = it->next;
+		else if ((tok->type == expr_tk || tok->type == value_tk) \
+		&& (ntok->type == expr_tk || ntok->type == value_tk))
+		{
+			if (prs_join_exprs(tks) < 0)
+				return (-1);
+		}
+		else
+			tks = tks->next;
 	}
 	return (0);
 }
 
-char			**prs_args(t_dlist **tokens, ENV *envs)
+char			**prs_args(t_dlist *tokens, ENV *envs)
 {
 	char		**args;
 	size_t		argslen;
@@ -115,7 +111,7 @@ char			**prs_args(t_dlist **tokens, ENV *envs)
 	argslen = 0;
 	prs_vars_derefs(tokens, envs); //! MALLOC CHECK NEED
 	prs_values_joins(tokens); //! MALLOC CHECK NEED
-	it = *tokens;
+	it = tokens;
 	while (it && prs_is_a_instruction((tok = it->content)))
 	{
 		tok->type == expr_tk ? ++argslen : 0;
@@ -123,7 +119,7 @@ char			**prs_args(t_dlist **tokens, ENV *envs)
 	}
 	if (!(args = ft_memalloc(sizeof(char*) * (argslen + 1))))
 		return (0); //!MALLOC CALL FAILED. (SU.)
-	it = *tokens;
+	it = tokens;
 	i = -1;
 	while (it && prs_is_a_instruction((tok = it->content)))
 	{
