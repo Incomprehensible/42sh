@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:56:29 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/24 07:29:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 15:12:59 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ void		et_rm_expr(EXPRESSION *expr);
 ** FREES A CONTENT OF ETAB * from executer.h
 */
 void		et_rm_ett(void *et_cont, size_t type);
+
+void		free_token(void *tok, size_t sz);
 
 #endif

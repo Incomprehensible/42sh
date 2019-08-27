@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 01:35:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 15:20:52 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int			prs_is_a_instruction(t_tok *tok);
 /*
 ** FUNCTION RETURNS ARGS WARR FOR EXPRESSIONS
 */
-char		**prs_args(t_dlist *tokens);
+char		**prs_args(t_dlist **tokens, ENV *envs);
 
 /*
 ** FUNCTION RETURS TYPE FOR REDIRECTION DESCRIPTOR
@@ -106,7 +106,7 @@ REDIRECT		*prs_rdr_wa(t_dlist *tokens);
 /*
 ** PARSING OF A EXPRESSIONS ETT
 */
-t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens);
+t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs);
 
 /*
 ** PARSING OF A PIPES ETT

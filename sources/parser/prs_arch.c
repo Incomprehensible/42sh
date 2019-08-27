@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 09:09:54 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 14:56:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 			break ;
 
 		tks = tok->type == empty_tk || tok->type == sep_tk ? tks->next : tks;
-		tks = tok->type == expr_tk ? prs_expr(&etab, tks) : tks;
+		tks = tok->type == expr_tk ? prs_expr(&etab, tks, envs) : tks;
 		tks = tok->type == pipe_tk ? prs_pipe(&etab, tks) : tks; 
 		tks = tok->type == if_tk ? prs_if(tks, envs, status) : tks;
 		tks = tok->type == while_tk ? prs_while(tks, envs, status) : tks;

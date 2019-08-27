@@ -6,11 +6,22 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/24 21:59:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 15:12:44 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rms.h"
+
+void			free_token(void *tok, size_t sz)
+{
+	t_tok	*token;
+
+	token = tok;
+	sz = 0;
+	if (token->value)
+		free(token->value);
+	free(token);
+}
 
 void			et_rm_rdr(void *rdir, size_t type)
 {
