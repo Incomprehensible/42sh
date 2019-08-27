@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/08/25 03:33:57 by hgranule         ###   ########.fr        #
+#    Updated: 2019/08/27 16:45:48 by fnancy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,9 +47,10 @@ INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 SRC_FILES = sh_main.c exe_sys/exe_calls.c free_me/rms.c \
 			ft_basename.c exe_sys/exe_binaries.c exe_sys/exe_builtns.c \
 			exe_sys/exe_redirs.c parser/prs_arch.c parser/prs_args.c \
-			parser/prs_instructions.c parser/prs_rdrs.c parser/prs_types.c
+			parser/prs_instructions.c parser/prs_rdrs.c parser/prs_types.c \
+			env/env_init.c env/env_get_variable.c env/env_set_variable.c env/env_unset_variable.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env)
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

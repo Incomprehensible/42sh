@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 15:12:44 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/27 22:07:53 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,16 @@ void			et_rm_ett(void *et_cont, size_t type)
 		et_rm_expr((EXPRESSION *)et_cont);
 	else if (type == ET_PIPE)
 		free(et_cont);
+}
+
+void			et_rm_clear_env(ENV *env)
+{
+	if (env->globals)
+			ft_avl_tree_free(env->globals);
+	if (env->locals)
+		ft_avl_tree_free(env->locals);
+	if (env->builtns)
+		ft_avl_tree_free(env->builtns);
+	if (env->funcs)
+		ft_avl_tree_free(env->funcs);
 }
