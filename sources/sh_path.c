@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:45:13 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/17 18:46:04 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/26 23:55:08 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,9 @@ DSTRING			*sh_get_path(DSTRING *buf, size_t start_dir)
     if (sh_get_path_help(path1->txt))
         return (path1);	
 	dstr_insert_str(path1, "./", 0);
-	path2 = dstr_slice(path1, 0, dstrrchr(path1, '/'));
     if (sh_get_path_help(path1->txt))
-    {
-        dstr_del(&path2);
         return (path1);
-    }
+	path2 = dstr_slice(path1, 0, dstrrchr(path1, '/'));
     if (sh_get_path_help(path2->txt))
     {
         dstr_del(&path1);

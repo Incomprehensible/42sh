@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:36:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/23 14:34:11 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/27 03:21:59 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ t_indch			sh_tab(DSTRING **buf, size_t index, t_envp *env)
 		overlap = sh_add_path(buf, start_dir);
 	sh_rewrite((*buf), (*buf)->strlen);
 	fl = 0;
-	ind = 0;
+	ind = 1;
 	ind_name = get_ind_name((*buf));
 	while ((indch.ch = ft_getch()) == TAB)
 	{
@@ -147,8 +147,6 @@ t_indch			sh_tab(DSTRING **buf, size_t index, t_envp *env)
 		if (overlap.count == 1)
 			break ;
 	}
-	// printf("\n%zu\n", darr.count);
-	// free_darr_n(darr.strings, darr.count);
 	free_darr_n(overlap.strings, overlap.count);
 	indch.ind = (*buf)->strlen;
 	return (indch);

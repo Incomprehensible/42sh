@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:38:55 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/23 14:59:30 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/26 20:57:41 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ ssize_t			dstrrchr(const DSTRING *src, const int ch)
 {
 	ssize_t		rez;
 	
+	if (!src)
+		return (-1);
 	rez = src->strlen;
 	while (rez--)
 	{
