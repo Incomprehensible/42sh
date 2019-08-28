@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 14:43:29 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/27 16:46:10 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/28 13:11:19 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int			env_init(int argc, char **argv, char **envp, ENV *env)
 {
 	char	**spl;
 
+	spl = NULL;
 	if (!(env->globals = ft_avl_tree_create(free))\
 		|| !(env->locals = ft_avl_tree_create(free))\
 		|| !(env->builtns = ft_avl_tree_create(free))\
@@ -40,7 +41,7 @@ int			env_init(int argc, char **argv, char **envp, ENV *env)
 	{
 		spl = ft_strsplit(*envp, '=');
 		if ((ft_avl_set(env->globals, ft_avl_node(spl[0], (char *)spl[1],\
-					ft_strlen(spl[1]))) == -1))
+					ft_strlen(spl[1]) + 1)) == -1))
 		{
 			free_spl(&spl);
 			return (env_init_error(env, 12));

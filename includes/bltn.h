@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/27 20:12:15 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/28 14:22:40 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,15 @@
 # include "rms.h"
 
 /* Добавляет новую глобальную переменную или изменяет уже существующую с ключом $key и значением $value. */
-int	bltn_setenv(char *key, char *value, ENV *env);
+int	bltn_setenv(char **args, ENV *env);
 
 /* Выводит в стандартный вывод значение всех глобальных переменных в формате ключ=значение. */
 int	bltn_env(ENV *env);
 
-/* Выводит в стандартный вывод значение глобальной переменной с ключом key*/
-int	bltn_getenv(char *key, ENV *env);
+/* Выводит в стандартный вывод значение глобальной переменной с ключом*/
+int	bltn_getenv(char **args, ENV *env);
 
 /* Удаляет глобальную переменную.*/
-int	bltn_unsetenv(char *key, ENV *env);
+int	bltn_unsetenv(char **args, ENV *env);
+
 #endif

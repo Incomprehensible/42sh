@@ -6,26 +6,49 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:46:16 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/27 19:56:26 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/28 16:08:36 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn.h"
 
-int			bltn_setenv(char *key, char *value, ENV *env)
+static void	free_spl(char ***str)
+{
+	if ((*str)[0])
+		free((*str)[0]);
+	if ((*str)[1])
+		free((*str)[1]);
+	free((*str));
+}
+
+static int	setenv_error(char ***str, int errcode)
+{
+	free_spl(str);
+	return (errcode);
+}
+
+int			bltn_setenv(char **args, ENV *env)
 {
 	t_avln	*node;
+	int		i;
+	char	**spl;
 
-	if (!value || value[0] == '\0')
-		value = ft_strdup(" ");
-	if (ft_avl_search(env->locals, key) != 0)
-		return (242);
-	else
+	i = 0;
+	while (args[++i])
 	{
-		if (!(node = ft_avl_node(key, value, ft_strlen(value))))
-			return (210);
-		if (!(ft_avl_set(env->globals, node)))
-			return (210);
+		spl = ft_strsplit(args[i], '=');
+		if (!spl[1])
+			spl[1] = ft_strdup("");
+		if (ft_avl_search(env->locals, spl[0]) != 0)
+			return (setenv_error(&spl, 242));
+		else
+		{
+			if (!(node = ft_avl_node(spl[0], spl[1], ft_strlen(spl[1]) + 1)))
+				return (setenv_error(&spl, 210));
+			if (ft_avl_set(env->globals, node) == -1)
+				return (setenv_error(&spl, 210));
+		}
+		free_spl(&spl);
 	}
 	return (0);
 }

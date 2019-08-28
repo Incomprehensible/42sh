@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 22:09:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/28 16:09:46 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,11 @@ int				main(const int argc, char **argv, char **envp)
 	ENV			env;
 	int			status;
 
-
 	env_init(argc, argv, envp, &env);
-	bltn_getenv("HOME",&env);
-	bltn_unsetenv("HOME", &env);
-	bltn_getenv("HOME",&env);
+
+	bltn_env(&env);
+	//bltn_unsetenv("HOME", &env);
+	//bltn_getenv("HOME",&env);
 	et_rm_clear_env(&env);
 	
 	
