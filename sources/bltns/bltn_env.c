@@ -6,13 +6,13 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 19:52:22 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/28 12:40:04 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/28 18:20:21 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn.h"
 
-int			bltn_env(ENV *env)
+int			bltn_env(char **args, ENV *env)
 {
 	char	**mas;
 	int		i;

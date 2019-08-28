@@ -1,37 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bltn_getenv.c                                      :+:      :+:    :+:   */
+/*   bltn_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/27 20:01:57 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/28 18:21:06 by fnancy           ###   ########.fr       */
+/*   Created: 2019/08/28 18:10:52 by fnancy            #+#    #+#             */
+/*   Updated: 2019/08/28 19:53:28 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn.h"
 
-int			bltn_getenv(char **args, ENV *env)
+int		bltn_cnt_builtins(void)
 {
-	t_avln	*node;
-	int		i;
-	int		ret;
+	return (sizeof(bltns_str) / sizeof(char *));
+}
 
-	i = 0;
-	ret = -1;
-	while (args[++i])
+int		bltn_init(ENV *env)
+{
+	int i;
+
+	i = -1;
+	while (++i < bltn_cnt_builtins())
 	{
-		if ((node = ft_avl_search(env->globals, args[i])) != 0)
-		{
-			ft_putstr((char*)node->content);
-			ft_putstr("\n");
-			ret = 0;
-		}
-		else if (ft_avl_search(env->locals, args[i]) != 0)
-			return (242);
+		if ((ft_avl_set(env->builtns, ft_avl_node_cc(bltns_str[i],\
+		bltns_func[i], sizeof(bltns_func[i])))) == -1)
+			return (-1);
 	}
-	if (ret == -1)
-		return (bltn_env(args, env));
-	return (0);
+	return (1);
 }

@@ -6,12 +6,13 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 14:43:29 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/28 13:11:19 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/28 18:25:11 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env.h"
 #include "rms.h"
+#include "bltn.h"
 
 static int	env_init_error(ENV *env, int errcode)
 {
@@ -49,5 +50,7 @@ int			env_init(int argc, char **argv, char **envp, ENV *env)
 		free_spl(&spl);
 		envp++;
 	}
+	if (bltn_init(env) == -1)
+		return (env_init_error(env, 12));
 	return (1);
 }

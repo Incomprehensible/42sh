@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   rms.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 22:07:53 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/28 19:52:46 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rms.h"
+#include "bltn.h"
 
 void			free_token(void *tok, size_t sz)
 {
@@ -77,6 +78,15 @@ void			et_rm_ett(void *et_cont, size_t type)
 
 void			et_rm_clear_env(ENV *env)
 {
+	int i;
+	t_avln *node;
+
+	i = -1;
+	while (++i < bltn_cnt_builtins())
+	{
+		node = ft_avl_search(env->builtns, bltns_str[i]);
+		node->content = NULL;
+	}
 	if (env->globals)
 			ft_avl_tree_free(env->globals);
 	if (env->locals)
