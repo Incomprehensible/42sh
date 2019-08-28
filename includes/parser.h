@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 19:50:11 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/28 16:29:48 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ typedef struct		s_pipe			// PIPE DESCRIPTOR
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# ifdef __linux__
+#  include <sys/wait.h>
+# endif
 # include "ft_mem.h"
 # include "sh_token.h"
 # include "ft_string.h"
