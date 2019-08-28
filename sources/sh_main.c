@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 22:09:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/28 15:36:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,53 +77,19 @@ int				main(const int argc, char **argv, char **envp)
 
 
 	env_init(argc, argv, envp, &env);
-	bltn_getenv("HOME",&env);
-	bltn_unsetenv("HOME", &env);
-	bltn_getenv("HOME",&env);
+	env_set_variable("HOME", dstr_new("/home/hgranule"), &env);
+
+	UT_TOK_INIT();
+	UT_TOK_CR(expr_tk, "ls");
+	UT_TOK_CR(empty_tk, 0);
+	UT_TOK_CR(deref_tk, 0);
+	UT_TOK_CR(name_tk, "HOME");
+	UT_TOK_CR(eof_tk, 0);
+
+	sh_tparse(UT_TOK, &env, eof_tk, &status);
+
+	UT_TOK_END();
 	et_rm_clear_env(&env);
-	
-	
-	// enviroment.globals = ft_avl_tree_create(free);
-	// ft_avl_set(enviroment.globals, ft_avl_node("PATH", pathes, ft_strlen(pathes) + 1));
-
-	// enviroment.locals = 0;
-	// enviroment.builtns = ft_avl_tree_create(0);
-	// ft_avl_set(enviroment.builtns, ft_avl_node_cc("exit", bltn_exit, sizeof(bltn_exit)));
-	// ft_avl_set(enviroment.builtns, ft_avl_node_cc("echo", bltn_echo, sizeof(bltn_exit)));
-	// enviroment.funcs = 0;
-
-
-
-	// UT_TOK_INIT();
-	// UT_TOK_CR(while_tk, 0);
-	// UT_TOK_CR(expr_tk, "true");
-	// UT_TOK_CR(sep_tk, 0);
-	// UT_TOK_CR(do_tk, 0);
-	// 	UT_TOK_CR(expr_tk, "echo");
-	// 	UT_TOK_CR(expr_tk, "LOL");
-	// 	UT_TOK_CR(sep_tk, 0);
-	// 	UT_TOK_CR(if_tk, 0);
-	// 	UT_TOK_CR(expr_tk, "true");
-	// 	UT_TOK_CR(sep_tk, 0);
-	// 	UT_TOK_CR(then_tk, 0);
-	// 		UT_TOK_CR(expr_tk, "echo");
-	// 		UT_TOK_CR(expr_tk, "BEFORE BREAK");
-	// 		UT_TOK_CR(sep_tk, 0);
-	// 		UT_TOK_CR(break_tk, 0);
-	// 		UT_TOK_CR(sep_tk, 0);
-	// 		UT_TOK_CR(expr_tk, "echo");
-	// 		UT_TOK_CR(expr_tk, "AFTER BREAK");
-	// 		UT_TOK_CR(sep_tk, 0);
-	// 	UT_TOK_CR(fi_tk, 0);
-	// 	UT_TOK_CR(sep_tk, 0);
-	// UT_TOK_CR(done_tk, 0);
-	// UT_TOK_CR(eof_tk, 0);
-
-	// sh_tparse(UT_TOK, &enviroment, eof_tk, &status);
-
-	// UT_TOK_END();
-	// ft_avl_tree_free(enviroment.globals);
-	// ft_avl_tree_free(enviroment.builtns);
 
 	// TERMINATE
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 20:45:07 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 05:27:48 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/28 15:24:22 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char		*sh_checkpathes(const char *cmd, char **pathes)
 
 char		*sh_checkbins(const char *cmd, ENV *envir)
 {
-	t_avln		*var_node;
+	DSTRING		*dstr;
 	char		**pathes;
 	char		*str;
 
@@ -66,12 +66,13 @@ char		*sh_checkbins(const char *cmd, ENV *envir)
 		return (ft_strdup(cmd));
 	else if (*cmd == '.' && *(cmd + 1) == '/')
 		return (0);
-	if (!(var_node = ft_avl_search(envir->globals, "PATH")) || \
-	!(pathes = ft_strsplit(var_node->content, ':')))
+	if (!(dstr = env_get_variable("PATH", envir)))
+		return (0);
+	if (!(pathes = ft_strsplit(dstr->txt, ':')))
 		return (0);
 	str = sh_checkpathes(cmd, pathes);
-	if (pathes)
-		et_rm_warr(pathes);
+	dstr_del(&dstr);
+	et_rm_warr(pathes);
 	if (str)
 		return (str);
 	return (0);

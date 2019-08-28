@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 21:25:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/08/28 15:38:42 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,24 @@
 int				prs_deref_name(t_dlist **tks, ENV *envs)
 {
 	t_tok		*dtok;
-	t_avln		*v_node; //! VAR TMP
 	t_dlist		*tmp;
-	char		*valu;
+	DSTRING		*dstr;
+	int			ret;
 
 	tmp = (*tks)->next;
+	ret = 0;
 	ft_dlst_delcut(tks, free_token);
 	(*tks) = tmp;
 	dtok = tmp->content;
 	dtok->type = value_tk;
 	//! GET VARIABLE
-	if (!(v_node = ft_avl_search(envs->globals, dtok->value)))
-		valu = "";
-	else
-		valu = v_node->content;
+	if (!(dstr = env_get_variable(dtok->value, envs)))
+		return (-1);
 	free(dtok->value);
-	if (!(dtok->value = ft_strdup(valu)))
-		return (-1); //!MALLOC ERRROR -1 code
-	return (0);
+	if (!(dtok->value = ft_strdup(dstr->txt)))
+		ret = -1; //!MALLOC ERRROR -1 code
+	dstr_del(&dstr);
+	return (ret);
 }
 
 int				prs_vars_derefs(t_dlist *tks, ENV *envs)
@@ -93,6 +93,10 @@ int				prs_values_joins(t_dlist *tks)
 		{
 			if (prs_join_exprs(tks) < 0)
 				return (-1);
+		}
+		else if (tok->type == value_tk)
+		{
+			tok->type = expr_tk;
 		}
 		else
 			tks = tks->next;
