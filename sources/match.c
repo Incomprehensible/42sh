@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:52:49 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 07:53:29 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 10:19:58 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int				nmatch(const char *s1, const char *s2)
 {
 	int		step;
 
-	if ((*s1 != '\0') && (*s2 == '*'))
+	if ((*s1 != '\0') && (*s2 == '*') && (*s2 + 1 != '\\'))
 		return (nmatch(s1 + 1, s2) || nmatch(s1, s2 + 1));
 	else if ((*s1 == *s2 && *s2 != '\0') || *s1 == '?' || *s2 == '?')
 		return (nmatch(s1 + 1, s2 + 1));

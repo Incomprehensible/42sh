@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 09:04:37 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 10:01:00 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ DSTRING			*sh_readline(t_envp *env);
 ** ctrl+a move the cursor to the beginning of the line
 ** ctrl+e move the cursor to the end of the line
 ** ctrl+u Delete to the beginning of the line
-** ctrl+t Delete to the утв of the line
+** ctrl+t Delete to the end of the line
 */
 t_indch			management_line(t_indch indch, DSTRING **buf);
 
