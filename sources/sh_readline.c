@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/27 12:18:30 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 09:01:18 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,18 @@ DSTRING			*control_c(DSTRING **buf)
 
 DSTRING			*fill_reg(DSTRING **buf, t_fl fl)
 {
-	if (fl.astr)
-		astr(buf, &fl);
+	if (fl.reg)
+		reg_expr(buf, &fl);
 	return (*buf);
+}
+
+t_indch			management_line(t_indch indch, DSTRING **buf)
+{
+	if (indch.ch == 0x1)
+		indch.ind = 0;
+	else if (indch.ch == 0x5)
+		indch.ind = (*buf)->strlen;
+	return (indch);
 }
 
 DSTRING			*sh_readline(t_envp *env)
@@ -45,29 +54,32 @@ DSTRING			*sh_readline(t_envp *env)
 	char		*move;
 
 	buf = dstr_new(0);
-	indch.ind = 0;
+	ft_bzero(&indch, sizeof(t_indch));
 	ft_bzero(&fl, sizeof(t_fl));
 	while (1)
 	{
-		if (fl.tab == 0)
+		if (fl.tab == 0 && !indch.fl)
 			indch.ch = ft_getch();
-		//  printf("0x%hhX == [%c]\n", indch.ch, (indch.ch < ' ' || indch.ch > '~') ? '$' : indch.ch);
+		printf("0x%hhX == [%c]\n", indch.ch, (indch.ch < ' ' || indch.ch > '~') ? '$' : indch.ch);
 		if (indch.ch == (char)0x04)
 			return (control_c(&buf));
-		else if (indch.ch == '\n')
+		if (indch.ch == 0x1 || indch.ch == 0x5 || indch.ch == 0x15 || indch.ch == 0x14)
+			indch = management_line(indch, &buf);
+		if (indch.ch == '\n')
 			return (fill_reg(&buf, fl));
-		else if ((indch.ch == BAKSP || indch.ch == DEL) && (fl.tab = 0) == 0)
+		if ((indch.ch == BAKSP || indch.ch == DEL) && (fl.tab = 0) == 0)
 			indch.ind = sh_del_char(&buf, indch.ind, indch.ch);
-		else if (ft_isprint(indch.ch) && (fl.tab = 0) == 0)
+		if ((ft_isprint(indch.ch) || indch.ch == '\n') && (!indch.fl || indch.fl == 2) && (fl.tab = 0) == 0)
 			dstr_insert_ch(buf, indch.ch, indch.ind++);
-		else if ((indch.ch == ESC) && (fl.tab = 0) == 0)
-			indch.ind = sh_esc(indch.ind, buf->strlen);
-		if (indch.ch == TAB && fl.astr == 0 && fl.tab++ == 0)
-			indch = sh_tab(&buf, indch.ind, env);
-		if (indch.ch == '*' || indch.ch == '?' || indch.ch == '[' || indch.ch == '!')
-			fl.astr = 1;
-		if (indch.ch == TAB && fl.astr)
-			indch.ind = astr(&buf, &fl);
+		if (indch.ch == TAB && fl.reg == 0 && fl.tab++ == 0)
+			indch = sh_tab(&buf, indch.ind, env, indch);
+		if (((indch.ch == ESC) || indch.fl) && (fl.tab = 0) == 0)
+			indch = sh_esc(indch, buf->strlen, &buf);
+		if (ft_memchr("*?[", indch.ch, 3))
+			fl.reg = 1;
+		if (indch.ch == TAB && fl.reg)
+			indch.ind = reg_expr(&buf, &fl);
+		free_lines_down();
 		sh_rewrite(buf, indch.ind);
 	}
 }

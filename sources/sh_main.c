@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 09:53:12 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 02:56:53 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,39 @@
 #include "sh_req.h"
 #include "sh_readline.h"
 #include "sh_vars.h"
-# include <sys/ioctl.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+
 
 int				sh_tokenizer(char *str, t_dlist **token_list);
 int				sh_tparser(t_dlist **token_list);
+
+void		write_history(DSTRING *line)
+{
+	int		fd;
+
+	if (line->strlen == 0 || ft_strcmp(line->txt, "exit()") == 0 \
+			|| ft_strcmp(line->txt, "\n") == 0)
+		return ;
+	if (line->txt[line->strlen - 1] != '\n')
+		dstr_insert_ch(line, '\n', line->strlen);
+	/* почему то не записывает в файл команду, если надо создать файл */
+	if ((fd = open(HISTORY_PATH, O_CREAT|O_EXCL, S_IREAD|S_IWRITE)) != -1)
+	{
+		write(fd, line->txt, line->strlen);
+		close(fd);
+		return ;
+	}
+	else if ((fd = open(HISTORY_PATH, O_RDWR|O_APPEND)) == -1)
+	{
+		perror("\nopen failed on history command file");
+        exit (1);
+	}
+	write(fd, line->txt, line->strlen);
+	close(fd);
+}
 
 static void		sh_loop(t_envp *env)
 {
@@ -28,11 +57,16 @@ static void		sh_loop(t_envp *env)
 	while (1)
 	{
 		line = sh_readline(env);
+		write_history(line);
 		printf("\n\n\n\n\n%s\n", line->txt);
-		dstr_del(&line);
 		// sh_tokenizer(line, token_list);
 		// sh_tparser(token_list);
-		break ;
+		if (ft_strcmp(line->txt, "exit()") == 0)
+		{
+			dstr_del(&line);
+			break ;
+		}
+		dstr_del(&line);
 	}
 }
 

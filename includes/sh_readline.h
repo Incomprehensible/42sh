@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/27 03:09:54 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 09:04:37 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include "libft.h"
 # include "sh_vars.h"
 
+# define HISTORY_PATH "/Users/gdaemoni/Desktop/42sh/history.txt"
+
 #define S_ASTR_STR 50000
 
 /* 
@@ -29,7 +31,9 @@
 typedef struct	s_indch
 {
 	char		ch;
-	size_t		ind;
+	int			ind;
+	char		fl;
+	int			his;
 }				t_indch;
 
 /* array of strings with a counter */
@@ -49,10 +53,21 @@ typedef struct	s_regpath
 typedef struct	s_fl
 {
 	char		tab;
-	char		astr;
+	char		reg;
 }				t_fl;
 
 DSTRING			*sh_readline(t_envp *env);
+
+/* 
+** Command line editing
+**
+** ctrl+a move the cursor to the beginning of the line
+** ctrl+e move the cursor to the end of the line
+** ctrl+u Delete to the beginning of the line
+** ctrl+t Delete to the утв of the line
+*/
+t_indch			management_line(t_indch indch, DSTRING **buf);
+
 
 /* INIT GLOBAL AND LOCAL ENV
 	argc - count of arguments from main()
@@ -104,22 +119,29 @@ void			free_darr_n(DSTRING **darr, const size_t size);
 int				sort_darr(t_darr *darr);
 
 /* handles arrow clicks */
-size_t			sh_esc(size_t index, const size_t max);
+t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf);
 
 /* intercepts all keystrokes on the keyboard */
 int				ft_getch(void);
 
 /* prints an array in the form of columns. does not move the carriage */
 void			put_col(t_darr darr);
+ushort			get_col(const int lencol);
+void			free_lines_down(void);
 
 /* auto completion */
-t_indch			sh_tab(DSTRING **buf, size_t index, t_envp *env);
+t_indch			sh_tab(DSTRING **buf, size_t index, t_envp *env, t_indch indch);
 t_darr			sh_add_cmd(DSTRING **buf, t_envp *env);
 t_darr			sh_add_path(DSTRING **buf, size_t start_dir);
+char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
+int				ind_begin_cmd(DSTRING *buf);
+void			subst_name(DSTRING **buf, t_darr overlap, int ind, int ind_nam);
 char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
 
 /* appends directory name */
 void			correct_namedir_buf(t_darr darr, DSTRING **buf, size_t start_dir);
+void			help_correct_namedir_buf(t_darr *darrcopy, DSTRING **name_fil,\
+					DSTRING **name_dir);
 
 /* returns a t_darr of matches with str */
 t_darr			sh_cmp_darr(const t_darr darr, DSTRING *str);
@@ -134,12 +156,12 @@ DSTRING			*sh_get_path(DSTRING *buf, size_t start_dir);
 char			*ft_concat(const size_t n, const char *spec, ...);
 
 /* handles a special asterisk character */
-int				astr(DSTRING **buf, t_fl *fl);
+int				reg_expr(DSTRING **buf, t_fl *fl);
 
-/* auto-replace astr */
+/* auto-replace reg_expr */
 void			loop(DSTRING *reg, int i, t_astr *rez, const int itr);
 
-/* help astr */
+/* help reg_expr */
 char			chek_astr(const DSTRING *reg);
 DSTRING			*add_slash(char *str, DSTRING *reg);
 char			is_strdot(const char *path);
@@ -157,5 +179,32 @@ DSTRING			*cut_reg_expr(DSTRING *buf);
 ** returns the path, if there is no path, returns "."
 */
 t_regpath		get_regpath(DSTRING *reg);
+
+
+/*
+** To enable history management, click the up or down arrow
+**
+** ctrl+l clear history buf
+** ctrl+k print columns in chronological order
+** ctrl+p print sorted column
+*/
+
+/* write history in file */
+void			write_history(DSTRING *line);
+
+/* history management */
+t_indch			show_history(DSTRING **buf, t_indch indc);
+
+/* overwrites the command history file to avoid buffer overflow */
+void			rewrite_histr(t_darr *histr);
+
+/* clear historu file */
+void			clear_history(t_darr *his);
+
+/* reads history file and fill struct t_darr */
+char			get_histr(t_darr *histr);
+
+/* reads pressed keys */
+char			ispers_arws(char ch, t_indch *indch, t_darr *his);
 
 #endif

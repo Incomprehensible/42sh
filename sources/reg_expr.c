@@ -1,72 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   astr.c                                             :+:      :+:    :+:   */
+/*   reg_expr.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 06:51:22 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/27 10:21:24 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 07:53:00 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
 
-int			parse_brackets(const char *str, const char ch)
-{
-	int i;
-	int fl;
-	int otr;
-
-	i = -1;
-	fl = 0;
-	otr = 0;
-	while (str[++i] != ']' && str[i] != '\0')
-	{
-		if (str[i] == '!')
-			otr = 1;
-		if (str[i] == ch && (fl = 1))
-			break ;
-		if (str[i] == '-' && ch >= str[i - 1] && ch <= str[i + 1] && (fl = 1))
-			break ;
-	}
-	if ((fl && !otr) || (!fl && otr))
-	{	
-		while (str[i] != ']')
-			++i;
-		return (i + 1);
-	}
-	return (-1);
-}
-
-int			nmatch(const char *s1, const char *s2)
-{
-	int		step;
-
-	if ((*s1 != '\0') && (*s2 == '*'))
-		return (nmatch(s1 + 1, s2) || nmatch(s1, s2 + 1));
-	else if ((*s1 == *s2 && *s2 != '\0') || *s1 == '?' || *s2 == '?')
-		return (nmatch(s1 + 1, s2 + 1));
-	else if (*s1 == '[')
-	{
-		if ((step = parse_brackets(s1, *s2)) != -1)
-			return (nmatch(s1 + step, s2 + 1));
-		return (0);
-	}
-	else if (*s2 == '[')
-	{
-		if ((step = parse_brackets(s2, *s1)) != -1)
-			return (nmatch(s1 + 1, s2 + step));
-		return (0);
-	}
-	else if (*s1 == '\0' && *s2 == '\0')
-		return (1);
-	else if (*s1 == '\0' && *s2 == '*')
-		return (nmatch(s1, s2 + 1));
-	return (0);
-}
-
-DSTRING		*cut_reg_expr(DSTRING *buf)
+DSTRING			*cut_reg_expr(DSTRING *buf)
 {
 	ssize_t		ind;
 
@@ -120,7 +66,7 @@ static void		fill_buf(DSTRING **buf, const t_astr rez)
 	}
 }
 
-int				astr(DSTRING **buf, t_fl *fl)
+int				reg_expr(DSTRING **buf, t_fl *fl)
 {
 	DSTRING		*reg;
 	t_astr		rez;
@@ -134,6 +80,6 @@ int				astr(DSTRING **buf, t_fl *fl)
 		fill_buf(buf, rez);
 	free_darr_n(rez.strings, rez.count);
 	fl->tab = 0;
-	fl->astr = 0;
+	fl->reg = 0;
 	return ((*buf)->strlen);
 }

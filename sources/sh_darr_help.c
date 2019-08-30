@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_token.h                                         :+:      :+:    :+:   */
+/*   sh_darr_help.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/30 00:21:04 by gdaemoni         ###   ########.fr       */
+/*   Created: 2019/08/30 08:03:45 by gdaemoni          #+#    #+#             */
+/*   Updated: 2019/08/30 08:05:31 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_TOKEN_H
-# define SH_TOKEN_H
+#include "sh_readline.h"
 
-typedef enum		e_tk_type
+void			help_correct_namedir_buf(t_darr *darrcopy, DSTRING **name_fil,\
+					DSTRING **name_dir)
 {
-	empty, // Empty token
-	cmd, // cmd or arg
-	sep, // ;
-	pipes, // pipe |
-	eof // end of file input
-}					t_tk_type;
-
-typedef struct		s_token
-{
-	char			*value;
-	t_tk_type		type;
-}					t_tok;
-
-#endif
+	free_darr_n(darrcopy->strings, darrcopy->count);
+	dstr_del(name_dir);
+	dstr_del(name_fil);
+}

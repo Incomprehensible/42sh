@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:38:55 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/26 20:57:41 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 07:48:09 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void			dstr_cutins_ch(DSTRING **dst, char ch, ssize_t ind)
 	(*dst) = rez;
 }
 
-void					dstr_cutins_dstr(DSTRING **dst, DSTRING *src, size_t ind)
+void			dstr_cutins_dstr(DSTRING **dst, DSTRING *src, size_t ind)
 {
 	DSTRING	*rez;
 
@@ -58,7 +58,7 @@ void			dstr_cutins_str(DSTRING **dst, char *src, ssize_t ind)
 ssize_t			dstrrchr(const DSTRING *src, const int ch)
 {
 	ssize_t		rez;
-	
+
 	if (!src)
 		return (-1);
 	rez = src->strlen;
@@ -68,27 +68,4 @@ ssize_t			dstrrchr(const DSTRING *src, const int ch)
 			return (rez);
 	}
 	return (-1);
-}
-
-ssize_t			sh_dstr_iscmd(const DSTRING *str)
-{
-	ssize_t		i;
-	ssize_t		space;
-	ssize_t		smcln;
-	
-	space = dstrrchr(str, ' ');
-	smcln = dstrrchr(str, ';');
-	if (smcln != -1 && (i = smcln + 1))
-	{
-		while (ft_isspace(str->txt[i]))
-			i++;
-		if (i >= space + 1)
-			return (-1);
-	}
-	i = 0;
-	while (str->txt[i] == ' ')
-		++i;
-	if (str->strlen == 0 || space == -1 || space + 1 == i)
-		return (-1);
-	return (space + 1);
 }

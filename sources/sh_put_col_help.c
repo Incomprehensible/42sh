@@ -1,31 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_token.h                                         :+:      :+:    :+:   */
+/*   sh_put_col_help.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/30 00:21:04 by gdaemoni         ###   ########.fr       */
+/*   Created: 2019/08/30 08:15:58 by gdaemoni          #+#    #+#             */
+/*   Updated: 2019/08/30 08:27:37 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_TOKEN_H
-# define SH_TOKEN_H
+#include <sys/ioctl.h>
+#include "sh_termcomand.h"
 
-typedef enum		e_tk_type
+ushort	get_col(const int lencol)
 {
-	empty, // Empty token
-	cmd, // cmd or arg
-	sep, // ;
-	pipes, // pipe |
-	eof // end of file input
-}					t_tk_type;
+	struct winsize		term;
 
-typedef struct		s_token
-{
-	char			*value;
-	t_tk_type		type;
-}					t_tok;
-
-#endif
+	ioctl(0, TIOCGWINSZ, &term);
+	return (term.ws_col / lencol);
+}

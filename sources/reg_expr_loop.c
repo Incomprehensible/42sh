@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   astr_loop.c                                        :+:      :+:    :+:   */
+/*   reg_expr_loop.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:51:57 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/27 12:06:09 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 07:50:39 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static t_regpath	help_get_regpath(const int fl, DSTRING *path)
 	return (rez);
 }
 
-t_regpath		get_regpath(DSTRING *reg)
+t_regpath			get_regpath(DSTRING *reg)
 {
 	int			i;
 	int			fl;
@@ -83,7 +83,7 @@ static int			cmp(t_astr *rez, int i, t_regpath pth, DSTRING *reg)
 	return (i);
 }
 
-static void		addreg(t_astr *rez, DSTRING *r, DSTRING *reg, int j)
+static void			addreg(t_astr *rez, DSTRING *r, DSTRING *reg, int j)
 {
 	int		i;
 	DSTRING	*slice;
@@ -103,7 +103,7 @@ static void		addreg(t_astr *rez, DSTRING *r, DSTRING *reg, int j)
 	dstr_del(&slice);
 }
 
-void		loop(DSTRING *reg, int i, t_astr *rez, const int itr)
+void				loop(DSTRING *reg, int i, t_astr *rez, const int itr)
 {
 	DSTRING		*r;
 	int			j;

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 13:43:30 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/27 00:15:46 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 01:02:33 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,12 @@
 // Сохранить позицию: \ u001b [{s} сохраняет текущую позицию курсора
 // Сохранить позицию: \ u001b [{u} восстанавливает курсор в последнюю сохраненную позицию
 
+/* arrow keys */
 #define LEFT	"D"
 #define RIGHT	"C"
+#define UP		"A"
+#define DOWN	"B"
+
 #define CLEARL	"\x001b[0K"
 #define DELCHR	"\x001b[P"
 #define SAVECAR	"\x001b[s"

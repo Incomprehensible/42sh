@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:14:42 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/23 15:01:22 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 08:47:11 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void			sh_move_cursor(const size_t n, const char *side)
 {
 	char		*move_cors_r;
 	char		*move;
-	
+
 	if (n > 0)
 	{
 		move = ft_itoa(n);
@@ -40,7 +40,7 @@ void			sh_rewrite(const DSTRING *buf, const size_t index)
 {
 	char		*move_cursor_begin;
 	char		*len;
-	
+
 	len = ft_itoa(buf->strlen + 1000);
 	move_cursor_begin = ft_concat(3, "00", "\x1b[", len, LEFT);
 	ft_putstr(move_cursor_begin);

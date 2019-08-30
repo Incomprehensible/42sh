@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:40:25 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/26 23:02:02 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 08:07:59 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,41 +15,7 @@
 #include "sh_readline.h"
 #include <dirent.h>
 
-size_t			sh_count_file(const char *path)
-{
-	DIR				*dir;
-	struct dirent	*entry;
-	size_t			rez;
-
-	dir = opendir(path);
-	while ((entry = readdir(dir)) != NULL)
-		++rez;
-	closedir(dir);
-	return (rez);
-}
-
-void			free_darr_n(DSTRING **darr, const size_t size)
-{
-	size_t		i;
-
-	i = -1;
-	while (++i < size)
-		dstr_del(&(darr[i]));
-}
-
-void			free_darr(DSTRING **darr)
-{
-	int		size;
-
-	size = -1;
-	while (darr[size])
-	{
-		printf("%d", size);
-		dstr_del(&(darr[size]));
-	}
-}
-
-char		sh_check_dot(const DSTRING *path)
+char				sh_check_dot(const DSTRING *path)
 {
 	if (path->strlen == 1 && path->txt[0] == '.')
 		return (0);
@@ -94,7 +60,7 @@ t_darr				sh_dir_content(char *path)
 
 	i = 0;
 	rez.count = 0;
-    rez.maxlen = 0;
+	rez.maxlen = 0;
 	dir = opendir(path);
 	while ((entry = readdir(dir)) != NULL)
 	{

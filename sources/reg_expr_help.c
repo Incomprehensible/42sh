@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   astr_help.c                                        :+:      :+:    :+:   */
+/*   reg_expr_help.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:58:52 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/27 08:55:42 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 07:50:04 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ DSTRING			*add_slash(char *str, DSTRING *reg)
 	return (rez);
 }
 
-char		chek_astr(const DSTRING *reg)
+char			chek_astr(const DSTRING *reg)
 {
 	int			i;
 
@@ -59,7 +59,7 @@ DSTRING			*join_reg(DSTRING *n_dir, DSTRING *cmp, const char fl)
 }
 
 char			cmp_dirreg(DSTRING *n_dir, DSTRING *cmp,\
-						 DSTRING *reg, const char fl)
+						DSTRING *reg, const char fl)
 {
 	DSTRING		*tmp;
 

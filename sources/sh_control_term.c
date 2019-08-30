@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:35:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/22 19:06:32 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/30 07:56:22 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,81 @@
 #include "sh_termcomand.h"
 #include <unistd.h>
 #include <termios.h>
+#include <fcntl.h>
 
-size_t			sh_esc(size_t index, const size_t max)
+void			put_col_his(t_darr his, char fl)
+{
+	int			ind;
+	int			count;
+	t_darr		col;
+
+	ind = S_DARR_STRINGS - his.count;
+	count = -1;
+	while (++count < his.count)
+		col.strings[count] = dstr_new(his.strings[ind++]->txt);
+	col.allsize = his.allsize;
+	col.maxlen = his.maxlen;
+	col.count = his.count;
+	if (fl)
+		sort_darr(&col);
+	put_col(col);
+	free_darr_n(col.strings, col.count);
+}
+
+char			ispers_arws(char ch, t_indch *indch, t_darr *his)
+{
+	if (ch == 0xB)
+		put_col_his(*his, 0);
+	else if (ch == 0x10)
+		put_col_his(*his, 1);
+	else if (ch == 0xC)
+		clear_history(his);
+	else if (ch == ESC)
+	{
+		ch = ft_getch();
+		if (ch == '[')
+		{
+			ch = ft_getch();
+			indch->fl = 1;
+			return (ch);
+		}
+	}
+	indch->fl = 2;
+	return (ch);
+}
+
+t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf)
 {
 	char		ch;
 
-	ch = ft_getch();
-	if (ch == '[')
+	if (!indch.fl)
+		indch.ch = ft_getch();
+	if (indch.ch == '[' || indch.fl)
 	{
-		ch = ft_getch();
-		if (ch == LEFT[0] && index > 0)
-			return (--index);
-		else if (ch == RIGHT[0] && index < max)
-			return (++index);
+		if (!indch.fl)
+			indch.ch = ft_getch();
+		indch.fl = 0;
+		if (indch.ch == LEFT[0] && indch.ind > 0)
+		{
+			indch.ind--;
+			return (indch);
+		}
+		else if (indch.ch == RIGHT[0] && indch.ind < max)
+		{
+			indch.ind++;
+			return (indch);
+		}
+		else if (indch.ch == UP[0] || indch.ch == DOWN[0])
+			return (show_history(buf, indch));
 	}
-	return (index);
+	return (indch);
 }
 
 int				ft_getch(void)
 {
-	struct		termios oldt;
-	struct		termios newt;
-	char		ch;
+	struct termios	oldt;
+	struct termios	newt;
+	char			ch;
 
 	ch = 0;
 	tcgetattr(0, &oldt);
