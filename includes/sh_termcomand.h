@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 13:43:30 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 01:02:33 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/31 16:01:37 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,17 @@
 #define UP		"A"
 #define DOWN	"B"
 
-#define CLEARL	"\x001b[0K"
 #define DELCHR	"\x001b[P"
 #define SAVECAR	"\x001b[s"
 #define LOADCAR "\x001b[u"
 #define NEXTLIN "\x001b[1E"
-
+#define MOVEBGN "\x001b[10000D"
+/* clears from cursor to end of line */
+#define CLEARL	"\x001b[0J"
+/* clears from cursor to start of line */
+#define CLRCRBG "\x001b[1K"
+#define MOVEUP	"\x001b[1A"
+#define MOVEDWN "\x001b[1B"
 
 #define BAKSP	127
 #define DEL		126

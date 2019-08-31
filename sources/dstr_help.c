@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:47:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 07:54:28 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/31 07:24:33 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ ssize_t			sh_dstr_iscmd(const DSTRING *str)
 			return (-1);
 	}
 	i = 0;
-	while (str->txt[i] == ' ')
+	while (str->txt && str->txt[i] == ' ')
 		++i;
 	if (str->strlen == 0 || space == -1 || space + 1 == i)
 		return (-1);

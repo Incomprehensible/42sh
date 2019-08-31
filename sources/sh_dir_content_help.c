@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 08:07:20 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 08:08:10 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/31 11:55:08 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,22 @@ size_t				sh_count_file(const char *path)
 	return (rez);
 }
 
-void				free_darr_n(DSTRING **darr, const size_t size)
+void				free_darr_n(DSTRING **darr, const int size)
 {
-	size_t		i;
+	int		i;
 
 	i = -1;
 	while (++i < size)
 		dstr_del(&(darr[i]));
 }
 
-void				free_darr(DSTRING **darr)
+void				free_darr_re(DSTRING **darr, const int size)
 {
-	int		size;
+	int		i;
+	int		c;
 
-	size = -1;
-	while (darr[size])
-	{
-		printf("%d", size);
-		dstr_del(&(darr[size]));
-	}
+	i = S_DARR_STRINGS - 1;
+	c = -1;
+	while (++c < size)
+		dstr_del(&(darr[i--]));
 }

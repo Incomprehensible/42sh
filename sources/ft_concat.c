@@ -6,23 +6,14 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 17:02:34 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/22 18:19:26 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/31 06:13:57 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdarg.h>
 #include <stdlib.h>
 #include "libft.h"
-
-typedef struct		s_concat
-{
-	size_t			start;
-	size_t			*size;
-	size_t			n;
-	size_t			i;
-	size_t			all;
-
-}					t_concat;
+#include "sh_readline.h"
 
 static void		ft_addstr(char **str1, const char *str2, t_concat *p, \
 								const char *symbol)

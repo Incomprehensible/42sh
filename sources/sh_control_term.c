@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:35:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 07:56:22 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/31 06:58:59 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <termios.h>
 #include <fcntl.h>
 
-void			put_col_his(t_darr his, char fl)
+void			put_col_his(t_darr his, char fl, const DSTRING *buf)
 {
 	int			ind;
 	int			count;
@@ -31,16 +31,17 @@ void			put_col_his(t_darr his, char fl)
 	col.count = his.count;
 	if (fl)
 		sort_darr(&col);
-	put_col(col);
+	put_col(col, buf);
 	free_darr_n(col.strings, col.count);
 }
 
-char			ispers_arws(char ch, t_indch *indch, t_darr *his)
+char			ispers_arws(char ch, t_indch *indch, \
+				t_darr *his, const DSTRING *buf)
 {
 	if (ch == 0xB)
-		put_col_his(*his, 0);
+		put_col_his(*his, 0, buf);
 	else if (ch == 0x10)
-		put_col_his(*his, 1);
+		put_col_his(*his, 1, buf);
 	else if (ch == 0xC)
 		clear_history(his);
 	else if (ch == ESC)

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 10:01:00 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/31 18:46:53 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,27 @@
 # include "libft.h"
 # include "sh_vars.h"
 
-# define HISTORY_PATH "/Users/gdaemoni/Desktop/42sh/history.txt"
+# define HISTORY_PATH "/Users/gdaemoni/Desktop/42sh/sources/histr.txt"
 
 #define S_ASTR_STR 50000
+
+/* to save strings ft_concat */
+typedef struct	s_concat
+{
+	size_t		start;
+	size_t		*size;
+	size_t		n;
+	size_t		i;
+	size_t		all;
+
+}				t_concat;
+
+/* to save strings sh_tab */
+typedef struct	s_name_ind
+{
+	int			ind;
+	int			ind_name;
+}				t_name_ind;
 
 /* 
 ** ch - user entered character
@@ -112,8 +130,8 @@ char			sh_isdir(DSTRING *buf, ssize_t start_dir);
 char			sh_check_dot(const DSTRING *path);
 
 /* clears an array DSTRING */
-void			free_darr(DSTRING **darr);
-void			free_darr_n(DSTRING **darr, const size_t size);
+void			free_darr_n(DSTRING **darr, const int size);
+void			free_darr_re(DSTRING **darr, const int size);
 
 /* sorts lexicographically array DSTRING */
 int				sort_darr(t_darr *darr);
@@ -125,12 +143,15 @@ t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf);
 int				ft_getch(void);
 
 /* prints an array in the form of columns. does not move the carriage */
-void			put_col(t_darr darr);
+void			put_col(t_darr overlap, const DSTRING *buf);
 ushort			get_col(const int lencol);
 void			free_lines_down(void);
 
 /* auto completion */
-t_indch			sh_tab(DSTRING **buf, size_t index, t_envp *env, t_indch indch);
+t_indch			sh_tab(DSTRING **buf, t_envp *env, t_indch indch);
+t_darr			sh_tab_help(DSTRING **buf, t_envp *env);
+int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
+					int fl, t_name_ind n_ind);
 t_darr			sh_add_cmd(DSTRING **buf, t_envp *env);
 t_darr			sh_add_path(DSTRING **buf, size_t start_dir);
 char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
@@ -205,6 +226,7 @@ void			clear_history(t_darr *his);
 char			get_histr(t_darr *histr);
 
 /* reads pressed keys */
-char			ispers_arws(char ch, t_indch *indch, t_darr *his);
+char			ispers_arws(char ch, t_indch *indch, \
+				t_darr *his, const DSTRING *buf);
 
 #endif

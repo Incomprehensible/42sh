@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:05:05 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 08:39:37 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/31 17:10:56 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,20 @@ void			rewrite_histr(t_darr *histr)
 		perror("\nopen failed on history command file");
 		exit(1);
 	}
-	ind = S_DARR_STRINGS - 1;
+	if (histr->count > 1000)
+		ind = S_DARR_STRINGS - (histr->count - 1000);
+	else
+		ind = S_DARR_STRINGS - 1;
 	count = 0;
-	while (count < 1000 && count < histr->count)
+	while (count <= 1000 && count < histr->count)
 	{
 		write(fd, histr->strings[ind]->txt, histr->strings[ind]->strlen);
 		write(fd, "\n", 1);
 		ind--;
 		count++;
 	}
-	free_darr_n(histr->strings, histr->count);
 	close(fd);
+	free_darr_re(histr->strings, histr->count);
 }
 
 void			clear_history(t_darr *his)
@@ -110,7 +113,7 @@ t_indch			show_history(DSTRING **buf, t_indch indc)
 			write_cmd_to_buf(--indc.his, his, buf);
 		indc.ind = (*buf)->strlen;
 		sh_rewrite((*buf), (*buf)->strlen);
-		indc.ch = ispers_arws(ft_getch(), &indc, &his);
+		indc.ch = ispers_arws(ft_getch(), &indc, &his, (*buf));
 		if (indc.ch != UP[0] && indc.ch != DOWN[0] \
 			&& indc.ch != 0xB && indc.ch != 0x10)
 			break ;

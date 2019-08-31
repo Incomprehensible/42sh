@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:43:03 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 07:45:41 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/31 07:25:16 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int				ind_begin_cmd(DSTRING *buf)
 		return (ind + 1);
 	}
 	ind = 0;
-	while (ft_isspace(buf->txt[ind]))
+	while (buf->txt && ft_isspace(buf->txt[ind]))
 		++ind;
 	return (ind);
 }
@@ -55,4 +55,30 @@ char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir)
 		return (1);
 	}
 	return (1);
+}
+
+int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
+					int fl, t_name_ind n_ind)
+{
+	if (fl == 0 && overlap.count > 1)
+		put_col(overlap, (*buf));
+	if (overlap.count > 1 && fl != 0)
+		subst_name(buf, overlap, n_ind.ind++, n_ind.ind_name);
+	if (n_ind.ind == overlap.count)
+		n_ind.ind = 0;
+	return (n_ind.ind);
+}
+
+t_darr			sh_tab_help(DSTRING **buf, t_envp *env)
+{
+	ssize_t		start_dir;
+	t_darr		overlap;
+
+	overlap.count = 0;
+	if ((start_dir = sh_dstr_iscmd((*buf))) == -1)
+		overlap = sh_add_cmd(buf, env);
+	else if (sh_check_back_slash(buf, start_dir))
+		overlap = sh_add_path(buf, start_dir);
+	sh_rewrite((*buf), (*buf)->strlen);
+	return (overlap);
 }

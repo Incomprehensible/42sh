@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 08:17:07 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/31 07:38:43 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static DSTRING		*sh_get_col(t_darr dar, const ushort col, ushort iter)
 	uint		ind;
 
 	nstr = -1;
-	colstr = dstr_new("\n");
+	colstr = dstr_new("");
 	while (++nstr < dar.count / col + 1 && (iter = 0) == 0)
 	{
 		ind = nstr;
@@ -86,7 +86,7 @@ void				free_lines_down(void)
 	ft_putstr(LOADCAR);
 }
 
-void				put_col(t_darr overlap)
+void				put_col(t_darr overlap, const DSTRING *buf)
 {
 	ushort		col;
 	int			iter;
@@ -94,11 +94,13 @@ void				put_col(t_darr overlap)
 
 	iter = 0;
 	col = get_col(overlap.maxlen + 2);
+	ft_putstr(CLRCRBG);
+	ft_putstr(MOVEBGN);
 	free_lines_down();
-	ft_putstr(SAVECAR);
 	colstr = sh_get_col(overlap, col, iter);
 	dstr_cutins_ch(&colstr, '\0', colstr->strlen - 1);
 	ft_putstr(colstr->txt);
+	ft_putstr("\n");
+	sh_rewrite(buf, buf->strlen);
 	dstr_del(&colstr);
-	ft_putstr(LOADCAR);
 }

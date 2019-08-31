@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:36:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 08:36:13 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/08/31 14:26:00 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,40 +72,32 @@ int				get_ind_name(DSTRING *buf)
 	return (0);
 }
 
-t_darr			sh_tab_help(DSTRING **buf, t_envp *env)
+void			insert_space(DSTRING **buf)
 {
-	ssize_t		start_dir;
-	t_darr		overlap;
-
-	overlap.count = 0;
-	if ((start_dir = sh_dstr_iscmd((*buf))) == -1)
-		overlap = sh_add_cmd(buf, env);
-	else if (sh_check_back_slash(buf, start_dir))
-		overlap = sh_add_path(buf, start_dir);
-	sh_rewrite((*buf), (*buf)->strlen);
-	return (overlap);
+	if (!sh_isdir(*buf, get_ind_name(*buf)))
+		dstr_insert_ch(*buf, ' ', (*buf)->strlen);
 }
 
-t_indch			sh_tab(DSTRING **buf, size_t index, t_envp *env, t_indch indch)
+t_indch			sh_tab(DSTRING **buf, t_envp *env, t_indch indch)
 {
 	t_darr		overlap;
 	int			fl;
-	int			ind;
-	int			ind_name;
+	t_name_ind	n_ind;
 
-	overlap = sh_tab_help(buf, env);
 	fl = 0;
-	ind = 1;
-	ind_name = get_ind_name((*buf));
-	while ((indch.ch = ft_getch()) == TAB)
+	n_ind.ind = 0;
+	overlap = sh_tab_help(buf, env);
+	n_ind.ind_name = get_ind_name((*buf));
+	sort_darr(&overlap);
+	while (1)
 	{
-		if (fl++ == 0 && overlap.count > 1 && sort_darr(&overlap))
-			put_col(overlap);
-		if (overlap.count > 1 && fl > 1)
-			subst_name(buf, overlap, ind++, ind_name);
-		if (ind == overlap.count)
-			ind = 0;
-		if (overlap.count == 1)
+		n_ind.ind = sh_tab_loop_help(overlap, buf, fl++, n_ind);
+		if (overlap.count <= 1)
+		{
+			insert_space(buf);
+			break ;
+		}
+		if ((indch.ch = ft_getch()) != TAB)
 			break ;
 	}
 	free_darr_n(overlap.strings, overlap.count);
