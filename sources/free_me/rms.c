@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/28 19:52:46 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/31 14:53:56 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,6 @@ void			et_rm_clear_env(ENV *env)
 		ft_avl_tree_free(env->builtns);
 	if (env->funcs)
 		ft_avl_tree_free(env->funcs);
+	if (env->aliases)
+		ft_avl_tree_free(env->aliases);
 }

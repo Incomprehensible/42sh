@@ -6,26 +6,32 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 14:43:29 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/28 18:25:11 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/31 16:49:06 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env.h"
 #include "rms.h"
 #include "bltn.h"
+#include "aliases.h"
 
-static int	env_init_error(ENV *env, int errcode)
+int			env_init_error(ENV *env, int errcode)
 {
 	if (errcode == 12)
 		et_rm_clear_env(env);
 	return (errcode);
 }
 
-static void	free_spl(char ***spl)
+void		free_spl(char ***spl)
 {
-	free((*spl)[0]);
-	free((*spl)[1]);
-	free((*spl));
+	if (!(*spl))
+		return ;
+	if ((*spl)[0])
+		free((*spl)[0]);
+	if ((*spl)[1])
+		free((*spl)[1]);
+	if ((*spl))
+		free((*spl));
 }
 
 int			env_init(int argc, char **argv, char **envp, ENV *env)
@@ -36,7 +42,8 @@ int			env_init(int argc, char **argv, char **envp, ENV *env)
 	if (!(env->globals = ft_avl_tree_create(free))\
 		|| !(env->locals = ft_avl_tree_create(free))\
 		|| !(env->builtns = ft_avl_tree_create(free))\
-		|| !(env->funcs = ft_avl_tree_create(free)))
+		|| !(env->funcs = ft_avl_tree_create(free))\
+		|| !(env->aliases = ft_avl_tree_create(free)))
 		return (env_init_error(env, 12));
 	while (*envp)
 	{
@@ -50,7 +57,7 @@ int			env_init(int argc, char **argv, char **envp, ENV *env)
 		free_spl(&spl);
 		envp++;
 	}
-	if (bltn_init(env) == -1)
+	if (bltn_init(env) == -1 || alias_init(env) == -1)
 		return (env_init_error(env, 12));
 	return (1);
 }

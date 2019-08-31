@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/28 19:38:23 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/31 18:44:11 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ static void		sh_loop(void)
 	}
 }
 
-int				bltn_exit(char **args, ENV *envr)
-{
-	exit(100);
-}
+// int				bltn_exit(char **args, ENV *envr)
+// {
+// 	exit(100);
+// }
 
 int				bltn_echo(char **args, ENV *envr)
 {
@@ -74,21 +74,21 @@ int				main(const int argc, char **argv, char **envp)
 {
 	ENV			env;
 	int			status;
-
+	
 	env_init(argc, argv, envp, &env);
-	env_set_variable("HOME", dstr_new("/Users/fnancy"), &env);
+
 	UT_TOK_INIT();
-	UT_TOK_CR(expr_tk, "getenv");
+	UT_TOK_CR(expr_tk, "unalias");
 	UT_TOK_CR(empty_tk, 0);
-	UT_TOK_CR(expr_tk, "HOME");
+	UT_TOK_CR(expr_tk, "jopa");
 	UT_TOK_CR(empty_tk, 0);
-	UT_TOK_CR(expr_tk, "TMPDIR");
-	UT_TOK_CR(empty_tk, 0);
+	//UT_TOK_CR(expr_tk, "alias");
+	//UT_TOK_CR(empty_tk, 0);
 	UT_TOK_CR(eof_tk, 0);
 
 	sh_tparse(UT_TOK, &env, eof_tk, &status);
 
-	UT_TOK_END();
+	// UT_TOK_END();
 	et_rm_clear_env(&env);
 
 	// TERMINATE

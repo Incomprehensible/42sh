@@ -6,20 +6,11 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:46:16 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/28 16:08:36 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/31 15:57:40 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn.h"
-
-static void	free_spl(char ***str)
-{
-	if ((*str)[0])
-		free((*str)[0]);
-	if ((*str)[1])
-		free((*str)[1]);
-	free((*str));
-}
 
 static int	setenv_error(char ***str, int errcode)
 {

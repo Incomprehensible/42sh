@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/28 12:53:05 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/08/31 15:11:56 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ typedef struct	s_env
 	t_avl_tree	*globals;
 	t_avl_tree	*builtns;
 	t_avl_tree	*funcs;
+	t_avl_tree	*aliases;
 }				t_env;
-
-#endif
 
 /* INIT ENV 
  -if success return 1
@@ -44,3 +43,10 @@ int		env_set_variable(const char *key, DSTRING *value, ENV *enviroment);
 
 /* Удаляет переменную и очищает её память.*/
 int		env_unset_variable(const char *key, ENV *enviroment);
+
+/*Функция для обработки ошибок инициализации */
+int		env_init_error(ENV *env, int errcode);
+
+void	free_spl(char ***spl);
+
+#endif
