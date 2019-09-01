@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 14:56:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/01 17:42:19 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,24 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 	return (status);
 }
 
+int				math_to_expr_maker(ETAB **etab)
+{
+	MATH		*math;
+	EXPRESSION	*cmd;
+	char		*tmp;
+
+	math = (*etab)->instruction;
+	tmp = math->expr;
+	(*etab)->type = ET_EXPR;
+	cmd = (EXPRESSION *)math;
+	if (!(cmd->args = ft_memalloc(4 * sizeof(char *))))
+		return (-1);
+	cmd->args[0] = ft_strdup("((");
+	cmd->args[2] = ft_strdup("))");
+	cmd->args[1] = tmp;
+	return (0);
+}
+
 int				prs_executor(ETAB **etab, ENV *envs) //TODO! ERROR CHECKING NEED
 {
 	ETAB		*etab_row;
@@ -50,6 +68,8 @@ int				prs_executor(ETAB **etab, ENV *envs) //TODO! ERROR CHECKING NEED
 
 	while ((etab_row = *etab) != 0)
 	{
+		if (etab_row->type == ET_MATH)
+			status = math_to_expr_maker(etab);
 		if (etab_row->type == ET_EXPR)
 			status = prs_execute_expr(etab, envs);
 	}
@@ -158,6 +178,7 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 
 		tks = tok->type == empty_tk || tok->type == sep_tk ? tks->next : tks;
 		tks = tok->type == expr_tk ? prs_expr(&etab, tks, envs) : tks;
+		tks = tok->type == math_tk ? prs_math(&etab, tks, envs) : tks;
 		tks = tok->type == pipe_tk ? prs_pipe(&etab, tks) : tks; 
 		tks = tok->type == if_tk ? prs_if(tks, envs, status) : tks;
 		tks = tok->type == while_tk ? prs_while(tks, envs, status) : tks;

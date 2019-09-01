@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:09:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 01:18:30 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/01 17:14:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # define ET_EXPR (size_t)1
 # define ET_PIPE (size_t)2
+# define ET_MATH (size_t)3
 
 typedef struct		s_extab			// RELOADING OF T_DLIST
 {

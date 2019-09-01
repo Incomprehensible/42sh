@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aliases.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 14:39:09 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/31 17:02:18 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/01 18:05:24 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "bltn.h"
 # include <unistd.h>
 # include <fcntl.h>
-# define FILE_ALIASES "/Users/fnancy/.42shrc"
+# define FILE_ALIASES "/Users/hgranule/.42shrc"
 
 /*
 **Инициализация алиасов

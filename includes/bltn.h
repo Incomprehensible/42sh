@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/31 18:40:57 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/01 20:05:26 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "rms.h"
 
 static char	*bltns_str[] = {"setenv", "env", "getenv", "unsetenv", "exit",\
-	"alias", "unalias"};
+	"alias", "unalias", "(("};
 
 /*
 **Волзвращает кол-во bltns
@@ -63,7 +63,10 @@ int	bltn_alias(char **args, ENV *env);
 /* Удаление алиаса*/
 int	bltn_unalias(char **args, ENV *env);
 
+/* Математический билтын */
+int bltn_math(char **args, ENV *env);
+
 static int	(*bltns_func[]) (char **, ENV *) = {&bltn_setenv,\
-	&bltn_env, &bltn_getenv, &bltn_unsetenv, &bltn_exit, &bltn_alias, &bltn_unalias};
+	&bltn_env, &bltn_getenv, &bltn_unsetenv, &bltn_exit, &bltn_alias, &bltn_unalias, &bltn_math};
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/28 16:29:48 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/01 17:29:41 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define EXPRESSION t_command
 # define REDIRECT t_redir
 # define PIPE t_pipe
+# define MATH t_math
 
 typedef enum		e_rd_type		// TYPES OF REDIRS
 {
@@ -44,6 +45,14 @@ typedef struct		s_command		// COMMAND DESCRIPTOR!!
 	int				*opipe_fds;		// output pipe
 	t_dlist			*redirections;	// double-list with a content of t_redir (REDIRECT)
 }					t_command;
+
+typedef struct		s_math			// ARIPHMETICAL DESCRIPTOR!!
+{
+	char			*expr;
+	int				*ipipe_fds;		// input pipe
+	int				*opipe_fds;		// output pipe
+	t_dlist			*redirections;	// double-list with a content of t_redir (REDIRECT)				
+}					t_math;
 
 typedef struct		s_pipe			// PIPE DESCRIPTOR
 {
@@ -115,5 +124,7 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs);
 ** PARSING OF A PIPES ETT
 */
 t_dlist			*prs_pipe(ETAB **tab, t_dlist *tk);
+
+t_dlist			*prs_math(ETAB **tab, t_dlist *tokens, ENV *envs);
 
 #endif

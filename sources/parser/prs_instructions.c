@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:26:19 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 19:50:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/01 17:28:44 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,32 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs)
 	return (tokens);
 }
 
+t_dlist			*prs_math(ETAB **tab, t_dlist *tokens, ENV *envs)
+{
+	MATH		*math;
+	ETAB		*nrow;
+	t_tok		*mtok;
+
+	if (!(nrow = (ETAB *)ft_dlstnew_cc(0, 0)))
+		return (0); //! MALLOC CALL FAILED. (SU.)
+	ft_dlstpush((t_dlist **)tab, (t_dlist *)nrow);
+	nrow->type = ET_MATH;
+	if (!(nrow->instruction = ft_memalloc(sizeof(MATH))))
+		return (0); //! MALLOC CALL FAILED. (SU.)
+	math = (MATH *)nrow->instruction;
+	if (nrow->prev_e && nrow->prev_e->type == ET_PIPE)
+		math->ipipe_fds = ((PIPE *)nrow->prev_e->instruction)->pirw;
+	mtok = tokens->content;
+	math->expr = ft_strdup(mtok->value); 
+	math->redirections = prs_rdrs(&tokens);
+	return (tokens);
+}
+
 t_dlist			*prs_pipe(ETAB **tab, t_dlist *tk)
 {
 	ETAB		*curt;
 	EXPRESSION	*expr;
+	MATH		*math;
 	PIPE		*pipee;
 
 	curt = (ETAB *)ft_dlstnew_cc(0, 0);
@@ -43,8 +65,16 @@ t_dlist			*prs_pipe(ETAB **tab, t_dlist *tk)
 	curt->type = ET_PIPE;
 	if (!(curt->instruction = ft_memalloc(sizeof(PIPE))))
 		return (0); //! MALLOC FAILED
-	expr = curt->prev_e->instruction;
 	pipee = curt->instruction;
-	expr->opipe_fds = pipee->pirw;
+	if (curt->prev_e->type == ET_EXPR)
+	{
+		expr = curt->prev_e->instruction;
+		expr->opipe_fds = pipee->pirw;
+	}
+	else
+	{
+		math = curt->prev_e->instruction;
+		math->opipe_fds = pipee->pirw;
+	}
 	return (tk->next);
 }
