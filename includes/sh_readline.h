@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/31 18:46:53 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/01 14:24:11 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ typedef struct	s_fl
 
 DSTRING			*sh_readline(t_envp *env);
 
+char		is_ctrl(const t_indch indch);
+
 /* 
 ** Command line editing
 **
@@ -85,7 +87,6 @@ DSTRING			*sh_readline(t_envp *env);
 ** ctrl+t Delete to the end of the line
 */
 t_indch			management_line(t_indch indch, DSTRING **buf);
-
 
 /* INIT GLOBAL AND LOCAL ENV
 	argc - count of arguments from main()

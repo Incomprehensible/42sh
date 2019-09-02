@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 13:01:11 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/22 18:51:15 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/01 19:03:40 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	sh_init_vars(int argc, char **argv, char **envp, t_envp *env)
 					1 + ft_strlen(spl[1])));
 		free(spl[0]);
 		free(spl[1]);
-		free(spl); //! MALLOC ERROR NEED TO FREE
+		free(spl);
 		envp++;
 	}
 }

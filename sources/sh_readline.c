@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/31 19:19:19 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/02 13:45:43 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "dstring.h"
 #include <dirent.h>
 
-t_indch			management_line(t_indch indch, DSTRING **buf)
+t_indch					management_line(t_indch indch, DSTRING **buf)
 {
 	DSTRING		*str;
 
@@ -57,38 +57,12 @@ static DSTRING			*return_line(DSTRING **buf, t_indch indch, t_fl fl)
 	return (*buf);
 }
 
-static char				is_ctrl(t_indch indch)
-{
-	if (indch.ch == 0x1 || indch.ch == 0x5 \
-		|| indch.ch == 0x15 || indch.ch == 0x14)
-		return (1);
-	return (0);
-}
-
-static t_indch			auto_correction(DSTRING **buf, t_indch indch, \
-							t_fl *fl, t_envp *env)
-{
-	if ((indch.ch == BAKSP || indch.ch == DEL) && (fl->tab = 0) == 0)
-		indch.ind = sh_del_char(buf, indch.ind, indch.ch);
-	if (indch.ch == TAB && fl->reg == 0 && fl->tab++ == 0)
-		indch = sh_tab(buf, env, indch);
-	if (((indch.ch == ESC) || indch.fl) && (fl->tab = 0) == 0)
-		indch = sh_esc(indch, (*buf)->strlen, buf);
-	return (indch);
-}
-
-void					sh_readlinebzero(t_indch *indch, t_fl *fl)
-{
-	ft_bzero(indch, sizeof(t_indch));
-	ft_bzero(fl, sizeof(t_fl));
-}
-
-char					is_reg(DSTRING *buf)
+static char				is_reg(DSTRING *buf)
 {
 	int		i;
 
 	i = -1;
-	while (buf->txt[++i])
+	while (buf->txt && buf->txt[++i])
 	{
 		if (ft_memchr("*?[", buf->txt[i], 3) && buf->txt[i + 1] != '\\')
 			return (1);
@@ -96,6 +70,20 @@ char					is_reg(DSTRING *buf)
 			break ;
 	}
 	return (0);
+}
+
+static t_indch			auto_correction(DSTRING **buf, t_indch indch, \
+							t_fl *fl, t_envp *env)
+{
+	if (is_reg(*buf))
+		fl->reg = 1;
+	if ((indch.ch == BAKSP || indch.ch == DEL) && (fl->tab = 0) == 0)
+		indch.ind = sh_del_char(buf, indch.ind, indch.ch);
+	if (indch.ch == TAB && fl->reg == 0 && fl->tab++ == 0)
+		indch = sh_tab(buf, env, indch);
+	if (((indch.ch == ESC) || indch.fl) && (fl->tab = 0) == 0)
+		indch = sh_esc(indch, (*buf)->strlen, buf);
+	return (indch);
 }
 
 DSTRING					*sh_readline(t_envp *env)
@@ -106,7 +94,9 @@ DSTRING					*sh_readline(t_envp *env)
 	char		*move;
 
 	buf = dstr_new(0);
-	sh_readlinebzero(&indch, &fl);
+	ft_bzero(&indch, sizeof(t_indch));
+	ft_bzero(&fl, sizeof(t_fl));
+	ft_putstr(NAME);
 	while (1)
 	{
 		if (fl.tab == 0 && !indch.fl)
@@ -118,14 +108,9 @@ DSTRING					*sh_readline(t_envp *env)
 		if (ft_isprint(indch.ch) && indch.ch != DEL \
 			&& (!indch.fl || indch.fl == 2) && (fl.tab = 0) == 0)
 			dstr_insert_ch(buf, indch.ch, indch.ind++);
-		if (is_reg(buf))
-			fl.reg = 1;
 		indch = auto_correction(&buf, indch, &fl, env);
 		if (indch.ch == TAB && fl.reg)
 			indch.ind = reg_expr(&buf, &fl);
 		sh_rewrite(buf, indch.ind);
 	}
 }
-/* printf("0x%hhX == [%c]\n", indch.ch,\
- (indch.ch < ' ' || indch.ch > '~') ? '$' : indch.ch); */
-	

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:05:05 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/31 17:10:56 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/02 15:21:48 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char			get_histr(t_darr *histr)
 {
 	int			fd;
 	int			ind;
-	char		*line;
+	DSTRING		*line;
 
 	if ((fd = open(HISTORY_PATH, O_RDONLY)) == -1)
 	{
@@ -29,8 +29,7 @@ char			get_histr(t_darr *histr)
 	ind = S_DARR_STRINGS;
 	while (get_next_line(fd, &line) == 1 && ind > 0)
 	{
-		histr->strings[--ind] = dstr_new(line);
-		free(line);
+		histr->strings[--ind] = line;
 		++histr->count;
 		histr->allsize += histr->strings[ind]->strlen;
 		if (histr->strings[ind]->strlen > histr->maxlen)
@@ -52,7 +51,7 @@ void			rewrite_histr(t_darr *histr)
 		return ;
 	if ((fd = open(HISTORY_PATH, O_RDWR | O_APPEND | O_TRUNC)) == -1)
 	{
-		perror("\nopen failed on history command file");
+		ft_putstr("\nopen failed on history command file");
 		exit(1);
 	}
 	if (histr->count > 1000)
@@ -75,7 +74,11 @@ void			clear_history(t_darr *his)
 {
 	int			fd;
 
-	fd = open(HISTORY_PATH, O_TRUNC);
+	if ((fd = open(HISTORY_PATH, O_TRUNC)) == -1)
+	{
+		ft_putstr("\nopen failed on history command file");
+		exit(1);
+	}
 	close(fd);
 	free_darr_n(his->strings, his->count);
 	his->count = 0;

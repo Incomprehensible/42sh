@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:38:55 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 07:48:09 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/01 19:16:36 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ ssize_t			dstr_del_char(DSTRING **src, const ssize_t n)
 	dstr_insert_dstr(begin, end, begin->strlen);
 	dstr_del(src);
 	dstr_del(&end);
-	dstr_del(src);
 	(*src) = begin;
 	return (n - 1);
 }
