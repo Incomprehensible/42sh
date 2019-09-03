@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 14:43:29 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/31 16:49:06 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/03 08:41:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			env_init(int argc, char **argv, char **envp, ENV *env)
 	spl = NULL;
 	if (!(env->globals = ft_avl_tree_create(free))\
 		|| !(env->locals = ft_avl_tree_create(free))\
-		|| !(env->builtns = ft_avl_tree_create(free))\
+		|| !(env->builtns = ft_avl_tree_create(0))\
 		|| !(env->funcs = ft_avl_tree_create(free))\
 		|| !(env->aliases = ft_avl_tree_create(free)))
 		return (env_init_error(env, 12));
