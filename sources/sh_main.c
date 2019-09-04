@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/31 06:38:08 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/04 17:11:02 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,12 @@ void		write_history(DSTRING *line)
 			|| ft_strcmp(line->txt, "\n") == 0)
 		return ;
 	dstr_insert_ch(line, '\n', line->strlen);
-	/* почему то не записывает в файл команду, если надо создать файл */
-	if ((fd = open(HISTORY_PATH, O_CREAT|O_EXCL, S_IREAD|S_IWRITE)) != -1)
-	{
-		write(fd, line->txt, line->strlen);
+	if ((fd = open(HISTORY_PATH, O_CREAT | O_EXCL, S_IREAD | S_IWRITE)) != -1)
 		close(fd);
-		return ;
-	}
-	else if ((fd = open(HISTORY_PATH, O_RDWR|O_APPEND)) == -1)
+	else if ((fd = open(HISTORY_PATH, O_RDWR | O_APPEND)) == -1)
 	{
 		perror("\nopen failed on history command file");
-        exit (1);
+        exit	(1);
 	}
 	write(fd, line->txt, line->strlen);
 	close(fd);
@@ -57,9 +52,6 @@ static void		sh_loop(t_envp *env)
 	{
 		line = sh_readline(env);
 		write_history(line);
-		// printf("\n\n\n\n\n%s\n", line->txt);
-		// sh_tokenizer(line, token_list);
-		// sh_tparser(token_list);
 		if (line->txt && ft_strcmp(line->txt, "exit()") == 0)
 		{
 			dstr_del(&line);

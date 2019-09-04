@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/01 14:24:11 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/04 16:22:16 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include "libft.h"
 # include "sh_vars.h"
 
-# define HISTORY_PATH "/Users/gdaemoni/Desktop/42sh/sources/histr.txt"
+# define HISTORY_PATH "/Users/gdaemoni/Desktop/42sh/histr.txt"
 
 #define S_ASTR_STR 50000
 
@@ -85,8 +85,11 @@ char		is_ctrl(const t_indch indch);
 ** ctrl+e move the cursor to the end of the line
 ** ctrl+u Delete to the beginning of the line
 ** ctrl+t Delete to the end of the line
+** ctrl+x move insertion point one word back
+** ctrl+f move insertion point one word ahead
 */
 t_indch			management_line(t_indch indch, DSTRING **buf);
+int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
 
 /* INIT GLOBAL AND LOCAL ENV
 	argc - count of arguments from main()
@@ -220,7 +223,7 @@ t_indch			show_history(DSTRING **buf, t_indch indc);
 /* overwrites the command history file to avoid buffer overflow */
 void			rewrite_histr(t_darr *histr);
 
-/* clear historu file */
+/* clear history file */
 void			clear_history(t_darr *his);
 
 /* reads history file and fill struct t_darr */

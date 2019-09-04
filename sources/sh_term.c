@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:14:42 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/02 15:46:12 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/02 19:15:01 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,13 @@ void			sh_move_del(const size_t n, const char *side)
 	ft_putstr(DELCHR);
 }
 
-size_t			clear_line(const DSTRING *buf, struct winsize term,\
+size_t			clear_long_line(const DSTRING *buf, struct winsize term,\
 							const size_t index, int len_n)
 {
 	int					lines;
 
 	lines = buf->strlen + len_n / term.ws_col;
 	sh_move_cursor(buf->strlen + len_n, LEFT, term.ws_col);
-	ft_putstr("\x001b[15E");
 	ft_putstr(CLEARL);
 	ft_putstr(NAME);	
 	ft_putstr(buf->txt);
@@ -74,7 +73,7 @@ void			sh_rewrite(const DSTRING *buf, const size_t index)
 	len_n = ft_strlen(NAME);
 	ioctl(0, TIOCGWINSZ, &term);
 	if (buf->strlen + len_n >= term.ws_col)
-		clear_line(buf, term, index, len_n);
+		clear_long_line(buf, term, index, len_n);
 	else
 	{
 		ft_putstr(MOVEBGN);

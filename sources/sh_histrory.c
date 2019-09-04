@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:05:05 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/02 15:21:48 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/02 18:46:42 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char			get_histr(t_darr *histr)
 	int			ind;
 	DSTRING		*line;
 
+	if ((fd = open(HISTORY_PATH, O_CREAT | O_EXCL, S_IREAD | S_IWRITE)) != -1)
+		close(fd);
 	if ((fd = open(HISTORY_PATH, O_RDONLY)) == -1)
 	{
 		perror("\nopen failed on get_histr");

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/02 13:45:43 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/04 18:09:02 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ t_indch					management_line(t_indch indch, DSTRING **buf)
 	}
 	else if (indch.ch == 0x14)
 		dstr_cutins_str(buf, "", indch.ind);
+	else if ((indch.ch == 0x18 || indch.ch == 0x06) && (*buf)->strlen)
+		indch.ind = sh_move_insertion_point((*buf), indch.ind, indch.ch);
 	return (indch);
 }
 
