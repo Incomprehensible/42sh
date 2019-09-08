@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/08 11:37:11 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/08 21:14:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,22 +77,29 @@ int				main(const int argc, char **argv, char **envp)
 	DSTRING		*dstr;
 	
 	env_init(argc, argv, envp, &env);
-	dstr = dstr_new("150");
+	dstr = dstr_new("1000000");
 	env_set_variable("a", dstr, &env);
 	dstr_del(&dstr);
 	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));
 
 	UT_TOK_INIT();
-	UT_TOK_CR(expr_tk, "echo");
-	UT_TOK_CR(empty_tk, 0);
-	UT_TOK_CR(deref_tk, 0);
-	UT_TOK_CR(math_tk, "++a && ++a && ++a, a = 0"); 
-	UT_TOK_CR(empty_tk, 0);
-	UT_TOK_CR(deref_tk, 0);
-	UT_TOK_CR(name_tk, "a");
-	UT_TOK_CR(eof_tk, 0);
+	UT_TOK_CR(TK_WHILE, 0);
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_MATH, "a != 0");
+	UT_TOK_CR(TK_SEP, 0);
+	UT_TOK_CR(TK_DO, 0);
 
-	sh_tparse(UT_TOK, &env, eof_tk, &status);
+	UT_TOK_CR(TK_EXPR, "echo");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "NOW a=");
+	UT_TOK_CR(TK_DEREF, 0);
+	UT_TOK_CR(TK_MATH, "--a");
+	UT_TOK_CR(TK_SEP, 0);
+	UT_TOK_CR(TK_DONE, 0);
+
+	UT_TOK_CR(TK_EOF, 0);
+
+	sh_tparse(UT_TOK, &env, TK_EOF, &status);
 
 	UT_TOK_END();
 

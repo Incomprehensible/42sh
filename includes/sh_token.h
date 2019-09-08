@@ -6,40 +6,61 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 09:00:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/08 18:51:13 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH_TOKEN_H
 # define SH_TOKEN_H
 
-typedef enum		e_tk_type
-{
-	empty_tk, //* empty token for separations of args, or something else.
-	expr_tk, //* EXPRESSION token for cmds, args, builtns or something like that. [x]
-	sep_tk, //* ';' - separation token. [x]
-	or_tk, //* '||' - or operator token.
-	and_tk, //* '&&' - and operator token.
-	bckr_ps_tk, //* '&' - background procces token.
-	rd_w_tk, //* '> >&' redirection token for write. [x]
-	rd_r_tk, //* '< <&' redirection token for read. [x]
-	rd_a_tk, //* '>>' redirection token for appending-write. [x]
-	rd_rw_tk, //* '<>' redirection token for read_n_write. [x]
-	hered_tk, word_tk, //* '<< WORD' here-document tokens.
-	fd_tk, filename_tk, //* file_descriptor token and file_name token for redirections. [x]
-	pipe_tk, //* pipe token. [x]
-	assigm_tk, //* '= +=' assigment operator token for setting variables.
-	name_tk, value_tk, //* '[varname] = [value]', tokens for vars.
-	math_tk, //* '(()), let' arephmetic operator token.
-	subsh_tk, //* '()' sub-shell token.
-	deref_tk, //* '$' dereferencing token.
-	if_tk, then_tk, else_tk, fi_tk, while_tk, do_tk, done_tk, for_tk, in_tk, until_tk, break_tk, contin_tk, //* flow_instructions tokens.
-	exec_tk, function_tk, //* exec and function tokens.
-	apof_tk, dquote_tk, //* [ ', " ] - double-quotes and single-quotes tokens.
-	eof_tk, //* end_of_file(input) token.
-	fend_tk, //* end of the function body.
-	var_tk //* - '{}' variable engine token.
-}					t_tk_type;
+# include <unistd.h>
+
+typedef size_t		t_tk_type;
+
+#define TK_EMPTY	(t_tk_type)0x0000000000000002
+#define TK_EXPR		(t_tk_type)0x0000000000000004
+#define TK_SEP		(t_tk_type)0x0000000000000008
+#define TK_OR		(t_tk_type)0x0000000000000010
+#define TK_AND		(t_tk_type)0x0000000000000020
+#define TK_BCKR_PS	(t_tk_type)0x0000000000000040
+#define TK_RD_W		(t_tk_type)0x0000000000000080
+#define TK_RD_R		(t_tk_type)0x0000000000000100
+#define TK_RD_A		(t_tk_type)0x0000000000000200
+#define TK_RD_RW	(t_tk_type)0x0000000000000400
+#define TK_HERED	(t_tk_type)0x0000000000000001
+#define TK_WORD		(t_tk_type)0x0000000000000800
+#define TK_FD		(t_tk_type)0x0000000000001000
+#define TK_FILENAME	(t_tk_type)0x0000000000002000
+#define TK_PIPE		(t_tk_type)0x0000000000004000
+#define TK_ASSIGM	(t_tk_type)0x0000000000008000
+#define TK_NAME		(t_tk_type)0x0000000000010000
+#define TK_VALUE	(t_tk_type)0x0000000000020000
+#define TK_MATH		(t_tk_type)0x0000000000040000
+#define TK_SUBSH	(t_tk_type)0x0000000000080000
+#define TK_DEREF	(t_tk_type)0x0000000000100000
+#define TK_IF		(t_tk_type)0x0000000000200000
+#define TK_THEN		(t_tk_type)0x0000000000400000
+#define TK_ELSE		(t_tk_type)0x0000000000800000
+#define TK_FI		(t_tk_type)0x0000000001000000
+#define TK_WHILE	(t_tk_type)0x0000000002000000
+#define TK_DO		(t_tk_type)0x0000000004000000
+#define TK_DONE		(t_tk_type)0x0000000008000000
+#define TK_FOR		(t_tk_type)0x0000000010000000
+#define TK_IN		(t_tk_type)0x0000000020000000
+#define TK_BREAK	(t_tk_type)0x0000000040000000
+#define TK_CONTIN	(t_tk_type)0x0000000080000000
+#define TK_EXEC		(t_tk_type)0x0000000100000000
+#define TK_FUNCTION	(t_tk_type)0x0000000200000000
+#define TK_APOF		(t_tk_type)0x0000000400000000
+#define TK_DQUOTE	(t_tk_type)0x0000000800000000
+#define TK_EOF		(t_tk_type)0x0000010000000000
+#define TK_FEND		(t_tk_type)0x0000020000000000
+#define TK_VAR		(t_tk_type)0x0000040000000000
+#define TK_UNTIL	(t_tk_type)0x0000080000000000
+
+#define TK_SEPS		(t_tk_type)0x10000004038
+#define TK_FLOWS	(t_tk_type)0xffe00000000
+#define TK_FDS_RDS	(t_tk_type)0x00000003780
 
 typedef struct		s_token
 {

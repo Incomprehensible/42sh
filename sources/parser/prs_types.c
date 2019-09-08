@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:14:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/25 03:20:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/08 14:08:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,18 @@
 
 int				prs_is_a_instruction(t_tok *tok)
 {
-	if (tok && tok->type != pipe_tk && \
-	!(tok->type >= sep_tk && tok->type <= and_tk) && \
-	tok->type != eof_tk && tok->type != if_tk && tok->type != else_tk && \
-	tok->type != then_tk)
+	if (tok && !(tok->type & (TK_SEPS | TK_FLOWS)))
 		return (1);
 	return (0);
 }
 
 t_rdtype		prs_rdr_type(t_tok *tok)
 {
-	if (tok->type == rd_a_tk)
+	if (tok->type == TK_RD_A)
 		return (a_rdr);
-	if (tok->type == rd_r_tk)
+	if (tok->type == TK_RD_R)
 		return (r_rdr);
-	if (tok->type == rd_w_tk)
+	if (tok->type == TK_RD_W)
 		return (w_rdr);
 	return (rw_rdr);
 }

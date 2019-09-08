@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/04 06:16:29 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/08 21:09:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ t_dlist			*prs_skip_after_else(t_dlist *tks)
 
 	while (tks && (tok = tks->content))
 	{
-		if (tok->type == if_tk)
-			tks = prs_skip_paired(tks->next, if_tk, fi_tk)->next;
-		else if (tok->type == else_tk || tok->type == fi_tk)
+		if (tok->type == TK_IF)
+			tks = prs_skip_paired(tks->next, TK_IF, TK_FI)->next;
+		else if (tok->type == TK_ELSE || tok->type == TK_FI)
 			return(tks);
 		else
 			tks = tks->next;
@@ -115,21 +115,21 @@ t_dlist			*prs_if(t_dlist *tks, ENV *envs, int *status)
 {
 	t_tok			*tok;
 
-	tks = sh_tparse(tks->next, envs, then_tk, status);
+	tks = sh_tparse(tks->next, envs, TK_THEN, status);
 	if (*status == EXIT_SUCCESS)
 	{
-		tks = sh_tparse(tks, envs, else_tk, status);
+		tks = sh_tparse(tks, envs, TK_ELSE, status);
 		tok = tks->content;
-		if (tok->type == break_tk)
+		if (tok->type == TK_BREAK)
 			return (tks);
-		tks = prs_skip_paired(tks, if_tk, fi_tk)->next;
+		tks = prs_skip_paired(tks, TK_IF, TK_FI)->next;
 	}
 	else
 	{
 		tks = prs_skip_after_else(tks)->next;
-		tks = sh_tparse(tks, envs, fi_tk, status);
+		tks = sh_tparse(tks, envs, TK_FI, status);
 		tok = tks->content;
-		if (tok->type == break_tk)
+		if (tok->type == TK_BREAK)
 			return (tks);
 	}
 	return (tks);
@@ -141,16 +141,16 @@ t_dlist			*prs_while(t_dlist *tks, ENV *envs, int *status)
 	t_dlist			*end;
 	t_tok			*tok;
 
-	while ((end = sh_tparse((t_dlist *)cond, envs, do_tk, status)) && *status == EXIT_SUCCESS)
+	while ((end = sh_tparse((t_dlist *)cond, envs, TK_DO, status)) && *status == EXIT_SUCCESS)
 	{
-		tks = sh_tparse(end, envs, done_tk, status);
+		tks = sh_tparse(end, envs, TK_DONE, status);
 		tok = tks->content;
-		if (tok->type == break_tk)
+		if (tok->type == TK_BREAK)
 			break ;
-		if (tok->type == contin_tk)
+		if (tok->type == TK_CONTIN)
 			continue ;
 	}
-	return (prs_skip_paired(end, do_tk, done_tk)->next);
+	return (prs_skip_paired(end, TK_DO, TK_DONE)->next);
 }
 
 t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
@@ -161,27 +161,27 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 	etab = 0;
 	while (tks && (tok = tks->content))
 	{
-		if (etab && (tok->type == sep_tk || tok->type == end_tk))
+		if (etab && (tok->type & (TK_SEP | end_tk)))
 		{
 			*status = prs_executor(&etab, envs); // TODO: ERROR CHECKING NEED
-			ft_putstr("RETURNED STATUS: ");
-			ft_putnbr(*status);
-			ft_putstr("\n");
+			//ft_putstr("RETURNED STATUS: ");
+			//ft_putnbr(*status);
+			//ft_putstr("\n");
 		}
 
-		if (tok->type == break_tk || tok->type == contin_tk)
+		if (tok->type & (TK_BREAK | TK_CONTIN))
 			return (tks);
-		if (tok->type == fi_tk && end_tk == else_tk)
+		if (tok->type == TK_FI && end_tk == TK_ELSE)
 			break ;
-		if (tok->type == end_tk || tok->type == eof_tk)
+		if (tok->type & (end_tk | TK_EOF))
 			break ;
 
-		tks = tok->type == empty_tk || tok->type == sep_tk ? tks->next : tks;
-		tks = tok->type == expr_tk ? prs_expr(&etab, tks, envs) : tks;
-		tks = tok->type == math_tk ? prs_math(&etab, tks, envs) : tks;
-		tks = tok->type == pipe_tk ? prs_pipe(&etab, tks) : tks; 
-		tks = tok->type == if_tk ? prs_if(tks, envs, status) : tks;
-		tks = tok->type == while_tk ? prs_while(tks, envs, status) : tks;
+		tks = tok->type & (TK_EMPTY | TK_SEP) ? tks->next : tks;
+		tks = tok->type == TK_EXPR ? prs_expr(&etab, tks, envs) : tks;
+		tks = tok->type == TK_MATH ? prs_math(&etab, tks, envs) : tks;
+		tks = tok->type == TK_PIPE ? prs_pipe(&etab, tks) : tks; 
+		tks = tok->type == TK_IF ? prs_if(tks, envs, status) : tks;
+		tks = tok->type == TK_WHILE ? prs_while(tks, envs, status) : tks;
 	}
 	tks = tks && (tok = tks->content) && tok->type == end_tk ? tks->next : tks;
 	return (tks);

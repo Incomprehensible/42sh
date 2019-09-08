@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 17:42:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/08 11:34:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/08 20:47:07 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,10 +378,10 @@ long	math_eval(DSTRING *expr, ENV *envr)
 
 long	do_math_bltn(char *str_xp, ENV *envr)
 {
-	size_t	ind;
-	char	*str;
-	DSTRING	*expr;
-	long	res;
+	size_t		ind;
+	char		*str;
+	DSTRING		*expr;
+	long		res;
 
 	ind = 0;
 	skip_alnums_n_space(str_xp, &ind);
@@ -402,8 +402,6 @@ long	do_math_bltn(char *str_xp, ENV *envr)
 	res = math_eval(expr, envr);
 	dstr_del(&expr);
 	return (res);
-	
-
 }
 
 int		bltn_math(char **args, ENV *env)
@@ -420,5 +418,6 @@ int		bltn_math(char **args, ENV *env)
 	while (exprs[i])
 		res = do_math_bltn(exprs[i++], env);
 	et_rm_warr(exprs);
+	res = res == 0 ? EXIT_FAILURE : EXIT_SUCCESS;
 	return ((int)res);
 }
