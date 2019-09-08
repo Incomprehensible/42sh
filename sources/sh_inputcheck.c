@@ -209,6 +209,9 @@ short   input_finished(char *str, t_stx **tree)
     short id;
     static short kek;
 
+    //if we have unclosed heredoc, input not finished
+    //we may check static variable in outer func
+    //if (!check_heredoc()) where we store a flag
     if (kek)
     {
         if (!brackets_closed(str))

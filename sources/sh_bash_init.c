@@ -269,6 +269,7 @@ static void     iftk_init(t_graph *script)
     script->forward = exprtk1_init();
     script->left = NULL;
     script->right = NULL;
+    script->next = NULL;
 }
 
 t_graph  *if_script_in(void)
