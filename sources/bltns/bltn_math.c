@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 17:42:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/08 09:16:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/08 11:34:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -415,6 +415,7 @@ int		bltn_math(char **args, ENV *env)
 	long		res;
 
 	exprs = ft_strsplits(args[1], ",");
+	// TODO: Need to do malloc safer.
 	i = 0;
 	while (exprs[i])
 		res = do_math_bltn(exprs[i++], env);

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/04 06:54:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/08 11:38:26 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,31 @@ int				prs_deref_name(t_dlist **tks, ENV *envs)
 	return (ret);
 }
 
+int				prs_deref_math(t_dlist **tks, ENV *envs)
+{
+	t_tok		*dtok;
+	char		**exprs;
+	t_dlist		*tmp;
+	long		res;
+	int			ret;
+
+	tmp = (*tks)->next;
+	ret = 0;
+	ft_dlst_delcut(tks, free_token);
+	(*tks) = tmp;
+	dtok = tmp->content;
+	dtok->type = value_tk;
+	exprs = ft_strsplits(dtok->value, ",");
+	// TODO: unsafe malloc.
+	while (exprs[ret])
+		res = do_math_bltn(exprs[ret++], envs);
+	et_rm_warr(exprs);
+	free(dtok->value);
+	if (!(dtok->value = ft_lltoa_base(res, 10)))
+		ret = -1; // ERROR: prs_deref: Malloc failed.
+	return (0);
+}
+
 int				prs_vars_derefs(t_dlist *tks, ENV *envs)
 {
 	t_tok		*tok;
@@ -47,6 +72,8 @@ int				prs_vars_derefs(t_dlist *tks, ENV *envs)
 		{
 			tok = it->next->content;
 			if (tok->type == name_tk && (prs_deref_name(&it, envs) < 0))
+				return (-1); // ERROR: prs_deref: Malloc failed.
+			if (tok->type == math_tk && (prs_deref_math(&it, envs) < 0))
 				return (-1); // ERROR: prs_deref: Malloc failed.
 		}
 		it = it->next;

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:09:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/01 17:14:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/08 10:41:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ int			exe_execute_b(EXPRESSION *expr, ENV *envr, \
 int (*bltn)(char **, ENV *), int *status);
 int			exe_execute_pi_b(EXPRESSION *expr, ENV *envr, \
 int (*bltn)(char **, ENV *));
+long		do_math_bltn(char *str_xp, ENV *envr);
 
 #endif
