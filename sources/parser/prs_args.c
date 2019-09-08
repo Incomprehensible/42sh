@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/28 15:38:42 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/04 06:54:49 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@ int				prs_deref_name(t_dlist **tks, ENV *envs)
 	(*tks) = tmp;
 	dtok = tmp->content;
 	dtok->type = value_tk;
-	//! GET VARIABLE
 	if (!(dstr = env_get_variable(dtok->value, envs)))
 		return (-1);
 	free(dtok->value);
 	if (!(dtok->value = ft_strdup(dstr->txt)))
-		ret = -1; //!MALLOC ERRROR -1 code
+		ret = -1; // ERROR: prs_deref: Malloc failed.
 	dstr_del(&dstr);
 	return (ret);
 }
@@ -48,7 +47,7 @@ int				prs_vars_derefs(t_dlist *tks, ENV *envs)
 		{
 			tok = it->next->content;
 			if (tok->type == name_tk && (prs_deref_name(&it, envs) < 0))
-				return (-1); // ! MALLOC ERROR code -1
+				return (-1); // ERROR: prs_deref: Malloc failed.
 		}
 		it = it->next;
 	}
@@ -113,8 +112,8 @@ char			**prs_args(t_dlist *tokens, ENV *envs)
 	t_tok		*tok;
 
 	argslen = 0;
-	prs_vars_derefs(tokens, envs); //! MALLOC CHECK NEED
-	prs_values_joins(tokens); //! MALLOC CHECK NEED
+	prs_vars_derefs(tokens, envs); // TODO: Malloc checking in prs_args.
+	prs_values_joins(tokens);
 	it = tokens;
 	while (it && prs_is_a_instruction((tok = it->content)))
 	{
@@ -122,14 +121,14 @@ char			**prs_args(t_dlist *tokens, ENV *envs)
 		it = it->next;
 	}
 	if (!(args = ft_memalloc(sizeof(char*) * (argslen + 1))))
-		return (0); //!MALLOC CALL FAILED. (SU.)
+		return (0); // ERROR: prs_args: Malloc failed.
 	it = tokens;
 	i = -1;
 	while (it && prs_is_a_instruction((tok = it->content)))
 	{
 		if (tok->type == expr_tk)
-			if (!(args[++i] = ft_strdup(tok->value)))
-				return (0); //! MALLOC CALL FAILED. (NOT SAFE, MAY BE LEAKS).
+			if (!(args[++i] = ft_strdup(tok->value))) // FEATURE: prs_args: Возможное место для обхода экранирования.
+				return (0); // ERROR: prs_args: Malloc failed. (LEAKS alert).
 		it = it->next;
 	}
 	return (args);

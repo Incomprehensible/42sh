@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   alias_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 14:38:07 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/31 16:57:05 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/07 02:10:01 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	alias_init_free(char ***spl, char **str2)
 
 int			alias_init(ENV *env)
 {
-	int		fd;
+	/*int		fd;
 	char	*str;
 	char	**spl;
 
@@ -42,6 +42,6 @@ int			alias_init(ENV *env)
 		alias_init_free(&spl, &str);
 	}
 	if ((close(fd)) != 0)
-		return (-1);
+		return (-1);*/
 	return (1);
 }

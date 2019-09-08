@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:21:47 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/25 03:22:17 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/04 06:17:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ REDIRECT		*prs_rdr_r(t_dlist *tokens)
 	if (!(tks[0]) || tks[0]->type != fd_tk)
 		redir->fdl = 0;
 	else if (tks[0] && tks[0]->type == fd_tk)
-		redir->fdl = ft_atoi(tks[0]->value); //! NEED TO WORK WITH & (STDALL)
+		redir->fdl = ft_atoi(tks[0]->value); // UNDONE: TO WORK WITH & (STDALL)
 	if (tks[2] && tks[2]->type == filename_tk && (redir->fdr = -1))
 	{
 		if (!(redir->file = ft_strdup(tks[2]->value)))
 			free(redir);
 	}
 	else if (tks[2] && tks[2]->type)
-		redir->fdr = ft_atoi(tks[2]->value); //! NEED TO WORK WITH &- (CLOSE)
+		redir->fdr = ft_atoi(tks[2]->value); // UNDONE: TO WORK WITH &- (CLOSE)
 	return (redir);
 }
 
@@ -103,7 +103,7 @@ t_dlist			*prs_new_rdr_cr(t_dlist *tokens)
 	redir = (tok->type == rd_r_tk) ? prs_rdr_r(tokens) : redir;
 	redir = (tok->type == rd_rw_tk) ? prs_rdr_rw(tokens) : redir;
 	if (!redir || !(res = ft_dlstnew_cc(0, sizeof(REDIRECT))))
-		return (0); //! MALLOC OR PARSE ERROR!
+		return (0); // ERROR: prs_rdr: Malloc failed.
 	res->content = redir;
 	return (res);
 }
@@ -122,7 +122,7 @@ t_dlist			*prs_rdrs(t_dlist **tokens)
 		if (tok->type >= rd_w_tk && tok->type <= rd_rw_tk)
 		{
 			if (!(new_rdr = prs_new_rdr_cr(it)))
-				it = 0; //! MALLOC FAILED CALL
+				it = 0; // ERROR: prs_rdr: Malloc failed.
 			ft_dlstpush(&rdrs, new_rdr);
 		}
 		it = it->next;

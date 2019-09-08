@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 17:42:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/03 08:52:55 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/08 09:16:36 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,11 +137,123 @@ long	mop_mod(DSTRING *ex1, DSTRING *ex2, ENV *envr)
 	return (res);
 }
 
-//TODO NEED TO INC or DEC variables.
-long	mop_inc(DSTRING *ex, ENV *envr)
+long	mop_eq(DSTRING *ex1, DSTRING *ex2, ENV *envr)
 {
 	long	res;
 
+	res = (math_eval(ex1, envr) == math_eval(ex2, envr));
+	dstr_del(&ex1);
+	dstr_del(&ex2);
+	return (res);
+}
+
+long	mop_neq(DSTRING *ex1, DSTRING *ex2, ENV *envr)
+{
+	long	res;
+
+	res = (math_eval(ex1, envr) != math_eval(ex2, envr));
+	dstr_del(&ex1);
+	dstr_del(&ex2);
+	return (res);
+}
+
+long	mop_lw(DSTRING *ex1, DSTRING *ex2, ENV *envr)
+{
+	long	res;
+
+	res = (math_eval(ex1, envr) < math_eval(ex2, envr));
+	dstr_del(&ex1);
+	dstr_del(&ex2);
+	return (res);
+}
+
+long	mop_bg(DSTRING *ex1, DSTRING *ex2, ENV *envr)
+{
+	long	res;
+
+	res = (math_eval(ex1, envr) > math_eval(ex2, envr));
+	dstr_del(&ex1);
+	dstr_del(&ex2);
+	return (res);
+}
+
+long	mop_lweq(DSTRING *ex1, DSTRING *ex2, ENV *envr)
+{
+	long	res;
+
+	res = (math_eval(ex1, envr) <= math_eval(ex2, envr));
+	dstr_del(&ex1);
+	dstr_del(&ex2);
+	return (res);
+}
+
+
+long	mop_bgeq(DSTRING *ex1, DSTRING *ex2, ENV *envr)
+{
+	long	res;
+
+	res = (math_eval(ex1, envr) >= math_eval(ex2, envr));
+	dstr_del(&ex1);
+	dstr_del(&ex2);
+	return (res);
+}
+
+long	mop_or(DSTRING *ex1, DSTRING *ex2, ENV *envr)
+{
+	long	res;
+
+	res = math_eval(ex1, envr) || math_eval(ex2, envr);
+	dstr_del(&ex1);
+	dstr_del(&ex2);
+	return (res);
+}
+
+long	mop_and(DSTRING *ex1, DSTRING *ex2, ENV *envr)
+{
+	long	res;
+
+	res = math_eval(ex1, envr) && math_eval(ex2, envr);
+	dstr_del(&ex1);
+	dstr_del(&ex2);
+	return (res);
+}
+
+// TODO: Malloc error checking.
+long	dec_inc_do(DSTRING *ex, ENV *envr, int is_dec)
+{
+	size_t	ind;
+	long	res;
+	DSTRING	*dstr;
+	char	*new_val;
+	char	*name;
+
+	res = 0;
+	ind = 0;
+	skip_spaces(ex->txt, &ind);
+	name = get_name_var(ex->txt);
+	dstr = env_get_variable(name, envr);
+	res = ft_atoll_base(dstr->txt, 10);
+	res += is_dec ? -1 : 1;
+	new_val = ft_lltoa_base(res, 10);
+	dstr_del(&dstr);
+	dstr = dstr_new(new_val);
+	free(new_val);
+	env_set_variable(name, dstr, envr);
+	free(name);
+	dstr_del(&dstr);
+	dstr_del(&ex);
+	return (res);
+}
+
+long	mop_inc(DSTRING *ex, ENV *envr)
+{
+	long	res;
+	size_t	ind;
+
+	ind = 0;
+	skip_spaces(ex->txt, &ind);
+	if (ft_isalpha(ex->txt[ind]))
+		return (dec_inc_do(ex, envr, 0));
 	res = 1 + math_eval(ex, envr);
 	dstr_del(&ex);
 	return (res);
@@ -150,7 +262,12 @@ long	mop_inc(DSTRING *ex, ENV *envr)
 long	mop_dec(DSTRING *ex, ENV *envr)
 {
 	long	res;
+	size_t	ind;
 
+	ind = 0;
+	skip_spaces(ex->txt, &ind);
+	if (ft_isalpha(ex->txt[ind]))
+		return (dec_inc_do(ex, envr, 1));
 	res = -1 + math_eval(ex, envr);
 	dstr_del(&ex);
 	return (res);
@@ -182,7 +299,6 @@ long	value_ret(char *str, ENV *envr)
 {
 	long	res;
 	DSTRING	*var;
-	char	*strv;
 
 	var = 0;
 	if (*str == '$')
@@ -221,11 +337,28 @@ long	expr_ret(DSTRING *expr, ENV *envr)
 	free(trimmed);
 	return (res);
 }
-
+// TODO: Norms must be done
 long	math_eval(DSTRING *expr, ENV *envr)
 {
 	size_t		ind;
+	long		res;
 
+	if ((ind = op_search(expr, "==", 2)) != SIZE_T_MAX)
+		return (mop_eq(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
+	if ((ind = op_search(expr, "!=", 2)) != SIZE_T_MAX)
+		return (mop_neq(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
+	if ((ind = op_search(expr, "<=", 2)) != SIZE_T_MAX)
+		return (mop_lweq(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
+	if ((ind = op_search(expr, ">=", 2)) != SIZE_T_MAX)
+		return (mop_bgeq(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
+	if ((ind = op_search(expr, "<", 1)) != SIZE_T_MAX)
+		return (mop_lw(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 1, SSIZE_T_MAX), envr));
+	if ((ind = op_search(expr, ">", 1)) != SIZE_T_MAX)
+		return (mop_bg(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 1, SSIZE_T_MAX), envr));
+	if ((ind = op_search(expr, "||", 2)) != SIZE_T_MAX)
+		return (mop_or(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
+	if ((ind = op_search(expr, "&&", 2)) != SIZE_T_MAX)
+		return (mop_and(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
 	if ((ind = op_search(expr, "+", 1)) != SIZE_T_MAX && !ft_isalnum(expr->txt[ind + 1]) && expr->txt[ind + 1] != '+')
 		return (mop_add(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 1, SSIZE_T_MAX), envr));
 	if ((ind = op_search(expr, "-", 1)) != SIZE_T_MAX && !ft_isalnum(expr->txt[ind + 1]) && expr->txt[ind + 1] != '-')

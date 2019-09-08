@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/01 17:42:19 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/04 06:16:29 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,13 @@ int				math_to_expr_maker(ETAB **etab)
 	cmd = (EXPRESSION *)math;
 	if (!(cmd->args = ft_memalloc(4 * sizeof(char *))))
 		return (-1);
-	cmd->args[0] = ft_strdup("((");
+	cmd->args[0] = ft_strdup("(("); // TODO: need to handle malloc fails
 	cmd->args[2] = ft_strdup("))");
 	cmd->args[1] = tmp;
 	return (0);
 }
 
-int				prs_executor(ETAB **etab, ENV *envs) //TODO! ERROR CHECKING NEED
+int				prs_executor(ETAB **etab, ENV *envs) // TODO: ERROR CHECKING NEED
 {
 	ETAB		*etab_row;
 	ETAB		*trash;
@@ -163,7 +163,7 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 	{
 		if (etab && (tok->type == sep_tk || tok->type == end_tk))
 		{
-			*status = prs_executor(&etab, envs); //TODO! ERROR CHEKING NEED
+			*status = prs_executor(&etab, envs); // TODO: ERROR CHECKING NEED
 			ft_putstr("RETURNED STATUS: ");
 			ft_putnbr(*status);
 			ft_putstr("\n");
@@ -184,5 +184,5 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 		tks = tok->type == while_tk ? prs_while(tks, envs, status) : tks;
 	}
 	tks = tks && (tok = tks->content) && tok->type == end_tk ? tks->next : tks;
-	return (tks); //! MALLOC CALL FAILED.
+	return (tks);
 }
