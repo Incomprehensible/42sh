@@ -223,8 +223,8 @@ short   input_finished(char *str, t_stx **tree)
         kek = 0;
     }
     i = find_token(tree, str);
-    id = 1;
-    if (i == 1)
+    id = 0x1;
+    if (i == 0x1)
         id = script_input(str);
     return (id ? i : -1);
 }

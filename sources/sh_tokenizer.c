@@ -15,8 +15,7 @@
 #include "sh_tokenizer.h"
 
 //убери лишние аргументы из функций
-//check if last element in linked list is eof, rather then if [0] and [1] are equal
-void    make_token(t_dlist **list, char *value, int type)
+void    make_token(t_dlist **list, char *value, t_tk_type type)
 {
     t_tok           *token_data;
     t_dlist         *tmp;
@@ -63,8 +62,6 @@ int     layer_parse_one(char *meta, char *str, char *end)
         while (*str && *meta && (*str == *meta || special_meta(*meta)) && str != end)
         {
             tmp = str;
-//            str++;
-//            meta++;
             if (*meta && special_meta(*meta))
             {
                 str = process_reg(str, meta, end);
@@ -87,12 +84,6 @@ int     layer_parse_one(char *meta, char *str, char *end)
             }
             if (!*meta)
                 return (1);
-//            if (*str != *meta)
-//            {
-//                str = tmp;
-//                meta = tmp2;
-//                break;
-//            }
         }
         if (str == end && *meta == *end)
             return (1);
@@ -102,13 +93,13 @@ int     layer_parse_one(char *meta, char *str, char *end)
 }
 
 //we probably don't need parse_sep and parse_eof
-char    *block_pass(short i, char *str, t_dlist **toklst, t_stx **tree)
+char    *block_pass(t_tk_type i, char *str, t_dlist **toklst, t_stx **tree)
 {
-    static char*    (*ptr[12])(char *, t_dlist **, t_stx **, short);
+    static char*    (*ptr[10])(char *, t_dlist **, t_stx **, short);
 
     ptr[0] = &parse_mirror;
     ptr[1] = &parse_scripts;
-//    ptr[2] = &parse_hedoc;
+    ptr[2] = &parse_hedoc;
     ptr[3] = &parse_math;
     ptr[4] = &parse_quotes;
     ptr[5] = &parse_envar;
@@ -116,14 +107,13 @@ char    *block_pass(short i, char *str, t_dlist **toklst, t_stx **tree)
     ptr[7] = &parse_func;
     ptr[8] = &parse_subsh;
     ptr[9] = &parse_comm;
-//    ptr[10] = &parse_eof;
     str = ptr[i](str, toklst, tree, 0);
     return (str);
 }
 
 int     check_branch(char *str, t_stx *tree)
 {
-    int choice;
+    short choice;
     char *end;
 
     choice = 0;
@@ -141,18 +131,17 @@ int     check_branch(char *str, t_stx *tree)
         tree = tree->next;
     }
     return (choice);
-    //here we return id whether we have match or not
 }
 
 //what do we do if the first token is sep ? we may just skip it
-int     find_token(t_stx **tree, char *str)
+t_tk_type     find_token(t_stx **tree, char *str)
 {
-    int i;
+    t_tk_type i;
 
-    i = 0;
+    i = 0x0;
     while (tree[i] && !check_branch(str, tree[i]))
         i++;
-    return (tree[i] ? i : 9);
+    return (tree[i] ? i : TK_EXPRS);
 }
 
 //there is problem! if we have working first block and then the block which is not finished, we can't detect
@@ -160,29 +149,20 @@ int     find_token(t_stx **tree, char *str)
 //we must check for unfinished input every time the new block is processed.
 short    get_tokens(char *str, t_dlist **token_list)
 {
-//    t_dlist         *token;
-//    t_tok           *token_data;
     static t_stx    *tree[12];
     short           choice;
 
     if (!tree[0])
         tree_init(tree);
-//    token = token_list[0];
-//    token_data = (t_tok *)malloc(sizeof(t_tok));
-//    token_data->type = 0;
-//    token_data->value = NULL;
-//    token->token = token_data;
-//    if (!input_finished(str, tree))
-//        return (0);
-    //while (token_list[1]->token->type != eof_tk && *str)
     while (*str)
     {
         if ((choice = input_finished(str, tree)) == -1)
             return (0);
-        str = block_pass(choice, str, token_list, tree);
-//        str = block_pass(find_token(tree, str), str, token_list, tree);
+        //syntax error case
+        if (!(str = block_pass(choice, str, token_list, tree)))
+            exit(-1);
     }
-    make_token(token_list, NULL, eof_tk);
+    make_token(token_list, NULL, TK_EOF);
     return (1);
 }
 
@@ -200,7 +180,7 @@ t_dlist    **toklst_init(t_dlist **token_list)
     return (token_list);
 }
 
-int				sh_tokenizer(char *str, t_dlist **token_list, char **env)
+short				sh_tokenizer(char *str, t_dlist **token_list)
 {
     static char *last_input;
     char        *tmp;
@@ -227,6 +207,5 @@ int				sh_tokenizer(char *str, t_dlist **token_list, char **env)
             last_input = ft_strdup(str);
     }
     return (1);
-    //return (end_of_input(token_list[1]) ? 1 : 0);
 }
 

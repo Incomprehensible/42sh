@@ -24,10 +24,9 @@ char*   parse_math(char *str, t_dlist **tok, t_stx **tree, short ind)
     patt2 = ".let%";
     while (*str)
     {
-        //tmp = script_pull(patt1, math_tk, str, tree, tok)
-        if ((tmp = reg_process(patt1, math_tk, str, tree, tok)) != str && tmp)
+        if ((tmp = reg_process(patt1, TK_MATH, str, tree, tok)) != str && tmp)
             return (tmp);
-        else if ((tmp = reg_process(patt2, math_tk, str, tree, tok)) != str && tmp)
+        else if ((tmp = reg_process(patt2, TK_MATH, str, tree, tok)) != str && tmp)
             return (tmp);
         str++;
         ind++;

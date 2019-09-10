@@ -19,7 +19,7 @@ char*   parse_quotes(char *str, t_dlist **tok, t_stx **tree, short i)
     size_t j;
 
     j = 0;
-    str = parse_empty(str, "", tok);
+    str = parse_empty(str, 0x0, tok);
     if (*str && *str == '\'')
     {
         while (*str && *str != '\'')
@@ -27,11 +27,11 @@ char*   parse_quotes(char *str, t_dlist **tok, t_stx **tree, short i)
             str++;
             j++;
         }
-        make_token(tok, pull_token(str - j, j - 1), expr_tk);
+        make_token(tok, pull_token(str - j, j - 1), TK_EXPR);
         return (parse_sep(++str, tok, tree, 0));
     }
     //do we really need to have value here? or NULL is better?
-    make_token(tok, ft_strdup("\""), dquote_tk);
+    make_token(tok, ft_strdup("\""), TK_DQUOTE);
     str++;
     while (*str && *str != '"')
     {
@@ -40,7 +40,7 @@ char*   parse_quotes(char *str, t_dlist **tok, t_stx **tree, short i)
         else if (!i && *str == '$')
         {
             if (j)
-                make_token(tok, pull_token(str - j, j - 1), expr_tk);
+                make_token(tok, pull_token(str - j, j - 1), TK_EXPR);
             str = get_deref(str, tree, tok);
             j = 0;
         }
@@ -51,23 +51,15 @@ char*   parse_quotes(char *str, t_dlist **tok, t_stx **tree, short i)
             i = 0;
         }
     }
-    make_token(tok, ft_strdup("\""), dquote_tk);
+    make_token(tok, ft_strdup("\""), TK_DQUOTE);
     return (parse_sep(++str, tok, tree, 0));
 }
-
-//static char *parse_exec(char *str, t_dlist **tok)
-//{
-//    make_token(tok, ft_strdup("exec"), exec_tk);
-//    return (parse_empty(str + 5, "", tok));
-//}
 
 char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short i)
 {
     size_t j;
 
     j = 0;
-//    if (*str && *str != '\\' && is_token_here(str, "exec"))
-//        str = parse_exec(str, tok);
     while (*str && *str != ';')
     {
         if (*str == '\\' && (j++) && (++str))
@@ -75,24 +67,17 @@ char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short i)
         else if (!i && (*str == '$' || *str == '(' || *str == '"' || *str == '\''))
         {
             if (j)
-                make_token(tok, pull_token(str - j, j - 1), expr_tk);
-            str = check_subbranch(str, tok, tree, 9);
+                make_token(tok, pull_token(str - j, j - 1), TK_EXPR);
+            str = check_subbranch(str, tok, tree, TK_EXPRS);
             j = 0;
         }
         else if (!i && (*str == ' ' || *str == '\t' || *str == '\n'))
         {
             if (j)
-                make_token(tok, pull_token(str - j, j - 1), expr_tk);
+                make_token(tok, pull_token(str - j, j - 1), TK_EXPR);
             str = parse_empty(str, "", tok);
             j = 0;
         }
-//        else if (!i && is_separator(*str))
-//        {
-//            if (j)
-//                make_token(tok, pull_token(str - j - 1, j - 1), expr_tk);
-//            str = (*str == ' ' || *str == '\t') ? parse_empty(str, "", tok) : parse_sep(str, tok, tree, 0);
-//            j = 0;
-//        }
         else
         {
             str++;
@@ -100,19 +85,10 @@ char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short i)
             i = 0;
         }
     }
-    //str = parse_empty(str, "", tok);
     return (parse_sep(str + i, tok, tree, 0));
 }
-
-//empty_tk
-//subshell
-//quotes
-//deref
 
 //мы постоянно чекаем если перед пробелом стоит экранирование - тогда мы просто продолжаем парсить всю строку или же
 //считать в ней символы от начала до конца
 //если увидели разделитель / дереференс / другой токен и он не экранирован, продолжаем парсить
 //блоки для проверки - дереференс, кавычки, разделители (все лежит в нашей парсинговой функции)
-//one case is exec - one command
-//another case is just comms separated by spaces and tabs
-//third case is mirroring as we parse the whole command

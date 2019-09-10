@@ -14,19 +14,16 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-char    *script_pull(char *patt, int type, char *str, t_stx **tr, t_dlist **tok)
+char    *script_pull(char *patt, t_tk_type type, char *str, t_stx **tr, t_dlist **tok)
 {
     size_t i;
     char *start;
     char *new;
 
-    //fixed 30.08
     if (!(*str))
         return (str);
     str = parse_empty(str, patt, tok);
-//    while ((*patt != '^' && *patt != '_') && *str == ' ')
-//        str++;
-    if (type == expr_tk)
+    if (type == TK_EXPR)
         str = ((ft_strchr(patt, '[') || ft_strchr(patt, '!') || ft_strstr(patt, "((")) ? pull_expr1(patt, str, tok) : pull_expr2(str, tr, tok));
     else
     {
@@ -53,13 +50,9 @@ char    *new_graph(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
 {
     short i;
 
-    //I put it here
-//    while (*s == ' ' && g->patt[0] != '^')
-//        s++;
     s = parse_empty(s, g->patt, tok);
     if ((i = graph_type(g, s)) && i != -1)
         s = parse_scripts(s, tok, tr, i);
-    // broken_input(g, 1);
     return (s);
 }
 
@@ -70,40 +63,32 @@ static char *into_the_portal(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
     s = parse_empty(s, g->patt, tok);
     s = new_graph(g, s, tok, tr);
     if (!is_token_here(s, "do") && !is_token_here(s, "else"))
-        s = check_subbranch(s, tok, tr, 1);
+        s = check_subbranch(s, tok, tr, TK_FLOWS);
     return (s);
 }
 
+//changed
 char        *scripts_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
 {
+    static short sig;
     char *tmp;
 
-//    while (*s == ' ' && g->patt[0] != '^')
-//        s++;
-//    s = parse_empty(s, g->patt, tok);
-//    s = new_graph(g, s, tok, tr);
-//    s = check_subbranch(s, tok, tr, 1);
     s = into_the_portal(g, s, tok, tr);
     if (!g || ((tmp = script_pull(g->patt, g->type, s, tr, tok)) && tmp == s))
-        return (tmp);
+        return (sig ? tmp : NULL);
     s = tmp;
     s = parse_empty(s, g->patt, tok);
-//    while (*s == ' ' && (g->patt[0] != '^' && g->patt[0] != '_'))
-//        s++;
-    while ((g->type == expr_tk || g->type == fi_tk || g->type == done_tk) && (tmp = script_pull(g->patt, g->type, s, tr, tok)) && tmp != s)
+    sig = 1;
+    while ((g->type == TK_EXPR || g->type == TK_FI || g->type == TK_DONE) && (tmp = script_pull(g->patt, g->type, s, tr, tok)) && tmp != s)
         s = tmp;
-    //broken_input(g, 1);
     if (graph_end(g) || !(*s))
         return (s);
     if (graph_forward_only(g))
         return (scripts_traverse(g->forward, s, tok, tr));
     else
     {
-        // && g->patt[0] != '^')
-//        while (*s == ' ')
-//            ++s;
         if ((tmp = scripts_traverse(g->forward, s, tok, tr)) && tmp == s)
-            if (((tmp = scripts_traverse(g->right, s, tok, tr)) && tmp == s))
+            if (((tmp = scripts_traverse(g->right, s, tok, tr)) && tmp == s) && (sig = 0))
                 return (scripts_traverse(g->left, s, tok, tr));
     }
     return (tmp);
@@ -156,7 +141,6 @@ short   graph_type(t_graph *g, char *str)
 char*   parse_scripts(char *str, t_dlist **tok, t_stx **tree, short ind)
 {
     static t_graph  *script[4];
-    //t_graph         *choice;
     char *tmp;
 
     tmp = str;
@@ -171,17 +155,8 @@ char*   parse_scripts(char *str, t_dlist **tok, t_stx **tree, short ind)
     if (!ind)
         ind = graph_type(NULL, str);
     if ((str = scripts_traverse(script[ind], str, tok, tree)) == tmp)
-        return (block_pass(9, str, tok, tree));
-    //str = block_pass(find_token(tree, str), str, tok, tree);
-//  here goes func that checks whether we stopped halfway earlier
-//    if (!ind && !(choice = broken_input(NULL, 0)))
-//    {
-//        ind = graph_type(NULL, str);
-//        choice = script[ind];
-//        str = scripts_traverse(choice, str, tok, tree);
-//    }
-//    else
-//        while (choice && (tmp == (str = scripts_traverse(choice, str, tok, tree))))
-//            choice = switch_choice(choice, ++i);
+        return (block_pass(TK_EXPRS, str, tok, tree));
+    else if (!str)
+        exit(unexpected_token(tok));
     return (str);
 }

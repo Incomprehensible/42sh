@@ -64,12 +64,22 @@ char *ft_process_seq(char *str, char *meta)
     return (0);
 }
 
+static short is_meta(char *str, char meta)
+{
+    if (meta == ' ')
+    {
+        if (*str == ' ' || *str == '\t' || *str == ';' || *str == '\n' || !(*str))
+            return (1);
+    }
+        return (0);
+}
+
 char *ft_process_any(char *str, char *meta, char *end)
 {
     ++meta;
-    while (*str && str != end && *str != *meta)
+    while (*str && str != end && *str != *meta && !(is_meta(str, *meta)))
         str++;
-    if (*str == *meta)
+    if (*str == *meta || (is_meta(str, *meta)))
         return (str);
     return (0);
 }
@@ -83,14 +93,13 @@ short    is_token_here(char *start, char *meta)
             start++;
             meta++;
         }
-        //if (!(*meta) && (*(start - 1) == ' ' || (!(*start) || *(start) == ' ' || *start == '\t' || *start == '\n' || *start == ';')))
         if (!(*meta) && (*(start - 1) == ' ' || (!(*start) || is_separator(*start))))
             return (1);
     }
     return (0);
 }
 
-char    *ft_process_vars(int type, char *str, char *meta, t_dlist **tok)
+char    *ft_process_vars(t_tk_type type, char *str, char *meta, t_dlist **tok)
 {
     size_t i;
 
@@ -102,16 +111,12 @@ char    *ft_process_vars(int type, char *str, char *meta, t_dlist **tok)
         i++;
     }
     make_token(tok, pull_token(str - i, i), type);
-//    if (!(*str))
-//        return (0);
     return (str);
 }
 
 char    *ft_process_wall(char *str, char *meta, char *end)
 {
     ++meta;
-//    if (*meta == '/')
-//        return (ft_process_vars(str, meta));
     while (*str && str != end && !(is_token_here(str, meta)))
         str++;
     if (!(*str))
@@ -195,14 +200,11 @@ char   *cut_brackets(char *patt, char *str, t_dlist **tok, char br)
 
     i = 0;
     j = 0;
-//    while (*str && *str == '(')
     while (*str && *str == br)
     {
         str++;
         j++;
     }
-//    if (!(start = ft_process_wall(str, patt, str + ft_strlen(str) + 1)))
-//        return (0);
     if (!(end = ft_process_wall(str, patt + j, "\0")))
         return (0);
     while (str != end && *str)
@@ -210,11 +212,11 @@ char   *cut_brackets(char *patt, char *str, t_dlist **tok, char br)
         str++;
         i++;
     }
-    make_token(tok, pull_token(str - i, i), math_tk);
+    make_token(tok, pull_token(str - i, i), TK_MATH);
     return (end + 2);
 }
 
-char    *reg_process(char *patt, int type, char *str, t_stx **tr, t_dlist **tok)
+char    *reg_process(char *patt, t_tk_type type, char *str, t_stx **tr, t_dlist **tok)
 {
     size_t i;
     char *start;
@@ -223,14 +225,12 @@ char    *reg_process(char *patt, int type, char *str, t_stx **tr, t_dlist **tok)
     if (!(*str))
         return (str);
     str = parse_empty(str, patt, tok);
-//    while ((*patt != '^' && *patt != '_') && *str == ' ')
-//        str++;
     if (*str == '$')
     {
-        make_token(tok, ft_strdup("$"), deref_tk);
+        make_token(tok, ft_strdup("$"), TK_DEREF);
         str++;
     }
-    if (*str && type == math_tk)
+    if (*str && type == TK_MATH)
     {
         if (ft_strstr(patt, "(("))
             return (cut_brackets(patt, str, tok, '('));
@@ -244,21 +244,14 @@ char    *reg_process(char *patt, int type, char *str, t_stx **tr, t_dlist **tok)
             new = pull_token(str, i);
             make_token(tok, new, type);
             str += 1;
-//            str += i;
         }
     }
     else if ((i = layer_parse_two(patt, str)))
     {
         str = parse_empty(str, patt, tok);
         start = str;
-//        while (*start == ' ')
-//        {
-//            str++;
-//            start++;
-//        }
         new = pull_token(start, --i);
         make_token(tok, new, type);
-//        str += i;
     }
     str += i;
     if (str && *str == ';')

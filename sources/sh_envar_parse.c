@@ -26,32 +26,31 @@ char    *get_deref(char *str, t_stx **tr, t_dlist **tok)
     size_t i;
 
     i = 0;
-    make_token(tok, ft_strdup("$"), deref_tk);
+    make_token(tok, ft_strdup("$"), TK_DEREF);
     str++;
     if (*str && *str == '(' && check_branch(str, tr[8]))
-        return (block_pass(8, str, tok, tr));
+        return (block_pass(TK_SUBSHS, str, tok, tr));
     while (*str && !(is_separator(*str)))
     {
         str++;
         i++;
     }
-    make_token(tok, pull_token(str - i, i - 1), name_tk);
+    make_token(tok, pull_token(str - i, i - 1), TK_NAME);
     return (parse_sep(str, tok, tr, 0));
 }
 
-//check subshell as well in deref
 static void    get_envar(char *str, t_stx **tr, t_dlist **tok, short i)
 {
     while (*str && *str != '=' && *str != '+' && *str != '-')
     {
-        if (*str == '\\')
-            str++;
+//        if (*str == '\\')
+//            str++;
         str++;
         i++;
     }
-    make_token(tok, pull_token(str - i, i), name_tk);
+    make_token(tok, pull_token(str - i, i), TK_NAME);
     i = (*str == '+' || *str == '-') ? 2 : 1;
-    make_token(tok, pull_token(str, i), assigm_tk);
+    make_token(tok, pull_token(str, i), TK_ASSIGM);
     str += i;
     i = 0;
     if (*str == '\\' && (*(str + 1) == ' ' || *(str + 1) == '\t'))
@@ -66,7 +65,7 @@ static void    get_envar(char *str, t_stx **tr, t_dlist **tok, short i)
         str++;
         i++;
     }
-    make_token(tok, pull_token(str - i, i), value_tk);
+    make_token(tok, pull_token(str - i, i), TK_VALUE);
 }
 
 //if we have dollar sign in front of name_tk, we process it as whole command
@@ -78,9 +77,9 @@ char*   parse_envar(char *str, t_dlist **tok, t_stx **tree, short i)
     patt1 = "~=~_";
     patt2 = "~\\ =\\ ~_";
     if ((i = layer_parse_two(patt1, str)))
-        get_envar(str, tree, tok, 0);
+        get_envar(str, tree, tok, 0x0);
     else if ((i = layer_parse_two(patt2, str)))
-        get_envar(str, tree, tok, 1);
+        get_envar(str, tree, tok, 0x1);
     else
         str = parse_comm(str, tok, tree, 0);
     return (parse_sep(str + i, tok, tree, 0));
