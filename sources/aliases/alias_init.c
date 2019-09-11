@@ -6,31 +6,41 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 14:38:07 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/31 16:57:05 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/10 17:03:25 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "aliases.h"
 
-static void	alias_init_free(char ***spl, char **str2)
+static void	alias_init_free(char ***spl, DSTRING **str2)
 {
 	free_spl(&(*spl));
-	if ((*str2))
-		free(*str2);
+	dstr_del(&(*str2));
+}
+
+static int	alias_init_closefd(int fd, DSTRING **str)
+{
+	dstr_del(&(*str));
+	if ((close(fd)) != 0)
+		return (-1);
+	return (1);
 }
 
 int			alias_init(ENV *env)
 {
 	int		fd;
-	char	*str;
+	DSTRING	*str;
 	char	**spl;
+	char	*name;
 
-	if ((fd = open(FILE_ALIASES, O_CREAT | O_RDONLY, S_IRWXU | S_IRWXG)) < 0)
+	name = ft_strjoin((char *)ft_avl_search(env->globals, "HOME")->content,\
+			FILE_ALIASES);
+	if ((fd = open(name, O_CREAT | O_RDONLY, S_IRWXU | S_IRWXG)) < 0)
 		return (-1);
-	spl = NULL;
+	free(name);
 	while (get_next_line(fd, &str))
 	{
-		spl = ft_strsplit(str, '=');
+		spl = ft_strsplit(str->txt, '=');
 		if ((ft_avl_set(env->aliases, ft_avl_node(spl[0], (char *)spl[1],\
 					ft_strlen(spl[1]) + 1)) == -1))
 		{
@@ -41,7 +51,5 @@ int			alias_init(ENV *env)
 		}
 		alias_init_free(&spl, &str);
 	}
-	if ((close(fd)) != 0)
-		return (-1);
-	return (1);
+	return (alias_init_closefd(fd, &str));
 }

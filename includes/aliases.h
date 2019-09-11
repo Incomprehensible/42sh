@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 14:39:09 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/31 17:02:18 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/01 16:18:45 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "bltn.h"
 # include <unistd.h>
 # include <fcntl.h>
-# define FILE_ALIASES "/Users/fnancy/.42shrc"
+# define FILE_ALIASES "/.42shrc"
 
 /*
 **Инициализация алиасов
