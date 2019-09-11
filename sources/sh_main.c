@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/08 21:14:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/11 06:14:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int				main(const int argc, char **argv, char **envp)
 	DSTRING		*dstr;
 	
 	env_init(argc, argv, envp, &env);
-	dstr = dstr_new("1000000");
+	dstr = dstr_new("0");
 	env_set_variable("a", dstr, &env);
 	dstr_del(&dstr);
 	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));
@@ -85,17 +85,29 @@ int				main(const int argc, char **argv, char **envp)
 	UT_TOK_INIT();
 	UT_TOK_CR(TK_WHILE, 0);
 	UT_TOK_CR(TK_EMPTY, 0);
-	UT_TOK_CR(TK_MATH, "a != 0");
+	UT_TOK_CR(TK_MATH, "a < 1000");
 	UT_TOK_CR(TK_SEP, 0);
 	UT_TOK_CR(TK_DO, 0);
 
-	UT_TOK_CR(TK_EXPR, "echo");
-	UT_TOK_CR(TK_EMPTY, 0);
-	UT_TOK_CR(TK_EXPR, "NOW a=");
-	UT_TOK_CR(TK_DEREF, 0);
-	UT_TOK_CR(TK_MATH, "--a");
-	UT_TOK_CR(TK_SEP, 0);
+		UT_TOK_CR(TK_IF, 0);
+		UT_TOK_CR(TK_EMPTY, 0);
+		UT_TOK_CR(TK_MATH, "a % 2 == 0");
+		UT_TOK_CR(TK_SEP, 0);
+		UT_TOK_CR(TK_THEN, 0);
+		UT_TOK_CR(TK_EMPTY, 0);
+			UT_TOK_CR(TK_EXPR, "echo");
+			UT_TOK_CR(TK_EMPTY, 0);
+			UT_TOK_CR(TK_EXPR, "Key is: ");
+			UT_TOK_CR(TK_DEREF, 0);
+			UT_TOK_CR(TK_MATH, "a");
+			UT_TOK_CR(TK_SEP, 0);
+		UT_TOK_CR(TK_FI, 0);
+		UT_TOK_CR(TK_SEP, 0);
+
+		UT_TOK_CR(TK_MATH, "++a");
+		UT_TOK_CR(TK_SEP, 0);
 	UT_TOK_CR(TK_DONE, 0);
+	UT_TOK_CR(TK_SEP, 0);
 
 	UT_TOK_CR(TK_EOF, 0);
 

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/08 21:09:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/11 08:53:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ t_dlist			*prs_if(t_dlist *tks, ENV *envs, int *status)
 	tks = sh_tparse(tks->next, envs, TK_THEN, status);
 	if (*status == EXIT_SUCCESS)
 	{
-		tks = sh_tparse(tks, envs, TK_ELSE, status);
+		tks = sh_tparse(tks, envs, TK_ELSE | TK_FI, status);
 		tok = tks->content;
 		if (tok->type == TK_BREAK)
 			return (tks);
@@ -126,10 +126,11 @@ t_dlist			*prs_if(t_dlist *tks, ENV *envs, int *status)
 	}
 	else
 	{
-		tks = prs_skip_after_else(tks)->next;
-		tks = sh_tparse(tks, envs, TK_FI, status);
-		tok = tks->content;
-		if (tok->type == TK_BREAK)
+		tks = prs_skip_after_else(tks);
+		if ((tok = tks->content)->type == TK_FI)
+			return (tks->next);
+		tks = sh_tparse(tks->next, envs, TK_FI, status);
+		if ((tok = tks->content)->type == TK_BREAK)
 			return (tks);
 	}
 	return (tks);
@@ -171,11 +172,8 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 
 		if (tok->type & (TK_BREAK | TK_CONTIN))
 			return (tks);
-		if (tok->type == TK_FI && end_tk == TK_ELSE)
-			break ;
 		if (tok->type & (end_tk | TK_EOF))
 			break ;
-
 		tks = tok->type & (TK_EMPTY | TK_SEP) ? tks->next : tks;
 		tks = tok->type == TK_EXPR ? prs_expr(&etab, tks, envs) : tks;
 		tks = tok->type == TK_MATH ? prs_math(&etab, tks, envs) : tks;
