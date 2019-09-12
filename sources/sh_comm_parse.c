@@ -14,12 +14,38 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
+static char *pull_comm(char *str, t_dlist **tok)
+{
+    short i;
+
+    i = 0;
+    while (*str && *str != '"')
+    {
+        if (i && *str == ' ' && *(str - 1) != '\\')
+        {
+            make_token(tok, pull_token(str - i, i), TK_EXPR);
+            str = parse_empty(str, 0x0, tok);
+            i = 0;
+        }
+        else
+        {
+            i++;
+            str++;
+        }
+    }
+    if (i)
+        make_token(tok, pull_token(str - i, i), TK_EXPR);
+    return (str);
+}
+
 char*   parse_quotes(char *str, t_dlist **tok, t_stx **tree, short i)
 {
     size_t j;
 
     j = 0;
     str = parse_empty(str, 0x0, tok);
+    if (*str != '"')
+        str = pull_comm(str, tok);
     if (*str && *str == '\'')
     {
         while (*str && *str != '\'')
@@ -28,7 +54,7 @@ char*   parse_quotes(char *str, t_dlist **tok, t_stx **tree, short i)
             j++;
         }
         make_token(tok, pull_token(str - j, j - 1), TK_EXPR);
-        return (parse_sep(++str, tok, tree, 0));
+        return (parse_sep(++str, tok, 0));
     }
     //do we really need to have value here? or NULL is better?
     make_token(tok, ft_strdup("\""), TK_DQUOTE);
@@ -52,7 +78,7 @@ char*   parse_quotes(char *str, t_dlist **tok, t_stx **tree, short i)
         }
     }
     make_token(tok, ft_strdup("\""), TK_DQUOTE);
-    return (parse_sep(++str, tok, tree, 0));
+    return (parse_sep(++str, tok, 0));
 }
 
 char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short i)
@@ -74,8 +100,8 @@ char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short i)
         else if (!i && (*str == ' ' || *str == '\t' || *str == '\n'))
         {
             if (j)
-                make_token(tok, pull_token(str - j, j - 1), TK_EXPR);
-            str = parse_empty(str, "", tok);
+                make_token(tok, pull_token(str - j, j), TK_EXPR);
+            str = parse_empty(str, 0x0, tok);
             j = 0;
         }
         else
@@ -85,7 +111,9 @@ char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short i)
             i = 0;
         }
     }
-    return (parse_sep(str + i, tok, tree, 0));
+    if (j)
+        make_token(tok, pull_token(str - j, j), TK_EXPR);
+    return (parse_sep(str + i, tok, 0));
 }
 
 //мы постоянно чекаем если перед пробелом стоит экранирование - тогда мы просто продолжаем парсить всю строку или же

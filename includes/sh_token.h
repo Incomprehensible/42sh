@@ -13,67 +13,63 @@
 #ifndef SH_TOKEN_H
 # define SH_TOKEN_H
 
-typedef enum		e_tk_type
-{
-	empty_tk, // Empty token
-	cmd_tk, // cmd or arg
-	sep_tk, // ;
-	pipe_tk, // pipe |
-	expr_tk,
-	or_tk,
-	and_tk,
-	bckr_ps_tk,
-	rd_w_tk,
-	rd_r_tk,
-	rd_a_tk,
-	rd_rw_tk,
-	hered_tk,
-	word_tk,
-    fd_tk,
-    filename_tk,
-    assigm_tk,
-    name_tk,
-    value_tk,
-    math_tk,
-    subsh_tk,
-    deref_tk,
-    if_tk,
-    then_tk,
-    else_tk,
-    fi_tk,
-    while_tk,
-    do_tk,
-    done_tk,
-    for_tk,
-    in_tk,
-    until_tk,
-    exec_tk,
-    function_tk,
-    apof_tk,
-    dquote_tk,
-    fend_tk,
-    var_tk,
-	eof_tk // end of file input
-}					t_tk_type;
+#include <string.h>
+
+typedef size_t t_tk_type;
+
+# define TK_SEPS (t_tk_type)0x10000004038
+# define TK_MATHS (t_tk_type)0x0000000003
+# define TK_QUOTS (t_tk_type)0x0000000004
+# define TK_EXPRS (t_tk_type)0x0000000008
+# define TK_FUNCS (t_tk_type)0x0000000006
+# define TK_SUBSHS (t_tk_type)0x0000000007
+# define TK_FLOWS (t_tk_type)0x0000000000
+# define TK_EMPTY (t_tk_type)0x0000000000000002
+# define TK_EXPR (t_tk_type)0x0000000000000004
+# define TK_SEP (t_tk_type)0x0000000000000008
+# define TK_OR (t_tk_type)0x0000000000000010
+# define TK_AND (t_tk_type)0x0000000000000020
+# define TK_BCKR_PS (t_tk_type)0x0000000000000040
+# define TK_RD_W (t_tk_type)0x0000000000000080
+# define TK_RD_R (t_tk_type)0x0000000000000100
+# define TK_RD_A (t_tk_type)0x0000000000000200
+# define TK_RD_RW (t_tk_type)0x0000000000000400
+# define TK_HERED (t_tk_type)0x0000000000000001
+# define TK_WORD (t_tk_type)0x0000000000000800
+# define TK_FD (t_tk_type)0x0000000000001000
+# define TK_FILENAME (t_tk_type)0x0000000000002000
+# define TK_PIPE (t_tk_type)0x0000000000004000
+# define TK_ASSIGM (t_tk_type)0x0000000000008000
+# define TK_NAME (t_tk_type)0x0000000000010000
+# define TK_VALUE (t_tk_type)0x0000000000020000
+# define TK_MATH (t_tk_type)0x0000000000040000
+# define TK_SUBSH (t_tk_type)0x0000000000080000
+# define TK_DEREF (t_tk_type)0x0000000000100000
+# define TK_IF (t_tk_type)0x0000000000200000
+# define TK_THEN (t_tk_type)0x0000000000400000
+# define TK_ELSE (t_tk_type)0x0000000000800000
+# define TK_FI (t_tk_type)0x0000000001000000
+# define TK_WHILE (t_tk_type)0x0000000002000000
+# define TK_DO (t_tk_type)0x0000000004000000
+# define TK_DONE (t_tk_type)0x0000000008000000
+# define TK_FOR (t_tk_type)0x0000000010000000
+# define TK_IN (t_tk_type)0x0000000020000000
+# define TK_BREAK (t_tk_type)0x0000000040000000
+# define TK_CONTIN (t_tk_type)0x0000000080000000
+# define TK_EXEC (t_tk_type)0x0000000100000000
+# define TK_FUNCTION (t_tk_type)0x0000000200000000
+# define TK_APOF (t_tk_type)0x0000000400000000
+# define TK_DQUOTE (t_tk_type)0x0000000800000000
+# define TK_EOF (t_tk_type)0x0000010000000000
+# define TK_FEND (t_tk_type)0x0000020000000000
+# define TK_VAR (t_tk_type)0x0000040000000000
+# define TK_UNTIL (t_tk_type)0x0000080000000000
 
 typedef struct		s_token
 {
 	char			*value;
 	t_tk_type		type;
 }					t_tok;
-
-typedef struct      s_sstx
-{
-    char            *blck_name;
-    struct s_stx     *blck_next; //ring list
-    char            *tk_name;
-    char            *tcontent;
-    struct s_stx     *tk_next;
-    struct s_stx     *next;
-    struct s_stx     *prev;
-    struct s_stx     *blck_point;
-    struct s_stx     *denominator;
-}                   t_sstx;
 
 typedef struct      s_stx
 {

@@ -81,11 +81,30 @@ t_stx    *init_scripts(t_stx *tree)
 
 t_stx    *init_hedoc(t_stx *tree)
 {
+    char *hed;
+    char **heds;
+    short i;
+    t_stx *tmp;
+    t_stx *start;
+
+    i = 0;
+    hed = "<< <<<";
+    heds = ft_strsplit(hed, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = ft_strdup("<<?");
+    tree->meta = heds[i];
     tree->prev = NULL;
-    tree->next = NULL;
-    return (tree);
+    start = tree;
+    while (heds[++i])
+    {
+        tmp = tree;
+        tree->next = (t_stx *)malloc(sizeof(t_stx));
+        tree = tree->next;
+        tree->meta = heds[i];
+        tree->next = NULL;
+        tree->prev = tmp;
+    }
+    return (start);
+
 }
 
 t_stx    *init_math(t_stx *tree)
@@ -263,46 +282,46 @@ t_stx    *init_comm(t_stx *tree)
 //we don't access it like usual - but at the end of program
 //maybe we don't need it and will have to make our own rules to check whether input is over
 //like in heredoc and scripts we may request more input
-t_stx    *init_eof(t_stx *tree)
-{
-    char *eof;
-    char **eofs;
-    short i;
-    t_stx *tmp;
-    t_stx *start;
-
-    i = 0;
-    eof = "; & \n";
-    eofs = ft_strsplit(eof, ' ');
-    tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = eofs[i];
-    tree->prev = NULL;
-    start = tree;
-    while (eofs[++i])
-    {
-        tmp = tree;
-        tree->next = (t_stx *)malloc(sizeof(t_stx));
-        tree = tree->next;
-        tree->meta = eofs[i];
-        tree->next = NULL;
-        tree->prev = tmp;
-    }
-    return (start);
-}
+//t_stx    *init_eof(t_stx *tree)
+//{
+//    char *eof;
+//    char **eofs;
+//    short i;
+//    t_stx *tmp;
+//    t_stx *start;
+//
+//    i = 0;
+//    eof = "; & \n";
+//    eofs = ft_strsplit(eof, ' ');
+//    tree = (t_stx *)malloc(sizeof(t_stx));
+//    tree->meta = eofs[i];
+//    tree->prev = NULL;
+//    start = tree;
+//    while (eofs[++i])
+//    {
+//        tmp = tree;
+//        tree->next = (t_stx *)malloc(sizeof(t_stx));
+//        tree = tree->next;
+//        tree->meta = eofs[i];
+//        tree->next = NULL;
+//        tree->prev = tmp;
+//    }
+//    return (start);
+//}
 
 void    tree_init(t_stx **tree)
 {
     //tree[0] = init_sep(tree[0]);
-    tree[0] = init_mirror(tree[0]);
-    tree[1] = init_scripts(tree[1]);
+    //tree[0] = init_mirror(tree[0]);
+    tree[0] = init_scripts(tree[0]);
+    tree[1] = init_envar(tree[1]);
     tree[2] = init_hedoc(tree[2]);
     tree[3] = init_math(tree[3]);
     tree[4] = init_quotes(tree[4]);
-    tree[5] = init_envar(tree[5]);
-    tree[6] = init_redir(tree[6]);
-    tree[7] = init_func(tree[7]);
-    tree[8] = init_subsh(tree[8]);
-    tree[9] = init_comm(tree[9]);
-    tree[10] = init_eof(tree[10]);
-    tree[11] = NULL;
+    tree[5] = init_redir(tree[5]);
+    tree[6] = init_func(tree[6]);
+    tree[7] = init_subsh(tree[7]);
+    tree[8] = init_comm(tree[8]);
+   // tree[9] = init_eof(tree[10]);
+    tree[9] = NULL;
 }

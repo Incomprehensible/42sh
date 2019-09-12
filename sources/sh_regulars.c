@@ -21,13 +21,25 @@ int special_meta(char meta)
     return (0);
 }
 
+static short is_meta(char *str, char meta)
+{
+    if (meta == ' ' || meta == '^')
+    {
+        if (meta == ' ' && (*str == ' ' || *str == '\t' || *str == ';' || *str == '\n' || !(*str)))
+            return (1);
+        if (meta == '^' && ft_process_space(str, &meta))
+            return (1);
+    }
+    return (0);
+}
+
 char *ft_process_s(char *str, char *meta)
 {
-    if (!(*str >= 65 && *str <= 90) && !(*str >= 97 && *str <= 122))
+    if ((!(*str >= 65 && *str <= 90) && !(*str >= 97 && *str <= 122)))
         return (0);
-    while (*str && *str != *(meta + 1))
+    while (*str && (*str != *(meta + 1)))
         str++;
-    if (!(*str))
+    if (!(*str) && !(is_meta(str, *(meta + 1))))
         return (0);
     return (str);
 }
@@ -62,16 +74,6 @@ char *ft_process_seq(char *str, char *meta)
         meta++;
     }
     return (0);
-}
-
-static short is_meta(char *str, char meta)
-{
-    if (meta == ' ')
-    {
-        if (*str == ' ' || *str == '\t' || *str == ';' || *str == '\n' || !(*str))
-            return (1);
-    }
-        return (0);
 }
 
 char *ft_process_any(char *str, char *meta, char *end)
@@ -255,6 +257,6 @@ char    *reg_process(char *patt, t_tk_type type, char *str, t_stx **tr, t_dlist 
     }
     str += i;
     if (str && *str == ';')
-        str = parse_sep(str, tok, tr, 0);
+        str = parse_sep(str, tok, 0);
     return (str);
 }

@@ -35,11 +35,11 @@ char    *get_deref(char *str, t_stx **tr, t_dlist **tok)
         str++;
         i++;
     }
-    make_token(tok, pull_token(str - i, i - 1), TK_NAME);
-    return (parse_sep(str, tok, tr, 0));
+    make_token(tok, pull_token(str - i, i), TK_NAME);
+    return (parse_sep(str, tok, 0));
 }
 
-static void    get_envar(char *str, t_stx **tr, t_dlist **tok, short i)
+static char    *get_envar(char *str, t_stx **tr, t_dlist **tok, short i)
 {
     while (*str && *str != '=' && *str != '+' && *str != '-')
     {
@@ -57,8 +57,8 @@ static void    get_envar(char *str, t_stx **tr, t_dlist **tok, short i)
         str += 2;
     else if (*str == '$' && *(str - 1) != '\\' && !is_separator(*(str + 1)))
     {
-        get_deref(str, tr, tok);
-        return ;
+        str = get_deref(str, tr, tok);
+        return (str);
     }
     while (*str && !(is_separator(*str)))
     {
@@ -66,21 +66,24 @@ static void    get_envar(char *str, t_stx **tr, t_dlist **tok, short i)
         i++;
     }
     make_token(tok, pull_token(str - i, i), TK_VALUE);
+    return (str);
 }
 
 //if we have dollar sign in front of name_tk, we process it as whole command
 char*   parse_envar(char *str, t_dlist **tok, t_stx **tree, short i)
 {
-    char *patt1;
-    char *patt2;
+    char *patt;
+   // char *patt2;
 
-    patt1 = "~=~_";
-    patt2 = "~\\ =\\ ~_";
-    if ((i = layer_parse_two(patt1, str)))
-        get_envar(str, tree, tok, 0x0);
-    else if ((i = layer_parse_two(patt2, str)))
-        get_envar(str, tree, tok, 0x1);
+    //patt = "~^=^~ ";
+    //patt2 = "~=~ ";
+    patt = "?=? ";
+    str = parse_empty(str, 0x0, tok);
+    if (layer_parse_two(patt, str))
+        str = get_envar(str, tree, tok, 0);
     else
         str = parse_comm(str, tok, tree, 0);
-    return (parse_sep(str + i, tok, tree, 0));
+//    else if (layer_parse_two(patt2, str))
+//        str = get_envar(str, tree, tok, 0);
+    return (parse_sep(str, tok, i));
 }

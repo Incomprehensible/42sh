@@ -16,36 +16,87 @@
 
 char*   parse_hedoc(char *str, t_dlist **tok, t_stx **tree, short i)
 {
+    char *word;
+    short flag;
+    short size;
+
+    flag = 0;
     str = parse_empty(str, 0x0, tok);
-    if (*str != '<')
+    while (*str && *str != '<')
     {
-        while (*str && *str != '<')
+        if (*str == ' ' && *(str - 1) != '\\')
+        {
+            if (i)
+                make_token(tok, pull_token(str - i, i), TK_EXPR);
+            str = parse_empty(str, 0x0, tok);
+            i = 0;
+        }
+        else if (*str == '$')
+        {
+            if (i)
+                make_token(tok, pull_token(str - i, i), TK_EXPR);
+            str = get_deref(str, tree, tok);
+            i = 0;
+        }
+        else
         {
             str++;
             i++;
         }
-        make_token(tok, pull_token(str - i, i - 1), TK_EXPR);
-        i = 0;
-        while (*str && *str == '<')
-        {
-            str++;
-            i++;
-        }
-        make_token(tok, pull_token(str - i, i - 1), TK_HERED);
-        i = 0;
-        while (*str && !(is_separator(*str)))
-        {
-            str++;
-            i++;
-        }
-        make_token(tok, pull_token(str - i, i - 1), TK_WORD);
     }
-    return (parse_sep(str, tok, tree, 0));
+    if (i)
+        make_token(tok, pull_token(str - i, i), TK_EXPR);
+    i = 0;
+    while (*str && *str == '<')
+    {
+        str++;
+        i++;
+    }
+    make_token(tok, pull_token(str - i, i), TK_HERED);
+    i = 0;
+    while (*str && !(is_separator(*str)))
+    {
+        str++;
+        i++;
+    }
+    word = pull_token(str - i, i);
+    size = i;
+    make_token(tok, word, TK_WORD);
+    i = 0;
+    str = parse_empty(str, 0x0, tok);
+    while (*str && !(is_token_here(str, word)))
+    {
+        flag = 0;
+        if (*str == ' ' && *(str - 1) != '\\')
+        {
+            if (i)
+                make_token(tok, pull_token(str - i, i), TK_EXPR);
+            str = parse_empty(str, 0x0, tok);
+            i = 0;
+        }
+        else if (*str == '$')
+        {
+            if (i)
+                make_token(tok, pull_token(str - i, i), TK_EXPR);
+            str = get_deref(str, tree, tok);
+            i = 0;
+            flag = 1;
+        }
+        else
+        {
+            str++;
+            i++;
+        }
+    }
+    if (i && !flag)
+        make_token(tok, pull_token(str - i, i - 1), TK_EXPR);
+    make_token(tok, word, TK_WORD);
+    return (parse_sep(str + size, tok, 0));
 }
 
 static short is_sep_no_space(char str)
 {
-    if (str != '\n' && str != ';' && str != '&' && str != '|')
+    if (str != '\n' && str != ';' && str != '|')
         return (0);
     return (1);
 }
@@ -74,26 +125,26 @@ static char *fd_pull(t_graph *g, char *s, t_dlist **tok)
     return (s);
 }
 
-static void refactor_fd(char **new, char *meta, size_t i)
-{
-    short j;
-
-    j = 0;
-    while (new[i])
-        new[i++] = &meta[j++];
-}
-
-static short    proceding_fd(char *str)
-{
-    while (*str && !(*str >=65 && *str <= 90) && !(*str >= 97 && *str <= 122) &&
-    (!is_sep_no_space(*str)))
-    {
-        if (*str >= 48 && *str <= 57)
-            return (1);
-        str++;
-    }
-    return (0);
-}
+//static void refactor_fd(char **new, char *meta, size_t i)
+//{
+//    short j;
+//
+//    j = 0;
+//    while (new[i])
+//        new[i++] = &meta[j++];
+//}
+//
+//static short    proceding_fd(char *str)
+//{
+//    while (*str && !(*str >=65 && *str <= 90) && !(*str >= 97 && *str <= 122) &&
+//    (!is_sep_no_space(*str)))
+//    {
+//        if (*str >= 48 && *str <= 57)
+//            return (1);
+//        str++;
+//    }
+//    return (0);
+//}
 
 static char *redir_pull(t_graph *g, char *s, t_dlist **tok)
 {
@@ -227,7 +278,7 @@ char        *redir_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
         return (tmp);
     s = tmp;
     if (!(*s) || is_sep_no_space(*s))
-        return (parse_sep(s, tok, tr, 0));
+        return (parse_sep(s, tok, 0));
     s = parse_empty(s, g->patt, tok);
     while (g->type == TK_EXPR && (tmp = redirect_pull(g, s, tr, tok)) && tmp != s)
         s = tmp;
@@ -257,11 +308,11 @@ char*   parse_redir(char *str, t_dlist **tok, t_stx **tree, short i)
     {
         redir = redir_in();
         if ((*str == '<' || *str == '>') && *(str + 1) == '&')
-            redir = redir->forward;
-        else if (*str == '<' || *str == '>')
             redir = redir->left;
+        else if (*str == '<' || *str == '>')
+            redir = redir->right;
         else if ((*str >= 48 && *str <= 57) || *str == '&')
-            redir = redir->forward->forward;
+            redir = redir->forward;
         //if we find > > <> redir = redir->forward;
         //else if we find &< etc redir = redir->left;
     }

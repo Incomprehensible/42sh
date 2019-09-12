@@ -32,7 +32,7 @@ char    *parse_mirror(char *str, t_dlist **tok, t_stx **tr, short i)
     }
     make_token(tok, pull_token(str - i, i), TK_EXPR);
     if (*str == ';')
-        str = parse_sep(str, tok, tr, 0);
+        str = parse_sep(str, tok, 0);
 //    if (*str == ' ' || *str == '\t')
 //        str = parse_empty(str, 0x0, tok);
     return (str);

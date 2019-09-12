@@ -138,9 +138,9 @@ static void     comm_init(t_graph *red)
 {
     red->type = TK_EXPR;
     red->patt = "~";
-    red->forward = redir_one();
-    red->left = redir_two();
-    red->right = fd_in();
+    red->forward = fd_in();
+    red->left = redir_one();
+    red->right = redir_two();
     red->next = NULL;
 }
 

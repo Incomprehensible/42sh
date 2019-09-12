@@ -92,21 +92,24 @@ int     layer_parse_one(char *meta, char *str, char *end)
     return (0);
 }
 
-//we probably don't need parse_sep and parse_eof
 char    *block_pass(t_tk_type i, char *str, t_dlist **toklst, t_stx **tree)
 {
-    static char*    (*ptr[10])(char *, t_dlist **, t_stx **, short);
+    static char*    (*ptr[9])(char *, t_dlist **, t_stx **, short);
 
-    ptr[0] = &parse_mirror;
-    ptr[1] = &parse_scripts;
+//    ptr[0] = &parse_sep;
+    ptr[0] = &parse_scripts;
+    //was 4
+    ptr[1] = &parse_envar;
+    //was 1
     ptr[2] = &parse_hedoc;
+    //+1
     ptr[3] = &parse_math;
     ptr[4] = &parse_quotes;
-    ptr[5] = &parse_envar;
-    ptr[6] = &parse_redir;
-    ptr[7] = &parse_func;
-    ptr[8] = &parse_subsh;
-    ptr[9] = &parse_comm;
+    //
+    ptr[5] = &parse_redir;
+    ptr[6] = &parse_func;
+    ptr[7] = &parse_subsh;
+    ptr[8] = &parse_comm;
     str = ptr[i](str, toklst, tree, 0);
     return (str);
 }
@@ -119,9 +122,8 @@ int     check_branch(char *str, t_stx *tree)
     choice = 0;
     if (*str == '\'')
         return (choice);
-    //}?
-    if (!(end = ft_strchr(str, '}')))
-        end = ft_strchr(str, ';');
+    if (!(end = ft_strchr(str, ';')))
+        end = ft_strchr(str, ')') + 1;
     if (!end)
         if (!(end = ft_strchr(str, '\n')))
             end = str + ft_strlen(str);
@@ -138,10 +140,71 @@ t_tk_type     find_token(t_stx **tree, char *str)
 {
     t_tk_type i;
 
-    i = 0x0;
+    i = 0;
     while (tree[i] && !check_branch(str, tree[i]))
         i++;
     return (tree[i] ? i : TK_EXPRS);
+}
+
+static char     *pull_word(char *str)
+{
+    size_t  i;
+
+    i = 0;
+    while (*str && (*str == ' ' || *str == '\t'))
+        str++;
+    while (*str && *str != '<')
+        str++;
+    while (*str && *str == '<')
+        str++;
+    if (!(*str))
+        return (NULL);
+    while (*str && !(is_separator(*str)))
+    {
+        str++;
+        i++;
+    }
+    return (pull_token(str - i, i));
+}
+
+static short    get_hedoc(char *str, int id)
+{
+    static char *word;
+
+    if (!id)
+    {
+        word = pull_word(str);
+        if (!word)
+            return (-1);
+    }
+    else
+    {
+        str += ft_strlen(str) - 1;
+        while (*str != '<')
+        {
+            if (!(ft_strcmp(word, str)) && *(str - 1) != '<')
+            {
+                free(word);
+                return (1);
+            }
+            str--;
+        }
+    }
+    return (0);
+}
+
+short   clear_tokens(t_dlist **tokens)
+{
+    t_dlist *tmp;
+
+    while (*tokens)
+    {
+        tmp = *tokens;
+        *tokens = (*tokens)->next;
+        free(tmp);
+    }
+    free(tokens);
+    return (-1);
 }
 
 //there is problem! if we have working first block and then the block which is not finished, we can't detect
@@ -149,19 +212,40 @@ t_tk_type     find_token(t_stx **tree, char *str)
 //we must check for unfinished input every time the new block is processed.
 short    get_tokens(char *str, t_dlist **token_list)
 {
-    static t_stx    *tree[12];
+    static t_stx    *tree[10];
     short           choice;
+    static short    flag;
+    static short    path;
 
     if (!tree[0])
         tree_init(tree);
     while (*str)
     {
-        if ((choice = input_finished(str, tree)) == -1)
+        if (flag < 0)
+        {
+            if (!get_hedoc(str, 1))
+                return (0);
+            flag = 1;
+        }
+        if ((choice = input_finished(str, tree, path)) == -1)
             return (0);
+        path = -1;
+        if (choice == 2 && flag != 1 && (flag = -1))
+        {
+            //check if hedoc has a closing word, otherwise throw exception
+            if (get_hedoc(str, 0) < 0)
+            {
+                flag = 0;
+                return (-1);
+            }
+            return (0);
+        }
         //syntax error case
         if (!(str = block_pass(choice, str, token_list, tree)))
-            exit(-1);
+            return (clear_tokens(token_list));
     }
+    path = 0;
+    flag = 0;
     make_token(token_list, NULL, TK_EOF);
     return (1);
 }
@@ -184,10 +268,14 @@ short				sh_tokenizer(char *str, t_dlist **token_list)
 {
     static char *last_input;
     char        *tmp;
+    short       i;
 
     token_list = toklst_init(token_list);
     if (last_input)
     {
+        tmp = last_input;
+        last_input = ft_strjoin(last_input, " ");
+        free(tmp);
         tmp = last_input;
         last_input = ft_strjoin(last_input, str);
         free(tmp);
@@ -195,16 +283,27 @@ short				sh_tokenizer(char *str, t_dlist **token_list)
     }
     else
         tmp = str;
-    if (!get_tokens(tmp, token_list))
+    if ((i = get_tokens(tmp, token_list)) <= 0)
     {
-        if (last_input)
-        {
-            tmp = last_input;
-            ft_strjoin(last_input, str);
-            free(tmp);
-        }
-        else
+        if (!i && !last_input)
             last_input = ft_strdup(str);
+        return (0);
+//        if (last_input)
+//        {
+//            tmp = last_input;
+//            last_input = ft_strjoin(last_input, " ");
+//            free(tmp);
+//            tmp = last_input;
+//            last_input = ft_strjoin(last_input, str);
+//            free(tmp);
+//        }
+//        else
+//            last_input = ft_strdup(str);
+    }
+    if (last_input)
+    {
+        free(last_input);
+        last_input = NULL;
     }
     return (1);
 }

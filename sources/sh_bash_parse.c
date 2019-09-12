@@ -42,7 +42,7 @@ char    *script_pull(char *patt, t_tk_type type, char *str, t_stx **tr, t_dlist 
         }
     }
     if (*str == ';')
-        str = parse_sep(str, tok, tr, 0);
+        str = parse_sep(str, tok, 0);
     return (str);
 }
 
@@ -157,6 +157,6 @@ char*   parse_scripts(char *str, t_dlist **tok, t_stx **tree, short ind)
     if ((str = scripts_traverse(script[ind], str, tok, tree)) == tmp)
         return (block_pass(TK_EXPRS, str, tok, tree));
     else if (!str)
-        exit(unexpected_token(tok));
+        exit(unexpected_token());
     return (str);
 }

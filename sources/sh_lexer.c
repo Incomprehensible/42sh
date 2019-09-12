@@ -92,7 +92,7 @@ size_t    layer_parse_two(char *meta, char *str)
         if (!*meta || *meta == ' ')
             return (i);
     }
-    return (*meta ? 0x0 : i);
+    return (*meta ? 0 : i);
 }
 
 char    *pull_expr1(char *patt, char *str, t_dlist **tok)
@@ -118,9 +118,9 @@ char    *pull_expr2(char *str, t_stx **tr, t_dlist **tok)
     char *new;
     size_t i;
 
-    i = 0x0;
+    i = 0;
     start = str;
-    if (check_branch(str, tr[1]))
+    if (check_branch(str, tr[0]))
         return (str);
     while (*str && *str != ';')
     {
@@ -157,9 +157,9 @@ char   *check_subbranch(char *str,  t_dlist **tok, t_stx **tree, t_tk_type block
             str = block_pass(TK_MATHS, str, tok, tree);
         else if (*str && *str == '$' && !is_separator(*(str + 1)))
             str = get_deref(str, tree, tok);
-        else if (check_branch(str, tree[7]))
+        else if (check_branch(str, tree[6]))
             str = block_pass(TK_FUNCS, str, tok, tree);
-        else if (*str == '(' && check_branch(str, tree[8]))
+        else if (*str == '(' && check_branch(str, tree[7]))
             str = block_pass(TK_SUBSHS, str, tok, tree);
     }
     else if (block == TK_EXPRS)
@@ -168,16 +168,15 @@ char   *check_subbranch(char *str,  t_dlist **tok, t_stx **tree, t_tk_type block
             str = block_pass(TK_QUOTS, str, tok, tree);
         else if (*str && *str == '$' && !is_separator(*(str + 1)))
             str = get_deref(str, tree, tok);
-        else if (*str == '(' && check_branch(str, tree[8]))
+        else if (*str == '(' && check_branch(str, tree[7]))
             str = block_pass(TK_SUBSHS, str, tok, tree);
     }
     return (str);
 }
 
-char    *parse_sep(char *str, t_dlist **tok, t_stx **tr, short i)
+char    *parse_sep(char *str, t_dlist **tok, short i)
 {
     char *new;
-    char *kek;
 
     if (!(*str))
         return (str);
@@ -196,12 +195,15 @@ char    *parse_sep(char *str, t_dlist **tok, t_stx **tr, short i)
         i = TK_PIPE;
     else if (*new == '&' && (new[1] = '\0'))
         i = TK_BCKR_PS;
-    else if (*str == ';' && (new[1] = '\0'))
+    else if (*new == ';' && !(new[1] = '\0'))
         i = TK_SEP;
     else
         ft_strdel(&new);
     if (i != -1)
+    {
         make_token(tok, new, i);
-    kek = *str ? ++str : 0x0;
-    return (i > 0 ? kek : block_pass(find_token(tr, str), str, tok, tr));
+        str = *str ? ++str : str;
+    }
+    return (str);
+//    return (i > 0 ? kek : block_pass(find_token(tr, str), str, tok, tr));
 }

@@ -12,12 +12,12 @@
 
 #include "sh_token.h"
 #include "sh_req.h"
+#include "sh_tokenizer.h"
 
 char			*sh_readline(void);
-int				sh_tokenizer(char *str, t_dlist **token_list, char **env);
 int				sh_tparser(t_dlist **token_list);
 
-static void		sh_loop(char **env)
+static void		sh_loop()
 {
 	char		*line;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
@@ -27,8 +27,8 @@ static void		sh_loop(char **env)
 	{
 		//line = sh_readline();
 		//sh_tokenizer(line, token_list)
-		get_next_line(0, &line);
-		if (!sh_tokenizer(line, token_list, env))
+		get_line(0, &line);
+		if (!sh_tokenizer(line, token_list))
 		{
 		    free(line);
             continue;
@@ -44,7 +44,7 @@ int				main(const int argc, char *const *argv, char *const *envp)
 	// INIT
 
 	// LOOP
-	sh_loop(envp);
+	sh_loop();
 
 	// TERMINATE
 	return (0);

@@ -14,7 +14,7 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-static char *func_args(char *str, t_stx **tr, t_dlist **tok)
+static char *func_args(char *str, t_dlist **tok)
 {
     size_t i;
 
@@ -27,7 +27,7 @@ static char *func_args(char *str, t_stx **tr, t_dlist **tok)
         if (*str == ';')
         {
             make_token(tok, pull_token(str - i, i), TK_EXPR);
-            str = parse_sep(str, tok, tr, 0);
+            str = parse_sep(str, tok, 0);
             i = 0;
         }
         if (*str++ != ' ' && *str != '\t')
@@ -57,12 +57,12 @@ static char *get_function(char *str, t_stx **tr, t_dlist **tok)
             make_token(tok, pull_token(str, i), TK_NAME);
             str = parse_empty(str + i, reg1, tok);
             if ((layer_parse_two(reg2, str)))
-                return (func_args(str, tr, tok));
+                return (func_args(str, tok));
             else
             {
                 str = ft_process_vars(TK_EXPR, str, "/;/\n", tok);
                 make_token(tok, NULL, TK_FEND);
-                return (parse_sep(str, tok, tr, 0));
+                return (parse_sep(str, tok, 0));
             }
         }
     }

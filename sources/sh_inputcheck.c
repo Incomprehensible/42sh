@@ -14,6 +14,12 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
+short   unexpected_token(void)
+{
+    ft_putstr("bash: syntax error occured.\n");
+    return (0);
+}
+
 short   count_points(char *str, char *point)
 {
     char *start;
@@ -140,19 +146,23 @@ short   script_input(char *str)
 
 short   count_objects(char *str, char br, char rb)
 {
-    short flag;
+    short i;
     short mir;
+    short flag;
 
+    i = 0;
     flag = 0;
     while (*str)
     {
         mir = 0;
-        if (*str++ == '\\')
+//        if (*str == '\\' && ++str)
+//            mir = 1;
+        if (*str == '\\' && *(str + 1) == '\\' && (str += 2))
             mir = 1;
-        if (*str == br && !mir)
-            flag++;
-        else if (*str == rb && !mir)
-            flag--;
+        if (!flag && *str == br && !mir && (flag += 1))
+            i++;
+        else if (flag && *str == rb && !mir && (flag -= 1))
+            i--;
         str++;
     }
     return (flag ? 0 : 1);
@@ -203,16 +213,15 @@ short   pipes_closed(char *str)
 //don't look for separators and analyze string not in parts but the whole.
 //as first meta is found and we check every meta with layer_parse_one, we go script_input
 //we search for quotes and brackets in the same fashion - first search for the first bracket, if it's found go check brackets etc.
-short   input_finished(char *str, t_stx **tree)
+short   input_finished(char *str, t_stx **tree, short path)
 {
     short i;
     short id;
-    static short kek;
 
     //if we have unclosed heredoc, input not finished
     //we may check static variable in outer func
     //if (!check_heredoc()) where we store a flag
-    if (kek)
+    if (path >= 0)
     {
         if (!brackets_closed(str))
             return (-1);
@@ -220,11 +229,10 @@ short   input_finished(char *str, t_stx **tree)
             return (-1);
         if (!pipes_closed(str))
             return (-1);
-        kek = 0;
     }
     i = find_token(tree, str);
-    id = 0x1;
-    if (i == 0x1)
+    id = 1;
+    if (!i)
         id = script_input(str);
     return (id ? i : -1);
 }
