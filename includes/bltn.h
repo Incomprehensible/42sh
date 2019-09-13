@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/01 17:03:26 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/13 06:25:17 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@
 # include "ft_avl_tree.h"
 # include "env.h"
 # include "rms.h"
+# include <unistd.h>
 
 static char	*bltns_str[] = {"setenv", "env", "getenv", "unsetenv", "exit",\
-	"alias", "unalias", "cd"};
+	"alias", "unalias", "cd", "pwd"};
+
+char		*ft_parse_flags(char **argc);
 
 /*
 **Волзвращает кол-во bltns
@@ -65,8 +68,10 @@ int	bltn_unalias(char **args, ENV *env);
 
 int	bltn_cd(char **args, ENV *env);
 
+int	bltn_pwd(char **args, ENV *env);
+
 static int	(*bltns_func[]) (char **, ENV *) = {&bltn_setenv,\
 	&bltn_env, &bltn_getenv, &bltn_unsetenv, &bltn_exit, &bltn_alias, &bltn_unalias,\
-	&bltn_cd};
+	&bltn_cd, &bltn_pwd};
 
 #endif

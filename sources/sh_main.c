@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/11 17:16:02 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/13 06:40:10 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,17 @@ int				main(const int argc, char **argv, char **envp)
 	
 	env_init(argc, argv, envp, &env);
 
+	ft_avl_set(env.globals, ft_avl_node("PWD", (char*)"/var", 15));
 	UT_TOK_INIT();
-	UT_TOK_CR(expr_tk, "cd");
+	UT_TOK_CR(expr_tk, "pwd");
 	UT_TOK_CR(empty_tk, 0);
-	UT_TOK_CR(expr_tk, "..");
+	UT_TOK_CR(expr_tk, "-P");
 	// UT_TOK_CR(empty_tk, 0);
 	// UT_TOK_CR(expr_tk, "ls=ls");
 	UT_TOK_CR(empty_tk, 0);
 	UT_TOK_CR(eof_tk, 0);
 	sh_tparse(UT_TOK, &env, eof_tk, &status);
-	bltn_getenv(argv, &env);
+	//bltn_getenv(argv, &env);
 	et_rm_clear_env(&env);
 
 	// TERMINATE
