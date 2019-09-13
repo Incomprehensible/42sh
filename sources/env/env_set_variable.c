@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_set_variable.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 16:12:50 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/28 16:34:07 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/13 15:48:09 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int		env_set_variable(const char *key, DSTRING *value, ENV *enviroment)
 	}
 	else
 	{
-		if (!(ft_avl_set(enviroment->locals, node)))
+		if ((ft_avl_set(enviroment->locals, node)) < 0)
+		// !BUG FIXED
 			return (-1);
 	}
 	return (1);

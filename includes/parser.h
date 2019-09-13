@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/08 10:41:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/13 14:31:41 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,7 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs);
 t_dlist			*prs_pipe(ETAB **tab, t_dlist *tk);
 
 t_dlist			*prs_math(ETAB **tab, t_dlist *tokens, ENV *envs);
+
+t_dlist			*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr);
 
 #endif

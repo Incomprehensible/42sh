@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/11 07:57:13 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/13 14:31:16 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ t_dlist			*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr)
 	while (!((tok = tokens->content)->type & \
 	(TK_SEPS | TK_FLOWS | TK_FDS_RDS | TK_EMPTY)))
 	{
-		if (tok->type == TK_EXPR)
+		if (tok->type == TK_EXPR || tok->type == TK_VALUE)
 			dstr_insert_str(expr_buff, tok->value, MAX_LL);
 		else if (tok->type == TK_DEREF)
 		{
