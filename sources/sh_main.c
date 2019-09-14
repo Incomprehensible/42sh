@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/13 15:49:27 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/14 02:18:17 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int				bltn_echo(char **args, ENV *envr)
 		i != 1 ? ft_putstr(" ") : 0;
 		ft_putstr(args[i]);
 	}
-	ft_putstr("<>\n");
+	ft_putstr(" @\n");
 	return (0);
 }
 
@@ -78,27 +78,54 @@ int				main(const int argc, char **argv, char **envp)
 	
 	env_init(argc, argv, envp, &env);
 	dstr = dstr_new("RAINBOWDASH");
-	env_set_variable("MY_LITTLE_PONY", dstr, &env);
+	env_set_variable("MLP", dstr, &env);
 	dstr_del(&dstr);
 	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));
 
 	UT_TOK_INIT();
-	UT_TOK_CR(TK_VAR, "MY_LITTLE_PONY");
+	UT_TOK_CR(TK_VAR, "PHRASE");
 	UT_TOK_CR(TK_ASSIGM, "=");
-	UT_TOK_CR(TK_VALUE, "FLUTTERSHY");
-	UT_TOK_CR(TK_VALUE, "=");
+	UT_TOK_CR(TK_VALUE, "HELLO");
+	UT_TOK_CR(TK_VALUE, " ");
 	UT_TOK_CR(TK_DEREF, 0);
-	UT_TOK_CR(TK_NAME, "MY_LITTLE_PONY");
+	UT_TOK_CR(TK_NAME, "MLP");
 	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_FUNCTION, 0);
+	UT_TOK_CR(TK_NAME, "foo");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "echo");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_DEREF, 0);
+	UT_TOK_CR(TK_NAME, "PHRASE");
+	UT_TOK_CR(TK_SEP, 0);
+	UT_TOK_CR(TK_FEND, 0);
+
+	UT_TOK_CR(TK_EMPTY, 0);
 
 	UT_TOK_CR(TK_EXPR, "echo");
 	UT_TOK_CR(TK_EMPTY, 0);
-	UT_TOK_CR(TK_EXPR, "Key is: ");
-	UT_TOK_CR(TK_DEREF, 0);
-	UT_TOK_CR(TK_NAME, "MY_LITTLE_PONY");
+	UT_TOK_CR(TK_EXPR, "BEFORE FUNCTION I DID SOMETHING ...");
 	UT_TOK_CR(TK_SEP, 0);
 
+	UT_TOK_CR(TK_EMPTY, 0);
+
+	UT_TOK_CR(TK_EXPR, "foo");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_PIPE, 0);
+	UT_TOK_CR(TK_EXPR, "cat");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "-e");
 	UT_TOK_CR(TK_EOF, 0);
+
+	// UT_TOK_CR(TK_EXPR, "echo");
+	// UT_TOK_CR(TK_EMPTY, 0);
+	// UT_TOK_CR(TK_EXPR, "DENIS");
+	// UT_TOK_CR(TK_PIPE, 0);
+	// UT_TOK_CR(TK_EXPR, "cat");
+	// UT_TOK_CR(TK_EMPTY, 0);
+	// UT_TOK_CR(TK_EXPR, "-e");
+	// UT_TOK_CR(TK_EOF, 0);
 
 	sh_tparse(UT_TOK, &env, TK_EOF, &status);
 

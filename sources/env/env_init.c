@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 14:43:29 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/03 08:41:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/14 05:16:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ int			env_init(int argc, char **argv, char **envp, ENV *env)
 	if (!(env->globals = ft_avl_tree_create(free))\
 		|| !(env->locals = ft_avl_tree_create(free))\
 		|| !(env->builtns = ft_avl_tree_create(0))\
-		|| !(env->funcs = ft_avl_tree_create(free))\
+		|| !(env->funcs = ft_avl_tree_create(et_rm_func))\
+		|| !(env->core = ft_avl_tree_create(free))\
 		|| !(env->aliases = ft_avl_tree_create(free)))
 		return (env_init_error(env, 12));
 	while (*envp)

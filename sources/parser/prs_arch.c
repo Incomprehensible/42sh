@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/13 15:15:59 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/14 02:02:23 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,50 @@ t_dlist			*prs_assigm(t_dlist *tks, ENV *envs, int *status)
 	return (tks->next);
 }
 
+t_dlist			*prs_f_dup_tks(t_dlist *tks, t_dlist **fcode)
+{
+	t_tok		*tok;
+	t_tok		*ntok;
+	t_dlist		*instr;
+	char		*val;
+
+	while (tks && (tok = tks->content))
+	{
+		val = 0;
+		if (!(ntok = ft_memalloc(sizeof(t_tok))))
+			return (0);
+		if (tok->value && !(val = ft_strdup(tok->value)))
+			return (0);
+		ntok->value = val;
+		ntok->type = tok->type;
+		if (!(instr = ft_dlstnew_cc(ntok, tks->size)))
+			return (0);
+		ft_dlstpush(fcode, instr);
+		tks = tks->next;
+		if (tok->type == TK_FEND)
+			break;
+	}
+	return (tks);
+}
+
+t_dlist			*prs_func(t_dlist *tks, ENV *envr)
+{
+	FUNC		*func;
+	t_avln		*node;
+	t_tok		*tok;
+	t_tok		*ntok;
+
+	tks = tks->next;
+	tok = tks->content;
+	func = ft_memalloc(sizeof(FUNC)); // TODO: MALLOC CHECKING
+	node = ft_avl_node_cc(tok->value, func, sizeof(FUNC));
+	tks = tks->next;
+	if (!(tks = prs_f_dup_tks(tks, &func->func_code)))
+		return (0);
+	ft_avl_set(envr->funcs, node);
+	return (tks);
+}
+
 t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 {
 	ETAB		*etab;
@@ -233,19 +277,20 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 	etab = 0;
 	while (tks && (tok = tks->content))
 	{
-		if (etab && (tok->type & (TK_SEP | end_tk)))
+		if (etab && (tok->type & (TK_SEPS1 | end_tk)))
 			*status = prs_executor(&etab, envs); // TODO: ERROR CHECKING NEED
 		if (tok->type & (TK_BREAK | TK_CONTIN))
 			return (tks);
 		if (tok->type & (end_tk | TK_EOF))
 			break ;
 		tks = tok->type == TK_EXPR ? prs_expr(&etab, tks, envs) : tks;
+		tks = tok->type == TK_FUNCTION ? prs_func(tks, envs) : tks;
 		tks = tok->type == TK_MATH ? prs_math(&etab, tks, envs) : tks;
 		tks = tok->type == TK_PIPE ? prs_pipe(&etab, tks) : tks; 
 		tks = tok->type == TK_IF ? prs_if(tks, envs, status) : tks;
 		tks = tok->type == TK_WHILE ? prs_while(tks, envs, status) : tks;
 		tks = tok->type == TK_VAR ? prs_assigm(tks, envs, status) : tks;
-		tks = tok->type & (TK_EMPTY | TK_SEPS | (TK_FLOWS & ~(TK_IF | TK_WHILE))) ? tks->next : tks;
+		tks = tok->type & (TK_EMPTY | TK_SEPS1 | (TK_FLOWS & ~(TK_IF | TK_WHILE))) ? tks->next : tks;
 	}
 	return (tks);
 }

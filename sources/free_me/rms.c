@@ -3,15 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   rms.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/31 14:53:56 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/14 05:17:48 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rms.h"
 #include "bltn.h"
+#include "ft_dlist.h"
+
+void			et_rm_func(void *func)
+{
+	t_dlist		*toks;
+	FUNC		*func_ptr;
+
+	func_ptr = func;
+	if (func_ptr)
+	{
+		toks = func_ptr->func_code;
+		ft_dlst_delf(&toks, (size_t)-1, free_token);
+		free(func);
+	}
+}
 
 void			free_token(void *tok, size_t sz)
 {
@@ -88,7 +103,7 @@ void			et_rm_clear_env(ENV *env)
 		node->content = NULL;
 	}
 	if (env->globals)
-			ft_avl_tree_free(env->globals);
+		ft_avl_tree_free(env->globals);
 	if (env->locals)
 		ft_avl_tree_free(env->locals);
 	if (env->builtns)
@@ -97,4 +112,6 @@ void			et_rm_clear_env(ENV *env)
 		ft_avl_tree_free(env->funcs);
 	if (env->aliases)
 		ft_avl_tree_free(env->aliases);
+	if (env->core)
+		ft_avl_tree_free(env->core);
 }

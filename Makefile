@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/09/01 17:55:57 by hgranule         ###   ########.fr        #
+#    Updated: 2019/09/13 18:30:13 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,8 @@ SRC_FILES = sh_main.c exe_sys/exe_calls.c free_me/rms.c \
 			env/env_init.c env/env_get_variable.c env/env_set_variable.c env/env_unset_variable.c \
 			bltns/bltn_init.c bltns/bltn_setenv.c bltns/bltn_env.c bltns/bltn_getenv.c bltns/bltn_unsetenv.c \
 			bltns/bltn_exit.c bltns/bltn_alias.c bltns/bltn_unalias.c \
-			aliases/alias_add.c aliases/alias_init.c bltns/bltn_math.c
+			aliases/alias_add.c aliases/alias_init.c bltns/bltn_math.c \
+			exe_sys/exe_funcs.c
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases)
 

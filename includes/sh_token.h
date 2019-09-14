@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/13 12:05:28 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/14 02:02:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ typedef size_t		t_tk_type;
 #define TK_SEPS		(t_tk_type)0x1000004038 // SEP + OR + AND + PIPE + EOF
 #define TK_FLOWS	(t_tk_type)0x90ffe00000 // [IF -> CONTIN] + UNTIL + EOF
 #define TK_FDS_RDS	(t_tk_type)0x00000003780
+
+#define TK_SEPS1	(TK_SEPS & ~TK_PIPE) // SEP + OR + AND + PIPE + EOF
 
 typedef struct		s_token
 {

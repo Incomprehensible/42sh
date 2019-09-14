@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/31 15:11:56 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/14 05:57:57 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct	s_env
 	t_avl_tree	*builtns;
 	t_avl_tree	*funcs;
 	t_avl_tree	*aliases;
+	t_avl_tree	*core;
 }				t_env;
 
 /* INIT ENV 

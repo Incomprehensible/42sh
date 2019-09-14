@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:56:29 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/27 22:07:28 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/13 18:11:31 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,7 @@ void		free_token(void *tok, size_t sz);
 ** FREES A ENVEIROMENT
 */
 void		et_rm_clear_env(ENV *env);
+
+void		et_rm_func(void *func);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/13 14:31:41 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/13 18:28:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define REDIRECT t_redir
 # define PIPE t_pipe
 # define MATH t_math
+# define FUNC t_func
 
 typedef enum		e_rd_type		// TYPES OF REDIRS
 {
@@ -58,6 +59,11 @@ typedef struct		s_pipe			// PIPE DESCRIPTOR
 {
 	int				pirw[2];
 }					t_pipe;
+
+typedef struct		s_42func
+{
+	t_dlist			*func_code;
+}					t_func;
 
 # include <unistd.h>
 # include <stdlib.h>
