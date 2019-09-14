@@ -77,9 +77,9 @@ short       pull_type(char *str);
 char        *new_graph(t_graph *g, char *s, t_dlist **tok, t_stx **tr);
 char        *check_subbranch(char *str,  t_dlist **tok, t_stx **tree, t_tk_type block);
 short       graph_forward_only(t_graph *g);
-short       graph_end(t_graph *g);
+short       graph_end(t_graph *g, char *str);
 char        *pull_expr2(char *str, t_stx **tr, t_dlist **tok);
-char        *pull_expr1(char *patt, char *str, t_dlist **tok);
+char        *pull_expr1(char *patt, char *str, t_stx **tr, t_dlist **tok);
 size_t      layer_parse_two(char *meta, char *str);
 char        *pull_token(char *str, size_t i);
 char        *script_pull(char *patt, t_tk_type type, char *str, t_stx **tr, t_dlist **tok);
@@ -88,6 +88,6 @@ char        *parse_empty(char *str, char *patt, t_dlist **tok);
 char        *ft_process_vars(t_tk_type type, char *str, char *meta, t_dlist **tok);
 short       is_separator(char str);
 char        *get_deref(char *str, t_stx **tr, t_dlist **tok);
-short       unexpected_token(void);
+void        unexpected_token(void);
 
 #endif

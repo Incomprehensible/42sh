@@ -18,12 +18,12 @@
 typedef size_t t_tk_type;
 
 # define TK_SEPS (t_tk_type)0x10000004038
-# define TK_MATHS (t_tk_type)0x0000000003
-# define TK_QUOTS (t_tk_type)0x0000000004
+# define TK_MATHS (t_tk_type)0x0000000004
+# define TK_QUOTS (t_tk_type)0x0000000000
 # define TK_EXPRS (t_tk_type)0x0000000008
 # define TK_FUNCS (t_tk_type)0x0000000006
 # define TK_SUBSHS (t_tk_type)0x0000000007
-# define TK_FLOWS (t_tk_type)0x0000000000
+# define TK_FLOWS (t_tk_type)0x0000000001
 # define TK_EMPTY (t_tk_type)0x0000000000000002
 # define TK_EXPR (t_tk_type)0x0000000000000004
 # define TK_SEP (t_tk_type)0x0000000000000008
