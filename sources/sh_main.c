@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/14 02:18:17 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/14 07:31:42 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int				main(const int argc, char **argv, char **envp)
 	UT_TOK_CR(TK_EXPR, "echo");
 	UT_TOK_CR(TK_EMPTY, 0);
 	UT_TOK_CR(TK_DEREF, 0);
-	UT_TOK_CR(TK_NAME, "PHRASE");
+	UT_TOK_CR(TK_NAME, "#");
 	UT_TOK_CR(TK_SEP, 0);
 	UT_TOK_CR(TK_FEND, 0);
 
