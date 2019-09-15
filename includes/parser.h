@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/13 18:28:18 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/15 18:04:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,36 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs);
 t_dlist			*prs_pipe(ETAB **tab, t_dlist *tk);
 
 t_dlist			*prs_math(ETAB **tab, t_dlist *tokens, ENV *envs);
-
 t_dlist			*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr);
+
+/*
+** TOKEN SKIPERS (returns an pointer ro a t_dlist (end_token))
+*/
+t_dlist			*prs_skip_paired_trg(t_dlist *tks, t_tk_type op, \
+t_tk_type cls, int cntr);
+t_dlist			*prs_skip_until(t_dlist *tks, t_tk_type brk_toks);
+t_dlist			*prs_skip_paired(t_dlist *tks, t_tk_type op, t_tk_type cls);
+
+/*
+** PARSING AND AND OR TOKENS
+*/
+t_dlist			*prs_and(t_dlist *tks, ENV *envr, int *status);
+t_dlist			*prs_or(t_dlist *tks, ENV *envr, int *status);
+
+/*
+** PARSING FUNCTIONS
+*/
+t_dlist			*prs_func(t_dlist *tks, ENV *envr);
+
+/*
+** PARSING ASSIGNMENTS
+*/
+t_dlist			*prs_assigm(t_dlist *tks, ENV *envs, int *status);
+
+/*
+** PARSING FLOWS
+*/
+t_dlist			*prs_while(t_dlist *tks, ENV *envs, int *status);
+t_dlist			*prs_if(t_dlist *tks, ENV *envs, int *status);
 
 #endif

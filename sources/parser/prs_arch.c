@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/14 02:02:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/15 18:03:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,199 +76,6 @@ int				prs_executor(ETAB **etab, ENV *envs) // TODO: ERROR CHECKING NEED
 	return (status);
 }
 
-t_dlist			*prs_skip_paired_trg(t_dlist *tks, t_tk_type op, t_tk_type cls, int cntr)
-{
-	t_tok		*tok;
-
-	while (tks && (tok = tks->content))
-	{
-		if (tok->type & op)
-			--cntr;
-		if (tok->type & cls)
-			++cntr;
-		if (!cntr)
-			break ;
-		tks = tks->next;
-	}
-	return (tks);
-}
-
-t_dlist			*prs_skip_paired(t_dlist *tks, t_tk_type op, t_tk_type cls)
-{
-	int			cntr;
-	t_tok		*tok;
-
-	cntr = 0;
-	while (tks && (tok = tks->content))
-	{
-		if (tok->type & op)
-			--cntr;
-		if (tok->type & cls)
-			++cntr;
-		if (!cntr)
-			break ;
-		tks = tks->next;
-	}
-	return (tks);
-}
-
-t_dlist			*prs_skip_after_else(t_dlist *tks)
-{
-	t_tok		*tok;
-
-	while (tks && (tok = tks->content))
-	{
-		if (tok->type == TK_IF)
-			tks = prs_skip_paired_trg(tks->next, TK_IF, TK_FI, -1)->next;
-		else if (tok->type == TK_ELSE || tok->type == TK_FI)
-			return(tks);
-		else
-			tks = tks->next;
-	}
-	return (tks);
-}
-
-t_dlist			*prs_if(t_dlist *tks, ENV *envs, int *status)
-{
-	t_tok			*tok;
-
-	tks = sh_tparse(tks->next, envs, TK_THEN, status);
-	if (*status == EXIT_SUCCESS)
-	{
-		tks = sh_tparse(tks->next, envs, TK_ELSE | TK_FI, status);
-		tok = tks->content;
-		if (tok->type == TK_BREAK)
-			return (tks);
-		tks = prs_skip_paired_trg(tks, TK_IF, TK_FI, -1);
-	}
-	else
-	{
-		tks = prs_skip_after_else(tks);
-		if ((tok = tks->content)->type == TK_FI)
-			return (tks->next);
-		tks = sh_tparse(tks->next, envs, TK_FI, status);
-		if ((tok = tks->content)->type == TK_BREAK)
-			return (tks);
-	}
-	return (tks);
-}
-
-t_dlist			*prs_while(t_dlist *tks, ENV *envs, int *status)
-{
-	const t_dlist	*cond = tks->next;
-	t_dlist			*end;
-	t_tok			*tok;
-
-	while ((end = sh_tparse((t_dlist *)cond, envs, TK_DO, status)) && *status == EXIT_SUCCESS)
-	{
-		tks = sh_tparse(end->next, envs, TK_DONE, status);
-		tok = tks->content;
-		if (tok->type == TK_BREAK)
-			break ;
-		if (tok->type == TK_CONTIN)
-			continue ;
-	}
-	return (prs_skip_paired(end, TK_DO, TK_DONE)->next);
-}
-
-char			*prs_assigm_val_get(t_dlist **tks, ENV *envs)
-{
-	t_dlist		*tki;
-	char		*val;
-
-	tki = *tks;
-	tki = arg_sub(tki, &val, 0, envs);
-	*tks = tki;
-	return (val);
-}
-
-int				prs_assigm_do(char *key, char *n_val, char asgm_tp, ENV *envs)
-{
-	DSTRING		*val_buff;
-	DSTRING		*orig_val;
-
-	val_buff = dstr_new(n_val);
-	if (asgm_tp == '+')
-	{
-		if (!(orig_val = env_get_variable(key, envs)))
-			return (-1);
-		if ((dstr_insert_dstr(val_buff, orig_val, 0)) < 0)
-			return (-1);
-		dstr_del(&orig_val);
-	}
-	if (env_set_variable(key, val_buff, envs) < 0)
-		return (-1);
-	dstr_del(&val_buff);
-	return (0);
-}
-
-t_dlist			*prs_assigm(t_dlist *tks, ENV *envs, int *status)
-{
-	char		*var_val[2];
-	char		assigm_type;
-	t_tok		*tok;
-
-	if (tks && (tok = tks->content))
-		var_val[0] = (tok->type == TK_VAR) ? tok->value : 0;
-	else
-		return (0);
-	if (tks->next && (tok = tks->next->content) && tok->type == TK_ASSIGM)
-		assigm_type = tok->value[0];
-	else
-		return (0);
-	tks = tks->next;
-	tks = tks->next;
-	var_val[1] = prs_assigm_val_get(&tks, envs);
-	*status = prs_assigm_do(var_val[0], var_val[1], assigm_type, envs);
-	if (var_val[1])
-		free(var_val[1]);
-	return (tks->next);
-}
-
-t_dlist			*prs_f_dup_tks(t_dlist *tks, t_dlist **fcode)
-{
-	t_tok		*tok;
-	t_tok		*ntok;
-	t_dlist		*instr;
-	char		*val;
-
-	while (tks && (tok = tks->content))
-	{
-		val = 0;
-		if (!(ntok = ft_memalloc(sizeof(t_tok))))
-			return (0);
-		if (tok->value && !(val = ft_strdup(tok->value)))
-			return (0);
-		ntok->value = val;
-		ntok->type = tok->type;
-		if (!(instr = ft_dlstnew_cc(ntok, tks->size)))
-			return (0);
-		ft_dlstpush(fcode, instr);
-		tks = tks->next;
-		if (tok->type == TK_FEND)
-			break;
-	}
-	return (tks);
-}
-
-t_dlist			*prs_func(t_dlist *tks, ENV *envr)
-{
-	FUNC		*func;
-	t_avln		*node;
-	t_tok		*tok;
-	t_tok		*ntok;
-
-	tks = tks->next;
-	tok = tks->content;
-	func = ft_memalloc(sizeof(FUNC)); // TODO: MALLOC CHECKING
-	node = ft_avl_node_cc(tok->value, func, sizeof(FUNC));
-	tks = tks->next;
-	if (!(tks = prs_f_dup_tks(tks, &func->func_code)))
-		return (0);
-	ft_avl_set(envr->funcs, node);
-	return (tks);
-}
-
 t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 {
 	ETAB		*etab;
@@ -290,6 +97,8 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 		tks = tok->type == TK_IF ? prs_if(tks, envs, status) : tks;
 		tks = tok->type == TK_WHILE ? prs_while(tks, envs, status) : tks;
 		tks = tok->type == TK_VAR ? prs_assigm(tks, envs, status) : tks;
+		tks = tok->type == TK_AND ? prs_and(tks, envs, status) : tks;
+		tks = tok->type == TK_OR ? prs_or(tks, envs, status) : tks;
 		tks = tok->type & (TK_EMPTY | TK_SEPS1 | (TK_FLOWS & ~(TK_IF | TK_WHILE))) ? tks->next : tks;
 	}
 	return (tks);

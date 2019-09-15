@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/09/13 18:30:13 by hgranule         ###   ########.fr        #
+#    Updated: 2019/09/15 18:51:54 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,12 +49,18 @@ SRC_FILES = sh_main.c exe_sys/exe_calls.c free_me/rms.c \
 			exe_sys/exe_redirs.c parser/prs_arch.c parser/prs_args.c \
 			parser/prs_instructions.c parser/prs_rdrs.c parser/prs_types.c \
 			env/env_init.c env/env_get_variable.c env/env_set_variable.c env/env_unset_variable.c \
-			bltns/bltn_init.c bltns/bltn_setenv.c bltns/bltn_env.c bltns/bltn_getenv.c bltns/bltn_unsetenv.c \
+			bltns/bltn_init.c bltns/bltn_setenv.c bltns/bltn_env.c \
+			bltns/bltn_getenv.c bltns/bltn_unsetenv.c \
 			bltns/bltn_exit.c bltns/bltn_alias.c bltns/bltn_unalias.c \
-			aliases/alias_add.c aliases/alias_init.c bltns/bltn_math.c \
-			exe_sys/exe_funcs.c
+			aliases/alias_add.c aliases/alias_init.c \
+			exe_sys/exe_funcs.c parser/prs_and_or.c parser/prs_assigm.c \
+			parser/prs_funcs.c parser/prs_if_while.c parser/prs_skipers.c \
+			\
+			bltns/math/bltn_math.c bltns/math/math_ret_var.c bltns/math/math_skipers.c \
+			bltns/math/math_ops_dec_inc.c bltns/math/math_ops_log_eq.c \
+			bltns/math/math_ops_lw_bg.c bltns/math/math_ops_primary.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math)
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

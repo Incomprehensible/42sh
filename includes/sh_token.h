@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/14 02:02:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/15 15:33:32 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef size_t		t_tk_type;
 #define TK_VAR		(t_tk_type)0x0000004000000000 // 274 877 906 944
 #define TK_UNTIL	(t_tk_type)0x0000008000000000 // 549 755 813 888
 
-#define TK_SEPS		(t_tk_type)0x1000004038 // SEP + OR + AND + PIPE + EOF
+#define TK_SEPS		(t_tk_type)0x1000004038 // SEP + PIPE + EOF
 #define TK_FLOWS	(t_tk_type)0x90ffe00000 // [IF -> CONTIN] + UNTIL + EOF
 #define TK_FDS_RDS	(t_tk_type)0x00000003780
 
