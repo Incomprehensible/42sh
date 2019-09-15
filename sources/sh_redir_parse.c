@@ -14,6 +14,8 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
+//MAKE BLOCKS
+//SORRY FOR THIS ;c
 char*   parse_hedoc(char *str, t_dlist **tok, t_stx **tree, short i)
 {
     char *word;
@@ -236,7 +238,7 @@ static char *parse_expr(char *s, t_dlist **tok)
 
 static char *close_fd(char *str, t_dlist **tok)
 {
-    make_token(tok, ft_strdup("close"), TK_FD);
+    make_token(tok, ft_strdup("-42"), TK_FD);
     str += 1;
     return (str);
 }

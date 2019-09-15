@@ -59,7 +59,7 @@ size_t    layer_parse_two(char *meta, char *str)
     size_t  i;
     char    *tmp;
 
-    i = 0x0;
+    i = 0;
     tmp = str;
     while (*str && *meta && (*str == *meta || special_meta(*meta)))
     {
@@ -95,17 +95,19 @@ size_t    layer_parse_two(char *meta, char *str)
     return (*meta ? 0 : i);
 }
 
-char    *pull_expr1(char *patt, char *str, t_dlist **tok)
+char    *pull_expr1(char *patt, char *str, t_stx **tr, t_dlist **tok)
 {
-    char *start;
+   //char *start;
     char *new;
     size_t i;
 
-    start = str;
+   // start = str;
+    if (check_branch(str, tr[0]))
+        return (str);
     i = layer_parse_two(patt, str);
     if (i)
     {
-        new = pull_token(start, --i);
+        new = pull_token(str, --i);
         make_token(tok, new, TK_EXPR);
         str = str + i;
     }
@@ -114,12 +116,12 @@ char    *pull_expr1(char *patt, char *str, t_dlist **tok)
 
 char    *pull_expr2(char *str, t_stx **tr, t_dlist **tok)
 {
-    char *start;
+   // char *start;
     char *new;
     size_t i;
 
     i = 0;
-    start = str;
+   // start = str;
     if (check_branch(str, tr[0]))
         return (str);
     while (*str && *str != ';')
@@ -129,14 +131,18 @@ char    *pull_expr2(char *str, t_stx **tr, t_dlist **tok)
     }
     if (i)
     {
-        new = pull_token(start, i);
+        new = pull_token(str - i, i);
         make_token(tok, new, TK_EXPR);
     }
     return (str);
 }
 
-short   graph_end(t_graph *g)
+short   graph_end(t_graph *g, char *str)
 {
+    while (*str && (*str == ';' || *str == ' ' || *str == '\t'))
+        str++;
+    if (g->type == TK_FI && !is_token_here(str, "else"))
+        return (1);
     if (!g->forward && !g->right && !g->left)
         return (1);
     return (0);
@@ -177,6 +183,7 @@ char   *check_subbranch(char *str,  t_dlist **tok, t_stx **tree, t_tk_type block
 char    *parse_sep(char *str, t_dlist **tok, short i)
 {
     char *new;
+    short j;
 
     if (!(*str))
         return (str);
@@ -186,23 +193,26 @@ char    *parse_sep(char *str, t_dlist **tok, short i)
         new[i] = str[i];
         i++;
     }
-    i = -1;
+    j = -1;
     if (!ft_strcmp("&&", new))
-        i = TK_AND;
+        j = TK_AND;
     else if (!ft_strcmp("||", new))
-        i = TK_OR;
-    else if (*new == '|' && (new[1] = '\0'))
-        i = TK_PIPE;
-    else if (*new == '&' && (new[1] = '\0'))
-        i = TK_BCKR_PS;
+        j = TK_OR;
+    else if (*new == '|' && !(new[1] = '\0'))
+        j = TK_PIPE;
+    else if (*new == '&' && !(new[1] = '\0'))
+        j = TK_BCKR_PS;
     else if (*new == ';' && !(new[1] = '\0'))
-        i = TK_SEP;
+        j = TK_SEP;
+    else if (*new == '\n' && !(new[1] = '\0'))
+        j = TK_SEP;
     else
         ft_strdel(&new);
-    if (i != -1)
+    if (j != -1)
     {
-        make_token(tok, new, i);
+        make_token(tok, new, j);
         str = *str ? ++str : str;
+        str = new[1] ? ++str : str;
     }
     return (str);
 //    return (i > 0 ? kek : block_pass(find_token(tr, str), str, tok, tr));
