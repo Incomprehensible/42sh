@@ -6,12 +6,13 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/13 14:31:16 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/17 19:34:39 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "sh_token.h"
+#include "ft_lbuffer.h"
 
 //** Пропуск токенов соответующим флагам (FLAGS & ТИП_ТОКЕНА) == true
 t_dlist			*arg_tok_skip(t_dlist *tokens, t_tk_type flags)
@@ -74,6 +75,36 @@ char			*get_deref_math(char *expr, ENV *envr)
 	return (res);
 }
 
+/*
+!! TEMPORARY FUNCTION
+!! Soon will be changed!
+*/
+char			*get_deref_subsh(char *code, ENV *envr)
+{
+	int			pips[2];
+	pid_t		pid;
+
+	pipe(pips);
+	pid = fork();
+	if (pid == 0)
+	{
+		close(pips[0]);
+		dup2(pips[1], 1);
+		close(pips[1]);
+		char *argv[4];
+		argv[0] = "bash";
+		argv[1] = "-c";
+		argv[2] = code;
+		argv[3] = 0;
+		execv("/bin/bash", argv);
+		exit(2);
+	}
+	close(pips[1]);
+	t_lbuf *buff = ft_lb_readbytes(pips[0], 0);
+	char *res = ft_lb_flush(buff);
+	return(res);
+}
+
 //** ПОЛУЧЕНИЕ РАЗЫМЕНОВАНИЙ
 char			*get_deref(t_dlist *tokens, ENV *envr)
 {
@@ -83,6 +114,8 @@ char			*get_deref(t_dlist *tokens, ENV *envr)
 		return (get_deref_name(tok->value, envr));
 	if (tok->type == TK_MATH)
 	 	return (get_deref_math(tok->value, envr));
+	if (tok->type == TK_SUBSH)
+		return (get_deref_subsh(tok->value, envr));
 	return (0);
 }
 
@@ -92,6 +125,7 @@ t_dlist			*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr)
 	DSTRING		*expr_buff;
 	char		*tmp;
 	t_tok		*tok;
+	char		*trimmed;
 
 	expr_buff = dstr_new("");
 	tokens = arg_tok_skip(tokens, TK_FDS_RDS | TK_EMPTY);
@@ -104,9 +138,11 @@ t_dlist			*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr)
 		{
 			tokens = tokens->next;
 			tmp = get_deref(tokens, envr);
-			// ERROR: Если ТМП не вернулось, то значит у нас фейл.
-			dstr_insert_str(expr_buff, tmp, MAX_LL);
+			trimmed = ft_strtrim(tmp);
 			free(tmp);
+			// ERROR: Если ТМП не вернулось, то значит у нас фейл.
+			dstr_insert_str(expr_buff, trimmed, MAX_LL);
+			free(trimmed);
 		}
 		tokens = tokens->next;
 	}

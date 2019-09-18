@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 18:03:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/17 19:37:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,28 @@ int				math_to_expr_maker(ETAB **etab)
 	return (0);
 }
 
+/*
+!! TEMPORARY FUNCTION
+!! Soon will be changed!
+*/
+int				subsh_to_expr_maker(ETAB **etab)
+{
+	SUBSH		*subsh;
+	EXPRESSION	*cmd;
+	char		*tmp;
+
+	subsh = (*etab)->instruction;
+	tmp = subsh->commands;
+	(*etab)->type = ET_EXPR;
+	cmd = (EXPRESSION *)subsh;
+	if (!(cmd->args = ft_memalloc(4 * sizeof(char *))))
+		return (-1);
+	cmd->args[0] = ft_strdup("bash"); // TODO: need to handle malloc fails
+	cmd->args[1] = ft_strdup("-c");
+	cmd->args[2] = tmp;
+	return (0);
+}
+
 int				prs_executor(ETAB **etab, ENV *envs) // TODO: ERROR CHECKING NEED
 {
 	ETAB		*etab_row;
@@ -70,6 +92,8 @@ int				prs_executor(ETAB **etab, ENV *envs) // TODO: ERROR CHECKING NEED
 	{
 		if (etab_row->type == ET_MATH)
 			status = math_to_expr_maker(etab);
+		if (etab_row->type == ET_SUBSH)
+			status = subsh_to_expr_maker(etab);
 		if (etab_row->type == ET_EXPR)
 			status = prs_execute_expr(etab, envs);
 	}
@@ -96,9 +120,11 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 		tks = tok->type == TK_PIPE ? prs_pipe(&etab, tks) : tks; 
 		tks = tok->type == TK_IF ? prs_if(tks, envs, status) : tks;
 		tks = tok->type == TK_WHILE ? prs_while(tks, envs, status) : tks;
+		tks = tok->type == TK_FOR ? prs_for(tks, envs, status) : tks;
 		tks = tok->type == TK_VAR ? prs_assigm(tks, envs, status) : tks;
 		tks = tok->type == TK_AND ? prs_and(tks, envs, status) : tks;
 		tks = tok->type == TK_OR ? prs_or(tks, envs, status) : tks;
+		tks = tok->type == TK_SUBSH ? prs_subsh(&etab, tks, envs) : tks;
 		tks = tok->type & (TK_EMPTY | TK_SEPS1 | (TK_FLOWS & ~(TK_IF | TK_WHILE))) ? tks->next : tks;
 	}
 	return (tks);

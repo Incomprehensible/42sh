@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 18:04:54 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/17 22:22:48 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define PIPE t_pipe
 # define MATH t_math
 # define FUNC t_func
+# define SUBSH t_subsh
 
 typedef enum		e_rd_type		// TYPES OF REDIRS
 {
@@ -54,6 +55,14 @@ typedef struct		s_math			// ARIPHMETICAL DESCRIPTOR!!
 	int				*opipe_fds;		// output pipe
 	t_dlist			*redirections;	// double-list with a content of t_redir (REDIRECT)				
 }					t_math;
+
+typedef struct		s_subsh
+{
+	void			*commands;
+	int				*ipipe_fds;
+	int				*opipe_fds;
+	t_dlist			*redirections;
+}					t_subsh;
 
 typedef struct		s_pipe			// PIPE DESCRIPTOR
 {
@@ -132,6 +141,7 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs);
 t_dlist			*prs_pipe(ETAB **tab, t_dlist *tk);
 
 t_dlist			*prs_math(ETAB **tab, t_dlist *tokens, ENV *envs);
+t_dlist			*prs_subsh(ETAB **tab, t_dlist *tokens, ENV *envs);
 t_dlist			*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr);
 
 /*
@@ -163,5 +173,6 @@ t_dlist			*prs_assigm(t_dlist *tks, ENV *envs, int *status);
 */
 t_dlist			*prs_while(t_dlist *tks, ENV *envs, int *status);
 t_dlist			*prs_if(t_dlist *tks, ENV *envs, int *status);
+t_dlist			*prs_for(t_dlist *tks, ENV *envs, int *status);
 
 #endif

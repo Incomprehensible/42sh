@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 16:12:50 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/15 14:40:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/17 22:52:06 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int		env_set_variable(const char *key, DSTRING *value, ENV *enviroment)
 {
 	t_avln	*node;
 
+	if (!value)
+		return (0);
 	if (!(node = ft_avl_node((char *)key, (char *)value->txt,\
 		ft_strlen((char *)value->txt) + 1)))
 		return (-1);
