@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 15:33:32 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/18 10:21:50 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,16 @@ typedef size_t		t_tk_type;
 #define TK_FEND		(t_tk_type)0x0000002000000000 // 137 438 953 472
 #define TK_VAR		(t_tk_type)0x0000004000000000 // 274 877 906 944
 #define TK_UNTIL	(t_tk_type)0x0000008000000000 // 549 755 813 888
+#define TK_PROC_IN	(t_tk_type)0x0000010000000000 // 1 099 511 627 776
+#define TK_PROC_OUT	(t_tk_type)0x0000020000000000 // 2 199 023 255 552
+#define TK_PROF_IN	(t_tk_type)0x0000040000000000 // 4 398 046 511 104
+#define TK_PROF_OUT	(t_tk_type)0x0000080000000000 // 8 796 093 022 208
 
 #define TK_SEPS		(t_tk_type)0x1000004038 // SEP + PIPE + EOF
 #define TK_FLOWS	(t_tk_type)0x90ffe00000 // [IF -> CONTIN] + UNTIL + EOF
-#define TK_FDS_RDS	(t_tk_type)0x00000003780
+#define TK_FDS_RDS	(t_tk_type)0x0c0000003780
+
+#define TK_FLS_FDR	(t_tk_type)(TK_PROF_IN | TK_PROF_OUT | TK_FILENAME)
 
 #define TK_SEPS1	(TK_SEPS & ~TK_PIPE) // SEP + OR + AND + PIPE + EOF
 

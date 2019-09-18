@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:26:19 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/17 19:02:53 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/18 20:51:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs)
 {
 	EXPRESSION	*expr;
 	ETAB		*nrow;
+	t_dlist		*tks;
 
 	if (!(nrow = (ETAB *)ft_dlstnew_cc(0, 0)))
 		return (0); // ERROR: prs_expr: Malloc failed.
@@ -26,9 +27,10 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs)
 	expr = (EXPRESSION *)nrow->instruction;
 	if (nrow->prev_e && nrow->prev_e->type == ET_PIPE)
 		expr->ipipe_fds = ((PIPE *)nrow->prev_e->instruction)->pirw;
-	if (!(expr->args = prs_args(tokens, envs)))
+	tks = tokens;
+	if (!(expr->args = prs_args(tks, envs)))
 		return (0); // ERROR: prs_expr: Malloc failed.
-	expr->redirections = prs_rdrs(&tokens);
+	expr->redirections = prs_rdrs(&tokens, envs);
 	return (tokens);
 }
 
@@ -53,7 +55,7 @@ t_dlist			*prs_subsh(ETAB **tab, t_dlist *tokens, ENV *envs)
 		subsh->ipipe_fds = ((PIPE *)nrow->prev_e->instruction)->pirw;
 	subsh_tok = tokens->content;
 	subsh->commands = (void *)ft_strdup(subsh_tok->value); 
-	subsh->redirections = prs_rdrs(&tokens);
+	subsh->redirections = prs_rdrs(&tokens, envs);
 	return (tokens);
 }
 
@@ -74,7 +76,7 @@ t_dlist			*prs_math(ETAB **tab, t_dlist *tokens, ENV *envs)
 		math->ipipe_fds = ((PIPE *)nrow->prev_e->instruction)->pirw;
 	mtok = tokens->content;
 	math->expr = ft_strdup(mtok->value); 
-	math->redirections = prs_rdrs(&tokens);
+	math->redirections = prs_rdrs(&tokens, envs);
 	return (tokens);
 }
 

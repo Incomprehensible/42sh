@@ -6,19 +6,21 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/17 19:37:28 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/18 21:39:50 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "sh_token.h"
 #include "ft_io.h"
+#include "sys_tools/sys_tools.h"
 
 int				prs_execute_expr(ETAB **etab ,ENV *envs)
 {
 	ETAB		*etab_row;
 	ETAB		*pipe_free;
 	int			status;
+	int			signal_v;
 	pid_t		cpid;
 
 	etab_row = 0;
@@ -37,7 +39,8 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 	}
 	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);
 	if (cpid > 0)
-		status = exe_wait_cps(cpid);
+		signal_v = sys_wait_cps(cpid, &status);
+	sys_kill_pipes();
 	return (status);
 }
 

@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_req.h                                           :+:      :+:    :+:   */
+/*   sys_tools.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/12 01:34:45 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 09:03:43 by hgranule         ###   ########.fr       */
+/*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
+/*   Updated: 2019/09/18 16:23:34 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_REQ_H
-# define SH_REQ_H
+#ifndef SYS_TOOLS_H
+# define SYS_TOOLS_H
 
-# include "libft.h"
-# include "ft_avl_tree.h"
+# include <unistd.h>
+# include <signal.h>
 
-int			sys_init(void);
+int			sys_create_pipe(int	*a);
+int			sys_destroy_pipe(int p);
+int			sys_kill_pipes(void);
+
+int			sys_wait_cp(pid_t childs_pid, int *status);
+int			sys_wait_cps(pid_t last_child, int *status);
 
 #endif

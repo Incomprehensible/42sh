@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/17 22:22:48 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/18 11:16:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,27 +108,27 @@ t_rdtype		prs_rdr_type(t_tok *tok);
 /*
 ** Function creates a new t_dlist with REDIRECTION DESC.
 */
-t_dlist			*prs_new_rdr_cr(t_dlist *tokens);
+t_dlist			*prs_new_rdr_cr(t_dlist *tokens, ENV *envs);
 
 /*
 ** Function returns a full double-list with RDR DESCS
 */
-t_dlist			*prs_rdrs(t_dlist **tokens);
+t_dlist			*prs_rdrs(t_dlist **tokens, ENV *envs);
 
 /*
 ** CREATE REDIRECT_DS FOR '<>'
 */
-REDIRECT		*prs_rdr_rw(t_dlist *tokens);
+REDIRECT		*prs_rdr_rw(t_dlist *tokens, ENV *envs);
 
 /*
 ** CREATE REDIRECT_DS FOR '<'
 */
-REDIRECT		*prs_rdr_r(t_dlist *tokens);
+REDIRECT		*prs_rdr_r(t_dlist *tokens, ENV *envs);
 
 /*
 ** CREATE REDIRECT_DS FOR '> >>'
 */
-REDIRECT		*prs_rdr_wa(t_dlist *tokens);
+REDIRECT		*prs_rdr_wa(t_dlist *tokens, ENV *envs);
 
 /*
 ** PARSING OF A EXPRESSIONS ETT
@@ -174,5 +174,8 @@ t_dlist			*prs_assigm(t_dlist *tks, ENV *envs, int *status);
 t_dlist			*prs_while(t_dlist *tks, ENV *envs, int *status);
 t_dlist			*prs_if(t_dlist *tks, ENV *envs, int *status);
 t_dlist			*prs_for(t_dlist *tks, ENV *envs, int *status);
+
+char			*get_deref_subsh(char *code, ENV *envr);
+char			*prc_substitute(char *code, ENV *envr, int is_in);
 
 #endif

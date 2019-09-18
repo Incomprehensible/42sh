@@ -6,38 +6,11 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:03:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/13 18:15:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/18 12:44:30 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
-#include <stdio.h>
-
-// TODO: NEED TO CHECK FOR ERRORS!!!!!
-
-int			exe_wait_cps(pid_t cpid)
-{
-	int		statloc;
-	int		estatus;
-	pid_t	pid;
-
-	while ((pid = waitpid(cpid, &statloc, WUNTRACED)) || 1)
-	{
-		estatus = WEXITSTATUS(statloc);
-		if (WIFEXITED(statloc))
-			break ;
-		if (WIFSIGNALED(statloc))
-			break ;
-	}
-	while ((pid = waitpid(-1, &statloc, WUNTRACED)) && pid > 0)
-	{
-		if (WIFEXITED(statloc))
-			break ;
-		if (WIFSIGNALED(statloc))
-			break ;
-	}
-	return (estatus);
-}
 
 int			exe_execute_expr(EXPRESSION *expr, ENV *envr, int *status)
 {

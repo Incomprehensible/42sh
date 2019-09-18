@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/09/15 18:51:54 by hgranule         ###   ########.fr        #
+#    Updated: 2019/09/18 12:07:00 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,9 +58,12 @@ SRC_FILES = sh_main.c exe_sys/exe_calls.c free_me/rms.c \
 			\
 			bltns/math/bltn_math.c bltns/math/math_ret_var.c bltns/math/math_skipers.c \
 			bltns/math/math_ops_dec_inc.c bltns/math/math_ops_log_eq.c \
-			bltns/math/math_ops_lw_bg.c bltns/math/math_ops_primary.c
+			bltns/math/math_ops_lw_bg.c bltns/math/math_ops_primary.c \
+			\
+			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
+			sys_tools/sys_proc_wait.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools)
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

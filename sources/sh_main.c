@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/17 23:34:45 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/18 21:32:31 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,72 +81,21 @@ int				main(const int argc, char **argv, char **envp)
 	DSTRING		*dstr;
 	
 	env_init(argc, argv, envp, &env);
+	sys_init();
 	dstr = dstr_new("RAINBOWDASH");
 	env_set_variable("MLP", dstr, &env);
 	dstr_del(&dstr);
 	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));
 
 	UT_TOK_INIT();
-		// UT_TOK_CR(TK_VAR, "PHRASE");
-		// UT_TOK_CR(TK_ASSIGM, "=");
-		// UT_TOK_CR(TK_VALUE, "HELLO");
-		// UT_TOK_CR(TK_VALUE, " ");
-		// UT_TOK_CR(TK_DEREF, 0);
-		// UT_TOK_CR(TK_NAME, "MLP");
-		// UT_TOK_CR(TK_SEP, 0);
-
-		// UT_TOK_CR(TK_FUNCTION, 0);
-		// UT_TOK_CR(TK_NAME, "foo");
-		// UT_TOK_CR(TK_EMPTY, 0);
-		// UT_TOK_CR(TK_EXPR, "echo");
-		// UT_TOK_CR(TK_EMPTY, 0);
-		// UT_TOK_CR(TK_DEREF, 0);
-		// UT_TOK_CR(TK_MATH, "a = 4, a = # + 4");
-		// UT_TOK_CR(TK_SEP, 0);
-		// UT_TOK_CR(TK_FEND, 0);
-
-		// UT_TOK_CR(TK_EMPTY, 0);
-
-		// UT_TOK_CR(TK_EXPR, "echo");
-		// UT_TOK_CR(TK_EMPTY, 0);
-		// UT_TOK_CR(TK_EXPR, "BEFORE FUNCTION CALL, I DO SOMETHING ...");
-		// UT_TOK_CR(TK_SEP, 0);
-
-		// UT_TOK_CR(TK_EMPTY, 0);
-
-		// UT_TOK_CR(TK_EXPR, "foo");
-		// UT_TOK_CR(TK_EMPTY, 0);
-		// UT_TOK_CR(TK_EXPR, "foo");
-		// UT_TOK_CR(TK_EMPTY, 0);
-		// UT_TOK_CR(TK_EXPR, "foo");
-		// UT_TOK_CR(TK_EMPTY, 0);
-		// UT_TOK_CR(TK_PIPE, 0);
-		// UT_TOK_CR(TK_EXPR, "cat");
-		// UT_TOK_CR(TK_EMPTY, 0);
-		// UT_TOK_CR(TK_EXPR, "-e");
-		// UT_TOK_CR(TK_EOF, 0);
-
-	UT_TOK_CR(TK_FOR, 0);
+	UT_TOK_CR(TK_EXPR, "cat");
 	UT_TOK_CR(TK_EMPTY, 0);
-	UT_TOK_CR(TK_MATH, "IT = 3; IT <= 10; ++IT");
+	UT_TOK_CR(TK_EXPR, "-e");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_PROC_OUT, "ls -l");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_PROC_OUT, "ls -l");
 	UT_TOK_CR(TK_SEP, 0);
-	UT_TOK_CR(TK_DO, 0);
-	UT_TOK_CR(TK_EMPTY, 0);
-		UT_TOK_CR(TK_IF, 0);
-		UT_TOK_CR(TK_EMPTY, 0);
-		UT_TOK_CR(TK_MATH, "IT % 2 == 0 || IT % 3 == 0");
-		UT_TOK_CR(TK_SEP, 0);
-		UT_TOK_CR(TK_THEN, 0);
-		UT_TOK_CR(TK_CONTIN, 0);
-		UT_TOK_CR(TK_SEP, 0);
-		UT_TOK_CR(TK_FI, 0);
-		UT_TOK_CR(TK_SEP, 0);
-	UT_TOK_CR(TK_EXPR, "echo");
-	UT_TOK_CR(TK_EMPTY, 0);
-	UT_TOK_CR(TK_DEREF, 0);
-	UT_TOK_CR(TK_NAME, "IT");
-	UT_TOK_CR(TK_SEP, 0);
-	UT_TOK_CR(TK_DONE, 0);
 	UT_TOK_CR(TK_EOF, 0);
 
 	sh_tparse(UT_TOK, &env, TK_EOF, &status);
@@ -156,3 +105,13 @@ int				main(const int argc, char **argv, char **envp)
 	// TERMINATE
 	return (0);
 }
+/*
+	printf(
+		"\n================ 42sh ====\n\n"
+		"LPID   = %15d ]\n"
+		"PID    = %15d ]\n"
+		"STATUS = %15d ]\n"
+		"SIGNAL = %15d ]\n"
+		"\n================= wait_cps\n\n",
+		last_child, pid, *status, signal);
+*/

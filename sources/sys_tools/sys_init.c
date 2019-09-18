@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_req.h                                           :+:      :+:    :+:   */
+/*   sys_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/12 01:34:45 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 09:03:43 by hgranule         ###   ########.fr       */
+/*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
+/*   Updated: 2019/09/18 15:15:08 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_REQ_H
-# define SH_REQ_H
+#include "sys_tools/sys_hidden.h"
+#include "sys_tools/sys_tools.h"
+#include "ft_mem.h"
 
-# include "libft.h"
-# include "ft_avl_tree.h"
-
-int			sys_init(void);
-
-#endif
+int			sys_init(void)
+{
+	ft_bzero(sys_pipes, SYS_PIPES_SIZE * sizeof(char));
+	return (0);
+}

@@ -1,21 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_req.h                                           :+:      :+:    :+:   */
+/*   sys_hidden.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/12 01:34:45 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 09:03:43 by hgranule         ###   ########.fr       */
+/*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
+/*   Updated: 2019/09/18 21:38:14 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_REQ_H
-# define SH_REQ_H
+#ifndef SYS_HIDDEN_H
+# define SYS_HIDDEN_H
 
-# include "libft.h"
-# include "ft_avl_tree.h"
+# include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <sys/types.h>
+# include <signal.h>
+// # ifdef __linux__
+// #  include <sys/wait.h>
+// # endif
+# include "ft_mem.h"
 
-int			sys_init(void);
+# define SYS_FDS_USR_LIMIT 40
+# define SYS_PIPES_SIZE 1024
+
+# define CHECK_INTS_P 0x0000008000000080
+
+char		sys_pipes[SYS_PIPES_SIZE];
 
 #endif
