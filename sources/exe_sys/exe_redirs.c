@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:02:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 18:08:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/20 14:46:22 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void			exe_redir_ex(REDIRECT *rdr)
 	{
 		mode = 0644;
 		file_flag = rdr->type != r_rdr ? O_CREAT : 0;
-		rdr->type == r_rdr ? file_flag |= O_RDONLY | O_TRUNC : 0;
-		rdr->type == w_rdr ? file_flag |= O_WRONLY | O_TRUNC : 0;
+		rdr->type == r_rdr ? file_flag |= O_RDONLY | O_NOCTTY: 0;
+		rdr->type == w_rdr ? file_flag |= O_WRONLY | O_TRUNC | O_NOCTTY: 0;
 		rdr->type == rw_rdr ? file_flag |= O_RDWR : 0;
 		rdr->type == a_rdr ? file_flag |= O_APPEND | O_WRONLY : 0;
 		if (rdr->fdl == -21)
@@ -42,9 +42,6 @@ void			exe_redir_ex(REDIRECT *rdr)
 			if (rdr->file)
 				fd = open(rdr->file, file_flag, mode);
 			dup2(fd, STDOUT_FILENO);
-			// close(fd);									??
-			// if (rdr->file)								??
-			// fd = open(rdr->file, file_flag, mode);		??
 			dup2(fd, STDERR_FILENO);
 			close(fd);
 			return ;

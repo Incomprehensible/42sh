@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 10:21:50 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/20 12:41:13 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ typedef size_t		t_tk_type;
 #define TK_SEPS		(t_tk_type)0x1000004038 // SEP + PIPE + EOF
 #define TK_FLOWS	(t_tk_type)0x90ffe00000 // [IF -> CONTIN] + UNTIL + EOF
 #define TK_FDS_RDS	(t_tk_type)0x0c0000003780
+
+#define TK_RDS		(t_tk_type)0x781		// RDS + HERED
 
 #define TK_FLS_FDR	(t_tk_type)(TK_PROF_IN | TK_PROF_OUT | TK_FILENAME)
 

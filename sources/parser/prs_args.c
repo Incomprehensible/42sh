@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 11:06:45 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/18 22:03:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,6 @@
 #include "ft_lbuffer.h"
 #include "sys_tools/sys_tools.h"
 
-//** Пропуск токенов соответующим флагам (FLAGS & ТИП_ТОКЕНА) == true
-t_dlist			*arg_tok_skip(t_dlist *tokens, t_tk_type flags)
-{
-	while (((t_tok *)tokens->content)->type & flags)
-		tokens = tokens->next;
-	return (tokens);
-}
 
 //** Подсчет количества аргс
 size_t			args_count(t_dlist *tokens)

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 17:51:18 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 17:54:04 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/18 22:04:50 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,19 @@ t_dlist			*prs_skip_paired(t_dlist *tks, t_tk_type op, t_tk_type cls)
 		tks = tks->next;
 	}
 	return (tks);
+}
+
+//** Пропуск токенов соответующим флагам (FLAGS & ТИП_ТОКЕНА) == true
+t_dlist			*arg_tok_skip(t_dlist *tokens, t_tk_type flags)
+{
+	while (tokens && tokens->content && (((t_tok *)tokens->content)->type & flags))
+		tokens = tokens->next;
+	return (tokens);
+}
+
+t_dlist			*arg_tok_r_skip(t_dlist *tokens, t_tk_type flags)
+{
+	while (tokens && tokens->content && (((t_tok *)tokens->content)->type & flags))
+		tokens = tokens->prev;
+	return (tokens);
 }

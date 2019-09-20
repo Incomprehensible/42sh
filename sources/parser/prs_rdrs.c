@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:21:47 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 21:35:57 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/20 15:11:52 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,99 +23,60 @@ char			*rdr_get_filename(t_tok *tok, ENV *envr)
 	return (ch);
 }
 
-REDIRECT		*prs_rdr_wa(t_dlist *tokens, ENV *envr)
+int				prs_rdr_fdl(t_dlist *tokens, REDIRECT *redir)
 {
-	REDIRECT	*redir;
-	t_tok		*tks[3];
+	t_tok		*tok;
 
-	tks[0] = tokens->prev ? tokens->prev->content : 0;
-	tks[1] = tokens->content;
-	tks[2] = tokens->next ? tokens->next->content : 0;
-	if (!(redir = ft_memalloc(sizeof(REDIRECT))))
-		return (0);
-	redir->type = prs_rdr_type(tks[1]);
-	if (!(tks[0]) || tks[0]->type != TK_FD)
-		redir->fdl = 1;
-	else if (tks[0] && tks[0]->type == TK_FD)
-		redir->fdl = ft_atoi(tks[0]->value);
-	if (tks[2] && tks[2]->type & TK_FLS_FDR && (redir->fdr == -1))
+	tokens = arg_tok_r_skip(tokens, TK_EMPTY | TK_RDS);
+	if (!tokens || !(tok = tokens->content) || tok->type != TK_FD)
 	{
-		if (!(redir->file = rdr_get_filename(tks[2], envr)))
-			free(redir);
-		redir->fdr = 0;
+		redir->fdl = redir->type == r_rdr ? 0: redir->fdl;
+		redir->fdl = redir->type & (a_rdr | w_rdr) ? 1: redir->fdl;
+		return (0);
 	}
-	else if (tks[2] && tks[2]->type)
-		redir->fdr = ft_atoi(tks[2]->value);
-	return (redir);
+	else if (tok->type == TK_FD)
+	{
+		redir->fdl = ft_atoi(tok->value);
+		return (0);
+	}
+	return (-1);
 }
 
-REDIRECT		*prs_rdr_r(t_dlist *tokens, ENV *envr)
+int				prs_rdr_fdr_file(t_dlist *tokens, REDIRECT *redir, ENV *envr)
 {
-	REDIRECT	*redir;
-	t_tok		*tks[3];
+	t_tok		*tok;
 
-	tks[0] = tokens->prev ? tokens->prev->content : 0;
-	tks[1] = tokens->content;
-	tks[2] = tokens->next ? tokens->next->content : 0;
-	if (!(redir = ft_memalloc(sizeof(REDIRECT))))
+	if (!(tokens = arg_tok_skip(tokens, TK_EMPTY | TK_RDS)))
+		return (-2);
+	tok = tokens->content;
+	if (tok->type & (TK_PROF_IN | TK_PROF_OUT | TK_FILENAME))
+	{
+		redir->file = rdr_get_filename(tok, envr);
 		return (0);
-	redir->type = prs_rdr_type(tks[1]);
-	if (!(tks[0]) || tks[0]->type != TK_FD)
-		redir->fdl = 0;
-	else if (tks[0] && tks[0]->type == TK_FD)
-		redir->fdl = ft_atoi(tks[0]->value); // UNDONE: TO WORK WITH & (STDALL)
-	if (tks[2] && tks[2]->type & TK_FLS_FDR && (redir->fdr == -1))
-	{
-		if (!(redir->file = rdr_get_filename(tks[2], envr)))
-			free(redir);
 	}
-	else if (tks[2] && tks[2]->type)
-		redir->fdr = ft_atoi(tks[2]->value); // UNDONE: TO WORK WITH &- (CLOSE)
-	return (redir);
-}
-
-REDIRECT		*prs_rdr_rw(t_dlist *tokens, ENV *envr)
-{
-	REDIRECT	*redir;
-	t_tok		*tks[3];
-
-	tks[0] = tokens->prev ? tokens->prev->content : 0;
-	tks[1] = tokens->content;
-	tks[2] = tokens->next ? tokens->next->content : 0;
-	if (!(redir = ft_memalloc(sizeof(REDIRECT))))
+	if (tok->type == TK_FD)
+	{
+		redir->file = 0;
+		redir->fdr = ft_atoi(tok->value);
 		return (0);
-	redir->type = prs_rdr_type(tks[1]);
-	if (!(tks[0]) || !(tks[1]))
-	{
-		free(redir);
 	}
-	else if (tks[0] && tks[0]->type == TK_FD)
-		redir->fdl = ft_atoi(tks[0]->value);
-	if (tks[2] && tks[2]->type & TK_FLS_FDR && (redir->fdr == -1))
-	{
-		if (!(redir->file = rdr_get_filename(tks[2], envr)))
-			free(redir);
-	}
-	else if (tks[2] && tks[2]->type)
-		redir->fdr = ft_atoi(tks[2]->value);
-	return (redir);
+	return (-1);
 }
 
 t_dlist			*prs_new_rdr_cr(t_dlist *tokens, ENV *envr)
 {
-	t_tok		*tok;
-	REDIRECT	*redir;
 	t_dlist		*res;
+	REDIRECT	*redir;
 
-	tok = tokens->content;
-	redir = 0;
-	redir = (tok->type == TK_RD_W || tok->type == TK_RD_A) \
-		? prs_rdr_wa(tokens, envr) : redir;
-	redir = (tok->type == TK_RD_R) ? prs_rdr_r(tokens, envr) : redir;
-	redir = (tok->type == TK_RD_RW) ? prs_rdr_rw(tokens, envr) : redir;
-	if (!redir || !(res = ft_dlstnew_cc(0, sizeof(REDIRECT))))
-		return (0); // ERROR: prs_rdr: Malloc failed.
+	if (!(res = ft_dlstnew_cc(0, 0)))
+		return (0);
+	if (!(redir = ft_memalloc(sizeof(REDIRECT))))
+		return (0);
+	redir->type = prs_rdr_type(tokens->content);
+	prs_rdr_fdr_file(tokens, redir, envr);
+	prs_rdr_fdl(tokens, redir);
 	res->content = redir;
+	res->size = sizeof(REDIRECT);
 	return (res);
 }
 
@@ -128,15 +89,18 @@ t_dlist			*prs_rdrs(t_dlist **tokens, ENV *envr)
 
 	it = *tokens;
 	rdrs = 0;
-	while (it && prs_is_a_instruction((tok = it->content)))
+	while (it)
 	{
-		if (tok->type >= TK_RD_W && tok->type <= TK_RD_RW)
+		if (!(it = prs_skip_until(it, TK_SEPS | TK_FLOWS | TK_RDS)))
+			return (0);
+		if ((tok = (it->content)) && (tok->type & TK_RDS))
 		{
-			if (!(new_rdr = prs_new_rdr_cr(it, envr)))
-				it = 0; // ERROR: prs_rdr: Malloc failed.
+			new_rdr = prs_new_rdr_cr(it, envr);
 			ft_dlstpush(&rdrs, new_rdr);
+			it = it->next;
 		}
-		it = it->next;
+		else
+			break ;
 	}
 	*tokens = it;
 	return (rdrs);

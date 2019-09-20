@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 11:16:47 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/20 14:51:09 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ typedef enum		e_rd_type		// TYPES OF REDIRS
 
 typedef struct		s_redirection	// REDIR DESCRIPTOR!!
 {
-	char			*file;			// IF file-type redirection, name of file
-	char			*sbsh;			// IF proc redirection, string of shell
+	char			*file;			// IF file-type redirection, name of file			// IF proc redirection, string of shell
 	int				fdl;			// left fd
 	int				fdr;			// right fd
 	t_rdtype		type;			// type of redirection
@@ -86,6 +85,8 @@ typedef struct		s_42func
 # include "ft_avl_tree.h"
 # include "executer.h"
 # include "rms.h"
+
+char		*ft_basename(const char *path);
 
 t_dlist		*sh_tparse(t_dlist *tokens, ENV *vars, t_tk_type end_tk, int *status);
 char		*sh_checkbins(const char *cmd, ENV *vars);
@@ -151,6 +152,8 @@ t_dlist			*prs_skip_paired_trg(t_dlist *tks, t_tk_type op, \
 t_tk_type cls, int cntr);
 t_dlist			*prs_skip_until(t_dlist *tks, t_tk_type brk_toks);
 t_dlist			*prs_skip_paired(t_dlist *tks, t_tk_type op, t_tk_type cls);
+t_dlist			*arg_tok_r_skip(t_dlist *tokens, t_tk_type flags);
+t_dlist			*arg_tok_skip(t_dlist *tokens, t_tk_type flags);
 
 /*
 ** PARSING AND AND OR TOKENS
