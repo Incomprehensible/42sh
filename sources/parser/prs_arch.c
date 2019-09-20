@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 21:39:50 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/20 22:26:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,15 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 		if (etab_row->type == ET_PIPE)
 			ft_dlstunshift((t_dlist **)&pipe_free, (t_dlist *)etab_row);
 		else
+		{
+			cpid < 0 ? prs_error_handler(-1 * cpid, &status, envs, etab_row->instruction) : 0;
 			ft_dlst_delcut((t_dlist **)&etab_row, et_rm_ett);
+		}
 	}
 	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);
 	if (cpid > 0)
 		signal_v = sys_wait_cps(cpid, &status);
+	prs_set_last_status(&status, envs);
 	sys_kill_pipes();
 	return (status);
 }

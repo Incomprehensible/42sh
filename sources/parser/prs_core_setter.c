@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sys_tools.h                                        :+:      :+:    :+:   */
+/*   prs_core_setter.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/20 22:10:35 by hgranule         ###   ########.fr       */
+/*   Created: 2019/09/20 21:54:42 by hgranule          #+#    #+#             */
+/*   Updated: 2019/09/20 21:59:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SYS_TOOLS_H
-# define SYS_TOOLS_H
+#include "parser.h"
 
-# include <unistd.h>
-# include <signal.h>
+int			env_core_set(char *key, char *value, t_avl_tree *core)
+{
+	t_avln	*node;
 
-int			sys_create_pipe(int	*a);
-int			sys_destroy_pipe(int p);
-int			sys_kill_pipes(void);
+	if (!(node = ft_avl_node(key, value, ft_strlen(value) + 1)))
+		return (-1);
+	if ((ft_avl_set(core, node)) < 0)
+		return (-1);
+	return (0);
+}
 
-int			sys_wait_cp(pid_t childs_pid, int *status);
-int			sys_wait_cps(pid_t last_child, int *status);
+int			prs_set_last_status(int *status, ENV *envr)
+{
+	char	*val;
 
-int			sys_error_message(char *message, size_t len);
-int			sys_getch(void);
-int			sys_touch_file(const char *path);
-
-#endif
+	val = ft_itoa(*status);
+	env_core_set("?", val, envr->core);
+	free(val);
+	return (0);
+}

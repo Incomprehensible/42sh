@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:01:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/04 06:17:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/20 22:19:48 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void		exe_b_child_alg(EXPRESSION *cmd, char **envp, char *path)
 		close(cmd->opipe_fds[0]);
 	path == 0 ? path = cmd->args[0] : 0;
 	execve(path, cmd->args, envp);
-	exit(-1); // TODO: Error HANDLING need for failed execve
+	exit(126); // TODO: Error HANDLING need for failed execve
 }
 
 int				exe_execute_pi(EXPRESSION *cmd, ENV *envr)
@@ -37,16 +37,17 @@ int				exe_execute_pi(EXPRESSION *cmd, ENV *envr)
 	char		**envp;
 	char		*path;
 
+	pid = 0;
 	cmd->opipe_fds ? pipe(cmd->opipe_fds) : 0;
-	if (!(path = sh_checkbins(cmd->args[0], envr)))
-		return (-2); // ERROR: exec: Command not found.
+	if (!(path = sh_checkbins(cmd->args[0], envr, &pid)))
+		return (pid); // ERROR: exec: Command not found.
 	if (!(envp = ft_avl_tree_to_warr(envr->globals, avln_todstring_key_val)))
-		return (-3); // ERROR: exec: Malloc failed
+		return (-8); // ERROR: exec: Malloc failed
 	pid = fork();
 	if (pid == 0)
 		exe_b_child_alg(cmd, envp, path);
 	if (pid < 0)
-		return (-1);  // ERROR: exec: Fork failed
+		return (-2);  // ERROR: exec: Fork failed
 	envp ? et_rm_warr(envp) : 0;
 	path ? free(path) : 0;
 	cmd->ipipe_fds ? close(cmd->ipipe_fds[0]) : 0;

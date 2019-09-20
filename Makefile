@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/09/18 12:07:00 by hgranule         ###   ########.fr        #
+#    Updated: 2019/09/20 22:22:29 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,13 +55,15 @@ SRC_FILES = sh_main.c exe_sys/exe_calls.c free_me/rms.c \
 			aliases/alias_add.c aliases/alias_init.c \
 			exe_sys/exe_funcs.c parser/prs_and_or.c parser/prs_assigm.c \
 			parser/prs_funcs.c parser/prs_if_while.c parser/prs_skipers.c \
+			parser/prs_error.c parser/prs_core_setter.c \
 			\
 			bltns/math/bltn_math.c bltns/math/math_ret_var.c bltns/math/math_skipers.c \
 			bltns/math/math_ops_dec_inc.c bltns/math/math_ops_log_eq.c \
 			bltns/math/math_ops_lw_bg.c bltns/math/math_ops_primary.c \
 			\
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
-			sys_tools/sys_proc_wait.c
+			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
+			sys_tools/sys_touch.c
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools)
 

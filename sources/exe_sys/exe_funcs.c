@@ -6,24 +6,13 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/13 17:19:55 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 14:37:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/20 21:58:10 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
 #include "parser.h"
 #include "sh_token.h"
-
-int			env_core_set(char *key, char *value, t_avl_tree *core)
-{
-	t_avln	*node;
-
-	if (!(node = ft_avl_node(key, value, ft_strlen(value) + 1)))
-		return (-1);
-	if ((ft_avl_set(core, node)) < 0)
-		return (-1);
-	return (0);
-}
 
 t_avl_tree	*func_core_create(EXPRESSION *expr)
 {

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 21:38:14 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/20 20:39:44 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # define SYS_PIPES_SIZE 1024
 
 # define CHECK_INTS_P 0x0000008000000080
+
+# define SHELL_NAME_STD "42sh"
 
 char		sys_pipes[SYS_PIPES_SIZE];
 

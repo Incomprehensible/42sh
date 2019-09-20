@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/20 14:51:09 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/20 22:04:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ typedef struct		s_42func
 char		*ft_basename(const char *path);
 
 t_dlist		*sh_tparse(t_dlist *tokens, ENV *vars, t_tk_type end_tk, int *status);
-char		*sh_checkbins(const char *cmd, ENV *vars);
+char		*sh_checkbins(const char *cmd, ENV *vars, pid_t *pid);
 
 /*
 ** FUNCTION RETURNS TRUE IF THERE IS NO EXPR SEPS
@@ -180,5 +180,10 @@ t_dlist			*prs_for(t_dlist *tks, ENV *envs, int *status);
 
 char			*get_deref_subsh(char *code, ENV *envr);
 char			*prc_substitute(char *code, ENV *envr, int is_in);
+
+int				prs_error_handler(int ecode, int *stat, ENV *envr, EXPRESSION *expr);
+
+int				env_core_set(char *key, char *value, t_avl_tree *core);
+int				prs_set_last_status(int *status, ENV *envr);
 
 #endif
