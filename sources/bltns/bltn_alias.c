@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 15:07:08 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/31 18:36:27 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/01 17:07:13 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int			bltn_alias(char **args, ENV *env)
 	while (args[++i])
 	{
 		spl = ft_strsplit(args[i], '=');
+		if (!spl[1])
+			return (-1);
 		if ((ft_avl_set(env->aliases, ft_avl_node(spl[0], (char *)spl[1],\
 					ft_strlen(spl[1]) + 1)) == -1))
 		{

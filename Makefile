@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/09/20 22:22:29 by hgranule         ###   ########.fr        #
+#    Updated: 2019/09/21 20:15:49 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,15 +44,14 @@ OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 
-SRC_FILES = sh_main.c exe_sys/exe_calls.c free_me/rms.c \
+SRC_FILES = sh_main.c ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
 			ft_basename.c exe_sys/exe_binaries.c exe_sys/exe_builtns.c \
 			exe_sys/exe_redirs.c parser/prs_arch.c parser/prs_args.c \
 			parser/prs_instructions.c parser/prs_rdrs.c parser/prs_types.c \
 			env/env_init.c env/env_get_variable.c env/env_set_variable.c env/env_unset_variable.c \
-			bltns/bltn_init.c bltns/bltn_setenv.c bltns/bltn_env.c \
-			bltns/bltn_getenv.c bltns/bltn_unsetenv.c \
-			bltns/bltn_exit.c bltns/bltn_alias.c bltns/bltn_unalias.c \
-			aliases/alias_add.c aliases/alias_init.c \
+			bltns/bltn_init.c bltns/bltn_setenv.c bltns/bltn_env.c bltns/bltn_getenv.c bltns/bltn_unsetenv.c \
+			bltns/bltn_exit.c bltns/bltn_alias.c bltns/bltn_unalias.c bltns/bltn_cd.c bltns/bltn_pwd.c\
+			aliases/alias_add.c aliases/alias_init.c bltns/bltn_type.c \
 			exe_sys/exe_funcs.c parser/prs_and_or.c parser/prs_assigm.c \
 			parser/prs_funcs.c parser/prs_if_while.c parser/prs_skipers.c \
 			parser/prs_error.c parser/prs_core_setter.c \

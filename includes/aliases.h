@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 14:39:09 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/01 18:05:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/21 20:16:04 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "bltn.h"
 # include <unistd.h>
 # include <fcntl.h>
-# define FILE_ALIASES "/Users/hgranule/.42shrc"
+# define FILE_ALIASES "/.42shrc"
 
 /*
 **Инициализация алиасов

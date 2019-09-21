@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/01 20:05:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/21 20:16:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@
 # include "ft_avl_tree.h"
 # include "env.h"
 # include "rms.h"
+# include <unistd.h>
 
 static char	*bltns_str[] = {"setenv", "env", "getenv", "unsetenv", "exit",\
-	"alias", "unalias", "(("};
+	"alias", "unalias", "cd", "pwd", "type", "(("};
+
+char		*ft_parse_flags(char **argc);
 
 /*
 **Волзвращает кол-во bltns
@@ -66,7 +69,14 @@ int	bltn_unalias(char **args, ENV *env);
 /* Математический билтын */
 int bltn_math(char **args, ENV *env);
 
+int	bltn_cd(char **args, ENV *env);
+
+int	bltn_pwd(char **args, ENV *env);
+
+int	bltn_type(char **args, ENV *env);
+
 static int	(*bltns_func[]) (char **, ENV *) = {&bltn_setenv,\
-	&bltn_env, &bltn_getenv, &bltn_unsetenv, &bltn_exit, &bltn_alias, &bltn_unalias, &bltn_math};
+	&bltn_env, &bltn_getenv, &bltn_unsetenv, &bltn_exit, &bltn_alias, &bltn_unalias,\
+	&bltn_cd, &bltn_pwd, &bltn_type, &bltn_math};
 
 #endif

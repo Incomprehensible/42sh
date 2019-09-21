@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/20 23:16:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/21 20:17:17 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int				main(const int argc, char **argv, char **envp)
 	dstr_del(&dstr);
 	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));
 
+	ft_avl_set(env.globals, ft_avl_node("PWD", (char*)"/var", 15));
 	UT_TOK_INIT();
 	UT_TOK_CR(TK_EXPR, "sdfsdfsdfsd");
 	UT_TOK_CR(TK_SEP, 0);
