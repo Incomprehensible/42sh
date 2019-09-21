@@ -6,7 +6,7 @@
 #    By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/09/04 11:30:33 by gdaemoni         ###   ########.fr        #
+#    Updated: 2019/09/21 15:32:57 by gdaemoni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ ESCN = \033[0m
 #                           Configuration                                    #
 # ************************************************************************** #
 NAME = 42sh
-FLAGS = -g
+FLAGS = -g -Wall -Werror -Wextra
 
 WS_PATH = $(shell pwd)
 SRC_PATH = $(WS_PATH)/sources/
@@ -49,7 +49,8 @@ INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 SRC_FILES = sh_main.c sh_control_term.c sh_dir_content.c sh_readline.c sh_readline_help.c\
 	sh_term.c dstr.c ft_concat.c sh_put_col.c sh_tab.c sh_darr.c sh_path.c reg_expr.c\
 	reg_expr_loop.c reg_expr_help.c sh_histrory.c sh_tab_help.c dstr_help.c match.c\
-	sh_darr_help.c sh_dir_content_help.c sh_put_col_help.c sh_move_insertion_point.c 
+	sh_darr_help.c sh_dir_content_help.c sh_put_col_help.c sh_move_insertion_point.c\
+	sh_search_history.c sh_search_his_help.c
 	
 SRC_VAR_FILES = sh_vars_gets.c sh_vars_init.c sh_vars_parser.c
 

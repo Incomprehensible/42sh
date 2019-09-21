@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:05:05 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/02 18:46:42 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:25:48 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ char			get_histr(t_darr *histr)
 	while (get_next_line(fd, &line) == 1 && ind > 0)
 	{
 		histr->strings[--ind] = line;
-		++histr->count;
 		histr->allsize += histr->strings[ind]->strlen;
-		if (histr->strings[ind]->strlen > histr->maxlen)
+		if (++histr->count && (size_t)histr->strings[ind]->strlen > histr->maxlen)
 			histr->maxlen = histr->strings[ind]->strlen;
 	}
+	dstr_del(&line);
 	close(fd);
 	if (histr->count)
 		return (1);
@@ -47,7 +47,7 @@ void			rewrite_histr(t_darr *histr)
 {
 	int			fd;
 	int			ind;
-	int			count;
+	size_t		count;
 
 	if (!histr->count)
 		return ;
@@ -88,7 +88,7 @@ void			clear_history(t_darr *his)
 
 static void		write_cmd_to_buf(int ind, t_darr histr, DSTRING **buf)
 {
-	if (ind == S_DARR_STRINGS - (histr.count + 1))
+	if ((size_t)ind == S_DARR_STRINGS - (histr.count + 1))
 	{
 		dstr_del(buf);
 		(*buf) = dstr_new("");
@@ -114,7 +114,7 @@ t_indch			show_history(DSTRING **buf, t_indch indc)
 		if (indc.ch == UP[0] && (indc.his + 1) < S_DARR_STRINGS)
 			write_cmd_to_buf(++indc.his, his, buf);
 		else if (indc.ch == DOWN[0] \
-			&& (indc.his - 1) >= S_DARR_STRINGS - (his.count + 1))
+			&& ((size_t)indc.his - 1) >= S_DARR_STRINGS - (his.count + 1))
 			write_cmd_to_buf(--indc.his, his, buf);
 		indc.ind = (*buf)->strlen;
 		sh_rewrite((*buf), (*buf)->strlen);

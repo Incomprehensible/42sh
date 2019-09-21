@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:43:13 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 08:03:53 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:23:12 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ t_darr			sh_cmp_darr(const t_darr darr, DSTRING *str)
 	while (++i[0] < darr.count)
 		if (ft_strncmp(darr.strings[i[0]]->txt, cmp->txt, cmp->strlen) == 0)
 		{
-			rez.strings[++i[1]] = dstr_new((darr.strings[i[0]]->txt));
-			if (++rez.count && rez.maxlen < darr.strings[i[0]]->strlen)
+			rez.strings[++i[1]] = dstr_new(darr.strings[i[0]]->txt);
+			if (++rez.count && rez.maxlen < (size_t)darr.strings[i[0]]->strlen)
 				rez.maxlen = darr.strings[i[0]]->strlen;
 			rez.allsize += rez.maxlen;
 		}

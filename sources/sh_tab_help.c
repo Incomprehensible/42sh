@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:43:03 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/31 07:25:16 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:26:16 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
 		put_col(overlap, (*buf));
 	if (overlap.count > 1 && fl != 0)
 		subst_name(buf, overlap, n_ind.ind++, n_ind.ind_name);
-	if (n_ind.ind == overlap.count)
+	if ((size_t)n_ind.ind == overlap.count)
 		n_ind.ind = 0;
 	return (n_ind.ind);
 }

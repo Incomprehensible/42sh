@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:35:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/31 06:58:59 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:20:34 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void			put_col_his(t_darr his, char fl, const DSTRING *buf)
 
 	ind = S_DARR_STRINGS - his.count;
 	count = -1;
-	while (++count < his.count)
+	while (++count < (int)his.count)
 		col.strings[count] = dstr_new(his.strings[ind++]->txt);
 	col.allsize = his.allsize;
 	col.maxlen = his.maxlen;
@@ -60,8 +60,6 @@ char			ispers_arws(char ch, t_indch *indch, \
 
 t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf)
 {
-	char		ch;
-
 	if (!indch.fl)
 		indch.ch = ft_getch();
 	if (indch.ch == '[' || indch.fl)
@@ -74,7 +72,7 @@ t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf)
 			indch.ind--;
 			return (indch);
 		}
-		else if (indch.ch == RIGHT[0] && indch.ind < max)
+		else if (indch.ch == RIGHT[0] && (size_t)indch.ind < max)
 		{
 			indch.ind++;
 			return (indch);

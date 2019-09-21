@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 06:51:22 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 07:53:00 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:24:06 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ DSTRING			*slice_reg(DSTRING *reg)
 static void		fill_buf(DSTRING **buf, const t_astr rez)
 {
 	int		ind;
-	int		j;
+	size_t	j;
 
 	ind = dstrrchr(*buf, ' ');
 	if (ind == -1)
@@ -70,7 +70,6 @@ int				reg_expr(DSTRING **buf, t_fl *fl)
 {
 	DSTRING		*reg;
 	t_astr		rez;
-	t_indch		i;
 
 	reg = cut_reg_expr(*buf);
 	ft_bzero(&rez, sizeof(t_astr));

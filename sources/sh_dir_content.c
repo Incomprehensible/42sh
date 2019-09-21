@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:40:25 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 08:07:59 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:21:15 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_darr				sh_dir_content(char *path)
 		rez.strings[i] = dstr_new(entry->d_name);
 		if (sh_insert_slash(path, rez.strings[i]))
 			dstr_insert_str(rez.strings[i], "/", rez.strings[i]->strlen);
-		if (rez.strings[i]->strlen > rez.maxlen)
+		if (rez.strings[i]->strlen > (ssize_t)rez.maxlen)
 			rez.maxlen = rez.strings[i]->strlen;
 		rez.allsize += rez.strings[i++]->strlen;
 		rez.count++;

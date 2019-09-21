@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 13:43:30 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/02 13:44:19 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/18 18:00:48 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@
 #define CLEARL	"\x001b[0J"
 /* clears from cursor to start of line */
 #define CLRCRBG "\x001b[1K"
+/* clears all screen */
+#define CLRSCR	"\x001b[2J"
 #define MOVEUP	"\x001b[1A"
 #define MOVEDWN "\x001b[1B"
 

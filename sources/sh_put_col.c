@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/31 07:38:43 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:22:20 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 static void			ft_strset(char **str, char c, size_t n)
 {
-	int		i;
+	size_t		i;
 
 	i = 0;
 	(*str) = (char*)malloc(sizeof(char) * n + 1);

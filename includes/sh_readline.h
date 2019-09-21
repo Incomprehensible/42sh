@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/04 16:22:16 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:12:03 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,10 @@ char		is_ctrl(const t_indch indch);
 ** ctrl+t Delete to the end of the line
 ** ctrl+x move insertion point one word back
 ** ctrl+f move insertion point one word ahead
+** ctrl+n clear all screen
 */
 t_indch			management_line(t_indch indch, DSTRING **buf);
+void			clear_screen(void);
 int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
 
 /* INIT GLOBAL AND LOCAL ENV
@@ -134,6 +136,7 @@ char			sh_isdir(DSTRING *buf, ssize_t start_dir);
 char			sh_check_dot(const DSTRING *path);
 
 /* clears an array DSTRING */
+void			free_t_darr(t_darr *darr);
 void			free_darr_n(DSTRING **darr, const int size);
 void			free_darr_re(DSTRING **darr, const int size);
 
@@ -212,6 +215,8 @@ t_regpath		get_regpath(DSTRING *reg);
 ** ctrl+l clear history buf
 ** ctrl+k print columns in chronological order
 ** ctrl+p print sorted column
+** ctrl+r search history
+** tab	  show overlap history
 */
 
 /* write history in file */
@@ -219,6 +224,12 @@ void			write_history(DSTRING *line);
 
 /* history management */
 t_indch			show_history(DSTRING **buf, t_indch indc);
+
+t_indch			search_history(DSTRING **buf);
+void			direction_help(t_darr o, t_darr his, t_indch *ich,\
+					DSTRING **strd);
+
+#define LENSERCH 20
 
 /* overwrites the command history file to avoid buffer overflow */
 void			rewrite_histr(t_darr *histr);

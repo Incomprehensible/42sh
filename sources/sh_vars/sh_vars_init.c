@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 13:01:11 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/01 19:03:40 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:19:01 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	free_tree_content(void *content)
 void	sh_init_vars(int argc, char **argv, char **envp, t_envp *env)
 {
 	char	**spl;
-	t_avln	*avln;
 
 	sh_parser_argv(argc, argv, env);
 	env->global = ft_avl_tree_create(&free_tree_content);

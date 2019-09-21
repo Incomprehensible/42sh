@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:14:42 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/02 19:15:01 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:21:45 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ size_t			clear_long_line(const DSTRING *buf, struct winsize term,\
 	lines = buf->strlen + len_n / term.ws_col;
 	sh_move_cursor(buf->strlen + len_n, LEFT, term.ws_col);
 	ft_putstr(CLEARL);
-	ft_putstr(NAME);	
+	ft_putstr(NAME);
 	ft_putstr(buf->txt);
 	sh_move_cursor(buf->strlen + len_n, LEFT, term.ws_col);
 	sh_move_cursor(index + len_n, RIGHT, term.ws_col);
@@ -67,7 +67,6 @@ size_t			clear_long_line(const DSTRING *buf, struct winsize term,\
 void			sh_rewrite(const DSTRING *buf, const size_t index)
 {
 	struct winsize		term;
-	DSTRING				*tmp;
 	int					len_n;
 
 	len_n = ft_strlen(NAME);

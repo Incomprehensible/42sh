@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:45:13 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/31 13:16:43 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/21 15:23:32 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ DSTRING			*sh_get_path(DSTRING *buf, size_t start_dir)
 {
 	DSTRING		*path1;
 	DSTRING		*path2;
-	DIR			*dir;
 
 	path1 = dstr_slice(buf, start_dir, buf->strlen);
 	if (sh_get_path_help(path1->txt))
