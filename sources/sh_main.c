@@ -6,18 +6,24 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/21 20:17:17 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/21 21:59:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_token.h"
 #include "sh_req.h"
+#include "sh_readline.h"
 #include "env.h"
 #include "executer.h"
 #include "dstring.h"
 #include "bltn.h"
 
+#include "sh_vars.h"
+#include <sys/ioctl.h>
+#include <fcntl.h>
 #include <stdio.h>
+#include <unistd.h>
+
 
 #define UT_TOK_INIT()		t_dlist *tokens = 0;\
 							t_tok	token
@@ -31,25 +37,6 @@
 #define UT_TOK_END()		ft_dlst_delf(&tokens, (size_t)-1, free_token)
 
 #define UT_TOK				tokens
-
-char			*sh_readline(void);
-int				sh_tokenizer(char *str, t_dlist **token_list);
-int				sh_tparser(t_dlist **token_list);
-
-static void		sh_loop(void)
-{
-	char		*line;
-	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
-
-	ft_bzero(token_list, sizeof(t_dlist *) * 2);
-	while (1)
-	{
-		//line = sh_readline();
-		//sh_tokenizer(line, token_list);
-		//sh_tparser(token_list);
-		break ;
-	}
-}
 
 // int				bltn_exit(char **args, ENV *envr)
 // {
@@ -104,13 +91,58 @@ int				main(const int argc, char **argv, char **envp)
 	// TERMINATE
 	return (0);
 }
+
+void		write_history(DSTRING *line)
+{
+	int		fd;
+
+	if (line->strlen == 0 || ft_strcmp(line->txt, "exit()") == 0 \
+			|| ft_strcmp(line->txt, "\n") == 0)
+		return ;
+	dstr_insert_ch(line, '\n', line->strlen);
+	if ((fd = open(HISTORY_PATH, O_CREAT | O_EXCL, S_IREAD | S_IWRITE)) != -1)
+		close(fd);
+	else if ((fd = open(HISTORY_PATH, O_RDWR | O_APPEND)) == -1)
+	{
+		perror("\nopen failed on history command file");
+        exit	(1);
+	}
+	write(fd, line->txt, line->strlen);
+	close(fd);
+}
+
 /*
-	printf(
-		"\n================ 42sh ====\n\n"
-		"LPID   = %15d ]\n"
-		"PID    = %15d ]\n"
-		"STATUS = %15d ]\n"
-		"SIGNAL = %15d ]\n"
-		"\n================= wait_cps\n\n",
-		last_child, pid, *status, signal);
+static void		sh_loop(t_envp *env)
+{
+	DSTRING		*line;
+	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
+
+	ft_bzero(token_list, sizeof(t_dlist *) * 2);
+	while (1)
+	{
+		line = sh_readline(env);
+		write_history(line);
+		if (line->txt && ft_strcmp(line->txt, "exit()") == 0)
+		{
+			dstr_del(&line);
+			break ;
+		}
+		dstr_del(&line);
+	}
+}
+
+int				main(const int argc, char **argv, char **envp)
+{
+	t_envp	env;
+	// INIT
+	sh_init_vars(argc, argv, envp, &env);
+	// LOOP
+	sh_loop(&env);
+	// TERMINATE
+	ft_avl_tree_free(env.global);
+	ft_avl_tree_free(env.local);
+	return (0);
+}
 */
+
+// ls Libf[a-z]/*s/ft?a*

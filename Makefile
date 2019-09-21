@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/09/21 20:15:49 by hgranule         ###   ########.fr        #
+#    Updated: 2019/09/21 20:37:07 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,12 +34,14 @@ FLAGS = -g
 
 WS_PATH = $(shell pwd)
 SRC_PATH = $(WS_PATH)/sources/
+SRC_PATH_SH_VARS = $(SRC_PATH)/sh_vars/
 OBJ_PATH = $(WS_PATH)/objects/
 INC_PATH = $(WS_PATH)/includes/
 LIB_PATH = $(WS_PATH)/Libft/
 LIB_INC_PATH = $(LIB_PATH)includes/
 
 SRC = $(addprefix $(SRC_PATH), $(SRC_FILES))
+SRC_VAR = $(addprefix $(SRC_PATH_SH_VARS), $(SRC_VAR_FILES))
 OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
@@ -62,9 +64,16 @@ SRC_FILES = sh_main.c ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
 			\
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
-			sys_tools/sys_touch.c
+			sys_tools/sys_touch.c $(addprefix gui/, $(GUI_FILES)) \
+			sh_vars/sh_vars_gets.c sh_vars/sh_vars_init.c sh_vars/sh_vars_parser.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui sh_vars)
+
+GUI_FILES = sh_control_term.c sh_dir_content.c sh_readline.c sh_readline_help.c\
+	sh_term.c dstr.c ft_concat.c sh_put_col.c sh_tab.c sh_darr.c sh_path.c reg_expr.c\
+	reg_expr_loop.c reg_expr_help.c sh_histrory.c sh_tab_help.c dstr_help.c match.c\
+	sh_darr_help.c sh_dir_content_help.c sh_put_col_help.c sh_move_insertion_point.c\
+	sh_search_history.c sh_search_his_help.c
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
@@ -76,7 +85,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make make_lft
-	@gcc $(FLAGS) -o $(NAME) $(INC) $(INC_LIB) $(OBJ) -L $(LIB_PATH) -lft -lncurses
+	@gcc $(FLAGS) -o $(NAME) $(INC) $(INC_LIB) $(OBJ) -L $(LIB_PATH) -lft -lncurses -g
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@echo "$(RED)$(UNDERLINE)CREATING >> $@$(ESCN)"
@@ -97,6 +106,9 @@ fclean: clean
 	@make fclean -C $(LIB_PATH)
 
 re: fclean all
+
+ex:
+	gcc exmpl.c -lcurses -g -o 42sh -L libft -lft -I libft/includes
 
 appc: $(OBJ)
 	@make make_lft

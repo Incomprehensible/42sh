@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_type.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 16:14:37 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/20 18:45:33 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/21 20:37:52 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,17 @@ static void	bltn_type_output(char *str, int type)
 
 int			bltn_type(char **args, ENV *env)
 {
-	int		i;
+	// int		i;
 
-	i = 0;
-	while (args[++i])
-	{
-		if (bltn_type_check_bltn(args[i]))
-			bltn_type_output(args[i], 1);
-		else if (bltn_type_check_bins(args[i]))
-			bltn_type_output(args[i], 2);
-		else if (bltn_type_check_alias(args[i]))
-			bltn_type_output(args[i], 3);
-	}
+	// i = 0;
+	// while (args[++i])
+	// {
+	// 	if (bltn_type_check_bltn(args[i]))
+	// 		bltn_type_output(args[i], 1);
+	// 	else if (bltn_type_check_bins(args[i]))
+	// 		bltn_type_output(args[i], 2);
+	// 	else if (bltn_type_check_alias(args[i]))
+	// 		bltn_type_output(args[i], 3);
+	// }
+	return (0);
 }
