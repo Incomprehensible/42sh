@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:51:57 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:24:22 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 17:59:00 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static t_regpath	help_get_regpath(const int fl, DSTRING *path)
 	if (fl != 2)
 	{
 		rez.fl = 0;
-		rez.path = dstr_new(".");
+		rez.path = dstr_nerr(".");
 	}
 	else
 	{
@@ -48,7 +48,7 @@ t_regpath			get_regpath(DSTRING *reg)
 		{
 			if (path)
 				dstr_del(&path);
-			path = dstr_slice(reg, 0, i + 1);
+			path = dstr_serr(reg, 0, i + 1);
 			fl2 = 2;
 		}
 	}
@@ -89,7 +89,7 @@ static void			addreg(t_astr *rez, DSTRING *r, DSTRING *reg, int j)
 	DSTRING	*slice;
 
 	i = j;
-	slice = dstr_slice(reg, r->strlen, reg->strlen + 1);
+	slice = dstr_serr(reg, r->strlen, reg->strlen + 1);
 	if (!slice->strlen)
 	{
 		dstr_del(&slice);

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 19:11:29 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:59:00 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,11 @@ typedef struct	s_fl
 }				t_fl;
 
 DSTRING			*sh_readline(ENV *env);
+
+DSTRING			*dstr_nerr(char *src);
+DSTRING			*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei);
+DSTRING			*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei);
+DSTRING			*check_null(DSTRING *line);
 
 char		is_ctrl(const t_indch indch);
 

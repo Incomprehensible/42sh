@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:14:42 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:21:45 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:36:39 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void			sh_move_cursor(size_t n, const char *side, \
 			move = ft_concat(3, "00", "\x001b[", ft_itoa(n), "F");
 		else
 			move = ft_concat(3, "00", "\x001b[", ft_itoa(n / col), "E");
+		if (move == NULL)
+			sys_fatal_memerr(sys_get_std_message(8));
 		ft_putstr(move);
 		n = n % col;
 		free(move);

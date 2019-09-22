@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:05:05 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 19:32:18 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:59:44 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char			get_histr(t_darr *histr)
 	ind = S_DARR_STRINGS;
 	while (get_next_line(fd, &line) == 1 && ind > 0)
 	{
-		histr->strings[--ind] = line;
+		histr->strings[--ind] = check_null(line);
 		histr->allsize += histr->strings[ind]->strlen;
 		if (++histr->count && (size_t)histr->strings[ind]->strlen > histr->maxlen)
 			histr->maxlen = histr->strings[ind]->strlen;
@@ -92,11 +92,11 @@ static void		write_cmd_to_buf(int ind, t_darr histr, DSTRING **buf)
 	if ((size_t)ind == S_DARR_STRINGS - (histr.count + 1))
 	{
 		dstr_del(buf);
-		(*buf) = dstr_new("");
+		(*buf) = dstr_nerr("");
 		return ;
 	}
 	dstr_del(buf);
-	(*buf) = dstr_new(histr.strings[ind]->txt);
+	(*buf) = dstr_nerr(histr.strings[ind]->txt);
 }
 
 t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr)

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 17:02:34 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/31 06:13:57 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 17:49:55 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "libft.h"
 #include "sh_readline.h"
+#include "sys_tools/sys_errors.h"
 
 static void		ft_addstr(char **str1, const char *str2, t_concat *p, \
 								const char *symbol)
@@ -26,6 +27,16 @@ static void		ft_addstr(char **str1, const char *str2, t_concat *p, \
 	p->start = p->start + p->size[p->n];
 }
 
+size_t			*ft_errconcat(const size_t n)
+{
+	size_t		*rez;
+
+	rez = (size_t*)malloc(sizeof(size_t) * (n + 1));
+	if (rez == NULL)
+		sys_fatal_memerr(sys_get_std_message(8));
+	return (rez);
+}
+
 char			*ft_concat(const size_t n, const char *spec, ...)
 {
 	va_list			arg;
@@ -34,7 +45,7 @@ char			*ft_concat(const size_t n, const char *spec, ...)
 	char			*rez;
 
 	ft_bzero(&size, sizeof(t_concat));
-	size.size = (size_t*)malloc(sizeof(size_t) * (n + 1));
+	size.size = ft_errconcat(n);
 	va_start(arg, spec);
 	while (++size.i < n + 1)
 	{
@@ -62,7 +73,8 @@ char			*ft_concatarr(const size_t n, const char *spec, \
 	char		*rez;
 
 	ft_bzero(&size, sizeof(t_concat));
-	size.size = (size_t*)malloc(sizeof(size_t) * n);
+	if (!(size.size = (size_t*)malloc(sizeof(size_t) * n)))
+		sys_fatal_memerr(sys_get_std_message(8));
 	while (size.i < n)
 	{
 		if (arr[size.i])

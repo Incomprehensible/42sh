@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_put_col.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 21:28:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:42:11 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void			ft_strset(char **str, char c, size_t n)
 
 	i = 0;
 	(*str) = (char*)malloc(sizeof(char) * n + 1);
+	if ((*str) == NULL)
+		sys_fatal_memerr(sys_get_std_message(8));		
 	while (i < n)
 		(*str)[i++] = c;
 	(*str)[i] = '\0';
@@ -35,11 +37,11 @@ static DSTRING		*sh_get_space(int max, int len)
 	if (n > 0)
 	{
 		ft_strset(&str, ' ', n);
-		rez = dstr_new(str);
+		rez = dstr_nerr(str);
 		free(str);
 		return (rez);
 	}
-	return (dstr_new(""));
+	return (dstr_nerr(""));
 }
 
 static DSTRING		*sh_get_col(t_darr dar, const ushort col, ushort iter)
@@ -50,7 +52,7 @@ static DSTRING		*sh_get_col(t_darr dar, const ushort col, ushort iter)
 	uint		ind;
 
 	nstr = -1;
-	colstr = dstr_new("");
+	colstr = dstr_nerr("");
 	while (++nstr < dar.count / col + 1 && (iter = 0) == 0)
 	{
 		ind = nstr;
