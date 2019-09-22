@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 14:26:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:22:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "executer.h"
 #include "dstring.h"
 #include "bltn.h"
+#include "sys_tools/sys_errors.h"
 #include "sys_tools/sys_tools.h"
 
 #include "sh_vars.h"
@@ -95,6 +96,7 @@ int				main(const int argc, char **argv, char **envp)
 }
 */
 
+/*
 void		write_history(DSTRING *line)
 {
 	int		fd;
@@ -113,6 +115,7 @@ void		write_history(DSTRING *line)
 	write(fd, line->txt, line->strlen);
 	close(fd);
 }
+*/
 
 // /*
 static void		sh_loop(ENV *env)
@@ -124,7 +127,7 @@ static void		sh_loop(ENV *env)
 	while (1)
 	{
 		line = sh_readline(env);
-		write_history(line);
+		sys_write_history(line, env);
 		if (line->txt && ft_strcmp(line->txt, "exit()") == 0)
 		{
 			dstr_del(&line);
@@ -149,9 +152,12 @@ int				main(const int argc, char **argv, char **envp)
 
 	UT_TOK_INIT();
 
-	UT_TOK_CR(TK_EXPR, "echo");
-	UT_TOK_CR(TK_EMPTY, 0);
-	UT_TOK_CR(TK_EXPR, "TEST");
+	UT_TOK_CR(TK_VAR, "PATH");
+	UT_TOK_CR(TK_ASSIGM, "+");
+	UT_TOK_CR(TK_VALUE, ":");
+	UT_TOK_CR(TK_DEREF, 0);
+	UT_TOK_CR(TK_NAME, "HOME");
+	UT_TOK_CR(TK_VALUE, "/Desktop/my_own_bash");
 	UT_TOK_CR(TK_EOF, 0);
 
 	sh_tparse(UT_TOK, &env, TK_EOF, &status);

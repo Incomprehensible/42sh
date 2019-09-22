@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 01:36:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:11:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static t_indch			auto_correction(DSTRING **buf, t_indch indch, \
 	else if (indch.ch == TAB && fl->reg == 0 && fl->tab++ == 0)
 		indch = sh_tab(buf, env, indch);
 	if (((indch.ch == ESC) || indch.fl) && (fl->tab = 0) == 0)
-		indch = sh_esc(indch, (*buf)->strlen, buf);
+		indch = sh_esc(indch, (*buf)->strlen, buf, env);
 	return (indch);
 }
 

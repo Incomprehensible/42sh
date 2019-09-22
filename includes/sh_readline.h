@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 01:37:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:11:29 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void			free_darr_re(DSTRING **darr, const int size);
 int				sort_darr(t_darr *darr);
 
 /* handles arrow clicks */
-t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf);
+t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf, ENV *env);
 
 /* intercepts all keystrokes on the keyboard */
 int				ft_getch(void);
@@ -224,7 +224,7 @@ t_regpath		get_regpath(DSTRING *reg);
 void			write_history(DSTRING *line);
 
 /* history management */
-t_indch			show_history(DSTRING **buf, t_indch indc);
+t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr);
 
 t_indch			search_history(DSTRING **buf);
 void			direction_help(t_darr o, t_darr his, t_indch *ich,\

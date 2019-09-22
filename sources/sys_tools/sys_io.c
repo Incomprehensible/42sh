@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:33:01 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/20 21:38:10 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 16:13:17 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int		sys_error_message(char *message, size_t len)
 {
-	if (len == SIZE_T_MAX)
+	if (len == 0)
 		len = ft_strlen(message);
 	write(2, message, len);
 	write(2, "\n", 1);

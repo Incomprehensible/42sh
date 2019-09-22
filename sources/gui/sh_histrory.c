@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sh_histrory.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:05:05 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:25:48 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:32:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
 #include "sh_termcomand.h"
+#include "sys_tools/sys_tools.h"
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -98,7 +99,7 @@ static void		write_cmd_to_buf(int ind, t_darr histr, DSTRING **buf)
 	(*buf) = dstr_new(histr.strings[ind]->txt);
 }
 
-t_indch			show_history(DSTRING **buf, t_indch indc)
+t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr)
 {
 	t_darr		his;
 
@@ -108,7 +109,7 @@ t_indch			show_history(DSTRING **buf, t_indch indc)
 	if (indc.his == 0)
 		indc.his = S_DARR_STRINGS - (his.count + 1);
 	if (indc.ch == UP[0] && (*buf)->strlen && indc.ind++)
-		write_history(*buf);
+		sys_write_history(*buf, envr);
 	while (1)
 	{
 		if (indc.ch == UP[0] && (indc.his + 1) < S_DARR_STRINGS)

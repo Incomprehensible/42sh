@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:37:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 13:58:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 16:55:35 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ char		*errmess[ERR_CNT] =
 	"Is a directory",
 	"Is not a regular file",
 	"File creation failed",
-	"File creation failed, doesn't exist",
-	"File creation failed, permissions denined"
+	"File open failed, doesn't exist",
+	"File open failed, permissions denied",
+	"File open failed"
+	
 };
 
 char			*sys_get_std_message(int ecode)
@@ -50,11 +52,11 @@ void			sys_fatal_memerr(char *mess)
 
 	ft_bzero(buff, FATAL_BUFF_MSG_LEN);
 	ft_strcpy(buff, SHELL_NAME_STD);
-	ft_strcat(buff, ": FATAL ERROR: ");
+	ft_strcat(buff, ": Fatal error is occured: ");
 	ft_strcat(buff, mess);
 	ft_strcat(buff, "\n");
-	ft_strcat(buff, SHELL_NAME_STD);
-	ft_strcat(buff, " is CRASHED, press any button to exit!\n");
+	ft_strcat(buff, "In this scope is, press any button to exit.");
+	sys_error_message(buff, 0);
 	sys_getch();
 	exit(255);
 }
@@ -79,5 +81,5 @@ int		sys_error_handler(char *descr, int ecode, ENV *envr)
 	dstr_insert_str(message, sys_get_std_message(ecode), MAX_LL);
 	sys_error_message(message->txt, message->strlen);
 	dstr_del(&message);
-	return (0);
+	return (-ecode);
 }

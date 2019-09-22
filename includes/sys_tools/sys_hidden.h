@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 11:18:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 18:29:07 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@
 # define SYS_TCH_W 0x4
 # define SYS_TCH_R 0x2
 # define SYS_TCH_X 0x1
+
 # define SYS_TCH_TYP 0xF0
+
 # define SYS_TCH_PIP 0x10
 # define SYS_TCH_CHR 0x20
 # define SYS_TCH_DIR 0x40

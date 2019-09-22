@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/09/21 20:37:07 by hgranule         ###   ########.fr        #
+#    Updated: 2019/09/22 19:22:02 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,6 +65,7 @@ SRC_FILES = sh_main.c ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
 			sys_tools/sys_touch.c $(addprefix gui/, $(GUI_FILES)) \
+			sys_tools/sys_config.c sys_tools/sys_files.c \
 			sh_vars/sh_vars_gets.c sh_vars/sh_vars_init.c sh_vars/sh_vars_parser.c
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui sh_vars)

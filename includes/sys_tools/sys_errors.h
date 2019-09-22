@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:29:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 11:25:04 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 17:42:41 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,18 @@
 # define E_FCRTF 11 /* CREATION OF FILE FAILED */
 # define E_FOPEF 12 /* OPEN OF FILE FAILED, DSNT EXST */
 # define E_FOPPF 13 /* OPEN OF FILE FAILED, PERMS DENIED */
+# define E_FOPFF 14 /* OPEN OF FILE FAILED */
 
-# define ERR_CNT (E_FOPPF + 1)
+# define ERR_CNT (E_FOPFF + 1)
 
+/*
+** Returns a standart error message string with code {ECODE}
+*/
 char		*sys_get_std_message(int ecode);
+
+/*
+** Exiting from a programm and puts a standart error output
+*/
 void		sys_fatal_memerr(char *mess);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 11:19:45 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:27:16 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 
 # define SH_RC_FILE ".42shrc"
 # define SH_HIST_FILE ".42history"
+
+# define HIST_FILE_DENY_TRIES 16;
 
 int			history_file_status;
 int			rc_file_status;

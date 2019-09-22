@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_control_term.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:35:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:20:34 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 19:12:30 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char			ispers_arws(char ch, t_indch *indch, \
 	return (ch);
 }
 
-t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf)
+t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf, ENV *envr)
 {
 	if (!indch.fl)
 		indch.ch = ft_getch();
@@ -78,7 +78,7 @@ t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf)
 			return (indch);
 		}
 		else if (indch.ch == UP[0] || indch.ch == DOWN[0])
-			return (show_history(buf, indch));
+			return (show_history(buf, indch, envr));
 	}
 	return (indch);
 }
