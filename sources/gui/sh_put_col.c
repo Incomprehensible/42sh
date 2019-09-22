@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   sh_put_col.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 19:42:11 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 20:46:22 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
 #include "sh_termcomand.h"
 #include <sys/ioctl.h>
+#include "sys_tools/sys_errors.h"
 
 static void			ft_strset(char **str, char c, size_t n)
 {

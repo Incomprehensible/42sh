@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:35:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 19:59:28 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 20:50:57 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ char			ispers_arws(char ch, t_indch *indch, \
 		put_col_his(*his, 0, buf);
 	else if (ch == 0x10)
 		put_col_his(*his, 1, buf);
-	else if (ch == 0xC)
-		clear_history(his);
 	else if (ch == ESC)
 	{
 		ch = ft_getch();

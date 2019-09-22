@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_term.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:14:42 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 19:36:39 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 20:46:19 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "dstring.h"
 #include "libft.h"
 #include <unistd.h>
+#include "sys_tools/sys_errors.h"
 
 void			sh_move_cursor(size_t n, const char *side, \
 						const unsigned short col)

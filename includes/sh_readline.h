@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 19:59:00 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 20:50:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,13 +238,10 @@ void			direction_help(t_darr o, t_darr his, t_indch *ich,\
 #define LENSERCH 20
 
 /* overwrites the command history file to avoid buffer overflow */
-void			rewrite_histr(t_darr *histr);
-
-/* clear history file */
-void			clear_history(t_darr *his);
+void			rewrite_histr(t_darr *histr, ENV *envr);
 
 /* reads history file and fill struct t_darr */
-char			get_histr(t_darr *histr);
+char			get_histr(t_darr *histr, ENV *envr);
 
 /* reads pressed keys */
 char			ispers_arws(char ch, t_indch *indch, \

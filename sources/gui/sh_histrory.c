@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:05:05 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 19:59:44 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 20:57:09 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,29 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-char			get_histr(t_darr *histr)
+int				get_history_fd(int flags, char *er_context, ENV *envr)
+{
+	int			fd;
+	char		*hist_pt;
+
+	hist_pt = sys_get_conf_path(SH_HIST_FILE, envr);
+	if ((fd = sys_file_op(hist_pt, envr, flags, er_context)) < 0)
+	{
+		free(hist_pt);
+		return (-1);
+	}
+	free(hist_pt);
+	return (fd);
+}
+
+char			get_histr(t_darr *histr, ENV *envr)
 {
 	int			fd;
 	int			ind;
 	DSTRING		*line;
 
-	if ((fd = open(HISTORY_PATH, O_CREAT | O_EXCL, S_IREAD | S_IWRITE)) != -1)
-		close(fd);
-	if ((fd = open(HISTORY_PATH, O_RDONLY)) == -1)
-	{
-		perror("\nopen failed on get_histr");
-		exit(1);
-	}
+	if ((fd = get_history_fd(O_RDONLY, "GET_HISTORY: File error", envr)) < 0)
+		return (0);
 	ind = S_DARR_STRINGS;
 	while (get_next_line(fd, &line) == 1 && ind > 0)
 	{
@@ -44,19 +54,15 @@ char			get_histr(t_darr *histr)
 	return (0);
 }
 
-void			rewrite_histr(t_darr *histr)
+void			rewrite_histr(t_darr *histr, ENV *envr)
 {
 	int			fd;
 	int			ind;
 	size_t		count;
 
-	if (!histr->count)
+	if (!histr->count || ((fd = get_history_fd \
+	(O_WRONLY | O_TRUNC, "REWRITE_HISTORY: File error", envr)) < 0))
 		return ;
-	if ((fd = open(HISTORY_PATH, O_RDWR | O_APPEND | O_TRUNC)) == -1)
-	{
-		ft_putstr("\nopen failed on history command file");
-		exit(1);
-	}
 	if (histr->count > 1000)
 		ind = S_DARR_STRINGS - (histr->count - 1000);
 	else
@@ -71,20 +77,6 @@ void			rewrite_histr(t_darr *histr)
 	}
 	close(fd);
 	free_darr_re(histr->strings, histr->count);
-}
-
-void			clear_history(t_darr *his)
-{
-	int			fd;
-
-	if ((fd = open(HISTORY_PATH, O_TRUNC)) == -1)
-	{
-		ft_putstr("\nopen failed on history command file");
-		exit(1);
-	}
-	close(fd);
-	free_darr_n(his->strings, his->count);
-	his->count = 0;
 }
 
 static void		write_cmd_to_buf(int ind, t_darr histr, DSTRING **buf)
@@ -104,7 +96,7 @@ t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr)
 	t_darr		his;
 
 	ft_bzero(&his, sizeof(t_darr));
-	if (get_histr(&his) == 0)
+	if (get_histr(&his, envr) == 0)
 		return (indc);
 	if (indc.his == 0)
 		indc.his = S_DARR_STRINGS - (his.count + 1);
@@ -124,6 +116,6 @@ t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr)
 			&& indc.ch != 0xB && indc.ch != 0x10)
 			break ;
 	}
-	rewrite_histr(&his);
+	rewrite_histr(&his, envr);
 	return (indc);
 }

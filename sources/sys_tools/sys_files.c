@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 19:29:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 20:34:24 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int			sys_write_history(DSTRING *line, ENV *envr)
 	hist_path = sys_get_conf_path(SH_HIST_FILE, envr);
 	dstr_insert_ch(line, '\n', line->strlen);
 	if ((fd = sys_file_op(hist_path, envr, \
-	O_WRONLY | O_APPEND, "Commands history file fractured")) < 0)
+	O_WRONLY | O_APPEND, "Write_history error")) < 0)
 	{
 		history_file_status = 20;
 		free((void *)hist_path);
