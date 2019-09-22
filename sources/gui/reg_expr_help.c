@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:58:52 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/30 07:50:04 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 16:29:30 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ DSTRING			*add_slash(char *str, DSTRING *reg)
 {
 	DSTRING		*rez;
 
-	rez = dstr_new(str);
+	rez = dstr_nerr(str);
 	if (reg->txt[reg->strlen - 1] == '/')
 		dstr_insert_str(rez, "/", rez->strlen);
 	return (rez);
@@ -48,13 +48,13 @@ DSTRING			*join_reg(DSTRING *n_dir, DSTRING *cmp, const char fl)
 
 	if (fl)
 	{
-		rez = dstr_new(n_dir->txt);
+		rez = dstr_nerr(n_dir->txt);
 		if (rez->txt[rez->strlen - 1] != '/')
 			dstr_insert_str(rez, "/", rez->strlen);
 		dstr_insert_dstr(rez, cmp, n_dir->strlen);
 		return (rez);
 	}
-	rez = dstr_new(cmp->txt);
+	rez = dstr_nerr(cmp->txt);
 	return (rez);
 }
 
@@ -65,7 +65,7 @@ char			cmp_dirreg(DSTRING *n_dir, DSTRING *cmp,\
 
 	if (fl)
 	{
-		tmp = dstr_new(n_dir->txt);
+		tmp = dstr_nerr(n_dir->txt);
 		if (tmp->txt[tmp->strlen - 1] != '/')
 			dstr_insert_str(tmp, "/", n_dir->strlen);
 		dstr_insert_dstr(tmp, cmp, tmp->strlen);

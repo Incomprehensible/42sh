@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 01:36:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 17:59:41 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_indch					management_line(t_indch indch, DSTRING **buf)
 		indch.ind = (*buf)->strlen;
 	else if (indch.ch == 0x15)
 	{
-		str = dstr_slice(*buf, indch.ind, (*buf)->strlen);
+		str = dstr_serr(*buf, indch.ind, (*buf)->strlen);
 		dstr_del(buf);
 		*buf = str;
 		indch.ind = 0;
@@ -53,7 +53,7 @@ static DSTRING			*return_line(DSTRING **buf, t_indch indch, t_fl fl)
 		dstr_del(buf);
 		free_lines_down();
 		ft_putstr("\n");
-		return (dstr_new("exit()"));
+		return (dstr_nerr("exit()"));
 	}
 	free_lines_down();
 	sh_rewrite(*buf, indch.ind);
@@ -89,6 +89,10 @@ static t_indch			auto_correction(DSTRING **buf, t_indch indch, \
 		indch.ind = reg_expr(buf, fl);
 	else if (indch.ch == TAB && fl->reg == 0 && fl->tab++ == 0)
 		indch = sh_tab(buf, env, indch);
+	if (ft_isprint(indch.ch) && fl->tab)
+		dstr_insert_ch(*buf, indch.ch, indch.ind++);
+	if (is_ctrl(indch))
+		indch = management_line(indch, buf);
 	if (((indch.ch == ESC) || indch.fl) && (fl->tab = 0) == 0)
 		indch = sh_esc(indch, (*buf)->strlen, buf);
 	return (indch);
@@ -100,13 +104,13 @@ DSTRING					*sh_readline(ENV *env)
 	t_indch		indch;
 	t_fl		fl;
 
-	buf = dstr_new(0);
+	buf = dstr_nerr("");
 	ft_bzero(&indch, sizeof(t_indch));
 	ft_bzero(&fl, sizeof(t_fl));
 	ft_putstr(NAME);
 	while (1 && !(fl.tab = 0))
 	{
-		if (!fl.tab && !indch.fl)
+		if (!fl.tab && !indch.fl && (indch.ch != (char)0x04 && (indch.ch != '\n')))
 			indch.ch = ft_getch();
 		if (indch.ch == (char)0x04 || (indch.ch == '\n'))
 			return (return_line(&buf, indch, fl));
@@ -118,5 +122,5 @@ DSTRING					*sh_readline(ENV *env)
 		indch = auto_correction(&buf, indch, &fl, env);
 		sh_rewrite(buf, indch.ind);
 	}
-	return (dstr_new(0));
+	return (dstr_nerr(""));
 }

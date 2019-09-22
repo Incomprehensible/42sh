@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:43:13 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:23:12 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 17:59:24 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ t_darr			sh_cmp_darr(const t_darr darr, DSTRING *str)
 
 	i[1] = -1;
 	ft_bzero(&rez, sizeof(rez));
-	cmp = dstr_slice(str, dstrrchr(str, '/') + 1, str->strlen);
+	cmp = dstr_serr(str, dstrrchr(str, '/') + 1, str->strlen);
 	i[0] = -1;
 	while (++i[0] < darr.count)
 		if (ft_strncmp(darr.strings[i[0]]->txt, cmp->txt, cmp->strlen) == 0)
 		{
-			rez.strings[++i[1]] = dstr_new(darr.strings[i[0]]->txt);
+			rez.strings[++i[1]] = dstr_nerr(darr.strings[i[0]]->txt);
 			if (++rez.count && rez.maxlen < (size_t)darr.strings[i[0]]->strlen)
 				rez.maxlen = darr.strings[i[0]]->strlen;
 			rez.allsize += rez.maxlen;
@@ -88,9 +88,9 @@ void			correct_namedir_buf(t_darr darr, DSTRING **buf, size_t st_dir)
 	DSTRING		*n_f;
 	DSTRING		*name_dir;
 
-	name_dir = dstr_slice((*buf), st_dir, (*buf)->strlen);
+	name_dir = dstr_serr((*buf), st_dir, (*buf)->strlen);
 	start_name = dstrrchr(name_dir, '/');
-	n_f = dstr_slice(name_dir, ++start_name, name_dir->strlen);
+	n_f = dstr_serr(name_dir, ++start_name, name_dir->strlen);
 	darrcopy.count = 0;
 	while (darr.count)
 	{

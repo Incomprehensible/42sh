@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 06:51:22 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:24:06 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 17:59:13 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ DSTRING			*cut_reg_expr(DSTRING *buf)
 	ssize_t		ind;
 
 	ind = dstrrchr(buf, ' ');
-	return (dstr_slice(buf, ind + 1, buf->strlen));
+	return (dstr_serr(buf, ind + 1, buf->strlen));
 }
 
 DSTRING			*slice_reg(DSTRING *reg)
@@ -34,14 +34,14 @@ DSTRING			*slice_reg(DSTRING *reg)
 			fl = 1;
 		if (reg->txt[i] == '/' && fl)
 		{
-			rez = dstr_slice(reg, 0, i + 1);
+			rez = dstr_serr(reg, 0, i + 1);
 			break ;
 		}
 		if (reg->strlen == i + 1 && fl)
-			rez = dstr_new(reg->txt);
+			rez = dstr_nerr(reg->txt);
 	}
 	if (!rez)
-		rez = dstr_new("");
+		rez = dstr_nerr("");
 	return (rez);
 }
 

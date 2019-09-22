@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:35:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:20:34 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 16:29:51 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void			put_col_his(t_darr his, char fl, const DSTRING *buf)
 	ind = S_DARR_STRINGS - his.count;
 	count = -1;
 	while (++count < (int)his.count)
-		col.strings[count] = dstr_new(his.strings[ind++]->txt);
+		col.strings[count] = dstr_nerr(his.strings[ind++]->txt);
 	col.allsize = his.allsize;
 	col.maxlen = his.maxlen;
 	col.count = his.count;

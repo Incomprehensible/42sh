@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:45:13 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:23:32 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 17:59:34 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char			sh_isdir(DSTRING *buf, ssize_t start_dir)
 	DIR			*dir;
 	DSTRING		*tmp;
 
-	tmp = dstr_slice(buf, start_dir, buf->strlen);
+	tmp = dstr_serr(buf, start_dir, buf->strlen);
 	if (tmp->txt[0] != '.' && tmp->txt[0] != '/')
 	{
 		if (ft_strncmp(tmp->txt, "./", 2))
@@ -50,17 +50,17 @@ DSTRING			*sh_get_path(DSTRING *buf, size_t start_dir)
 	DSTRING		*path1;
 	DSTRING		*path2;
 
-	path1 = dstr_slice(buf, start_dir, buf->strlen);
+	path1 = dstr_serr(buf, start_dir, buf->strlen);
 	if (sh_get_path_help(path1->txt))
 		return (path1);
 	dstr_insert_str(path1, "./", 0);
 	if (sh_get_path_help(path1->txt))
 		return (path1);
-	path2 = dstr_slice(path1, 0, dstrrchr(path1, '/'));
+	path2 = dstr_serr(path1, 0, dstrrchr(path1, '/'));
 	if (sh_get_path_help(path2->txt))
 	{
 		dstr_del(&path1);
 		return (path2);
 	}
-	return (dstr_new("."));
+	return (dstr_nerr("."));
 }

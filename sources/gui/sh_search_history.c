@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 18:19:03 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:29:40 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 18:08:05 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char		get_list_histr(t_darr *histr)
 	ind = -1;
 	while (++ind != -1 && get_next_line(fd, &line) == 1)
 	{
-		histr->strings[ind] = line;
+		histr->strings[ind] = check_null(line);
 		histr->allsize += histr->strings[ind]->strlen;
 		if (++histr->count && (size_t)histr->strings[ind]->strlen > histr->maxlen)
 			histr->maxlen = histr->strings[ind]->strlen;
@@ -48,8 +48,8 @@ void		init_param(t_darr *his, DSTRING **strd, DSTRING **strs)
 	ft_bzero(his, sizeof(t_darr));
 	if (get_list_histr(his) == 0)
 		return ;
-	(*strd) = dstr_new("- search_history : ");
-	(*strs) = dstr_new(0);
+	(*strd) = dstr_nerr("- search_history : ");
+	(*strs) = dstr_nerr("");
 }
 
 t_darr		get_overlap(const t_darr his, DSTRING *strs)
@@ -64,7 +64,7 @@ t_darr		get_overlap(const t_darr his, DSTRING *strs)
 	while (++ind < his.count)
 		if ((ft_strncmp(his.strings[ind]->txt, strs->txt, strs->strlen)) == 0)
 		{
-			rez.strings[++indr] = dstr_new(his.strings[ind]->txt);
+			rez.strings[++indr] = dstr_nerr(his.strings[ind]->txt);
 			if (++rez.count && rez.maxlen < (size_t)his.strings[ind]->strlen)
 				rez.maxlen = his.strings[ind]->strlen;
 			rez.allsize += rez.maxlen;
@@ -112,7 +112,7 @@ t_indch		search_history(DSTRING **buf)
 		indch.ch = direction(his, &strd, &strs);
 		free_t_darr(&his);
 		dstr_del(buf);
-		(*buf) = dstr_slice(strd, LENSERCH - 1, strd->strlen);
+		(*buf) = dstr_serr(strd, LENSERCH - 1, strd->strlen);
 		if ((*buf)->strlen && (indch.fl = 1))
 			dstr_insert_ch((*buf), ' ', (*buf)->strlen);
 	}

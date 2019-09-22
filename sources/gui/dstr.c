@@ -6,20 +6,21 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:38:55 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/01 19:16:36 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 18:07:31 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "dstring.h"
 #include "libft.h"
+#include "sh_readline.h"
 
 ssize_t			dstr_del_char(DSTRING **src, const ssize_t n)
 {
 	DSTRING *begin;
 	DSTRING *end;
 
-	begin = dstr_slice((*src), 0, n);
-	end = dstr_slice((*src), n + 1, (*src)->strlen);
+	begin = dstr_serr((*src), 0, n);
+	end = dstr_serr((*src), n + 1, (*src)->strlen);
 	dstr_insert_dstr(begin, end, begin->strlen);
 	dstr_del(src);
 	dstr_del(&end);
