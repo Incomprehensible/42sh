@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tab.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:36:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/08/31 14:26:00 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 01:37:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_darr			sh_add_path(DSTRING **buf, size_t start_dir)
 	return (overlap);
 }
 
-t_darr			sh_add_cmd(DSTRING **buf, t_envp *env)
+t_darr			sh_add_cmd(DSTRING **buf, ENV *env)
 {
 	t_darr		allcmd;
 	t_darr		overlap;
@@ -78,7 +78,7 @@ void			insert_space(DSTRING **buf)
 		dstr_insert_ch(*buf, ' ', (*buf)->strlen);
 }
 
-t_indch			sh_tab(DSTRING **buf, t_envp *env, t_indch indch)
+t_indch			sh_tab(DSTRING **buf, ENV *env, t_indch indch)
 {
 	t_darr		overlap;
 	int			fl;

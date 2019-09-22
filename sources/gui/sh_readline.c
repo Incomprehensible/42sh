@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 21:51:47 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 01:36:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static char				is_reg(DSTRING *buf)
 }
 
 static t_indch			auto_correction(DSTRING **buf, t_indch indch, \
-							t_fl *fl, t_envp *env)
+							t_fl *fl, ENV *env)
 {
 	if (is_reg(*buf))
 		fl->reg = 1;
@@ -94,7 +94,7 @@ static t_indch			auto_correction(DSTRING **buf, t_indch indch, \
 	return (indch);
 }
 
-DSTRING					*sh_readline(t_envp *env)
+DSTRING					*sh_readline(ENV *env)
 {
 	DSTRING		*buf;
 	t_indch		indch;

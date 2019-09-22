@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_vars.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 13:00:33 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/30 06:57:44 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 01:38:19 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "libft.h"
 # include "ft_avl_tree.h"
 # include "dstring.h"
+# include "env.h"
 
 
 /* FLAGS 
@@ -67,7 +68,7 @@ typedef struct	s_darr
 void		sh_init_vars(int argc, char **argv, char **envp, t_envp *env);
 
 /*	GET ALL CMDS FROM $PATH */
-t_darr		get_list_cmds(t_envp *envp);
+t_darr		get_list_cmds(ENV *envp);
 
 /* PARSE ARGV */
 int			sh_parser_argv(int argc, char **argv, t_envp *env);

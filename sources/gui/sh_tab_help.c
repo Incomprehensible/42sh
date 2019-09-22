@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tab_help.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:43:03 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:26:16 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 01:36:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
 	return (n_ind.ind);
 }
 
-t_darr			sh_tab_help(DSTRING **buf, t_envp *env)
+t_darr			sh_tab_help(DSTRING **buf, ENV *env)
 {
 	ssize_t		start_dir;
 	t_darr		overlap;

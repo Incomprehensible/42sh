@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 20:45:07 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/20 23:14:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 08:24:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ int			sh_check_f_b(char *name, ENV *envr)
 
 pid_t		set_pid_err(pid_t pid, char *path)
 {
-	const int perms = sys_touch_file(path);
+	const int code = sys_is_ex_bin(path);
 
-	pid = !(perms & 0x8) ? -1 : 0; // NOT FOUND
-	pid = !(perms & 0x1) && !(pid) ? -5 : pid; // NOT EXE
-	pid = (perms & 0x40) && !(pid) ? -9 : pid; // IS DIR
-	pid = !(perms & 0x80) && !(pid) ? -10 : pid; //? NOT REGULAR
+	pid = code == -1 ? -1 : 0; // NOT FOUND
+	pid = code == -3 ? -5 : pid; // NOT EXE
+	pid = code == -2 ? -9 : pid; // IS DIR
+	pid = code == -4 ? -10 : pid; //? NOT REGULAR
 	return (pid);
 }
 

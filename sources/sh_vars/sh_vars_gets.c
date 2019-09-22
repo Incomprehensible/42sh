@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_vars_gets.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 13:02:20 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/22 18:53:49 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 01:38:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	sh_vars_parsepath(t_darr *res, char *path)
 	return (1);
 }
 
-t_darr		get_list_cmds(t_envp *envp)
+t_darr		get_list_cmds(ENV *envp)
 {
 	t_darr	res;
 
@@ -65,16 +65,16 @@ t_darr		get_list_cmds(t_envp *envp)
 	res.maxlen = 0;
 	res.maxlen = 0;
 	res.count = 0;
-	if (ft_avl_search(envp->global, "PATH") != 0)
+	if (ft_avl_search(envp->globals, "PATH") != 0)
 	{
 		if ((sh_vars_parsepath(&res,\
-			(char *)ft_avl_search(envp->global, "PATH")->content)) == 0)
+			(char *)ft_avl_search(envp->globals, "PATH")->content)) == 0)
 			return (res);
 	}
-	else if (ft_avl_search(envp->local, "PATH") != 0)
+	else if (ft_avl_search(envp->locals, "PATH") != 0)
 	{
 		if ((sh_vars_parsepath(&res,\
-			(char *)ft_avl_search(envp->local, "PATH")->content)) == 0)
+			(char *)ft_avl_search(envp->locals, "PATH")->content)) == 0)
 			return (res);
 	}
 	else

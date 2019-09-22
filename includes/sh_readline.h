@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/21 15:12:03 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/22 01:37:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "ft_avl_tree.h"
 # include "libft.h"
 # include "sh_vars.h"
+# include "env.h"
 
 # define HISTORY_PATH "/Users/gdaemoni/Desktop/42sh/histr.txt"
 
@@ -74,7 +75,7 @@ typedef struct	s_fl
 	char		reg;
 }				t_fl;
 
-DSTRING			*sh_readline(t_envp *env);
+DSTRING			*sh_readline(ENV *env);
 
 char		is_ctrl(const t_indch indch);
 
@@ -101,7 +102,7 @@ int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
 void			init_vars(int argc, char **argv, char **envp, t_envp *env);
 
 /*	GET ALL CMDS FROM $PATH */
-t_darr			get_list_cmds(t_envp *envp);
+t_darr			get_list_cmds(ENV *envp);
 
 /* overwrites the buffer string in the console and sets the cursor at the index */
 void			sh_rewrite(const DSTRING *buf, const size_t index);
@@ -155,11 +156,11 @@ ushort			get_col(const int lencol);
 void			free_lines_down(void);
 
 /* auto completion */
-t_indch			sh_tab(DSTRING **buf, t_envp *env, t_indch indch);
-t_darr			sh_tab_help(DSTRING **buf, t_envp *env);
+t_indch			sh_tab(DSTRING **buf, ENV *env, t_indch indch);
+t_darr			sh_tab_help(DSTRING **buf, ENV *env);
 int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
 					int fl, t_name_ind n_ind);
-t_darr			sh_add_cmd(DSTRING **buf, t_envp *env);
+t_darr			sh_add_cmd(DSTRING **buf, ENV *env);
 t_darr			sh_add_path(DSTRING **buf, size_t start_dir);
 char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
 int				ind_begin_cmd(DSTRING *buf);

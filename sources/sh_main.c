@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/21 21:59:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 14:26:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "executer.h"
 #include "dstring.h"
 #include "bltn.h"
+#include "sys_tools/sys_tools.h"
 
 #include "sh_vars.h"
 #include <sys/ioctl.h>
@@ -61,6 +62,7 @@ int				bltn_echo(char **args, ENV *envr)
 	return (0);
 }
 
+/*
 int				main(const int argc, char **argv, char **envp)
 {
 	ENV			env;
@@ -91,6 +93,7 @@ int				main(const int argc, char **argv, char **envp)
 	// TERMINATE
 	return (0);
 }
+*/
 
 void		write_history(DSTRING *line)
 {
@@ -105,14 +108,14 @@ void		write_history(DSTRING *line)
 	else if ((fd = open(HISTORY_PATH, O_RDWR | O_APPEND)) == -1)
 	{
 		perror("\nopen failed on history command file");
-        exit	(1);
+        exit (1);
 	}
 	write(fd, line->txt, line->strlen);
 	close(fd);
 }
 
-/*
-static void		sh_loop(t_envp *env)
+// /*
+static void		sh_loop(ENV *env)
 {
 	DSTRING		*line;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
@@ -133,16 +136,33 @@ static void		sh_loop(t_envp *env)
 
 int				main(const int argc, char **argv, char **envp)
 {
-	t_envp	env;
-	// INIT
-	sh_init_vars(argc, argv, envp, &env);
+	ENV			env;
+	int			status;
+	DSTRING		*dstr;
+	
+	env_init(argc, argv, envp, &env);
+	sys_var_init(&env);
+	sys_init();
+
+	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));
 	// LOOP
+
+	UT_TOK_INIT();
+
+	UT_TOK_CR(TK_EXPR, "echo");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "TEST");
+	UT_TOK_CR(TK_EOF, 0);
+
+	sh_tparse(UT_TOK, &env, TK_EOF, &status);
+
+	UT_TOK_END();
+
 	sh_loop(&env);
 	// TERMINATE
-	ft_avl_tree_free(env.global);
-	ft_avl_tree_free(env.local);
+	et_rm_clear_env(&env);
 	return (0);
 }
-*/
+// */
 
 // ls Libf[a-z]/*s/ft?a*
