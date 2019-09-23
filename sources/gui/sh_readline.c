@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 20:00:04 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/23 15:44:11 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "dstring.h"
 #include <dirent.h>
 
-t_indch					management_line(t_indch indch, DSTRING **buf)
+t_indch					management_line(t_indch indch, DSTRING **buf, ENV *envr)
 {
 	DSTRING		*str;
 
@@ -42,7 +42,7 @@ t_indch					management_line(t_indch indch, DSTRING **buf)
 	else if (indch.ch == 0x0e)
 		clear_screen();
 	else if (indch.ch == 0x12)
-		indch = search_history(buf);
+		indch = search_history(buf, envr);
 	return (indch);
 }
 
@@ -92,7 +92,7 @@ static t_indch			auto_correction(DSTRING **buf, t_indch indch, \
 	if (ft_isprint(indch.ch) && fl->tab)
 		dstr_insert_ch(*buf, indch.ch, indch.ind++);
 	if (is_ctrl(indch))
-		indch = management_line(indch, buf);
+		indch = management_line(indch, buf, env);
 	if (((indch.ch == ESC) || indch.fl) && (fl->tab = 0) == 0)
 		indch = sh_esc(indch, (*buf)->strlen, buf, env);
 	return (indch);
@@ -115,7 +115,7 @@ DSTRING					*sh_readline(ENV *env)
 		if (indch.ch == (char)0x04 || (indch.ch == '\n'))
 			return (return_line(&buf, indch, fl));
 		if (is_ctrl(indch))
-			indch = management_line(indch, &buf);
+			indch = management_line(indch, &buf, env);
 		if (ft_isprint(indch.ch) && indch.ch != DEL \
 			&& (!indch.fl || indch.fl == 2) && (fl.tab = 0) == 0)
 			dstr_insert_ch(buf, indch.ch, indch.ind++);

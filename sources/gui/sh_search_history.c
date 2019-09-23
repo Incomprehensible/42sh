@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 18:19:03 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 18:08:05 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/23 15:50:42 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,14 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-char		get_list_histr(t_darr *histr)
+char		get_list_histr(t_darr *histr, ENV *envr)
 {
 	int			fd;
 	int			ind;
 	DSTRING		*line;
 
-	if ((fd = open(HISTORY_PATH, O_CREAT | O_EXCL, S_IREAD | S_IWRITE)) != -1)
-		close(fd);
-	if ((fd = open(HISTORY_PATH, O_RDONLY)) == -1)
-	{
-		perror("\nopen failed on get_histr");
-		exit(1);
-	}
+	if ((fd = get_history_fd(O_RDONLY, "GET_HISTORY: file error", envr)) < 0)
+		return (0);
 	ind = -1;
 	while (++ind != -1 && get_next_line(fd, &line) == 1)
 	{
@@ -43,10 +38,10 @@ char		get_list_histr(t_darr *histr)
 	return (0);
 }
 
-void		init_param(t_darr *his, DSTRING **strd, DSTRING **strs)
+void		init_param(t_darr *his, DSTRING **strd, DSTRING **strs, ENV *envr)
 {
 	ft_bzero(his, sizeof(t_darr));
-	if (get_list_histr(his) == 0)
+	if (get_list_histr(his, envr) == 0)
 		return ;
 	(*strd) = dstr_nerr("- search_history : ");
 	(*strs) = dstr_nerr("");
@@ -99,14 +94,14 @@ char		direction(t_darr his, DSTRING **strd, DSTRING **strs)
 	return (ich.ch);
 }
 
-t_indch		search_history(DSTRING **buf)
+t_indch		search_history(DSTRING **buf, ENV *envr)
 {
 	t_darr		his;
 	DSTRING		*strd;
 	DSTRING		*strs;
 	t_indch		indch;
 
-	init_param(&his, &strd, &strs);
+	init_param(&his, &strd, &strs, envr);
 	if (his.count)
 	{
 		indch.ch = direction(his, &strd, &strs);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 20:50:51 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/23 15:43:44 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char		is_ctrl(const t_indch indch);
 ** ctrl+f move insertion point one word ahead
 ** ctrl+n clear all screen
 */
-t_indch			management_line(t_indch indch, DSTRING **buf);
+t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr);
 void			clear_screen(void);
 int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
 
@@ -225,13 +225,15 @@ t_regpath		get_regpath(DSTRING *reg);
 ** tab	  show overlap history
 */
 
+int				get_history_fd(int flags, char *er_context, ENV *envr);
+
 /* write history in file */
 void			write_history(DSTRING *line);
 
 /* history management */
 t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr);
 
-t_indch			search_history(DSTRING **buf);
+t_indch			search_history(DSTRING **buf, ENV *envr);
 void			direction_help(t_darr o, t_darr his, t_indch *ich,\
 					DSTRING **strd);
 
