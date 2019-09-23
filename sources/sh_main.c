@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 14:26:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 18:08:29 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include "bltn.h"
 #include "sys_tools/sys_tools.h"
 
-#include "sh_vars.h"
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <stdio.h>

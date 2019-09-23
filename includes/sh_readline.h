@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 01:37:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 17:59:18 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 # include <termcap.h>
 # include <stdio.h>
+# include <dirent.h>
 # include "dstring.h"
 # include "ft_avl_tree.h"
 # include "libft.h"
-# include "sh_vars.h"
 # include "env.h"
 
 # define HISTORY_PATH "/Users/gdaemoni/Desktop/42sh/histr.txt"
@@ -93,13 +93,6 @@ char		is_ctrl(const t_indch indch);
 t_indch			management_line(t_indch indch, DSTRING **buf);
 void			clear_screen(void);
 int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
-
-/* INIT GLOBAL AND LOCAL ENV
-	argc - count of arguments from main()
-	argv - arguments from main()
-	envp - envp from main()
-	env  - adreess for env */
-void			init_vars(int argc, char **argv, char **envp, t_envp *env);
 
 /*	GET ALL CMDS FROM $PATH */
 t_darr			get_list_cmds(ENV *envp);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/14 05:57:57 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/22 20:08:01 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "libft.h"
 # include "dstring.h"
 
+# define S_DARR_STRINGS		2096
 # define ENV t_env
 
 typedef struct	s_env
@@ -28,6 +29,18 @@ typedef struct	s_env
 	t_avl_tree	*aliases;
 	t_avl_tree	*core;
 }				t_env;
+
+/*	strings - array of DSTRING'S(every string is name of command / directory)
+	maxlen  - max length name command / directory
+	count   - count elements in array
+	allsize - count symbols all elements in array */
+typedef struct	s_darr
+{
+	DSTRING		*strings[S_DARR_STRINGS];
+	size_t 		maxlen;
+	size_t 		count;
+	size_t 		allsize;
+}				t_darr;
 
 /* INIT ENV 
  -if success return 1
@@ -49,5 +62,14 @@ int		env_unset_variable(const char *key, ENV *enviroment);
 int		env_init_error(ENV *env, int errcode);
 
 void	free_spl(char ***spl);
+
+void	env_get_bins_parsepath(t_darr *res, ENV *envp);
+void	env_get_bins_parsebltn(t_darr *res);
+void	env_get_bins_parefunc(t_darr *res, ENV *envp);
+
+t_darr	env_get_bins(ENV *envp);
+
+int		env_get_bins_unq(t_darr *res, char *str);
+void	env_get_bins_cmp_name(t_darr *res, int namelen);
 
 #endif
