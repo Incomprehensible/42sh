@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/14 05:57:57 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/25 16:45:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,8 @@ int		env_unset_variable(const char *key, ENV *enviroment);
 int		env_init_error(ENV *env, int errcode);
 
 void	free_spl(char ***spl);
+
+int		env_core_set(char *key, char *value, t_avl_tree *core);
+int		prs_set_pid(ENV *envr);
 
 #endif

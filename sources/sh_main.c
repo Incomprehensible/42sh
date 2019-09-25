@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 19:59:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/25 17:01:20 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ int				main(const int argc, char **argv, char **envp)
 	DSTRING		*dstr;
 	
 	env_init(argc, argv, envp, &env);
-	sys_var_init(&env);
+	sys_var_init(&env, argv, argc);
 	sys_init();
 
 	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));
@@ -152,19 +152,71 @@ int				main(const int argc, char **argv, char **envp)
 
 	UT_TOK_INIT();
 
-	UT_TOK_CR(TK_VAR, "PATH");
-	UT_TOK_CR(TK_ASSIGM, "+");
-	UT_TOK_CR(TK_VALUE, ":");
+	UT_TOK_CR(TK_EXPR, "cd");
+	UT_TOK_CR(TK_EMPTY, 0);
 	UT_TOK_CR(TK_DEREF, 0);
 	UT_TOK_CR(TK_NAME, "HOME");
-	UT_TOK_CR(TK_VALUE, "/Desktop/my_own_bash");
+	UT_TOK_CR(TK_EXPR, "/Desktop/lol");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "ls");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "cd");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "v");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "pwd");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "cd");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "vegan");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "pwd");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "cd");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "ms");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "pwd");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "cd");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "vg");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "pwd");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "cd");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "ms");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "pwd");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "cd");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "..");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "pwd");
+	UT_TOK_CR(TK_SEP, 0);
+	
 	UT_TOK_CR(TK_EOF, 0);
 
 	sh_tparse(UT_TOK, &env, TK_EOF, &status);
 
 	UT_TOK_END();
 
-	sh_loop(&env);
+	//sh_loop(&env);
 	// TERMINATE
 	et_rm_clear_env(&env);
 	return (0);

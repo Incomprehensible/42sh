@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 11:00:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/25 16:24:01 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ char			*prc_substitute(char *code, ENV *envr, int is_in);
 
 int				prs_error_handler(int ecode, int *stat, ENV *envr, EXPRESSION *expr);
 
-int				env_core_set(char *key, char *value, t_avl_tree *core);
 int				prs_set_last_status(int *status, ENV *envr);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 19:08:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/25 16:23:44 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int			sys_error_message(char *message, size_t len);
 */
 int			sys_error_handler(char *descr, int ecode, ENV *envr);
 
-int		sys_file_op(const char *path, ENV *envr, \
+int			sys_file_op(const char *path, ENV *envr, \
 const int flags, char *er_context);
 
 int			sys_getch(void);
