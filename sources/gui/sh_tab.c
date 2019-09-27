@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tab.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:36:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 17:59:53 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/09/27 20:40:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ t_darr			sh_add_cmd(DSTRING **buf, ENV *env)
 	DSTRING		*cmd;
 
 	begin_cmd = ind_begin_cmd((*buf));
-	cmd = dstr_serr((*buf), begin_cmd, (*buf)->strlen);
-	allcmd = get_list_cmds(env);
+	cmd = dstr_slice((*buf), begin_cmd, (*buf)->strlen);
+	allcmd = env_get_bins(env);
 	overlap = sh_cmp_darr(allcmd, cmd);
 	correct_namedir_buf(overlap, &cmd, 0);
 	dstr_cutins_dstr(buf, cmd, begin_cmd);

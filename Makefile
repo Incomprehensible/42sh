@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/09/22 19:58:39 by hgranule         ###   ########.fr        #
+#    Updated: 2019/09/27 20:39:00 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,14 +34,12 @@ FLAGS = -g
 
 WS_PATH = $(shell pwd)
 SRC_PATH = $(WS_PATH)/sources/
-SRC_PATH_SH_VARS = $(SRC_PATH)/sh_vars/
 OBJ_PATH = $(WS_PATH)/objects/
 INC_PATH = $(WS_PATH)/includes/
 LIB_PATH = $(WS_PATH)/Libft/
 LIB_INC_PATH = $(LIB_PATH)includes/
 
 SRC = $(addprefix $(SRC_PATH), $(SRC_FILES))
-SRC_VAR = $(addprefix $(SRC_PATH_SH_VARS), $(SRC_VAR_FILES))
 OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
@@ -53,7 +51,9 @@ SRC_FILES = sh_main.c ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
 			env/env_init.c env/env_get_variable.c env/env_set_variable.c env/env_unset_variable.c \
 			bltns/bltn_init.c bltns/bltn_setenv.c bltns/bltn_env.c bltns/bltn_getenv.c bltns/bltn_unsetenv.c \
 			bltns/bltn_exit.c bltns/bltn_alias.c bltns/bltn_unalias.c bltns/bltn_cd.c bltns/bltn_pwd.c\
-			aliases/alias_add.c aliases/alias_init.c bltns/bltn_type.c \
+			bltns/bltn_type/bltn_type.c bltns/bltn_type/bltn_type_free.c bltns/bltn_type/bltn_type_alias_check.c bltns/bltn_type/bltn_type_bins_check.c\
+			bltns/bltn_type/bltn_type_help.c\
+			aliases/alias_add.c aliases/alias_init.c \
 			exe_sys/exe_funcs.c parser/prs_and_or.c parser/prs_assigm.c \
 			parser/prs_funcs.c parser/prs_if_while.c parser/prs_skipers.c \
 			parser/prs_error.c parser/prs_core_setter.c \
@@ -66,9 +66,10 @@ SRC_FILES = sh_main.c ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
 			sys_tools/sys_touch.c $(addprefix gui/, $(GUI_FILES)) \
 			sys_tools/sys_config.c sys_tools/sys_files.c \
-			sh_vars/sh_vars_gets.c sh_vars/sh_vars_init.c sh_vars/sh_vars_parser.c
+			env/env_get_bins/env_get_bins_parsebltn.c env/env_get_bins/env_get_bins_parsefunc.c \
+			env/env_get_bins/env_get_bins_parsepath.c env/env_get_bins/env_get_bins.c 
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui sh_vars)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type)
 
 GUI_FILES = sh_control_term.c sh_dir_content.c sh_readline.c sh_readline_help.c\
 	sh_term.c dstr.c ft_concat.c sh_put_col.c sh_tab.c sh_darr.c sh_path.c reg_expr.c\
