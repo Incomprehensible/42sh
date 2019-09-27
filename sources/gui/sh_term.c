@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:14:42 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 20:46:19 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/27 19:57:23 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,27 @@ void			sh_move_cursor(size_t n, const char *side, \
 	if (n > col && col != 0)
 	{
 		if (ft_strcmp(side, "D") == 0)
-			move = ft_concat(3, "00", "\x001b[", ft_itoa(n), "F");
+			move = ft_concat(3, "00", "\x001b[", ft_itoa((n - 1) / col), "F"); // LEAK
 		else
-			move = ft_concat(3, "00", "\x001b[", ft_itoa(n / col), "E");
+			move = ft_concat(3, "00", "\x001b[", ft_itoa(n / col), "E"); // LEAK
 		if (move == NULL)
 			sys_fatal_memerr(sys_get_std_message(8));
 		ft_putstr(move);
 		n = n % col;
 		free(move);
 	}
+	if (!ft_strcmp(side, "C") && !(n % col) && col != 0 && n != 0) // перенос строки делается с \n
+	{
+		ft_putstr("\n");
+		ft_putstr("\x001b[0B");
+		n = n % col;
+	}
 	if (n > 0)
 	{
-		move = ft_itoa(n);
+		if (ft_strcmp(side, "C") == 0 && n == col)
+			move = ft_itoa(n + 1);
+		else
+			move = ft_itoa(n);
 		move_cors_r = ft_concat(3, "00", "\x1b[", move, side);
 		ft_putstr(move_cors_r);
 		free(move_cors_r);
