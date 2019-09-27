@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 18:08:29 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/27 18:07:10 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,16 +148,17 @@ int				main(const int argc, char **argv, char **envp)
 
 	UT_TOK_INIT();
 
-	UT_TOK_CR(TK_EXPR, "echo");
+	UT_TOK_CR(TK_EXPR, "type");
 	UT_TOK_CR(TK_EMPTY, 0);
-	UT_TOK_CR(TK_EXPR, "TEST");
+	UT_TOK_CR(TK_EXPR, "ls");
 	UT_TOK_CR(TK_EOF, 0);
 
 	sh_tparse(UT_TOK, &env, TK_EOF, &status);
 
 	UT_TOK_END();
 
-	sh_loop(&env);
+	
+	//sh_loop(&env);
 	// TERMINATE
 	et_rm_clear_env(&env);
 	return (0);
