@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 20:34:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/27 16:02:42 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int			sys_write_history(DSTRING *line, ENV *envr)
 		return (-1);
 	}
 	write(fd, line->txt, line->strlen);
+	free((void *)hist_path);
 	close(fd);
 	return (0);
 }

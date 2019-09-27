@@ -6,11 +6,12 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:33:01 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 16:13:17 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/27 15:19:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sys_tools/sys_errors.h"
+#include "sys_tools/sys_tools.h"
 #include "ft_io.h"
 #include "dstring.h"
 #include <unistd.h>
@@ -22,6 +23,16 @@ int		sys_error_message(char *message, size_t len)
 		len = ft_strlen(message);
 	write(2, message, len);
 	write(2, "\n", 1);
+	return (0);
+}
+
+int				sys_put_prompt(ENV *envr, char type)
+{
+	DSTRING		*prmt;
+
+	prmt = sys_get_prompt_num(envr, type);
+	write(1, prmt->txt, prmt->strlen);
+	dstr_del(&prmt);
 	return (0);
 }
 

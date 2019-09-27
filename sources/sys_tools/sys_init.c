@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/25 16:48:07 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/27 16:20:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ int			sys_core_set_init(ENV *env, char **argv, int argc)
 	char		*argc_val;
 
 	i = -1;
-	key[0] = '0';
-	key[1] = 0;
 	if (!(argc_val = ft_itoa(argc)) || \
 	(env_core_set("#", argc_val, env->core) < 0))
 		sys_fatal_memerr("MALLOC CALL FAILED, CORE VARIABLES LOST!");
@@ -41,14 +39,24 @@ int			sys_core_set_init(ENV *env, char **argv, int argc)
 	return (0);
 }
 
-int			sys_var_init(ENV *env, char **argv, int argc)
+int			sys_var_stdname_pr(ENV *env)
 {
 	DSTRING		*val;
 
 	val = dstr_new(SHELL_NAME_STD);
 	if ((env_set_variable(SH_VAR_SHNAME, val, env)) <= 0)
-		sys_fatal_memerr("MALLOC CALL FAILED!");
+		sys_fatal_memerr("MALLOC CALL FAILED, VAR INIT");
+	if (dstr_insert_str(val, "$ ", val->strlen) < 0)
+		sys_fatal_memerr("MALLOC CALL FAILED, VAR INIT");
+	if ((env_set_variable(SH_VAR_PROMPT, val, env)) <= 0)
+		sys_fatal_memerr("MALLOC CALL FAILED, VAR INIT");
 	dstr_del(&val);
+	return (0);
+}
+
+int			sys_var_init(ENV *env, char **argv, int argc)
+{
+	sys_var_stdname_pr(env);
 	prs_set_pid(env);
 	if ((sys_core_set_init(env, argv, argc)) < 0)
 		sys_fatal_memerr("MALLOC CALL FAILED, CORE VARIABLES LOST!");

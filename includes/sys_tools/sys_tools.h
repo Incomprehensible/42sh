@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/25 16:23:44 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/27 15:19:14 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,18 @@ int			sys_is_ex_bin(const char *path);
 ** DUPLICATES A NEW STRING!
 */
 char		*sys_get_conf_path(char *file, ENV *envr);
+
+/*
+** Returns a DYN_string with STD_PROMPT
+** If type is 0, returns PS varibale's value. 
+** Else if type is 'p', '\\', 'l', 'h', 's', 'a', 'q'
+** returns a one of const values.
+**
+** FATAL ERROR IS MALLOC FAIL.
+** CREATES A NEW DSTRING!
+*/
+DSTRING		*sys_get_prompt_num(ENV *envr, char type);
+int			sys_put_prompt(ENV *envr, char type);
 
 int			sys_write_history(DSTRING *line, ENV *envr);
 
