@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_type.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 10:36:07 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/27 18:19:13 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/27 20:33:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include "bltn.h"
 
-static char	*bltn_keywords[] = {"!", "[[", "]]", "{", "}", "case", "do",\
-	"done", "elif", "else", "esac", "fi", "for", "function", "if", "in",\
-	"select", "then", "time", "until", "while"};
+static char	*bltn_keywords[] = {"{", "}", "do",\
+	"done", "else", "fi", "for", "function", "if", "in",\
+	"then", "while"};
 
 void	bltn_type_output(char *str, int type, DSTRING *val);
 int		bltn_type_check_bins(char *str, ENV *env, DSTRING **val);

@@ -3,24 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_type.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 16:14:37 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/27 17:54:58 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/09/27 20:30:19 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn_type.h"
+#include "sys_tools/sys_sh_configs.h"
 
-static int	bltn_type_check_bltn(char *str)
+static int	bltn_type_check_bltn(char *str, ENV *env)
 {
-	int		i;
+	// int		i;
 
-	i = -1;
-	while (bltns_str[++i])
-		if (ft_strequ(bltns_str[i], str))
-			return (1);
-	return (0);
+	// i = -1;
+	// while (bltns_str[++i])
+	// 	if (ft_strequ(bltns_str[i], str))
+	// 		return (1);
+	// return (0);
+	if (!ft_avl_search(env->builtns, str))
+		return (0);
+	return (1);
 }
 
 static int	bltn_type_check_reserved(char *str)
@@ -41,7 +45,11 @@ void		bltn_type_output(char *str, int type, DSTRING *val)
 	if (type == -1)
 		ft_putendl("not found");
 	else if (type == 1)
-		ft_putendl("is a 42shell builtin");
+	{
+		ft_putstr("is a ");
+		ft_putstr(SHELL_NAME_STD);
+		ft_putendl(" builtin");
+	}
 	else if (type == 2)
 		ft_putendl("is a reserved word");
 	else if (type == 3)
@@ -67,7 +75,7 @@ int			bltn_type(char **args, ENV *env)
 	{
 		if (val)
 			dstr_del(&val);
-		if (bltn_type_check_bltn(args[i]))
+		if (bltn_type_check_bltn(args[i], env))
 			bltn_type_output(args[i], 1, NULL);
 		else if (bltn_type_check_reserved(args[i]))
 			bltn_type_output(args[i], 2, NULL);
