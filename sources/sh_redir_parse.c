@@ -14,312 +14,317 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-//MAKE BLOCKS
-//SORRY FOR THIS ;c
-char*   parse_hedoc(char *str, t_dlist **tok, t_stx **tree, short i)
-{
-    char *word;
-    short flag;
-    short size;
+//char*   parse_hedoc(char *str, t_dlist **tok, t_stx **tree, short i)
+//{
+//    char *word;
+//    short flag;
+//    short size;
+//
+//    flag = 0;
+//    str = parse_empty(str, 0x0, tok);
+//    while (*str && *str != '<')
+//    {
+//        if (*str == ' ' && *(str - 1) != '\\')
+//        {
+//            if (i)
+//                make_token(tok, pull_token(str - i, i), TK_EXPR);
+//            str = parse_empty(str, 0x0, tok);
+//            i = 0;
+//        }
+//        else if (*str == '$')
+//        {
+//            if (i)
+//                make_token(tok, pull_token(str - i, i), TK_EXPR);
+//            str = get_deref(str, tree, tok);
+//            i = 0;
+//        }
+//        else
+//        {
+//            str++;
+//            i++;
+//        }
+//    }
+//    if (i)
+//        make_token(tok, pull_token(str - i, i), TK_EXPR);
+//    i = 0;
+//    while (*str && *str == '<')
+//    {
+//        str++;
+//        i++;
+//    }
+//    make_token(tok, pull_token(str - i, i), TK_HERED);
+//    i = 0;
+//    while (*str && !(is_separator(*str)))
+//    {
+//        str++;
+//        i++;
+//    }
+//    word = pull_token(str - i, i);
+//    size = i;
+//    make_token(tok, word, TK_WORD);
+//    i = 0;
+//    str = parse_empty(str, 0x0, tok);
+//    while (*str && !(is_token_here(str, word)))
+//    {
+//        flag = 0;
+//        if (*str == ' ' && *(str - 1) != '\\')
+//        {
+//            if (i)
+//                make_token(tok, pull_token(str - i, i), TK_EXPR);
+//            str = parse_empty(str, 0x0, tok);
+//            i = 0;
+//        }
+//        else if (*str == '$')
+//        {
+//            if (i)
+//                make_token(tok, pull_token(str - i, i), TK_EXPR);
+//            str = parse_deref(str, tok, tree, 0);
+//            i = 0;
+//            flag = 1;
+//        }
+//        else
+//        {
+//            str++;
+//            i++;
+//        }
+//    }
+//    if (i && !flag)
+//        make_token(tok, pull_token(str - i, i - 1), TK_EXPR);
+//    make_token(tok, word, TK_WORD);
+//    return (parse_sep(str + size, tok, 0));
+//}
 
-    flag = 0;
-    str = parse_empty(str, 0x0, tok);
-    while (*str && *str != '<')
-    {
-        if (*str == ' ' && *(str - 1) != '\\')
-        {
-            if (i)
-                make_token(tok, pull_token(str - i, i), TK_EXPR);
-            str = parse_empty(str, 0x0, tok);
-            i = 0;
-        }
-        else if (*str == '$')
-        {
-            if (i)
-                make_token(tok, pull_token(str - i, i), TK_EXPR);
-            str = get_deref(str, tree, tok);
-            i = 0;
-        }
-        else
-        {
-            str++;
-            i++;
-        }
-    }
-    if (i)
-        make_token(tok, pull_token(str - i, i), TK_EXPR);
-    i = 0;
-    while (*str && *str == '<')
-    {
-        str++;
-        i++;
-    }
-    make_token(tok, pull_token(str - i, i), TK_HERED);
-    i = 0;
-    while (*str && !(is_separator(*str)))
-    {
-        str++;
-        i++;
-    }
-    word = pull_token(str - i, i);
-    size = i;
-    make_token(tok, word, TK_WORD);
-    i = 0;
-    str = parse_empty(str, 0x0, tok);
-    while (*str && !(is_token_here(str, word)))
-    {
-        flag = 0;
-        if (*str == ' ' && *(str - 1) != '\\')
-        {
-            if (i)
-                make_token(tok, pull_token(str - i, i), TK_EXPR);
-            str = parse_empty(str, 0x0, tok);
-            i = 0;
-        }
-        else if (*str == '$')
-        {
-            if (i)
-                make_token(tok, pull_token(str - i, i), TK_EXPR);
-            str = get_deref(str, tree, tok);
-            i = 0;
-            flag = 1;
-        }
-        else
-        {
-            str++;
-            i++;
-        }
-    }
-    if (i && !flag)
-        make_token(tok, pull_token(str - i, i - 1), TK_EXPR);
-    make_token(tok, word, TK_WORD);
-    return (parse_sep(str + size, tok, 0));
-}
-
-static short is_sep_no_space(char str)
+short is_sep_no_space(char str)
 {
-    if (str != '\n' && str != ';' && str != '|')
+    if (str != '\n' && str != ';' && str != '|' && str != '&' && str != '\0')
         return (0);
     return (1);
+}
+
+static size_t decimals_proceed(char *str, char *meta)
+{
+    size_t  i;
+
+    i = 0;
+    if (*meta == '@')
+    {
+        if ((str = ft_process_seq(str, meta)))
+            i = get_seq(str);
+        if (!str)
+            return (0);
+        str += i;
+    }
+    meta = (*meta == '@') ? get_point(meta) + 1 : ++meta;
+    while (*meta && *str && *meta == *str)
+    {
+        str++;
+        meta++;
+        i++;
+    }
+    if (!(*meta) && *str != '-')
+        return (i);
+    return (0);
+}
+
+static size_t parse_fd(char *meta, char *str)
+{
+    size_t  i;
+
+    i = 0;
+    while (str[i] && *meta && (str[i] == *meta || special_meta(*meta)))
+    {
+        if (*meta && special_meta(*meta))
+            return (decimals_proceed(str, meta));
+        else
+        {
+            str++;
+            meta++;
+            i++;
+        }
+        if (!(*meta))
+            return (i);
+    }
+    return (*meta ? 0 : i);
 }
 
 static char *fd_pull(t_graph *g, char *s, t_dlist **tok)
 {
     short   i;
     char    *new;
-    t_graph *start;
 
-    start = g;
-    s = parse_empty(s, 0x0, tok);
-    while (g && !(i = layer_parse_two(g->patt, s)))
+   // s = parse_empty(s, 0x0, tok);
+    while (g && !(i = parse_fd(g->patt, s)))
         g = g->next;
     if (i)
     {
-        new = pull_token(s, i);
-        make_token(tok, new, g->type);
+        if (g->type == CLOSE)
+            new = ft_strdup("-42");
+        else
+            new = pull_token(s, i);
+        make_token(tok, new, TK_FD);
         s = s + i;
     }
-    else if (*s == '&' || (*s && *(s - 1) == ' ' && *(s - 2) == '&'))
-    {
-        make_token(tok, ft_strdup("-21"), start->type);
-        s = s + 1;
-    }
+    //else if (*s == '&' || (*s && *(s - 1) == ' ' && *(s - 2) == '&'))
+//    else if (*s == '&' && is_redir(s + 1))
+//    {
+//        make_token(tok, ft_strdup("-21"), start->type);
+//        s = s + 2;
+//    }
     return (s);
 }
-
-//static void refactor_fd(char **new, char *meta, size_t i)
-//{
-//    short j;
-//
-//    j = 0;
-//    while (new[i])
-//        new[i++] = &meta[j++];
-//}
-//
-//static short    proceding_fd(char *str)
-//{
-//    while (*str && !(*str >=65 && *str <= 90) && !(*str >= 97 && *str <= 122) &&
-//    (!is_sep_no_space(*str)))
-//    {
-//        if (*str >= 48 && *str <= 57)
-//            return (1);
-//        str++;
-//    }
-//    return (0);
-//}
 
 static char *redir_pull(t_graph *g, char *s, t_dlist **tok)
 {
     short   i;
-    char    *new;
 
     while (g && !(i = layer_parse_two(g->patt, s)))
         g = g->next;
-    if (i)
+    if (i && i < 3)
     {
-        new = pull_token(s, i);
-        make_token(tok, new, g->type);
+        if (*s == '&')
+            make_token(tok, ft_strdup("-21"), TK_FD);
+        make_token(tok, NULL, g->type);
         s = s + i;
     }
     return (s);
 }
 
-//static char *redir_pull(t_graph *g, char *s, t_dlist **tok, short t)
-//{
-//    short   i;
-//    short size;
-//    char    *new;
-//
-//    while (g && !(i = layer_parse_two(g->patt, s)))
-//        g = g->next;
-//    size = t ? i + 2 : i;
-//    if (i)
-//    {
-//        new = pull_token(s, size);
-//        if (!t)
-//        {
-//            if (!proceding_fd(s))
-//                refactor_fd(&new, "-21", i);
-//            else
-//                ft_bzero(&new[i], 2);
-//        }
-//        make_token(tok, new, g->type);
-//        s = s + i;
-//    }
-//    return (s);
-//}
-
-//static char *second_redir_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
-//{
-//    short   i;
-//    char    *new;
-//
-//    while (g && !(i = layer_parse_two(g->patt, s)))
-//        g = g->next;
-//    if (i)
-//    {
-//        new = pull_token(s, i + 2);
-//        make_token(tok, new, g->type);
-//        s = s + i;
-//    }
-//    return (s);
-//}
-
 static char *in_redir_blocks(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
 {
-    s = parse_empty(s, g->patt, tok);
     if (g->type == TK_FD)
         s = fd_pull(g, s, tok);
-    else
+    else if (g->type == TK_PROF_OUT)
     {
-//        i = (g->type == TK_RD_W && (ft_strlen(g->patt) > 1)) ? 0 : 1;
-        s = redir_pull(g, s, tok);
+        if (layer_parse_one("<(z)", s) || layer_parse_one(">(z)", s))
+            s = parse_proc(s, tok, tr, PROF);
     }
+    else
+        s = redir_pull(g, s, tok);
     return (s);
+}
+
+//char *pull_exec(char *s, size_t i, size_t space, t_dlist **tok)
+//{
+//    make_token(tok, pull_token(s - i, i - space), TK_EXEC);
+//    return (parse_empty(s, 0x0, tok));
+//}
+
+size_t remove_spaces(char *str, size_t len)
+{
+    size_t spaces;
+
+    spaces = 0;
+    while (*str && len && ft_isspace(*str))
+    {
+        str--;
+        spaces++;
+        if (*str == '\\')
+        {
+            spaces--;
+            break;
+        }
+        len--;
+    }
+    return (spaces);
 }
 
 static char *parse_expr(char *s, t_dlist **tok)
 {
     size_t i;
+    size_t space;
+    short flag;
 
     i = 0;
+    flag = 0;
+    space = 0;
+//    if (is_token_here(s, "exec") && *s && *(s + 1) != '\\')
+//        s = skip_spaces(parse_exec(s, tok));
     while (*s && *s != '&' && *s != '<' && *s != '>' && *s != ';' && !(*s >= 48 && *s <= 57))
     {
+        flag = (ft_isspace(*s)) ? flag : 1;
+        space = (ft_isspace(*s)) ? ++space : space;
         i++;
         s++;
     }
-    if (i && (*(--s) == ' ' || *s == '\t'))
+    if (flag && i)
     {
-        make_token(tok, pull_token(s - i + 1, i - 1), TK_EXPR);
+        space = remove_spaces(s - 1, i);
+        make_token(tok, pull_token(s - i, i - space), TK_EXPR);
         s = parse_empty(s, 0x0, tok);
     }
-    return (s);
-}
-
-static char *close_fd(char *str, t_dlist **tok)
-{
-    make_token(tok, ft_strdup("-42"), TK_FD);
-    str += 1;
-    return (str);
+    return (flag ? s : s - i);
 }
 
 static char *redirect_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
 {
     short i;
-    char *new;
 
-    s = parse_empty(s, g->patt, tok);
     if (!(*s))
         return (s);
     if (g->next)
         return (in_redir_blocks(g, s, tr, tok));
     else if (g->type == TK_EXPR)
         s = parse_expr(s, tok);
-    else if (*s == '-')
-        s = close_fd(s, tok);
     else
     {
-        i = layer_parse_two(g->patt, s);
-        if (i)
+        if (is_redir(s))
+            return (s);
+        if ((i = layer_parse_two(g->patt, s)))
         {
-            new = pull_token(s, i);
-            make_token(tok, new, g->type);
+            make_token(tok, pull_token(s, i), g->type);
             s = s + i;
         }
     }
     return (s);
 }
 
+static short    stop_point(t_tk_type tk)
+{
+    if (tk == TK_EXPR || tk == TK_RD_A || tk == TK_RD_RW || tk == TK_RD_W ||
+    tk == TK_RD_R || tk == TK_RD_R || tk == TK_RD_W)
+        return (0);
+    return (1);
+}
+
 char        *redir_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
 {
     char *tmp;
+    static short sig;
 
-//    if (!(*s) || is_sep_no_space(*s))
-//        return (parse_sep(s, tok, tr, 0));
-    if (!g || ((tmp = redirect_pull(g, s, tr, tok)) && tmp == s))
-        return (tmp);
-    s = tmp;
-    if (!(*s) || is_sep_no_space(*s))
-        return (parse_sep(s, tok, 0));
-    s = parse_empty(s, g->patt, tok);
-    while (g->type == TK_EXPR && (tmp = redirect_pull(g, s, tr, tok)) && tmp != s)
-        s = tmp;
-    if (graph_forward_only(g))
+    s = g ? parse_empty(s, g->patt, tok) : s;
+    if (!g || ((tmp = redirect_pull(g, s, tr, tok)) && tmp == s) || !tmp)
+        return (sig ? tmp : NULL);
+    s = parse_empty(tmp, g->patt, tok);
+    sig = 1;
+    if ((!(*s) || is_sep_no_space(*s)) && (stop_point(g->type)))
+        return (s);
+    if (graph_forward_only(g) && !(sig = 0))
         return (redir_traverse(g->forward, s, tok, tr));
     else
     {
-        s = parse_empty(s, g->patt, tok);
         if ((tmp = redir_traverse(g->forward, s, tok, tr)) && tmp == s)
-            if (((tmp = redir_traverse(g->left, s, tok, tr)) && tmp == s))
+            if (((tmp = redir_traverse(g->left, s, tok, tr)) && tmp == s) && !(sig = 0))
                 return (redir_traverse(g->right, s, tok, tr));
     }
     return (tmp);
 }
-
-//проверять на экранирование
-//в цикле expr_tk если есть экранирование то продолжаем
-//pull exec here
 char*   parse_redir(char *str, t_dlist **tok, t_stx **tree, short i)
 {
-    static t_graph *redir;
+    t_graph *redir;
     char *tmp;
 
     str = parse_empty(str, 0x0, tok);
     tmp = str;
-    if (!redir)
-    {
-        redir = redir_in();
-        if ((*str == '<' || *str == '>') && *(str + 1) == '&')
-            redir = redir->left;
-        else if (*str == '<' || *str == '>')
-            redir = redir->right;
-        else if ((*str >= 48 && *str <= 57) || *str == '&')
-            redir = redir->forward;
-        //if we find > > <> redir = redir->forward;
-        //else if we find &< etc redir = redir->left;
-    }
-
+    redir = redir_in();
+    if (*str == '&' || ((*str == '<' || *str == '>') && *(str + 1) == '&'))
+        redir = redir->left;
+    else if (*str == '<' || *str == '>')
+        redir = redir->right;
+    else if ((*str >= 48 && *str <= 57))
+        redir = redir->forward;
     if ((str = redir_traverse(redir, str, tok, tree)) == tmp)
-        return (block_pass(TK_EXPRS, str, tok, tree));
+        return (block_pass(EXPRS, str, tok, tree));
+    if (!str)
+        return (NULL);
     return (str);
 }

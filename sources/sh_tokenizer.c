@@ -25,16 +25,18 @@ void    make_token(t_dlist **list, char *value, t_tk_type type)
     {
         token_data->value = value;
         token_data->type = type;
-        if (list[0] == list[1] && !list[0]->token)
+        if (list[0] == list[1] && !list[0]->content)
         {
-            list[1]->token = token_data;
+            list[1]->content = (t_tok *)malloc(sizeof(t_tok));
+            *((t_tok *)(list[1]->content)) = *token_data;
             list[0]->next = NULL;
         }
         else if (list[0] == list[1])
         {
             tmp = list[0];
             tmp->next = ft_dlstnew(NULL, 0);
-            tmp->next->token = token_data;
+            tmp->next->content = (t_tok *)malloc(sizeof(t_tok));
+            *((t_tok *)(tmp->next->content)) = *token_data;
             tmp->next->next = NULL;
             tmp->next->prev = list[0];
             list[1] = tmp->next;
@@ -43,209 +45,218 @@ void    make_token(t_dlist **list, char *value, t_tk_type type)
         {
             tmp = list[1];
             tmp->next = ft_dlstnew(NULL, 0);
-            tmp->next->token = token_data;
-            tmp->next->next = NULL;
-            tmp->next->prev = tmp;
-            list[1] = tmp->next;
+            tmp = tmp->next;
+            tmp->content = (t_tok *)malloc(sizeof(t_tok));
+            *((t_tok *)(tmp->content)) = *token_data;
+            tmp->next = NULL;
+            tmp->prev = list[1];
+            //list[1]->next = tmp;
+            list[1] = tmp;
+//            tmp = list[1];
+//            tmp->next = ft_dlstnew(NULL, 0);
+//            tmp->next->content = (t_tok *)malloc(sizeof(t_tok));
+//            *((t_tok *)(tmp->next->content)) = *token_data;
+//            tmp->next->next = NULL;
+//            tmp->next->prev = tmp;
+//            list[1] = tmp->next;
         }
     }
 }
 
-int     layer_parse_one(char *meta, char *str, char *end)
-{
-    char *tmp;
-    char *tmp2;
+//void    make_token(t_dlist **list, char *value, t_tk_type type)
+//{
+//    t_tok           *token_data;
+//    t_dlist         *tmp;
+//
+//    token_data = (t_tok *)malloc(sizeof(t_tok));
+//    if (token_data)
+//    {
+//        token_data->value = value;
+//        token_data->type = type;
+//        if (list[0] == list[1] && !list[0]->content)
+//        {
+//            *((t_tok *)list[0]->content) = *token_data;
+//            list[1]->content = (void *)token_data;
+//            list[0]->next = NULL;
+//        }
+//        else if (list[0] == list[1])
+//        {
+//            tmp = list[0];
+//            tmp->next = ft_dlstnew(NULL, 0);
+//            tmp->next->content = (void *)token_data;
+//            tmp->next->next = NULL;
+//            tmp->next->prev = list[0];
+//            list[1] = tmp->next;
+//        }
+//        else
+//        {
+//            tmp = list[1];
+//            tmp->next = ft_dlstnew(NULL, 0);
+//            tmp->next->content = (void *)token_data;
+//            tmp->next->next = NULL;
+//            tmp->next->prev = tmp;
+//            list[1] = tmp->next;
+//        }
+//    }
+//}
 
-    tmp2 = meta;
-    while (str && str != end && *str && *meta)
+int     layer_parse_one(char *meta, char *str)
+{
+    while (*str && *meta && !(is_sep_no_space(*str) && *meta != 'x') && (*str == *meta || special_meta(*meta)))
     {
-        while (*str && *meta && (*str == *meta || special_meta(*meta)) && str != end)
+        if (*meta && special_meta(*meta))
         {
-            tmp = str;
-            if (*meta && special_meta(*meta))
-            {
-                str = process_reg(str, meta, end);
-                if (!str)
-                    return (0);
-                if (*meta == '@' || *meta == '!' || *meta == '.')
-                    meta = get_point(meta);
-                meta++;
-            }
-            else
-            {
-                if (*str != *meta)
-                {
-                    str = tmp;
-                    meta = tmp2;
-                    break;
-                }
-                str++;
-                meta++;
-            }
-            if (!*meta)
-                return (1);
+            if (!(str = process_reg(str, meta)))
+                return (0);
+            if (*meta == '@' || *meta == '!' || *meta == '.')
+                meta = get_point(meta);
+            meta++;
         }
-        if (str == end && *meta == *end)
-            return (1);
-        str++;
+        else
+        {
+            str++;
+            meta++;
+        }
     }
+    if (!*meta || (*meta == '_' && is_sep_no_space(*str)))
+        return (1);
     return (0);
 }
 
-char    *block_pass(t_tk_type i, char *str, t_dlist **toklst, t_stx **tree)
+char    *block_pass(short i, char *str, t_dlist **tok, t_stx **tree)
 {
-    static char*    (*ptr[9])(char *, t_dlist **, t_stx **, short);
+    static char*    (*ptr[13])(char *, t_dlist **, t_stx **, short);
 
-//    ptr[0] = &parse_sep;
-    ptr[0] = &parse_scripts;
-    //was 4
-    ptr[1] = &parse_envar;
-    //was 1
-    ptr[2] = &parse_hedoc;
-    //+1
-    ptr[3] = &parse_math;
-    ptr[4] = &parse_quotes;
-    //
-    ptr[5] = &parse_redir;
-    ptr[6] = &parse_func;
-    ptr[7] = &parse_subsh;
-    ptr[8] = &parse_comm;
-    str = ptr[i](str, toklst, tree, 0);
+    if (!ptr[0])
+    {
+        ptr[0] = &parse_dquotes;
+        ptr[1] = &parse_apofs;
+        ptr[2] = &parse_math;
+        ptr[3] = &parse_subsh;
+        ptr[4] = &parse_scripts;
+        ptr[5] = &parse_envar;
+        ptr[6] = &parse_hedoc;
+        ptr[7] = &parse_proc;
+        ptr[8] = &parse_redir;
+        ptr[9] = &parse_func;
+        ptr[10] = &parse_lambda;
+        ptr[11] = &parse_comm;
+        ptr[12] = &parse_deref;
+    }
+    if (i == EMPTY)
+        return (parse_empty(str, 0x0, tok));
+    else if (i == SEPS)
+        return (parse_sep(str, tok, 0));
+    str = ptr[i](str, tok, tree, 0);
     return (str);
 }
+
+//int     check_branch(char *str, t_stx *tree)
+//{
+//    short choice;
+//    char *end;
+//
+//    choice = 0;
+//    if (*str == '\\')
+//        return (8);
+//    if (!(end = ft_strchr(str, ';')))
+//        end = ft_strchr(str, ')') + 1;
+//    else
+//        end += 1;
+//    if (!end)
+//        if (!(end = ft_strchr(str, '\n')))
+//            end = str + ft_strlen(str);
+//    while (tree && !choice)
+//    {
+//        choice = layer_parse_one(tree->meta, str, end);
+//        tree = tree->next;
+//    }
+//    return (choice);
+//}
 
 int     check_branch(char *str, t_stx *tree)
 {
     short choice;
-    char *end;
 
     choice = 0;
-    if (*str == '\'')
-        return (choice);
-    if (!(end = ft_strchr(str, ';')))
-        end = ft_strchr(str, ')') + 1;
-    if (!end)
-        if (!(end = ft_strchr(str, '\n')))
-            end = str + ft_strlen(str);
-    while (tree && !choice)
+    while (!choice && *str && tree)
     {
-        choice = layer_parse_one(tree->meta, str, end);
+        choice = layer_parse_one(tree->meta, str);
         tree = tree->next;
     }
     return (choice);
 }
 
-//what do we do if the first token is sep ? we may just skip it
-t_tk_type     find_token(t_stx **tree, char *str)
+short     find_token(t_stx **tree, char *str)
 {
     t_tk_type i;
+    short   choice;
 
     i = 0;
-    while (tree[i] && !check_branch(str, tree[i]))
-        i++;
-    return (tree[i] ? i : TK_EXPRS);
-}
-
-static char     *pull_word(char *str)
-{
-    size_t  i;
-
-    i = 0;
-    while (*str && (*str == ' ' || *str == '\t'))
-        str++;
-    while (*str && *str != '<')
-        str++;
-    while (*str && *str == '<')
-        str++;
-    if (!(*str))
-        return (NULL);
-    while (*str && !(is_separator(*str)))
+    choice = 0;
+    if (*str == '\\')
+        return (EXPRS);
+    else if (ft_isspace(*str) || *str == '\n')
+        return (EMPTY);
+    else if (*str == '$' && *(str + 1) != '=')
+        return (DEREF);
+    else if (is_sep_no_space(*str) && *str && !is_redir(str + 1))
+        return (SEPS);
+    while (*str && !(is_sep_no_space(*str) && !is_redir(str + 1)) && !choice)
     {
-        str++;
-        i++;
+        i = 0;
+        if (*str == '$')
+            return (EXPRS);
+        while (tree[i] && !(choice = check_branch(str, tree[i])))
+            i++;
+        if (!tree[i])
+            str++;
     }
-    return (pull_token(str - i, i));
-}
-
-static short    get_hedoc(char *str, int id)
-{
-    static char *word;
-
-    if (!id)
-    {
-        word = pull_word(str);
-        if (!word)
-            return (-1);
-    }
-    else
-    {
-        str += ft_strlen(str) - 1;
-        while (*str != '<')
-        {
-            if (!(ft_strcmp(word, str)) && *(str - 1) != '<')
-            {
-                free(word);
-                return (1);
-            }
-            str--;
-        }
-    }
-    return (0);
+    return (tree[i] ? i : EXPRS);
 }
 
 short   clear_tokens(t_dlist **tokens)
 {
-    t_dlist *tmp;
+    t_dlist *token_list;
+//    t_tok *token_data;
 
+    unexpected_token();
     while (*tokens)
     {
-        tmp = *tokens;
+        token_list = *tokens;
         *tokens = (*tokens)->next;
-        free(tmp);
+//        token_data = (t_tok *)token_list->content;
+        if (token_list->content && TOK_VALUE)
+            free(TOK_VALUE);
+//        if (token_data->value)
+//            free(token_data->value);
+        free(token_list->content);
+        free(token_list);
     }
-    free(tokens);
+    tokens[0] = NULL;
+    tokens[1] = NULL;
     return (-1);
 }
 
-//there is problem! if we have working first block and then the block which is not finished, we can't detect
-//any unfinished input. Cause our find block func searchs for the first occurance of block
-//we must check for unfinished input every time the new block is processed.
 short    get_tokens(char *str, t_dlist **token_list)
 {
-    static t_stx    *tree[10];
-    short           choice;
-    static short    flag;
-    static short    path;
+    static t_stx    *tree[13];
+    t_tk_type       choice;
 
     if (!tree[0])
         tree_init(tree);
+    if (input_finished(str) < 0)
+        return (0);
     while (*str)
     {
-        if (flag < 0)
-        {
-            if (!get_hedoc(str, 1))
-                return (0);
-            flag = 1;
-        }
-        if ((choice = input_finished(str, tree, path)) == -1)
-            return (0);
-        path = -1;
-        if (choice == 2 && flag != 1 && (flag = -1))
-        {
-            //check if hedoc has a closing word, otherwise throw exception
-            if (get_hedoc(str, 0) < 0)
-            {
-                flag = 0;
-                return (-1);
-            }
-            return (0);
-        }
-        //syntax error case
+        choice = find_token(tree, str);
         if (!(str = block_pass(choice, str, token_list, tree)))
             return (clear_tokens(token_list));
     }
-    path = 0;
-    flag = 0;
+    if (!back_ps_check(token_list[0]))
+        return (clear_tokens(token_list));
+    if (!(list_ready_to_go(token_list)))
+        return (clear_tokens(token_list));
     make_token(token_list, NULL, TK_EOF);
     return (1);
 }
@@ -259,26 +270,33 @@ t_dlist    **toklst_init(t_dlist **token_list)
     token_list[0]->content = NULL;
     token_list[0]->prev = NULL;
     token_list[0]->size = 0;
-    token_list[0]->token = NULL;
     token_list[1] = token_list[0];
     return (token_list);
+}
+
+void    concatenate_str(char **last_input, char *str)
+{
+    char        *tmp;
+
+    tmp = *last_input;
+    *last_input = ft_strjoin(*last_input, "\n");
+    free(tmp);
+    tmp = *last_input;
+    *last_input = ft_strjoin(*last_input, str);
+    free(tmp);
+    //return (last_input);
 }
 
 short				sh_tokenizer(char *str, t_dlist **token_list)
 {
     static char *last_input;
-    char        *tmp;
+   char        *tmp;
     short       i;
 
     token_list = toklst_init(token_list);
     if (last_input)
     {
-        tmp = last_input;
-        last_input = ft_strjoin(last_input, " ");
-        free(tmp);
-        tmp = last_input;
-        last_input = ft_strjoin(last_input, str);
-        free(tmp);
+        concatenate_str(&last_input, str);
         tmp = last_input;
     }
     else
@@ -287,18 +305,12 @@ short				sh_tokenizer(char *str, t_dlist **token_list)
     {
         if (!i && !last_input)
             last_input = ft_strdup(str);
+        else if (i < 0 && last_input)
+        {
+            free(last_input);
+            last_input = NULL;
+        }
         return (0);
-//        if (last_input)
-//        {
-//            tmp = last_input;
-//            last_input = ft_strjoin(last_input, " ");
-//            free(tmp);
-//            tmp = last_input;
-//            last_input = ft_strjoin(last_input, str);
-//            free(tmp);
-//        }
-//        else
-//            last_input = ft_strdup(str);
     }
     if (last_input)
     {

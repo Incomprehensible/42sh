@@ -30,27 +30,81 @@ static t_graph    *close_in(void)
     return (red);
 }
 
+static t_graph    *prof_in(void)
+{
+    static t_graph *prof;
+
+    if (prof)
+        return (prof);
+    prof = (t_graph *)malloc((sizeof(t_graph)));
+    prof->type = TK_PROF_OUT;
+    prof->patt = "<(z)";
+    prof->forward = redir_one();
+    prof->left = redir_two();
+    prof->right = NULL;
+    prof->next = (t_graph *)malloc((sizeof(t_graph)));
+    prof->next->type = TK_PROF_IN;
+    prof->next->patt = ">(z)";
+    prof->next->forward = prof->forward;
+    prof->next->left = prof->left;
+    prof->next->right = prof->right;
+    prof->next->next = NULL;
+    return (prof);
+}
+
 static t_graph    *fd_in(void)
 {
     static t_graph *red;
+    short i;
+    static t_graph *start;
+    char **redir;
 
-    if (red)
-        return (red);
-    red = (t_graph *)malloc((sizeof(t_graph)));
+    if (start)
+        return (start);
+    i = 0;
+    redir = ft_strsplit("@123456789@ @123456789@- -", ' ');
+    red = (t_graph *)malloc(sizeof(t_graph));
+    red->patt = redir[i];
+    start = red;
     red->type = TK_FD;
-    red->patt = "@123456789@";
     red->forward = redir_one();
     red->left = redir_two();
-    red->right = close_in();
-    red->next = (t_graph *)malloc((sizeof(t_graph)));
-    red->next->type = TK_FD;
-    red->next->patt = "@123456789@-";
-    red->next->forward = red->forward;
-    red->next->left = red->left;
-    red->next->right = red->right;
-    red->next->next = NULL;
-    return (red);
+    red->right = NULL;
+    while (redir[++i])
+    {
+        red->next = (t_graph *)malloc(sizeof(t_graph));
+        red->next->forward = NULL;
+        red->next->left = NULL;
+        red->next->right = NULL;
+        red->next->next = NULL;
+        red = red->next;
+        red->patt = redir[i];
+        red->type = CLOSE;
+    }
+    return (start);
 }
+
+//static t_graph    *fd_in(void)
+//{
+//    static t_graph *red;
+//
+//    if (red)
+//        return (red);
+//    red = (t_graph *)malloc((sizeof(t_graph)));
+//    red->type = TK_FD;
+//    red->patt = "@123456789@";
+//    red->forward = redir_one();
+//    red->left = redir_two();
+//    red->right = close_in();
+//    red->next = (t_graph *)malloc((sizeof(t_graph)));
+//    red->next->type = TK_FD;
+//    red->next->patt = "@123456789@-";
+//    red->next->forward = red->forward;
+//    red->next->left = red->left;
+//    red->next->right = red->right;
+//    red->next->next = NULL;
+//    return (red);
+//}
 
 static t_graph    *filename_in(void)
 {
@@ -62,8 +116,8 @@ static t_graph    *filename_in(void)
     red->type = TK_FILENAME;
     red->patt = "~ ";
     red->forward = fd_in();
-    red->left = NULL;
-    red->right = NULL;
+    red->left = redir_one();
+    red->right = redir_two();
     red->next = NULL;
     return (red);
 }
@@ -84,8 +138,8 @@ t_graph    *redir_two(void)
     red->patt = redir[i];
     start = red;
     red->type = r[i];
-    red->forward = filename_in();
-    red->left = NULL;
+    red->forward = prof_in();
+    red->left = filename_in();
     red->right = NULL;
     while (redir[++i])
     {
@@ -118,8 +172,8 @@ t_graph  *redir_one(void)
     start = red;
     red->type = r[i];
     red->forward = fd_in();
-    red->left = filename_in();
-    red->right = NULL;
+    red->left = prof_in();
+    red->right = filename_in();
     while (redir[++i])
     {
         red->next = (t_graph *)malloc(sizeof(t_graph));
@@ -146,8 +200,10 @@ static void     comm_init(t_graph *red)
 
 t_graph  *redir_in(void)
 {
-    t_graph *red;
+    static t_graph *red;
 
+    if (red)
+        return (red);
     red = (t_graph *)malloc((sizeof(t_graph)));
     comm_init(red);
     return (red);

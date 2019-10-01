@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_inputcheck.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/09/15 23:49:09 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,225 +14,229 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-short   unexpected_token(void)
+short    unexpected_token(void)
 {
     ft_putstr("bash: syntax error occured.\n");
-    return (0);
+    return (-1);
 }
 
-short   count_points(char *str, char *point)
-{
-    char *start;
-    short i;
-    char    *patt;
+//short is_it_sep(char str)
+//{
+//    if (str != '\n' && str != ';')
+//        return (0);
+//    return (1);
+//}
 
-    start = str;
-    i = 0;
-    patt = "if";
-    while (start)
-    {
-        start = ft_strstr(start, point);
-        if (start)
-        {
-            while (*start && *start == *patt++)
-                start++;
-            i++;
-            patt -= 3;
-        }
-    }
-    return (i);
-}
-
-short   check_ifs(char *str)
-{
-    short i;
-    short j;
-    char *point;
-
-    i = count_points(str, "if");
-    j = 0;
-    point = str;
-    while (point && j != i)
-    {
-        point = ft_strstr(point, "fi");
-        if (point)
-            j++;
-    }
-    return (j == i ? 1 : 0);
-}
-
-short   check_while(char *str)
-{
-    short i;
-    short j;
-    char *point;
-
-    i = count_points(str, "while");
-    j = 0;
-    point = str;
-    while (point && j != i)
-    {
-        point = ft_strstr(point, "done");
-        if (point)
-            j++;
-    }
-    return (j == i ? 1 : 0);
-}
-
-short   check_until(char *str, short add)
-{
-    short i;
-    short j;
-    char *point;
-
-    i = count_points(str, "until");
-    j = 0;
-    point = str;
-    while (point && j != i)
-    {
-        point = ft_strstr(point, "done");
-        if (point)
-            j++;
-    }
-    j -= add;
-    return (j == i ? 1 : 0);
-}
-
-short   check_for(char *str, short add)
-{
-    short i;
-    short j;
-    char *point;
-
-    i = count_points(str, "for");
-    j = 0;
-    point = str;
-    while (point && j != i)
-    {
-        point = ft_strstr(point, "done");
-        if (point)
-            j++;
-    }
-    j -= add;
-    return (j == i ? 1 : 0);
-}
-
-short   script_input(char *str)
-{
-    short flag;
-    short i;
-
-    flag = 0;
-    i = 0;
-    if (is_token_here(str, "if"))
-        flag = check_ifs(str);
-    if (is_token_here(str, "while"))
-    {
-        i = check_while(str);
-        flag = i;
-    }
-    if (is_token_here(str, "until"))
-    {
-        i += check_until(str, i);
-        flag = i;
-    }
-    if (is_token_here(str, "for"))
-    {
-        i += check_for(str, i);
-        flag = i;
-    }
-    return (flag);
-}
-
-short   count_objects(char *str, char br, char rb)
-{
-    short i;
-    short mir;
-    short flag;
-
-    i = 0;
-    flag = 0;
-    while (*str)
-    {
-        mir = 0;
-//        if (*str == '\\' && ++str)
+//short   count_points(char *str, char *point)
+//{
+//    char *start;
+//    short i;
+//
+//    start = str;
+//    i = 0;
+//    while (start)
+//    {
+//        start = ft_strstr(start, point);
+//        if (start)
+//        {
+//            while (*start && !is_separator(*start))
+//                start++;
+//            i++;
+//        }
+//    }
+//    return (i);
+//}
+//
+////changed to count if before done and if we have another if / done and if we have delimeter in front
+//short   sep_is_here(char *str, char *point)
+//{
+//    short flag;
+//
+//    flag = 0;
+//    while (point-- != str)
+//    {
+//        while (point != str && (*point == ' ' || *point == '\t'))
+//            --point;
+//        if (*point && is_it_sep(*point))
+//        {
+//            flag = 1;
+//            break;
+//        }
+//		while ((*point != ' ' || *point != '\t' || is_it_sep(*point)) && point != str)
+//			--point;
+//		if (point != str)
+//			if (is_token_here(point, "if") || is_token_here(point, "done"))
+//				flag = 1;
+//        return (flag);
+//    }
+//    return (flag);
+//}
+//
+//short   check_ifs(char *str)
+//{
+//    short i;
+//    short j;
+//    char *point;
+//
+//    i = count_points(str, "if");
+//    j = 0;
+//    point = str;
+//    while (point && j != i)
+//    {
+//        point = ft_strstr(point, "fi");
+//        if (point && point != str && *(point - 1) != '\\')
+//            if (sep_is_here(str, point))
+//                j++;
+//    }
+//    return (j == i ? 1 : 0);
+//}
+//
+//short   check_cycle(char *str, char *meta)
+//{
+//    short i;
+//    short j;
+//    char *point;
+//
+//    i = count_points(str, meta);
+//    j = 0;
+//    point = str;
+//    while (point && j != i)
+//    {
+//        point = ft_strstr(point, "done");
+//		if (point && point != str && *(point - 1) != '\\')
+//        	if (sep_is_here(str, point))
+//            	j++;
+//    }
+//    return (j);
+//}
+//
+//short   script_input(char *str)
+//{
+//    short i;
+//
+//    while (*str && (*str == ' ' || *str == '\t'))
+//        str++;
+//    if (ft_strstr(str, "if"))
+//        if (!(check_ifs(str)))
+//			return (0);
+//	i = count_points(str, "done");
+//    if (ft_strstr(str, "while"))
+//        i -= check_cycle(str, "while");
+//    if (ft_strstr(str, "until"))
+//        i -= check_cycle(str, "until");
+//    if (ft_strstr(str, "for"))
+//        i -= check_cycle(str, "for");
+//    return (i ? 0 : 1);
+//}
+//
+//// short   script_input(char *str)
+//// {
+////     short flag;
+////     short i;
+//
+////     flag = 0;
+////     i = 0;
+////     while (*str && (*str == ' ' || *str == '\t'))
+////         str++;
+////     if (ft_strstr(str, "if"))
+////         flag = check_if_while(str, "if", "fi");
+////     if (ft_strstr(str, "while"))
+////     {
+////         i = check_if_while(str, "while", "done");
+////         flag = i;
+////     }
+////     if (ft_strstr(str, "until"))
+////     {
+////         i += check_until_for(str, "until", i);
+////         flag = i;
+////     }
+////     if (ft_strstr(str, "for"))
+////     {
+////         i += check_until_for(str, "for", i);
+////         flag = i;
+////     }
+////     return (flag);
+//// }
+//
+//short   count_objects(char *str, char br, char rb)
+//{
+//    short i;
+//    short mir;
+//    short flag;
+//
+//    i = 0;
+//    flag = 0;
+//    while (*str)
+//    {
+//        mir = 0;
+//        if (*str == '\\' && (str += 2))
 //            mir = 1;
-        if (*str == '\\' && *(str + 1) == '\\' && (str += 2))
-            mir = 1;
-        if (!flag && *str == br && !mir && (flag += 1))
-            i++;
-        else if (flag && *str == rb && !mir && (flag -= 1))
-            i--;
-        str++;
-    }
-    return (flag ? 0 : 1);
-}
+//        if (!flag && *str == br && !mir && (flag += 1))
+//            i++;
+//        else if (flag && *str == rb && !mir && (flag -= 1))
+//            i--;
+//        str++;
+//    }
+//    return (flag ? 0 : 1);
+//}
+//
+//short   brackets_closed(char *str)
+//{
+//    if (ft_strchr(str, '('))
+//        if (!count_objects(str, '(', ')'))
+//            return (0);
+//    if (ft_strchr(str, '{'))
+//    {
+//        if (!count_objects(str, '{', '}'))
+//            return (0);
+//    }
+//    return (1);
+//}
+//
+//short   quotes_closed(char *str)
+//{
+//    if (ft_strchr(str, '\''))
+//        if (!count_objects(str, '\'', '\''))
+//            return (0);
+//    if (ft_strchr(str, '"'))
+//    {
+//        if (!count_objects(str, '"', '"'))
+//            return (0);
+//    }
+//    if (ft_strchr(str, '`'))
+//    {
+//        if (!count_objects(str, '`', '`'))
+//            return (0);
+//    }
+//    return (1);
+//}
+//
+//short   pipes_closed(char *str)
+//{
+//    if (*(str + ft_strlen(str) - 1) == '|' && *(str + ft_strlen(str) - 2) != '\\')
+//        return (0);
+//    return (1);
+//}
 
-short   brackets_closed(char *str)
-{
-    if (ft_strchr(str, '('))
-        if (!count_objects(str, '(', ')'))
-            return (0);
-    if (ft_strchr(str, '{'))
-    {
-        if (!count_objects(str, '{', '}'))
-            return (0);
-    }
-    return (1);
-}
-
-short   quotes_closed(char *str)
-{
-    if (ft_strchr(str, '\''))
-        if (!count_objects(str, '\'', '\''))
-            return (0);
-    if (ft_strchr(str, '"'))
-    {
-        if (!count_objects(str, '"', '"'))
-            return (0);
-    }
-    if (ft_strchr(str, '`'))
-    {
-        if (!count_objects(str, '`', '`'))
-            return (0);
-    }
-    return (1);
-}
-
-short   pipes_closed(char *str)
-{
-    if (*(str + ft_strlen(str) - 1) == '|' && *(str + ft_strlen(str) - 2) != '\\')
-        return (0);
-    return (1);
-}
-
-//check for closed pipes as well!! input can't finish with a pipe opened
-//we check if functions' input is finished - whether our brackets of commands within func definition are closed or if there is
-//only function or fname written
-//instead of find_token we must only search for meta words across the whole string - it differs from check-branch as we
-//don't look for separators and analyze string not in parts but the whole.
-//as first meta is found and we check every meta with layer_parse_one, we go script_input
-//we search for quotes and brackets in the same fashion - first search for the first bracket, if it's found go check brackets etc.
-short   input_finished(char *str, t_stx **tree, short path)
-{
-    short i;
-    short id;
-
-    //if we have unclosed heredoc, input not finished
-    //we may check static variable in outer func
-    //if (!check_heredoc()) where we store a flag
-    if (path >= 0)
-    {
-        if (!brackets_closed(str))
-            return (-1);
-        if (!quotes_closed(str))
-            return (-1);
-        if (!pipes_closed(str))
-            return (-1);
-    }
-    i = find_token(tree, str);
-    id = 1;
-    if (!i)
-        id = script_input(str);
-    return (id ? i : -1);
-}
+//short   input_finished(char *str, t_stx **tree, short path)
+//{
+//    short i;
+//    short id;
+//
+//    if (path >= 0)
+//    {
+//        if (!brackets_closed(str))
+//            return (-1);
+////        if (!seps_check(str))
+////            return (unexpected_token());
+//        if (!quotes_closed(str))
+//            return (-1);
+////        if (!input_closed(str))
+////            return (-1);
+//    }
+//    i = find_token(tree, str);
+//    id = 1;
+//    if (i == 3)
+//        id = script_input(str);
+//    return (id ? i : -1);
+//}

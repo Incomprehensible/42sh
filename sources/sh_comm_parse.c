@@ -14,109 +14,160 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-static char *pull_comm(char *str, t_dlist **tok)
+char    *parse_exec(char *str, t_dlist **tok)
 {
-    short i;
+    size_t i;
 
     i = 0;
-    while (*str && *str != '"')
+    make_token(tok, pull_token(str, 4), TK_EXEC);
+    str += 4;
+   if (ft_isspace(*str))
+       str = parse_empty(str, 0x0, tok);
+    while (*str && !is_sep_no_space((*str)))
     {
-        if (i && *str == ' ' && *(str - 1) != '\\')
-        {
-            make_token(tok, pull_token(str - i, i), TK_EXPR);
-            str = parse_empty(str, 0x0, tok);
-            i = 0;
-        }
-        else
+        if (*str && *str == '\\')
         {
             i++;
             str++;
         }
+        str++;
+        i++;
     }
-    if (i)
-        make_token(tok, pull_token(str - i, i), TK_EXPR);
-    return (str);
-}
-
-char*   parse_quotes(char *str, t_dlist **tok, t_stx **tree, short i)
-{
-    size_t j;
-
-    j = 0;
-    str = parse_empty(str, 0x0, tok);
-    if (*str != '"')
-        str = pull_comm(str, tok);
-    if (*str && *str == '\'')
-    {
-        while (*str && *str != '\'')
-        {
-            str++;
-            j++;
-        }
-        make_token(tok, pull_token(str - j, j - 1), TK_EXPR);
-        return (parse_sep(++str, tok, 0));
-    }
-    //do we really need to have value here? or NULL is better?
-    make_token(tok, ft_strdup("\""), TK_DQUOTE);
-    str++;
-    while (*str && *str != '"')
-    {
-        if (*str == '\\' && (j++) && (++str))
-            i = 1;
-        else if (!i && *str == '$')
-        {
-            if (j)
-                make_token(tok, pull_token(str - j, j - 1), TK_EXPR);
-            str = get_deref(str, tree, tok);
-            j = 0;
-        }
-        else
-        {
-            str++;
-            j++;
-            i = 0;
-        }
-    }
-    make_token(tok, ft_strdup("\""), TK_DQUOTE);
-    return (parse_sep(++str, tok, 0));
-}
-
-char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short i)
-{
-    size_t j;
-
-    j = 0;
-    while (*str && *str != ';')
-    {
-        if (*str == '\\' && (j++) && (++str))
-            i = 1;
-        else if (!i && (*str == '$' || *str == '(' || *str == '"' || *str == '\''))
-        {
-            if (j)
-                make_token(tok, pull_token(str - j, j - 1), TK_EXPR);
-            str = check_subbranch(str, tok, tree, TK_EXPRS);
-            j = 0;
-        }
-        else if (!i && (*str == ' ' || *str == '\t' || *str == '\n'))
-        {
-            if (j)
-                make_token(tok, pull_token(str - j, j), TK_EXPR);
-            str = parse_empty(str, 0x0, tok);
-            j = 0;
-        }
-        else
-        {
-            str++;
-            j++;
-            i = 0;
-        }
-    }
-    if (j)
-        make_token(tok, pull_token(str - j, j), TK_EXPR);
+    make_token(tok, pull_token(str - i, i), TK_EXPR);
     return (parse_sep(str + i, tok, 0));
 }
 
-//мы постоянно чекаем если перед пробелом стоит экранирование - тогда мы просто продолжаем парсить всю строку или же
-//считать в ней символы от начала до конца
-//если увидели разделитель / дереференс / другой токен и он не экранирован, продолжаем парсить
-//блоки для проверки - дереференс, кавычки, разделители (все лежит в нашей парсинговой функции)
+static short    is_and_or(char *str)
+{
+    if ((*str && *str == '&' && *(str + 1) == '&') || (*str && *str == '|' && *(str + 1) == '|'))
+        return (1);
+    return (0);
+}
+
+short   time_for_portal(char *str)
+{
+    if ((*str == '$' && *(str + 1) != '=') || *str == '(' || *str == '"' || *str == '\'' ||
+    *str == ';' || *str == '\n' ||  ft_isspace(*str) || is_and_or(str))
+        return (1);
+    return (0);
+}
+
+char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
+{
+    size_t j;
+    short i;
+
+    j = 0;
+    i = 0;
+    if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
+        return (parse_exec(str, tok));
+    while (!(special_case(stop, str)))
+    {
+        if (*str == '\\' && (++j) && (++str))
+            i = 1;
+        if (!i && *str && time_for_portal(str) && *(str + 1) != '\\')
+        {
+            j = can_pull_tk(j, str, tok, stop);
+            if (!(str = check_subbranch(str, tok, tree, EXPRS)))
+                return (NULL);
+            if (sep_detected(tok[1], stop))
+                return (str);
+        }
+        else
+        {
+            str++;
+            j++;
+        }
+        i = (*str == '\\') ? 1 : 0;
+    }
+    can_pull_tk(j, str, tok, stop);
+    return (parse_sep(str + i, tok, 0));
+}
+
+//in case we may mistakenly check subbranch - it has a mistake as it reverses arguments
+//char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
+//{
+//    size_t j;
+//    short i;
+//    char *tmp;
+//
+//    j = 0;
+//    i = 0;
+//    if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
+//        return (parse_exec(str, tok));
+////    while (!(special_case(stop, str)) && !(is_sep_no_space(*str)) && !is_and_or(str))
+//    while (!(special_case(stop, str)))
+//    {
+//        if (*str == '\\' && (j++) && (++str))
+//            i = 1;
+//        if (!i && *str && time_for_portal(str) && *(str + 1) != '\\')
+//        {
+////            j = can_pull_tk(j, str, tok, stop);
+//            if (!(tmp = check_subbranch(str, tok, tree, EXPRS)))
+//                return (NULL);
+//            if (tmp != str)
+//                j = can_pull_tk(j, str, tok, stop);
+//            str = (tmp == str && (++j)) ? ++str : tmp;
+//            if (sep_detected(tok[1], 0))
+//                return (str);
+//        }
+//        else
+//        {
+//            str++;
+//            j++;
+//        }
+//        i = (*str == '\\') ? 1 : 0;
+//    }
+//    can_pull_tk(j, str, tok, stop);
+//    return (parse_sep(str + i, tok, 0));
+//}
+
+////rewrite - close function when we need to check subbranch and go to the portal. just return the value
+//char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short i)
+//{
+//    size_t j;
+//
+//    j = 0;
+//    if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
+//        return (parse_exec(str, tok));
+//    while (*str && !(is_sep_no_space(*str)))
+//    {
+//        if (*str == '\\' && (j++) && (++str))
+//            i = 1;
+//        if (!i && *str && time_for_portal(*str) && *(str + 1) != '\\')
+//        {
+//            if (j)
+//                make_token(tok, pull_token(str - j, j - 1), TK_EXPR);
+//            if (!(str = check_subbranch(str, tok, tree, EXPRS)))
+//                return (NULL);
+//            j = 0;
+//        }
+//        else if (!i && (*str == ' ' || *str == '\t' || *str == '\n'))
+//        {
+//            if (j)
+//                make_token(tok, pull_token(str - j, j), TK_EXPR);
+//            str = parse_empty(str, 0x0, tok);
+//            j = 0;
+//        }
+//        else
+//        {
+//            if (!i)
+//            {
+//                if (*str != ' ' && is_separator(*str))
+//                {
+//                    if (j)
+//                        make_token(tok, pull_token(str - j, j), TK_EXPR);
+//                    str = parse_sep(str, tok, 0);
+//                    str = parse_empty(str, 0x0, tok);
+//                    j = 0;
+//                }
+//            }
+//            i = (*str == '\\') ? 1 : 0;
+//            str++;
+//            j++;
+//        }
+//    }
+//    if (j)
+//        make_token(tok, pull_token(str - j, j), TK_EXPR);
+//    return (parse_sep(str + i, tok, 0));
+//}

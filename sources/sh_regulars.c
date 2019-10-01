@@ -16,7 +16,8 @@
 
 int special_meta(char meta)
 {
-    if (meta == '@' || meta == '^' || meta == '~' || meta == '_' || meta == '!' || meta == '%' || meta == '.' || meta == '?')
+    if (meta == '@' || meta == '^' || meta == '~' || meta == '_' || meta == '!' || meta == '%' || meta == '.'
+    || meta == '?' || meta == '+' || meta == 'z' || meta == 'x')
         return (1);
     return (0);
 }
@@ -33,11 +34,13 @@ static short is_meta(char *str, char meta)
     return (0);
 }
 
+//changed from is_sep_no_space to is_separator
 char *ft_process_s(char *str, char *meta)
 {
-    if ((!(*str >= 65 && *str <= 90) && !(*str >= 97 && *str <= 122)))
+    if ((!(*str >= 65 && *str <= 90) && !(*str >= 97 && *str <= 122)) &&
+    *str != '_' && !(ft_isdigit(*str)))
         return (0);
-    while (*str && (*str != *(meta + 1)))
+    while (*str && !is_separator(*str) && *str != *(meta + 1))
         str++;
     if (!(*str) && !(is_meta(str, *(meta + 1))))
         return (0);
@@ -46,17 +49,31 @@ char *ft_process_s(char *str, char *meta)
 
 char *ft_process_space(char *str, char *meta)
 {
-    if (*str != ' ' && *str != '\t' && *str != ';' && *str != '\n')
-        return (0);
     if (*meta == '_')
     {
-        if (*str == ' ' || *str == '\t' || *str == ';' || *str == '\n')
+        if (*str == ' ' || *str == '\t' || !(*str) || is_sep_no_space(*str) || *str == '(')
             return (str);
         return (0);
     }
-    while (*str && str != meta && *str != ';' && (*str == ' ' || *str == '\t' || *str == '\n'))
+    if (*str != ' ' && *str != '\t' && *str)
+        return (0);
+    while (*str && str != meta && !is_sep_no_space(*str) && (*str == ' ' || *str == '\t'))
         str++;
     if (*str)
+        return (str);
+    return (0);
+}
+
+char    *ft_process_trash(char *str, char *meta)
+{
+    ++meta;
+    while (*str && *str != *meta)
+    {
+        if (*str == '\\')
+            str++;
+        str++;
+    }
+    if (*str == *meta)
         return (str);
     return (0);
 }
@@ -76,10 +93,43 @@ char *ft_process_seq(char *str, char *meta)
     return (0);
 }
 
-char *ft_process_any(char *str, char *meta, char *end)
+char *ft_process_all(char *str, char *meta)
+{
+    short flag;
+
+    flag = 0;
+    ++meta;
+    while (*str && *str != *meta)
+    {
+        if (*str && !is_separator(*str))
+            flag = 1;
+        if (*str == '\\' && *(str + 1) && (flag = 1))
+            str++;
+        str++;
+    }
+    if (*str == *meta && flag)
+        return (str);
+    return (0);
+}
+
+//char *ft_process_all(char *str, char *meta)
+//{
+//    ++meta;
+//    while (*str && *str != *meta)
+//    {
+//        if (*str == '\\' && *(str + 1))
+//            str++;
+//        str++;
+//    }
+//    if (*str == *meta)
+//        return (str);
+//    return (0);
+//}
+
+char *ft_process_any(char *str, char *meta)
 {
     ++meta;
-    while (*str && str != end && *str != *meta && !(is_meta(str, *meta)))
+    while (*str && !is_sep_no_space(*str) && *str != *meta && !(is_meta(str, *meta)))
         str++;
     if (*str == *meta || (is_meta(str, *meta)))
         return (str);
@@ -116,17 +166,19 @@ char    *ft_process_vars(t_tk_type type, char *str, char *meta, t_dlist **tok)
     return (str);
 }
 
-char    *ft_process_wall(char *str, char *meta, char *end)
+char    *ft_process_wall(char *str, char *meta)
 {
     ++meta;
-    while (*str && str != end && !(is_token_here(str, meta)))
+    while (*str && !is_sep_no_space(*str) && !is_token_here(str, meta))
         str++;
+    if (is_sep_no_space(*str))
+        return (NULL);
     if (!(*str))
         return (0);
     return (str);
 }
 
-char *ft_process_limits(char *str, char *end)
+char *ft_process_limits(char *str)
 {
     char limit;
 
@@ -135,15 +187,15 @@ char *ft_process_limits(char *str, char *end)
     else
         limit = ' ';
     //we cut shit that sits between these metas ; need for math
-    while (*str && str != end && *str != limit)
+    while (*str && !is_sep_no_space(*str) && *str != limit)
         str++;
     return (str - 1);
 }
 
-char *ft_process_ignore(char *str, char *meta, char *end)
+char *ft_process_ignore(char *str, char *meta)
 {
     meta++;
-    while (*str && str != end && !(special_meta(*meta)))
+    while (*str && !is_sep_no_space(*str) && !(special_meta(*meta)))
     {
         if (*str != *meta)
             return (0);
@@ -154,20 +206,24 @@ char *ft_process_ignore(char *str, char *meta, char *end)
     return (str);
 }
 
-char *process_reg(char *str, char *meta, char *end)
+char *process_reg(char *str, char *meta)
 {
     if (*meta == '?')
         str = ft_process_s(str, meta);
     else if (*meta == '^' || *meta == '_')
         str = ft_process_space(str, meta);
     else if (*meta == '~')
-        str = ft_process_any(str, meta, end);
+        str = ft_process_any(str, meta);
     else if (*meta == '!')
-        str = ft_process_wall(str, meta, end);
+        str = ft_process_wall(str, meta);
     else if (*meta == '.')
-        str = ft_process_ignore(str, meta, end);
+        str = ft_process_ignore(str, meta);
     else if (*meta == '%')
-        str = ft_process_limits(str, end);
+        str = ft_process_limits(str);
+    else if (*meta == 'z')
+        str = ft_process_all(str, meta);
+    else if (*meta == 'x')
+        str = ft_process_trash(str, meta);
     else
         str = ft_process_seq(str, meta);
     return (str);
@@ -194,69 +250,28 @@ char *get_point(char *meta)
     return (meta);
 }
 
-char   *cut_brackets(char *patt, char *str, t_dlist **tok, char br)
-{
-    char *end;
-    size_t i;
-    short   j;
-
-    i = 0;
-    j = 0;
-    while (*str && *str == br)
-    {
-        str++;
-        j++;
-    }
-    if (!(end = ft_process_wall(str, patt + j, "\0")))
-        return (0);
-    while (str != end && *str)
-    {
-        str++;
-        i++;
-    }
-    make_token(tok, pull_token(str - i, i), TK_MATH);
-    return (end + 2);
-}
-
-char    *reg_process(char *patt, t_tk_type type, char *str, t_stx **tr, t_dlist **tok)
+char    *reg_process(char *patt, t_tk_type type, char *str, t_dlist **tok, t_stx **tr)
 {
     size_t i;
-    char *start;
     char *new;
 
     if (!(*str))
         return (str);
     str = parse_empty(str, patt, tok);
-    if (*str == '$')
+    if (*str == '$' && !(is_separator(*(str + 1))))
+        return (parse_deref(str, tok, tr, 0));
+    if ((i = layer_parse_two(patt, str)))
     {
-        make_token(tok, ft_strdup("$"), TK_DEREF);
-        str++;
-    }
-    if (*str && type == TK_MATH)
-    {
-        if (ft_strstr(patt, "(("))
-            return (cut_brackets(patt, str, tok, '('));
-        else if ((str = ft_process_ignore(str, patt, "\0")))
-        {
-            while (*str && (*str == ' ' || *str == '\t'))
-                str++;
-            i = layer_parse_two(patt + 4, str);
-            if (*str && (*str == '\'' || *str == '"' || *str == '`'))
-                str++;
+        if (type == TK_SUBSH || type == TK_PROC_OUT || type == TK_PROC_IN)
+            new = pull_token(str + 1, --i - 2);
+        else if (type == TK_FUNCTION)
+            new = NULL;
+        else
             new = pull_token(str, i);
-            make_token(tok, new, type);
-            str += 1;
-        }
-    }
-    else if ((i = layer_parse_two(patt, str)))
-    {
-        str = parse_empty(str, patt, tok);
-        start = str;
-        new = pull_token(start, --i);
         make_token(tok, new, type);
     }
     str += i;
-    if (str && *str == ';')
-        str = parse_sep(str, tok, 0);
+//    if (str && *str == ';')
+//        str = parse_sep(str, tok, 0);
     return (str);
 }

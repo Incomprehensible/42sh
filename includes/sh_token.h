@@ -18,12 +18,6 @@
 typedef size_t t_tk_type;
 
 # define TK_SEPS (t_tk_type)0x10000004038
-# define TK_MATHS (t_tk_type)0x0000000004
-# define TK_QUOTS (t_tk_type)0x0000000000
-# define TK_EXPRS (t_tk_type)0x0000000008
-# define TK_FUNCS (t_tk_type)0x0000000006
-# define TK_SUBSHS (t_tk_type)0x0000000007
-# define TK_FLOWS (t_tk_type)0x0000000001
 # define TK_EMPTY (t_tk_type)0x0000000000000002
 # define TK_EXPR (t_tk_type)0x0000000000000004
 # define TK_SEP (t_tk_type)0x0000000000000008
@@ -58,24 +52,20 @@ typedef size_t t_tk_type;
 # define TK_CONTIN (t_tk_type)0x0000000080000000
 # define TK_EXEC (t_tk_type)0x0000000100000000
 # define TK_FUNCTION (t_tk_type)0x0000000200000000
-# define TK_APOF (t_tk_type)0x0000000400000000
-# define TK_DQUOTE (t_tk_type)0x0000000800000000
-# define TK_EOF (t_tk_type)0x0000010000000000
-# define TK_FEND (t_tk_type)0x0000020000000000
-# define TK_VAR (t_tk_type)0x0000040000000000
-# define TK_UNTIL (t_tk_type)0x0000080000000000
+# define TK_LAMBDA (t_tk_type)0x0000000400000000
+# define TK_EOF (t_tk_type)0x000001000000000
+# define TK_FEND (t_tk_type)0x000002000000000
+# define TK_VAR (t_tk_type)0x000004000000000
+# define TK_UNTIL (t_tk_type)0x000008000000000
+# define TK_PROC_IN (t_tk_type)0x0000010000000000
+# define TK_PROC_OUT (t_tk_type)0x0000020000000000
+# define TK_PROF_IN (t_tk_type)0x0000040000000000
+# define TK_PROF_OUT (t_tk_type)0x0000080000000000
 
 typedef struct		s_token
 {
 	char			*value;
 	t_tk_type		type;
 }					t_tok;
-
-typedef struct      s_stx
-{
-    struct s_stx *next;
-    struct s_stx *prev;
-    char         *meta;
-}                   t_stx;
 
 #endif

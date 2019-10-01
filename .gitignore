@@ -4,3 +4,9 @@
 objects
 *dSYM
 *.o
+.idea
+.vscode
+cmake*
+2
+Cmake*
+.DS_Store

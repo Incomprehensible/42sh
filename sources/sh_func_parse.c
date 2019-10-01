@@ -14,58 +14,81 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-static char *func_args(char *str, t_dlist **tok)
+static char *func_args(char *str, t_dlist **tok, t_stx **tr)
 {
-    size_t i;
-
-    i = 0;
     str++;
     while (*str && *str != '}')
     {
-        while (*str && (*str == ' ' || *str == '\t'))
-            str++;
-        if (*str == ';')
-        {
-            make_token(tok, pull_token(str - i, i), TK_EXPR);
-            str = parse_sep(str, tok, 0);
-            i = 0;
-        }
-        if (*str++ != ' ' && *str != '\t')
-            i++;
+        if (check_branch(str, tr[FLOWS]))
+            str = block_pass(FLOWS, str, tok, tr);
+        else
+            str = parse_comm(str, tok, tr, '}');
+        str = (str) ? skip_spaces(str) : str;
+        if (!sep_detected(tok[1], ';') || !check_valid_sep(tok[1]))
+            return (NULL);
+        //check tok instead
+//        if (*str != ';' && (*str && *str != '\\'))
+//            return (0);
+        //str = parse_sep(str, tok, 0);
+        str = skip_spaces(str);
     }
     if (!(*str))
         return (0);
-    make_token(tok, pull_token(str - i, i), TK_EXPR);
     make_token(tok, NULL, TK_FEND);
     return (str + 1);
 }
 
-static char *get_function(char *str, t_stx **tr, t_dlist **tok)
+//static char *func_args(char *str, t_dlist **tok, t_stx **tr)
+//{
+//    str++;
+//    while (*str && *str != '}')
+//    {
+//        if (check_branch(str, tr[FLOWS]))
+//            str = block_pass(0, str, tok, tr);
+//        else
+//            str = parse_comm(str, tok, tr, ';');
+//        str = skip_spaces(str);
+//        if (!sep_detected(tok[1], ";"))
+//            return (NULL);
+//        //check tok instead
+////        if (*str != ';' && (*str && *str != '\\'))
+////            return (0);
+//        //str = parse_sep(str, tok, 0);
+//        str = skip_spaces(str);
+//    }
+//    if (!(*str))
+//        return (0);
+//    make_token(tok, NULL, TK_FEND);
+//    return (str + 1);
+//}
+
+static char *get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)
 {
     size_t i;
-    char *reg1;
     char *reg2;
 
-    reg1 = "! ";
-    reg2 = "{~}";
-    i = 0;
-    str = parse_empty(str, "", tok);
+    reg2 = "{z}";
+    str = parse_empty(str, 0x0, tok);
     if ((*str >= 65 && *str <= 90) || (*str >= 97 && *str <= 122))
     {
         if ((i = layer_parse_two(reg1, str)))
         {
             make_token(tok, pull_token(str, i), TK_NAME);
-            str = parse_empty(str + i, reg1, tok);
+            while (*str && !(ft_isspace(*str)))
+                str++;
+            str = parse_empty(str, reg1, tok);
             if ((layer_parse_two(reg2, str)))
-                return (func_args(str, tok));
+                return (func_args(str, tok, tr));
             else
             {
-                str = ft_process_vars(TK_EXPR, str, "/;/\n", tok);
+                str = ft_process_vars(TK_EXPR, str, "/;/\n/&/|", tok);
                 make_token(tok, NULL, TK_FEND);
                 return (parse_sep(str, tok, 0));
             }
         }
     }
+    else
+        return (NULL);
     return (str + i);
 }
 
@@ -76,18 +99,27 @@ char*   parse_func(char *str, t_dlist **tok, t_stx **tree, short ind)
     char *tmp;
 
     patt0 = "function_";
-    patt2 = "?(~)_";
-    while (*str)
+    patt2 = "?()_";
+    if ((tmp = reg_process(patt0, TK_FUNCTION, str, tok, tree)) != str && tmp)
+        return (get_function(str + 8, "! ", tok, tree));
+    else if ((layer_parse_two(patt2, str)))
     {
-        if ((tmp = reg_process(patt0, TK_FUNCTION, str, tree, tok)) != str && tmp)
-            return (get_function(str + 8, tree, tok));
-        else if ((layer_parse_two(patt2, str)))
-        {
-            make_token(tok, NULL, TK_FUNCTION);
-            return (get_function(str, tree, tok));
-        }
-        str++;
-        ind++;
+        make_token(tok, NULL, TK_FUNCTION);
+        return (get_function(str, "!()", tok, tree));
     }
-    return (str - ind);
+    return (NULL);
+    //return (str - ind);
+}
+
+char*   parse_lambda(char *str, t_dlist **tok, t_stx **tree, short i)
+{
+    char *reg2;
+
+    reg2 = "{z}";
+    if (!(layer_parse_two(reg2, str)))
+        return (NULL);
+    make_token(tok, NULL, TK_LAMBDA);
+    if (!(str = func_args(str, tok, tree)))
+        return (NULL);
+    return (parse_sep(str, tok, i));
 }

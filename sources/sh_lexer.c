@@ -14,21 +14,6 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-char    *parse_empty(char *str, char *patt, t_dlist **tok)
-{
-    if (str && (*str == ' ' || *str == '\t'))
-        make_token(tok, " ", TK_EMPTY);
-    if (patt)
-    {
-        while ((*patt != '^' && *patt != '_') && *str == ' ')
-            str++;
-    }
-    else
-        while (*str && *str == ' ')
-            str++;
-    return (str);
-}
-
 char    *pull_token(char *str, size_t i)
 {
     char *new;
@@ -41,17 +26,18 @@ char    *pull_token(char *str, size_t i)
     return (new - tmp);
 }
 
-static size_t get_seq(char *str)
+static short    dont_count(char *meta)
 {
-    size_t i;
+    if (*meta != '@' && *meta != '^' && *meta != '_' && *meta != '.' && *meta != ' ')
+        return (0);
+    return (1);
+}
 
-    i = 0;
-    while (*str >= 48 && *str <= 57)
-    {
-        str++;
-        i++;
-    }
-    return (i);
+static short   can_finish(char *meta)
+{
+    if ((!*meta || *meta == ' ' || *meta == '_'))
+        return (1);
+    return (0);
 }
 
 size_t    layer_parse_two(char *meta, char *str)
@@ -65,23 +51,23 @@ size_t    layer_parse_two(char *meta, char *str)
     {
         if (*meta && special_meta(*meta))
         {
-            str = process_reg(str, meta, "\0");
+            str = process_reg(str, meta);
             if (str)
             {
                 if (*meta == '@')
+                {
                     i = get_seq(str);
+                    str += i;
+                }
                 while (tmp != str)
                 {
                     tmp++;
-                    if (*meta != '^' && *meta != '_' && *meta != '.' && *meta != ' ')
-                        i++;
+                    i = (dont_count(meta)) ? i : ++i;
                 }
             }
             if (!str)
                 return (0);
-            if (*meta == '@' || *meta == '!' || *meta == '.')
-                meta = get_point(meta);
-            meta++;
+            meta = (*meta == '@' || *meta == '!' || *meta == '.') ? get_point(meta) + 1 : ++meta;
         }
         else
         {
@@ -89,131 +75,183 @@ size_t    layer_parse_two(char *meta, char *str)
             meta++;
             i++;
         }
-        if (!*meta || *meta == ' ')
+        if (can_finish(meta))
             return (i);
     }
     return (*meta ? 0 : i);
 }
 
+//char    *pull_expr1(char *patt, t_tk_type t, char *str, t_stx **tr, t_dlist **tok)
+//{
+//    char *new;
+//    size_t i;
+//
+//    if (check_branch(str, tr[FLOWS]))
+//        return (str);
+//    if ((new = check_subbranch(str, tok, tr, FLOWS)) && new != str)
+//        return (new);
+//    if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
+//        str = parse_empty(parse_exec(str, tok), 0x0, tok);
+//    i = layer_parse_two(patt, str);
+//    if (i)
+//    {
+//        new = pull_token(str, --i);
+//        make_token(tok, new, t);
+//        str = str + i;
+//    }
+//    return (str);
+//}
+
+//here we invoke func that parses content between two quotes
+//there we split function in two - one removes quotes and inserts only string in that func, another parses content
+//char    *pull_expr1(char *patt, t_tk_type t, char *str, t_stx **tr, t_dlist **tok)
+//{
+//    char *new;
+//    size_t i;
+//
+//    if (check_branch(str, tr[FLOWS]))
+//        return (str);
+//    if ((new = check_subbranch(str, tok, tr, FLOWS)) && new != str)
+//        return (new);
+//    i = layer_parse_two(patt, str);
+//    if (i)
+//    {
+//        new = pull_token(str, --i);
+//        make_token(tok, new, t);
+//        str = str + i;
+//    }
+//    return (str);
+//}
+
 char    *pull_expr1(char *patt, char *str, t_stx **tr, t_dlist **tok)
 {
-   //char *start;
     char *new;
-    size_t i;
 
-   // start = str;
-    if (check_branch(str, tr[0]))
+    if (check_branch(str, tr[FLOWS]))
         return (str);
-    i = layer_parse_two(patt, str);
-    if (i)
+    if (layer_parse_two(patt, str))
     {
-        new = pull_token(str, --i);
-        make_token(tok, new, TK_EXPR);
-        str = str + i;
+        if ((new = parse_comm(str, tok, tr, IN)) && new == str)
+            return (NULL);
+        if (!new)
+            return (NULL);
+        str = new;
     }
     return (str);
 }
 
 char    *pull_expr2(char *str, t_stx **tr, t_dlist **tok)
 {
-   // char *start;
     char *new;
-    size_t i;
 
-    i = 0;
-   // start = str;
-    if (check_branch(str, tr[0]))
+    if (check_branch(skip_spaces(str), tr[FLOWS]))
         return (str);
-    while (*str && *str != ';')
-    {
-        str++;
-        i++;
-    }
-    if (i)
-    {
-        new = pull_token(str - i, i);
-        make_token(tok, new, TK_EXPR);
-    }
+    if ((new = parse_comm(str, tok, tr, '\n')) && new == str)
+        return (NULL);
+    if (!new)
+        return (NULL);
+    str = new;
+//    if (ft_isspace(*str))
+//        str = parse_empty(str, 0x0, tok);
+    if (!check_valid_sep(tok[1]))
+        return (NULL);
+//    if (*str != '\n' && *str != ';')
+//        return (NULL);
     return (str);
 }
 
-short   graph_end(t_graph *g, char *str)
-{
-    while (*str && (*str == ';' || *str == ' ' || *str == '\t'))
-        str++;
-    if (g->type == TK_FI && !is_token_here(str, "else"))
-        return (1);
-    if (!g->forward && !g->right && !g->left)
-        return (1);
-    return (0);
-}
+//char    *pull_expr2(char *str, t_stx **tr, t_dlist **tok)
+//{
+//    char *new;
+//    size_t i;
+//    short mir;
+//
+//    i = 0;
+//    mir = 0;
+//    if (check_branch(skip_spaces(str), tr[FLOWS]))
+//        return (str);
+//    if ((new = check_subbranch(str, tok, tr, FLOWS)) && new != str)
+//        return (new);
+//    if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
+//        str = parse_empty(parse_exec(str, tok), 0x0, tok);
+//    if ((new = parse_comm(str, tok, tr, 0)) && new == str)
+//        return (NULL);
+//    if (!new)
+//        return (NULL);
+//    str = new;
+//    if (ft_isspace(*str))
+//        str = parse_empty(str, 0x0, tok);
+//    if (*str != '\n' && *str != ';')
+//        return (NULL);
+//    return (parse_sep(str, tok, 0));
+//    while (!mir && *str && !is_sep_no_space(*str))
+//    {
+//        if (*str++ == '\\')
+//            mir = 1;
+//        else
+//            mir = 0;
+//        i++;
+//    }
+//    if (i)
+//        make_token(tok, pull_token(str - i, i), TK_EXPR);
+//    if (!(*str))
+//        return (NULL);
+//    return (str);
+//}
 
-short   graph_forward_only(t_graph *g)
-{
-    if (g->forward && (!g->right && !g->left))
-        return (1);
-    return (0);
-}
+//static char *flows_jump_into_portal(char *str, t_dlist **tok, t_stx **tree)
+//{
+//    if (check_branch(str, tree[MATHS]))
+//        str = block_pass(MATHS, str, tok, tree);
+//    else if (*str && *str == '$' && !is_separator(*(str + 1)))
+//        str = parse_deref(str, tok, tree, 0);
+//    else if (check_branch(str, tree[FUNCS]))
+//        str = block_pass(FUNCS, str, tok, tree);
+//    else if (*str == '(' && check_branch(str, tree[SUBSHS]))
+//        str = block_pass(SUBSHS, str, tok, tree);
+//    return (str);
+//}
 
-char   *check_subbranch(char *str,  t_dlist **tok, t_stx **tree, t_tk_type block)
+//static char *quots_jump_into_portal(char *str, t_dlist **tok, t_stx **tree)
+//{
+//    if (check_branch(str, tree[MATHS]))
+//        str = block_pass(MATHS, str, tok, tree);
+//    else if (*str && *str == '$' && !is_separator(*(str + 1)))
+//        str = parse_deref(str, tok, tree, 0);
+//    else if (check_branch(str, tree[FUNCS]))
+//        str = block_pass(FUNCS, str, tok, tree);
+//    else if (*str == '(' && check_branch(str, tree[SUBSHS]))
+//        str = block_pass(SUBSHS, str, tok, tree);
+//    return (str);
+//}
+
+static char *expr_jump_into_portal(char *str, t_dlist **tok, t_stx **tree)
 {
-    if (block == TK_FLOWS)
-    {
-        if (check_branch(str, tree[3]))
-            str = block_pass(TK_MATHS, str, tok, tree);
-        else if (*str && *str == '$' && !is_separator(*(str + 1)))
-            str = get_deref(str, tree, tok);
-        else if (check_branch(str, tree[6]))
-            str = block_pass(TK_FUNCS, str, tok, tree);
-        else if (*str == '(' && check_branch(str, tree[7]))
-            str = block_pass(TK_SUBSHS, str, tok, tree);
-    }
-    else if (block == TK_EXPRS)
-    {
-        if ((*str == '\'' || *str == '"') && check_branch(str, tree[4]))
-            str = block_pass(TK_QUOTS, str, tok, tree);
-        else if (*str && *str == '$' && !is_separator(*(str + 1)))
-            str = get_deref(str, tree, tok);
-        else if (*str == '(' && check_branch(str, tree[7]))
-            str = block_pass(TK_SUBSHS, str, tok, tree);
-    }
+    if (ft_isspace(*str))
+        str = parse_empty(str, 0x0, tok);
+    else if (is_sep_no_space(*str))
+        str = parse_sep(str, tok, 0);
+    else if (*str == '\'' && check_branch(str, tree[APOFS]))
+        str = block_pass(APOFS, str, tok, tree);
+    else if (*str == '"' && check_branch(str, tree[DQUOTS]))
+        str = block_pass(DQUOTS, str, tok, tree);
+    else if (*str && *str == '$' && !is_separator(*(str + 1)))
+        str = parse_deref(str, tok, tree, 0);
+    else if (*str == '(' && check_branch(str, tree[MATHS]))
+        str = block_pass(MATHS, str, tok, tree);
+    else if (*str == '(' && check_branch(str, tree[SUBSHS]))
+        str = block_pass(SUBSHS, str, tok, tree);
     return (str);
 }
 
-char    *parse_sep(char *str, t_dlist **tok, short i)
+//??? maybe we just remove it?
+char   *check_subbranch(char *str, t_dlist **tok, t_stx **tree, t_tk_type block)
 {
-    char *new;
-    short j;
-
-    if (!(*str))
-        return (str);
-    new = (char *)ft_memalloc(sizeof(char) * 3);
-    while (i != 2 && str[i])
-    {
-        new[i] = str[i];
-        i++;
-    }
-    j = -1;
-    if (!ft_strcmp("&&", new))
-        j = TK_AND;
-    else if (!ft_strcmp("||", new))
-        j = TK_OR;
-    else if (*new == '|' && !(new[1] = '\0'))
-        j = TK_PIPE;
-    else if (*new == '&' && !(new[1] = '\0'))
-        j = TK_BCKR_PS;
-    else if (*new == ';' && !(new[1] = '\0'))
-        j = TK_SEP;
-    else if (*new == '\n' && !(new[1] = '\0'))
-        j = TK_SEP;
-    else
-        ft_strdel(&new);
-    if (j != -1)
-    {
-        make_token(tok, new, j);
-        str = *str ? ++str : str;
-        str = new[1] ? ++str : str;
-    }
+//    if (block == FLOWS)
+//        str = flows_jump_into_portal(str, tok, tree);
+    if (block == EXPRS)
+        str = expr_jump_into_portal(str, tok, tree);
+//    else if (block == DQUOTS)
+//        str = quots_jump_into_portal(str, tok, tree);
     return (str);
-//    return (i > 0 ? kek : block_pass(find_token(tr, str), str, tok, tr));
 }

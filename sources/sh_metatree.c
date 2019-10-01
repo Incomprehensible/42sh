@@ -12,45 +12,46 @@
 
 #include "sh_req.h"
 #include "sh_token.h"
+#include "sh_tokenizer.h"
 
 //some blocks precede others - or have more priority over others. like math blocks comes before envar and we must check
 //it before envar.
 
-t_stx    *init_sep(t_stx *tree)
-{
-    char *sep;
-    char **seps;
-    short i;
-    t_stx *tmp;
-    t_stx *start;
+//t_stx    *init_sep(t_stx *tree)
+//{
+//    char *sep;
+//    char **seps;
+//    short i;
+//    t_stx *tmp;
+//    t_stx *start;
+//
+//    i = 0;
+//    sep = "; | & && ||";
+//    seps = ft_strsplit(sep, ' ');
+//    tree = (t_stx *)malloc(sizeof(t_stx));
+//    tree->meta = seps[i];
+//    tree->prev = NULL;
+//    start = tree;
+//    while (seps[++i])
+//    {
+//        tmp = tree;
+//        tree->next = (t_stx *)malloc(sizeof(t_stx));
+//        tree = tree->next;
+//        tree->meta = seps[i];
+//        tree->next = NULL;
+//        tree->prev = tmp;
+//    }
+//    return (start);
+//}
 
-    i = 0;
-    sep = "; | & && ||";
-    seps = ft_strsplit(sep, ' ');
-    tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = seps[i];
-    tree->prev = NULL;
-    start = tree;
-    while (seps[++i])
-    {
-        tmp = tree;
-        tree->next = (t_stx *)malloc(sizeof(t_stx));
-        tree = tree->next;
-        tree->meta = seps[i];
-        tree->next = NULL;
-        tree->prev = tmp;
-    }
-    return (start);
-}
-
-t_stx    *init_mirror(t_stx *tree)
-{
-    tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = ft_strdup("\\");
-    tree->prev = NULL;
-    tree->next = NULL;
-    return (tree);
-}
+//t_stx    *init_mirror(t_stx *tree)
+//{
+//    tree = (t_stx *)malloc(sizeof(t_stx));
+//    tree->meta = ft_strdup("\\");
+//    tree->prev = NULL;
+//    tree->next = NULL;
+//    return (tree);
+//}
 
 t_stx    *init_scripts(t_stx *tree)
 {
@@ -61,7 +62,7 @@ t_stx    *init_scripts(t_stx *tree)
     t_stx *start;
 
     i = 0;
-    scrp = "if_ then_ else_ fi_ while_ do_ done_ for_ until_";
+    scrp = "if_ then_ else_ fi_ while_ do_ done_ for_ until_ break_ continue_";
     scrps = ft_strsplit(scrp, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
     tree->meta = scrps[i];
@@ -116,7 +117,7 @@ t_stx    *init_math(t_stx *tree)
     t_stx *start;
 
     i = 0;
-    mat = "let_ ((~))";
+    mat = "let_ ((";
     mats = ft_strsplit(mat, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
     tree->meta = mats[i];
@@ -134,31 +135,22 @@ t_stx    *init_math(t_stx *tree)
     return (start);
 }
 
-t_stx    *init_quotes(t_stx *tree)
+t_stx    *init_dquotes(t_stx *tree)
 {
-    char *qu;
-    char **qus;
-    short i;
-    t_stx *tmp;
-    t_stx *start;
-
-    i = 0;
-    qu = "\"~\" '~'";
-    qus = ft_strsplit(qu, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = qus[i];
+    tree->meta = ft_strdup("\"x\"");
     tree->prev = NULL;
-    start = tree;
-    while (qus[++i])
-    {
-        tmp = tree;
-        tree->next = (t_stx *)malloc(sizeof(t_stx));
-        tree = tree->next;
-        tree->meta = qus[i];
-        tree->next = NULL;
-        tree->prev = tmp;
-    }
-    return (start);
+    tree->next = NULL;
+    return (tree);
+}
+
+t_stx    *init_apofs(t_stx *tree)
+{
+    tree = (t_stx *)malloc(sizeof(t_stx));
+    tree->meta = ft_strdup("'x'");
+    tree->prev = NULL;
+    tree->next = NULL;
+    return (tree);
 }
 
 t_stx    *init_envar(t_stx *tree)
@@ -170,7 +162,7 @@ t_stx    *init_envar(t_stx *tree)
     t_stx *start;
 
     i = 0;
-    env = "= +=";
+    env = "= += -=";
     envs = ft_strsplit(env, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
     tree->meta = envs[i];
@@ -224,7 +216,7 @@ t_stx    *init_func(t_stx *tree)
     t_stx *start;
 
     i = 0;
-    fun = "function_ ?(~)^{~}";
+    fun = "function_ ?(~) ?(~)^{z}";
     funs = ft_strsplit(fun, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
     tree->meta = funs[i];
@@ -242,6 +234,42 @@ t_stx    *init_func(t_stx *tree)
     return (start);
 }
 
+t_stx    *init_lambda(t_stx *tree)
+{
+    tree = (t_stx *)malloc(sizeof(t_stx));
+    tree->meta = ft_strdup("{z}");
+    tree->prev = NULL;
+    tree->next = NULL;
+    return (tree);
+}
+
+t_stx    *init_proc(t_stx *tree)
+{
+    char *proc;
+    char **procs;
+    short i;
+    t_stx *tmp;
+    t_stx *start;
+
+    i = 0;
+    proc = "<~(z) >~(z)";
+    procs = ft_strsplit(proc, ' ');
+    tree = (t_stx *)malloc(sizeof(t_stx));
+    tree->meta = procs[i];
+    tree->prev = NULL;
+    start = tree;
+    while (procs[++i])
+    {
+        tmp = tree;
+        tree->next = (t_stx *)malloc(sizeof(t_stx));
+        tree = tree->next;
+        tree->meta = procs[i];
+        tree->next = NULL;
+        tree->prev = tmp;
+    }
+    return (start);
+}
+
 t_stx    *init_subsh(t_stx *tree)
 {
     char *sub;
@@ -251,7 +279,8 @@ t_stx    *init_subsh(t_stx *tree)
     t_stx *start;
 
     i = 0;
-    sub = "$(~) (~)";
+//    sub = "(z) $(z) $(~; (~;";
+    sub = "(x) $(x)";
     subs = ft_strsplit(sub, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
     tree->meta = subs[i];
@@ -272,7 +301,6 @@ t_stx    *init_subsh(t_stx *tree)
 t_stx    *init_comm(t_stx *tree)
 {
     tree = (t_stx *)malloc(sizeof(t_stx));
-    //do we need to malloc it?
     tree->meta = ft_strdup("exec_");
     tree->prev = NULL;
     tree->next = NULL;
@@ -311,17 +339,17 @@ t_stx    *init_comm(t_stx *tree)
 
 void    tree_init(t_stx **tree)
 {
-    //tree[0] = init_sep(tree[0]);
-    //tree[0] = init_mirror(tree[0]);
-    tree[0] = init_scripts(tree[0]);
-    tree[1] = init_envar(tree[1]);
-    tree[2] = init_hedoc(tree[2]);
-    tree[3] = init_math(tree[3]);
-    tree[4] = init_quotes(tree[4]);
-    tree[5] = init_redir(tree[5]);
-    tree[6] = init_func(tree[6]);
-    tree[7] = init_subsh(tree[7]);
-    tree[8] = init_comm(tree[8]);
-   // tree[9] = init_eof(tree[10]);
-    tree[9] = NULL;
+    tree[0] = init_dquotes(tree[0]);
+    tree[1] = init_apofs(tree[0]);
+    tree[2] = init_math(tree[1]);
+    tree[3] = init_subsh(tree[2]);
+    tree[4] = init_scripts(tree[3]);
+    tree[5] = init_envar(tree[4]);
+    tree[6] = init_hedoc(tree[5]);
+    tree[7] = init_proc(tree[6]);
+    tree[8] = init_redir(tree[7]);
+    tree[9] = init_func(tree[8]);
+    tree[10] = init_lambda(tree[9]);
+    tree[11] = init_comm(tree[10]);
+    tree[12] = NULL;
 }

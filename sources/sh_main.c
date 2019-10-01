@@ -13,6 +13,7 @@
 #include "sh_token.h"
 #include "sh_req.h"
 #include "sh_tokenizer.h"
+#include <stdio.h>
 
 char			*sh_readline(void);
 int				sh_tparser(t_dlist **token_list);
@@ -32,6 +33,11 @@ static void		sh_loop()
 		{
 		    free(line);
             continue;
+        }
+		while (token_list[0])
+        {
+		    printf("value %s type %zx\n", ((t_tok *)(token_list[0]->content))->value, ((t_tok *)(token_list[0]->content))->type);
+		    token_list[0] = token_list[0]->next;
         }
 		//sh_tparser(token_list);
 		free(line);
