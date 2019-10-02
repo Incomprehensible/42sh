@@ -245,7 +245,7 @@ short    get_tokens(char *str, t_dlist **token_list)
 
     if (!tree[0])
         tree_init(tree);
-    if (input_finished(str) < 0)
+    if (input_finished(str) < 0 || !(*str))
         return (0);
     while (*str)
     {
@@ -284,7 +284,6 @@ void    concatenate_str(char **last_input, char *str)
     tmp = *last_input;
     *last_input = ft_strjoin(*last_input, str);
     free(tmp);
-    //return (last_input);
 }
 
 short				sh_tokenizer(char *str, t_dlist **token_list)

@@ -14,18 +14,19 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-//открывающая кавычка - пока идет кавычка и дальше не следует пробел и не str[i + 1] == число или буква или !
-//выражение - пока идет разделитель идем вперед?  если бы раздедлитель читаем выражение до разделителя, потом идем вперед по разделителю до пробела ,
-//в другом случае идем до пробела и по пробелу или до разделителя
-//еслши все кавычки закрылись и идет пробел - матан завершился
-//если во втором этапе кавычка выражения открылась и дальше следует пробел - синтакс еррор, нет выражения
-
 short   back_ps_check(t_dlist *token_list)
 {
+    t_tk_type type;
+
     while (token_list)
     {
         while (token_list && TOK_TYPE != HOLE)
+        {
+            type = (TOK_TYPE == TK_EMPTY) ? type : TOK_TYPE;
             token_list = token_list->next;
+        }
+        if (token_list && (type == TK_SEP || type == TK_AND || type == TK_OR || type == TK_PIPE))
+            return (0);
         if (token_list)
             token_list = token_list->next;
         while (token_list && TOK_TYPE == TK_EMPTY)
@@ -44,6 +45,18 @@ short   is_sep_token(t_tk_type type)
     if (type == TK_SEP || type == TK_AND || type == TK_OR || type == TK_BCKR_PS || type == TK_PIPE)
         return (1);
     return (0);
+}
+
+short   tokens_follow(t_dlist *token_list)
+{
+    if (!token_list || !token_list->next)
+        return (0);
+    token_list = token_list->next;
+    while (token_list && TOK_TYPE == TK_EMPTY)
+        token_list = token_list->next;
+    if (!token_list || is_sep_token(TOK_TYPE))
+        return (0);
+    return (1);
 }
 
 short   seps_check(t_dlist *token_list)
@@ -73,6 +86,10 @@ short   seps_check(t_dlist *token_list)
             }
             if (is_sep_token(TOK_TYPE) && TOK_TYPE != TK_BCKR_PS)
                 return (0);
+            if (TOK_TYPE == TK_BCKR_PS && !tokens_follow(token_list))
+                return (0);
+//            if (is_sep_token(TOK_TYPE) && is_sep_token(type))
+//                return (0);
         }
         token_list = token_list->next;
     }

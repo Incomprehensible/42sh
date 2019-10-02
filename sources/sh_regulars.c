@@ -34,14 +34,24 @@ static short is_meta(char *str, char meta)
     return (0);
 }
 
-//changed from is_sep_no_space to is_separator
+short is_ariphmetic(char str)
+{
+    if (str == '<' || str == '>' || str == '=')
+        return (1);
+    return (0);
+}
+
 char *ft_process_s(char *str, char *meta)
 {
     if ((!(*str >= 65 && *str <= 90) && !(*str >= 97 && *str <= 122)) &&
     *str != '_' && !(ft_isdigit(*str)))
         return (0);
     while (*str && !is_separator(*str) && *str != *(meta + 1))
-        str++;
+    {
+        if (is_prefix(*str) || is_ariphmetic(*str))
+            return (NULL);
+        str = (*str == '\\') ? str + 2 : ++str;
+    }
     if (!(*str) && !(is_meta(str, *(meta + 1))))
         return (0);
     return (str);
@@ -130,7 +140,9 @@ char *ft_process_any(char *str, char *meta)
 {
     ++meta;
     while (*str && !is_sep_no_space(*str) && *str != *meta && !(is_meta(str, *meta)))
-        str++;
+    {
+        str = (*str == '\\') ? str + 2 : ++str;
+    }
     if (*str == *meta || (is_meta(str, *meta)))
         return (str);
     return (0);

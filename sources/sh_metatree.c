@@ -14,45 +14,6 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-//some blocks precede others - or have more priority over others. like math blocks comes before envar and we must check
-//it before envar.
-
-//t_stx    *init_sep(t_stx *tree)
-//{
-//    char *sep;
-//    char **seps;
-//    short i;
-//    t_stx *tmp;
-//    t_stx *start;
-//
-//    i = 0;
-//    sep = "; | & && ||";
-//    seps = ft_strsplit(sep, ' ');
-//    tree = (t_stx *)malloc(sizeof(t_stx));
-//    tree->meta = seps[i];
-//    tree->prev = NULL;
-//    start = tree;
-//    while (seps[++i])
-//    {
-//        tmp = tree;
-//        tree->next = (t_stx *)malloc(sizeof(t_stx));
-//        tree = tree->next;
-//        tree->meta = seps[i];
-//        tree->next = NULL;
-//        tree->prev = tmp;
-//    }
-//    return (start);
-//}
-
-//t_stx    *init_mirror(t_stx *tree)
-//{
-//    tree = (t_stx *)malloc(sizeof(t_stx));
-//    tree->meta = ft_strdup("\\");
-//    tree->prev = NULL;
-//    tree->next = NULL;
-//    return (tree);
-//}
-
 t_stx    *init_scripts(t_stx *tree)
 {
     char *scrp;

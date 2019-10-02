@@ -14,12 +14,6 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-//<><(echo);
-// <<<(echo)
-//<<(echo)
-//<< (echo)
-//>>(echo);
-//>> (echo);
 static char *valid_sign(char *str)
 {
     char c;
@@ -27,7 +21,7 @@ static char *valid_sign(char *str)
 
     c = *str;
     i = 0;
-    while (*str && (!(ft_isspace(*str)) && *str != '('))
+    while (*str && !(ft_isspace(*str)) && *str != '(')
     {
         if (*str != c)
             return (NULL);

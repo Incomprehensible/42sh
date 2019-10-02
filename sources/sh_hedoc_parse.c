@@ -38,27 +38,9 @@ char    *pull_word(char *str, t_dlist **tok, short i)
     return (str);
 }
 
-static char *pull_command(char *str, t_dlist **tok)
-{
-    size_t comm;
-    short flag;
-
-    comm = 0;
-    flag = 1;
-    while (*str && !(flag && ft_isspace(*str)) && !(flag && *str == '<'))
-    {
-        flag = (*str == '\\' && flag) ? 0 : 1;
-        str++;
-        comm++;
-    }
-    if (comm)
-        make_token(tok, pull_token(str - comm, comm), TK_EXPR);
-    return (skip_spaces(str));
-}
-
 char*   parse_hedoc(char *str, t_dlist **tok, t_stx **tree, short i)
 {
-    str = pull_command(str, tok);
+    str = parse_comm(str, tok, tree, '<');
     while (*str++ == '<')
         i++;
     if (i > 3 || i < 2)
@@ -71,62 +53,3 @@ char*   parse_hedoc(char *str, t_dlist **tok, t_stx **tree, short i)
         return (NULL);
     return (pull_word(str, tok, 0));
 }
-
-//static char     *pull_word(char *str)
-//{
-//    size_t  i;
-//    short   size;
-//
-//    i = ft_strlen(str) - 1;
-//    size = 0;
-//    while (i && str[i] != '<')
-//        i--;
-//    while (i && size <= 1)
-//    {
-//        while (i && str[i] == '<')
-//        {
-//            i--;
-//            size++;
-//        }
-//        if (size > 1)
-//            break;
-//        else
-//            size = 0;
-//    }
-//    if (!i)
-//        return (NULL);
-//    str += i + size + 1;
-//    i = 0;
-//    while (*str && !(is_separator(str[i])))
-//    {
-//        str++;
-//        i++;
-//    }
-//    return (pull_token(str - i, i));
-//}
-
-//static short    get_hedoc(char *str, int id)
-//{
-//    static char *word;
-//
-//    if (!id)
-//    {
-//        word = pull_word(str);
-//        if (!word)
-//            return (-1);
-//    }
-//    else
-//    {
-//        str += ft_strlen(str) - 1;
-//        while (*str != '<')
-//        {
-//            if (!(ft_strcmp(word, str)) && *(str - 1) != '<')
-//            {
-//                free(word);
-//                return (1);
-//            }
-//            str--;
-//        }
-//    }
-//    return (0);
-//}

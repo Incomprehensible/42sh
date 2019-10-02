@@ -241,6 +241,8 @@ static char *expr_jump_into_portal(char *str, t_dlist **tok, t_stx **tree)
         str = block_pass(MATHS, str, tok, tree);
     else if (*str == '(' && check_branch(str, tree[SUBSHS]))
         str = block_pass(SUBSHS, str, tok, tree);
+    else if (is_token_here(str, "exec"))
+        str = parse_exec(str, tok);
     return (str);
 }
 

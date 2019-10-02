@@ -173,10 +173,12 @@ static char *fd_pull(t_graph *g, char *s, t_dlist **tok)
     return (s);
 }
 
-static char *redir_pull(t_graph *g, char *s, t_dlist **tok)
+static char *redir_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
 {
     short   i;
 
+    if (layer_parse_one("<(z)", s) || layer_parse_one(">(z)", s))
+        return (parse_proc(s, tok, tr, PROF));
     while (g && !(i = layer_parse_two(g->patt, s)))
         g = g->next;
     if (i && i < 3)
@@ -199,15 +201,9 @@ static char *in_redir_blocks(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
             s = parse_proc(s, tok, tr, PROF);
     }
     else
-        s = redir_pull(g, s, tok);
+        s = redir_pull(g, s, tr, tok);
     return (s);
 }
-
-//char *pull_exec(char *s, size_t i, size_t space, t_dlist **tok)
-//{
-//    make_token(tok, pull_token(s - i, i - space), TK_EXEC);
-//    return (parse_empty(s, 0x0, tok));
-//}
 
 size_t remove_spaces(char *str, size_t len)
 {
@@ -237,8 +233,6 @@ static char *parse_expr(char *s, t_dlist **tok)
     i = 0;
     flag = 0;
     space = 0;
-//    if (is_token_here(s, "exec") && *s && *(s + 1) != '\\')
-//        s = skip_spaces(parse_exec(s, tok));
     while (*s && *s != '&' && *s != '<' && *s != '>' && *s != ';' && !(*s >= 48 && *s <= 57))
     {
         flag = (ft_isspace(*s)) ? flag : 1;
@@ -278,10 +272,12 @@ static char *redirect_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
     return (s);
 }
 
-static short    stop_point(t_tk_type tk)
+static short    stop_point(t_tk_type tk, t_dlist *token_list)
 {
-    if (tk == TK_EXPR || tk == TK_RD_A || tk == TK_RD_RW || tk == TK_RD_W ||
-    tk == TK_RD_R || tk == TK_RD_R || tk == TK_RD_W)
+    if (token_list && (TOK_TYPE == TK_PROF_OUT || TOK_TYPE == TK_PROF_IN || TOK_TYPE == TK_PROC_IN || TOK_TYPE == TK_PROC_OUT))
+        return (1);
+    else if ((tk == TK_RD_A || tk == TK_RD_RW || tk == TK_RD_W ||
+    tk == TK_RD_R || tk == TK_RD_R || tk == TK_RD_W))
         return (0);
     return (1);
 }
@@ -296,7 +292,7 @@ char        *redir_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
         return (sig ? tmp : NULL);
     s = parse_empty(tmp, g->patt, tok);
     sig = 1;
-    if ((!(*s) || is_sep_no_space(*s)) && (stop_point(g->type)))
+    if ((!(*s) || is_sep_no_space(*s)) && (stop_point(g->type, tok[1])))
         return (s);
     if (graph_forward_only(g) && !(sig = 0))
         return (redir_traverse(g->forward, s, tok, tr));

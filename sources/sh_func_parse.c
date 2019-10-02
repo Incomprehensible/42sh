@@ -26,10 +26,6 @@ static char *func_args(char *str, t_dlist **tok, t_stx **tr)
         str = (str) ? skip_spaces(str) : str;
         if (!sep_detected(tok[1], ';') || !check_valid_sep(tok[1]))
             return (NULL);
-        //check tok instead
-//        if (*str != ';' && (*str && *str != '\\'))
-//            return (0);
-        //str = parse_sep(str, tok, 0);
         str = skip_spaces(str);
     }
     if (!(*str))
@@ -37,30 +33,6 @@ static char *func_args(char *str, t_dlist **tok, t_stx **tr)
     make_token(tok, NULL, TK_FEND);
     return (str + 1);
 }
-
-//static char *func_args(char *str, t_dlist **tok, t_stx **tr)
-//{
-//    str++;
-//    while (*str && *str != '}')
-//    {
-//        if (check_branch(str, tr[FLOWS]))
-//            str = block_pass(0, str, tok, tr);
-//        else
-//            str = parse_comm(str, tok, tr, ';');
-//        str = skip_spaces(str);
-//        if (!sep_detected(tok[1], ";"))
-//            return (NULL);
-//        //check tok instead
-////        if (*str != ';' && (*str && *str != '\\'))
-////            return (0);
-//        //str = parse_sep(str, tok, 0);
-//        str = skip_spaces(str);
-//    }
-//    if (!(*str))
-//        return (0);
-//    make_token(tok, NULL, TK_FEND);
-//    return (str + 1);
-//}
 
 static char *get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)
 {
@@ -73,9 +45,9 @@ static char *get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)
     {
         if ((i = layer_parse_two(reg1, str)))
         {
+            i = (*(str + i - 1) == ')') ? i - 2 : i;
             make_token(tok, pull_token(str, i), TK_NAME);
-            while (*str && !(ft_isspace(*str)))
-                str++;
+            str += ( *(str + i) == '(') ? i + 2 : i;
             str = parse_empty(str, reg1, tok);
             if ((layer_parse_two(reg2, str)))
                 return (func_args(str, tok, tr));
@@ -87,9 +59,7 @@ static char *get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)
             }
         }
     }
-    else
-        return (NULL);
-    return (str + i);
+    return (NULL);
 }
 
 char*   parse_func(char *str, t_dlist **tok, t_stx **tree, short ind)
@@ -101,7 +71,7 @@ char*   parse_func(char *str, t_dlist **tok, t_stx **tree, short ind)
     patt0 = "function_";
     patt2 = "?()_";
     if ((tmp = reg_process(patt0, TK_FUNCTION, str, tok, tree)) != str && tmp)
-        return (get_function(str + 8, "! ", tok, tree));
+        return (get_function(str + 8, "? ", tok, tree));
     else if ((layer_parse_two(patt2, str)))
     {
         make_token(tok, NULL, TK_FUNCTION);

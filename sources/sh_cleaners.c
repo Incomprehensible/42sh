@@ -16,16 +16,6 @@
 
 #include <stdio.h>
 
-//static void    get_rid_of_holes(t_dlist *token_list)
-//{
-//    while (token_list)
-//    {
-//        if (TOK_TYPE == HOLE)
-//            TOK_TYPE = TK_SEP;
-//        token_list = token_list->prev;
-//    }
-//}
-
 void    get_rid_of_holes(t_dlist *token_list)
 {
     t_dlist *tmp_next;
@@ -47,27 +37,6 @@ void    get_rid_of_holes(t_dlist *token_list)
         token_list = token_list->next;
     }
 }
-
-//void    get_rid_of_holes(t_dlist *token_list)
-//{
-//    t_dlist *tmp_next;
-//    t_dlist *tmp_prev;
-//
-//    while (token_list)
-//    {
-//        if (TOK_TYPE == HOLE)
-//        {
-//            tmp_next = token_list->next;
-//            tmp_prev = token_list->prev;
-//            free(token_list->content);
-//            free(token_list);
-//            tmp_prev->next = tmp_next;
-//            if (tmp_next)
-//                tmp_next->prev = tmp_prev;
-//        }
-//        token_list = token_list->prev;
-//    }
-//}
 
 static void    get_rid_of_void(t_dlist *token_list)
 {
@@ -131,8 +100,6 @@ short    list_ready_to_go(t_dlist **token_list)
     t_dlist *start;
 
     get_rid_of_holes(token_list[0]);
-//    if (!seps_check(token_list[0]))
-//        return (0);
     get_rid_of_void(token_list[0]);
     exec_on(token_list[0]);
     trim_separators(token_list[0]);
@@ -140,12 +107,6 @@ short    list_ready_to_go(t_dlist **token_list)
     while (start->next)
         start = start->next;
     token_list[1] = start;
-//    printf("value %s type %zx\n", ((t_tok *)(token_list[1]->content))->value, ((t_tok *)(token_list[1]->content))->type);
-//    while (token_list[0])
-//    {
-//        printf("value %s type %zx\n", ((t_tok *)(token_list[0]->content))->value, ((t_tok *)(token_list[0]->content))->type);
-//        token_list[0] = token_list[0]->next;
-//    }
     if (!seps_check(token_list[0]))
         return (0);
     return (1);

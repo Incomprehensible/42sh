@@ -14,6 +14,12 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
+short    unexpected_token(void)
+{
+    ft_putstr("bash: syntax error occured.\n");
+    return (-1);
+}
+
 size_t   mirror_passes(char *str)
 {
     size_t i;
@@ -219,10 +225,69 @@ int  validate_cycles(char *str, char *meta)
 short   scripts_closed(char *str)
 {
     if (validate_ifs(str) > 0)
-        return (1);
+        return (0);
     if (validate_cycles(str, "done") > 0)
-        return (1);
+        return (0);
+    return (1);
+}
+
+short is_func_fucking_closed(char *str)
+{
+    if (!(*str))
+        return (0);
+    while (*str && *str != '}')
+        str += (*str == '\\') ? mirror_passes(str) : 1;
+    if (!(*str))
+        return (0);
+    return (1);
+}
+
+char    *skip_spaces_newline(char *str)
+{
+    while (*str && (*str == ' ' || *str == '\t' || *str == '\n'))
+        str++;
+    return (str);
+}
+
+short func_really_closed(char *str)
+{
+    str = skip_spaces_newline(str);
+    if (!(*str))
+        return (0);
+    if (*str == '{')
+        return (is_func_fucking_closed(str + 1));
     return (0);
+}
+
+short func_is_closed(char *str)
+{
+    size_t i;
+
+    i = 0;
+    str = skip_spaces(str);
+    if (!*str)
+        return (1);
+//    if ((i = layer_parse_two("?()_", str)))
+//        return (func_really_closed(str + i));
+    if ((i = layer_parse_two("? ", str)))
+        return (func_really_closed(str + i));
+    return (1);
+}
+
+short   funcs_closed(char *str)
+{
+    size_t i;
+
+    str = skip_spaces(str);
+    while (*str)
+    {
+        if (is_token_here(str, "function"))
+            return (func_is_closed(str + 8));
+        else if ((i = layer_parse_two("?()_", str)))
+            return (func_really_closed(str + i));
+        str += (*str == '\\') ? mirror_passes(str) : 1;
+    }
+    return (1);
 }
 
 short   input_finished(char *str)
@@ -233,7 +298,9 @@ short   input_finished(char *str)
         return (-1);
     if (!input_closed(str))
         return (-1);
-    if (scripts_closed(str))
+    if (!scripts_closed(str))
+        return (-1);
+    if (!funcs_closed(str))
         return (-1);
     return (1);
 }

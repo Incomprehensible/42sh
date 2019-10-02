@@ -25,16 +25,16 @@ char    *parse_exec(char *str, t_dlist **tok)
        str = parse_empty(str, 0x0, tok);
     while (*str && !is_sep_no_space((*str)))
     {
-        if (*str && *str == '\\')
+        if ((*str && *str == '\\') || ((*str == '<' || *str == '>') && *(str + 1) == '&'))
         {
-            i++;
             str++;
+            i++;
         }
         str++;
         i++;
     }
     make_token(tok, pull_token(str - i, i), TK_EXPR);
-    return (parse_sep(str + i, tok, 0));
+    return (parse_sep(str, tok, 0));
 }
 
 static short    is_and_or(char *str)
@@ -44,10 +44,17 @@ static short    is_and_or(char *str)
     return (0);
 }
 
+static short valid_deref(char *str)
+{
+    if (*str == '$' && *(str + 1) != '=' && !ft_isspace(*(str + 1)))
+        return (1);
+    return (0);
+}
+
 short   time_for_portal(char *str)
 {
-    if ((*str == '$' && *(str + 1) != '=') || *str == '(' || *str == '"' || *str == '\'' ||
-    *str == ';' || *str == '\n' ||  ft_isspace(*str) || is_and_or(str))
+    if (valid_deref(str) || *str == '(' || *str == '"' || *str == '\'' ||
+    *str == ';' || *str == '\n' ||  ft_isspace(*str) || is_and_or(str) || is_token_here(str, "exec"))
         return (1);
     return (0);
 }

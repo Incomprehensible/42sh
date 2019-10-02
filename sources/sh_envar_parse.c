@@ -21,56 +21,12 @@ short   is_separator(char str)
     return (1);
 }
 
-//char    *get_deref(char *str, t_stx **tr, t_dlist **tok)
-//{
-//    size_t i;
-//
-//    i = 0;
-//    make_token(tok, ft_strdup("$"), TK_DEREF);
-//    str++;
-//    if (*str && *str == '(' && check_branch(str, tr[8]))
-//        return (block_pass(SUBSHS, str, tok, tr));
-//    while (*str && !(is_separator(*str)))
-//    {
-//        str++;
-//        i++;
-//    }
-//    make_token(tok, pull_token(str - i, i), TK_NAME);
-//    return (parse_sep(str, tok, 0));
-//}
-
 static short    is_assign(char c)
 {
     if (c != '=' && c != '+' && c != '-')
         return (0);
     return (1);
 }
-
-//static char    *get_envar(char *str, t_stx **tr, t_dlist **tok, short i)
-//{
-//    while (*str && !is_separator(*str) && !is_assign(*str))
-//    {
-//        str = (*str == '\\' && *str) ? str + 2 : ++str;
-//        i++;
-//    }
-//    if (!(*str) || is_separator(*str))
-//        return (parse_comm(str - i, tok, tr, 0));
-//    make_token(tok, pull_token(str - i, i), TK_VAR);
-//    make_token(tok, pull_token(str, 1), TK_ASSIGM);
-//    str = (*str == '+' || *str == '-') ? str + 2 : ++str;
-//    if (*str == '\\' && (*(str + 1) == ' ' || *(str + 1) == '\t'))
-//        str += 2;
-//    else if (*str == '$' && *(str - 1) != '\\' && !is_separator(*(str + 1)))
-//        return (parse_deref(str, tok, tr, 0));
-//    i = 0;
-//    while (*str && !(is_separator(*str)))
-//    {
-//        str++;
-//        i++;
-//    }
-//    i ? make_token(tok, pull_token(str - i, i), TK_VALUE) : make_token(tok, NULL, TK_VALUE);
-//    return (str);
-//}
 
 static short    validate_envar(char *str)
 {
@@ -220,9 +176,7 @@ char*   parse_envar(char *str, t_dlist **tok, t_stx **tree, short i)
 {
     char *patt;
     char *tmp;
-    //   char *patt2;
 
-    // patt2 = "z = z";
     patt = "?= ";
     str = parse_empty(str, 0x0, tok);
     if (layer_parse_two(patt, str))
@@ -244,28 +198,3 @@ char*   parse_envar(char *str, t_dlist **tok, t_stx **tree, short i)
         return (NULL);
     return (str);
 }
-
-//char*   parse_envar(char *str, t_dlist **tok, t_stx **tree, short i)
-//{
-//    char *patt;
-// //   char *patt2;
-//
-//   // patt2 = "z = z";
-//    patt = "?= ";
-//    str = parse_empty(str, 0x0, tok);
-//    if (layer_parse_two(patt, str))
-//    {
-//        if (!validate_envar(str))
-//            return (parse_comm(str, tok, tree, i));
-//        if (following_pipe(tok[1]))
-//            return (NULL);
-//        str = get_envar(str, tree, tok, i);
-//        if (!str || !validate_var(tok[1]))
-//            return (NULL);
-//    }
-////    else if (layer_parse_two(patt2, str))
-//    else
-//        return (parse_comm(str, tok, tree, i));
-//    if (!str)
-//    return (str ? parse_sep(str, tok, i) : str);
-//}
