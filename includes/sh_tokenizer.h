@@ -156,6 +156,7 @@ short       special_case(char br, char *str);
 short       check_valid_sep(t_dlist *token_list);
 short       back_ps_check(t_dlist *token_list);
 short       seps_check(t_dlist *token_list);
+short       is_prefix(char str);
 
 //more comfortable form of type cast
 # define TOK_TYPE ((t_tok *)(token_list->content))->type
