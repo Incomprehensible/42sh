@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/21 20:32:09 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/29 02:55:10 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ typedef size_t		t_tk_type;
 #define TK_CONTIN	(t_tk_type)0x0000000080000000 // 2 147 483 648
 #define TK_EXEC		(t_tk_type)0x0000000100000000 // 4 294 967 296
 #define TK_FUNCTION	(t_tk_type)0x0000000200000000 // 8 589 934 592
-#define TK_APOF		(t_tk_type)0x0000000400000000 // 17 179 869 184
-#define TK_DQUOTE	(t_tk_type)0x0000000800000000 // 34 359 738 368
+#define TK_APOF		(t_tk_type)0x0000000400000000 // 17 179 869 184 !DU
+#define TK_DQUOTE	(t_tk_type)0x0000000800000000 // 34 359 738 368 !DU
 #define TK_EOF		(t_tk_type)0x0000001000000000 // 68 719 476 736
 #define TK_FEND		(t_tk_type)0x0000002000000000 // 137 438 953 472
 #define TK_VAR		(t_tk_type)0x0000004000000000 // 274 877 906 944

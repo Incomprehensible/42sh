@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 18:29:07 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/05 04:12:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@
 # include <sys/types.h>
 # include <signal.h>
 # include "ft_mem.h"
+# include "ft_dlist.h"
 
 # define SYS_FDS_USR_LIMIT 40
 # define SYS_PIPES_SIZE 1024
+# define SYS_PRGS_SIZE 1024
 
 # define CHECK_INTS_P 0x0000008000000080
 
@@ -44,6 +46,31 @@
 # define SYS_TCH_SOC 0xC0
 # define SYS_TCH_WHT 0xE0
 
+# define PS_M_FG 1
+# define PS_M_BG 2
+
+# define PS_S_RUN 4
+# define PS_S_STP 3
+# define PS_S_SIG 2
+# define PS_S_DON 1
+
+typedef struct	s_proc_grp
+{
+	t_dlist		*members;
+	char		*input_line;
+	pid_t		pgid;
+	int			mode;
+	int			state;
+}				t_pgrp;
+
+typedef struct	s_proc_ds
+{
+	pid_t		pid;
+	int			state;
+}				t_ps_d;
+
+t_pgrp		*p_table[SYS_PRGS_SIZE];
 char		sys_pipes[SYS_PIPES_SIZE];
+pid_t		hot_gid;
 
 #endif

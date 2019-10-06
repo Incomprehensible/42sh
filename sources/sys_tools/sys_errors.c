@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:37:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 16:55:35 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/02 05:17:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 char		*errmess[ERR_CNT] =
 {
-	"UNDEFINED ERROR",
+	"",
 	"Command not found",
 	"Fork call failed",
 	"Exec call failed",
@@ -76,9 +76,9 @@ int		sys_error_handler(char *descr, int ecode, ENV *envr)
 	if (descr)
 	{
 		dstr_insert_str(message, descr, MAX_LL);
-		dstr_insert_str(message, ": ", MAX_LL);
+		ecode ? dstr_insert_str(message, ": ", MAX_LL) : 0;
 	}
-	dstr_insert_str(message, sys_get_std_message(ecode), MAX_LL);
+	ecode ? dstr_insert_str(message, sys_get_std_message(ecode), MAX_LL) : 0;
 	sys_error_message(message->txt, message->strlen);
 	dstr_del(&message);
 	return (-ecode);

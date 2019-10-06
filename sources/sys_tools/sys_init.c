@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/27 16:20:43 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/06 23:21:17 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 
 #include "ft_mem.h"
 #include "env.h"
+
+#include <stdio.h>
 
 int			sys_core_set_init(ENV *env, char **argv, int argc)
 {
@@ -63,8 +65,24 @@ int			sys_var_init(ENV *env, char **argv, int argc)
 	return (0);
 }
 
+void		sighand(int s)
+{
+	printf("SIGNAL input: %d\n", s);
+	signal(s, SIG_DFL);
+}
+
 int			sys_init(void)
 {
+	extern t_pgrp	*p_table[SYS_PRGS_SIZE];
+	extern char		sys_pipes[SYS_PIPES_SIZE];
+	
+	// Здесь будет идти установка стандартных обработчиков сигналов!
+	signal(SIGTSTP, SIG_IGN);
+	//signal(SIGCONT, sighand);
+	//signal(SIGCHLD, sighand);
+	//signal(SIGTTIN, sighand);
+	signal(SIGTTOU, SIG_IGN);
+	ft_bzero(p_table, SYS_PRGS_SIZE * sizeof(t_pgrp *));
 	ft_bzero(sys_pipes, SYS_PIPES_SIZE * sizeof(char));
 	return (0);
 }

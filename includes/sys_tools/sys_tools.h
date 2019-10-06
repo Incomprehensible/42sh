@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/27 20:40:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/06 23:33:52 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <signal.h>
 
 # include "sys_tools/sys_sh_configs.h"
+# include "sys_tools/sys_hidden.h"
 
 int			sys_create_pipe(int	*a);
 int			sys_destroy_pipe(int p);
@@ -91,5 +92,17 @@ DSTRING		*sys_get_prompt_num(ENV *envr, char type);
 int			sys_put_prompt(ENV *envr, char type);
 
 int			sys_write_history(DSTRING *line, ENV *envr);
+
+int			sys_prc_create(pid_t pid, t_dlist **members);
+t_pgrp		*sys_prg_create(pid_t prg, t_dlist *prcs, char *str, int mode);
+t_pgrp		*sys_prg_get(pid_t prg);
+int			sys_delete_prg(t_pgrp **prg);
+int			sys_hot_charge(pid_t pid, int mode, char *str);
+int			sys_hot_off(int ret_status);
+// DEBUG
+int			DBG_SYS_SNAP(void);
+
+int			sys_wait_ptable(int *status, pid_t lpid);
+
 
 #endif

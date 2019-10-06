@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/25 16:48:44 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/06 23:41:41 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #include "sh_token.h"
 #include "ft_io.h"
 #include "sys_tools/sys_tools.h"
+
+#include "stdio.h"
+
+extern pid_t	hot_gid;
 
 int				prs_execute_expr(ETAB **etab ,ENV *envs)
 {
@@ -32,17 +36,29 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 		etab_row = (ETAB *)ft_dlstshift((t_dlist **)etab);
 		if (etab_row->type == ET_EXPR)
 			cpid = exe_execute_expr(etab_row->instruction, envs, &status);
-		if (etab_row->type == ET_PIPE)
+		if (etab_row->type == ET_PIPE && !(cpid = 0))
 			ft_dlstunshift((t_dlist **)&pipe_free, (t_dlist *)etab_row);
 		else
 		{
 			cpid < 0 ? prs_error_handler(-1 * cpid, &status, envs, etab_row->instruction) : 0;
 			ft_dlst_delcut((t_dlist **)&etab_row, et_rm_ett);
 		}
+		if (cpid > 0)
+		{
+			// SETTING PGID FOR ALL GROUP PIDS AND TAKING THEM INTO P_TABLE
+			sys_hot_charge(cpid, PS_M_FG, 0);
+			setpgid(cpid, hot_gid);
+		}
 	}
 	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);
 	if (cpid > 0)
-		signal_v = sys_wait_cps(cpid, &status);
+	{
+		// if we have a forked process group, we give terminal control to it.
+		tcsetpgrp(0, hot_gid);
+	}
+	signal_v = sys_wait_ptable(&status, cpid);
+	DBG_SYS_SNAP();
+	sys_hot_off(2);
 	prs_set_last_status(&status, envs);
 	sys_kill_pipes();
 	return (status);

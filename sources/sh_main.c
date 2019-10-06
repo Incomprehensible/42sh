@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/27 20:48:42 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/06 23:42:57 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,19 +91,89 @@ int				main(const int argc, char **argv, char **envp)
 
 	UT_TOK_INIT();
 
-	UT_TOK_CR(TK_VAR, "PATH");
-	UT_TOK_CR(TK_ASSIGM, "=");
+/* TEST
+	UT_TOK_CR(TK_FUNCTION, 0);
+	UT_TOK_CR(TK_NAME, "funct");
+
+	UT_TOK_CR(TK_FOR, 0);
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_MATH, "a=0; a<10; ++a");
+	UT_TOK_CR(TK_SEP, 0);
+	UT_TOK_CR(TK_DO, 0);
+
+	UT_TOK_CR(TK_IF, 0);
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_MATH, "a % 2 == 0");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_THEN, 0);
+
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "echo");
+	UT_TOK_CR(TK_EMPTY, 0);
 	UT_TOK_CR(TK_DEREF, 0);
-	UT_TOK_CR(TK_NAME, "HOME");
-	UT_TOK_CR(TK_VALUE, "/Desktop/my_own_bash");
+	UT_TOK_CR(TK_NAME, "1");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "KO");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_ELSE, 0);
+
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "echo");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_DEREF, 0);
+	UT_TOK_CR(TK_NAME, "2");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "OK");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_FI, 0);
+
+	UT_TOK_CR(TK_IF, 0);
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_MATH, "a == 5");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_THEN, 0);
+
+	UT_TOK_CR(TK_BREAK, 0);
+
+	UT_TOK_CR(TK_FI, 0);
+
+	UT_TOK_CR(TK_DONE, 0);
+
+	UT_TOK_CR(TK_FEND, 0);
+
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "echo");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "HELLO");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "funct");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "LOL");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_EXPR, "NELOL");
+
+	UT_TOK_CR(TK_EOF, 0);
+** END OF TEST*/
+
+	UT_TOK_CR(TK_SUBSH, "ls; ls; ls;");
+	UT_TOK_CR(TK_SEP, 0);
+
+	UT_TOK_CR(TK_EXPR, "echo");
+	UT_TOK_CR(TK_EMPTY, 0);
+	UT_TOK_CR(TK_DEREF, 0);
+	UT_TOK_CR(TK_NAME, "?");
 	UT_TOK_CR(TK_EOF, 0);
 
 	sh_tparse(UT_TOK, &env, TK_EOF, &status);
-
 	UT_TOK_END();
 
 	
-	sh_loop(&env);
+	// sh_loop(&env);
 	// TERMINATE
 	et_rm_clear_env(&env);
 	return (0);

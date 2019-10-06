@@ -6,11 +6,12 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 17:59:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 18:00:06 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/09/29 01:17:36 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "sys_tools/sys_errors.h"
 
 static t_dlist	*prs_f_dup_tks(t_dlist *tks, t_dlist **fcode)
 {
@@ -23,13 +24,13 @@ static t_dlist	*prs_f_dup_tks(t_dlist *tks, t_dlist **fcode)
 	{
 		val = 0;
 		if (!(ntok = ft_memalloc(sizeof(t_tok))))
-			return (0);
+			sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0");
 		if (tok->value && !(val = ft_strdup(tok->value)))
-			return (0);
+			sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0");
 		ntok->value = val;
 		ntok->type = tok->type;
 		if (!(instr = ft_dlstnew_cc(ntok, tks->size)))
-			return (0);
+			sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0");
 		ft_dlstpush(fcode, instr);
 		tks = tks->next;
 		if (tok->type == TK_FEND)
@@ -47,7 +48,8 @@ t_dlist			*prs_func(t_dlist *tks, ENV *envr)
 
 	tks = tks->next;
 	tok = tks->content;
-	func = ft_memalloc(sizeof(FUNC)); // TODO: MALLOC CHECKING
+	if (!(func = ft_memalloc(sizeof(FUNC))))
+		sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0"); // TODO: MALLOC CHECKING
 	node = ft_avl_node_cc(tok->value, func, sizeof(FUNC));
 	tks = tks->next;
 	if (!(tks = prs_f_dup_tks(tks, &func->func_code)))
