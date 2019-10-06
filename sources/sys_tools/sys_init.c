@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/06 23:21:17 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 01:36:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int			sys_init(void)
 	signal(SIGTSTP, SIG_IGN);
 	//signal(SIGCONT, sighand);
 	//signal(SIGCHLD, sighand);
-	//signal(SIGTTIN, sighand);
+	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	ft_bzero(p_table, SYS_PRGS_SIZE * sizeof(t_pgrp *));
 	ft_bzero(sys_pipes, SYS_PIPES_SIZE * sizeof(char));

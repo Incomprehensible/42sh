@@ -10,3 +10,10 @@ _test_work_space
 exmpl.c
 war_and_pice.txt
 histr.txt
+.idea
+.vscode
+cmake*
+2
+Cmake*
+.DS_Store
+_organizer

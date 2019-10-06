@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/06 23:41:41 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 01:45:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 		tcsetpgrp(0, hot_gid);
 	}
 	signal_v = sys_wait_ptable(&status, cpid);
-	DBG_SYS_SNAP();
+	// DBG_SYS_SNAP();
 	sys_hot_off(2);
 	prs_set_last_status(&status, envs);
 	sys_kill_pipes();

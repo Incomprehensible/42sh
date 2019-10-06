@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:13:30 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 18:49:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 01:18:49 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 long			math_eval(DSTRING *expr, ENV *envr);
 
 size_t			op_search(DSTRING *expr, char *op, size_t op_len);
-int				skip_brackets(char *str, size_t *ind);
+int				m_skip_brackets(char *str, size_t *ind);
 void			skip_word(char *str, size_t *ind);
 void			skip_alnums_n_space(char *str, size_t *ind);
-void			skip_spaces(char *str, size_t *ind);
+void			m_skip_spaces(char *str, size_t *ind);
 
 DSTRING			*get_res_var(long res);
 char			*get_name_var(char *str_xp);

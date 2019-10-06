@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:24:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 18:49:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 01:18:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ long	dec_inc_do(DSTRING *ex, ENV *envr, int is_dec)
 
 	res = 0;
 	ind = 0;
-	skip_spaces(ex->txt, &ind);
+	m_skip_spaces(ex->txt, &ind);
 	name = get_name_var(ex->txt);
 	dstr = env_get_variable(name, envr);
 	res = ft_atoll_base(dstr->txt, 10);
@@ -45,7 +45,7 @@ long	mop_inc(DSTRING *ex, ENV *envr)
 	size_t	ind;
 
 	ind = 0;
-	skip_spaces(ex->txt, &ind);
+	m_skip_spaces(ex->txt, &ind);
 	if (ft_isalpha(ex->txt[ind]))
 		return (dec_inc_do(ex, envr, 0));
 	res = 1 + math_eval(ex, envr);
@@ -59,7 +59,7 @@ long	mop_dec(DSTRING *ex, ENV *envr)
 	size_t	ind;
 
 	ind = 0;
-	skip_spaces(ex->txt, &ind);
+	m_skip_spaces(ex->txt, &ind);
 	if (ft_isalpha(ex->txt[ind]))
 		return (dec_inc_do(ex, envr, 1));
 	res = -1 + math_eval(ex, envr);

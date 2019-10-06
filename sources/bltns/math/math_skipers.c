@@ -6,13 +6,13 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:19:59 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 18:20:43 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 01:18:23 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn_math/math_hidden.h"
 
-int		skip_brackets(char *str, size_t *ind)
+int		m_skip_brackets(char *str, size_t *ind)
 {
 	int		br_cnt;
 
@@ -43,7 +43,7 @@ void	skip_alnums_n_space(char *str, size_t *ind)
 		++(*ind);
 }
 
-void	skip_spaces(char *str, size_t *ind)
+void	m_skip_spaces(char *str, size_t *ind)
 {
 	while (ft_isspace(str[*ind]))
 		++(*ind);
@@ -60,7 +60,7 @@ size_t	op_search(DSTRING *expr, char *op, size_t op_len)
 	while (ind < expr->strlen)
 	{
 		skip_alnums_n_space(stri, &ind);
-		if (stri[ind] == '(' && !skip_brackets(stri, &ind))
+		if (stri[ind] == '(' && !m_skip_brackets(stri, &ind))
 			return (0);
 		if (stri[ind] == ')')
 			return (0);

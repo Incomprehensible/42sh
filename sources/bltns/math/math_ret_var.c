@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:22:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 18:22:59 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 01:18:27 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*get_name_var(char *str_xp)
 	size_t	subs[2];
 
 	ind = 0;
-	skip_spaces(str_xp, &ind);
+	m_skip_spaces(str_xp, &ind);
 	subs[0] = ind;
 	skip_word(str_xp, &ind);
 	subs[1] = ind - subs[0];

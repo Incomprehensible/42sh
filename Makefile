@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/10/02 16:38:49 by hgranule         ###   ########.fr        #
+#    Updated: 2019/10/07 01:14:34 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,8 @@ OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 
-SRC_FILES = sh_main.c ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
+SRC_FILES = sh_main.c get_line.c \
+			ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
 			ft_basename.c exe_sys/exe_binaries.c exe_sys/exe_builtns.c \
 			exe_sys/exe_redirs.c parser/prs_arch.c parser/prs_args.c \
 			parser/prs_instructions.c parser/prs_rdrs.c parser/prs_types.c \
@@ -67,9 +68,23 @@ SRC_FILES = sh_main.c ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
 			sys_tools/sys_touch.c $(addprefix gui/, $(GUI_FILES)) \
 			sys_tools/sys_config.c sys_tools/sys_files.c sys_tools/sys_proc_tables.c \
 			env/env_get_bins/env_get_bins_parsebltn.c env/env_get_bins/env_get_bins_parsefunc.c \
-			env/env_get_bins/env_get_bins_parsepath.c env/env_get_bins/env_get_bins.c 
+			env/env_get_bins/env_get_bins_parsepath.c env/env_get_bins/env_get_bins.c \
+			\
+			lexer/sh_backgr_offset.c lexer/sh_bash_init.c \
+			lexer/sh_bash_parse.c lexer/sh_cleaners.c \
+			lexer/sh_comm_parse.c lexer/sh_envar_parse.c \
+			lexer/sh_func_parse.c \
+			lexer/sh_hedoc_parse.c lexer/sh_lexer.c \
+			lexer/sh_math_init.c \
+			lexer/sh_math_parse.c lexer/sh_metatree.c \
+			lexer/sh_new_input_finished.c lexer/sh_proc_parse.c \
+			lexer/sh_quots_parse.c lexer/sh_redir_init.c \
+			lexer/sh_redir_parse.c lexer/sh_regulars.c \
+			lexer/sh_sep_parse.c lexer/sh_subsh_parse.c \
+			lexer/sh_tokenizer.c lexer/sh_usefull_func.c \
+			lexer/sh_validate.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type lexer)
 
 GUI_FILES = sh_control_term.c sh_dir_content.c sh_readline.c sh_readline_help.c\
 	sh_term.c dstr.c ft_concat.c sh_put_col.c sh_tab.c sh_darr.c sh_path.c reg_expr.c\
@@ -115,3 +130,4 @@ ex:
 appc: $(OBJ)
 	@make make_lft
 	@gcc $(FLAGS) -o $(NAME) $(INC) $(INC_LIB) $(OBJ) -L $(LIB_PATH) -lft -L /usr/lib/x86_64-linux-gnu/libncurses.so -lncurses
+
