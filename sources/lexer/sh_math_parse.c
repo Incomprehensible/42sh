@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_math_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 00:41:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,35 +98,6 @@ short   validate_math(char *str, short i)
     return (i);
 }
 
-//size_t   cut_quots(char *str)
-//{
-//    int     counter;
-//    size_t  len;
-//    size_t  sub;
-//
-//    counter = 0;
-//    len = 0;
-//    sub = 0;
-//    while (str[len] != '\'')
-//        len = (str[len] == '\\') ? len + 2 : ++len;
-//    while (str[len] == '\'')
-//    {
-//        counter++;
-//        ++len;
-//        sub++;
-//    }
-//    while (counter && str[len] && !is_sep_no_space(str[len]))
-//    {
-//        if (str[len] == '\'')
-//            --counter;
-//        len = (str[len] == '\\') ? len + 2 : ++len;
-//    }
-//    --len;
-//    while (str[len] == '\'')
-//        len = (str[len] == '\\') ? len - 2 : --len;
-//    return (len);
-//}
-
 size_t   cut_quots(char *str)
 {
     int     counter;
@@ -145,6 +116,13 @@ size_t   cut_quots(char *str)
         len = (str[len] == '\\') ? len + 2 : ++len;
     }
     return (len - 2);
+}
+
+char    *skip_brackets(char *str, char br)
+{
+    while (*str == br)
+        str = (*str == '\\') ? str + 2 : ++str;
+    return (str);
 }
 
 size_t   cut_brackets(char *str)
@@ -169,44 +147,6 @@ size_t   cut_brackets(char *str)
         len = (str[len] == '\\') ? len + 2 : ++len;
     }
     return (len - (br * 2));
-}
-
-//size_t   cut_brackets(char *str)
-//{
-//    int     counter;
-//    size_t  len;
-//    size_t  sub;
-//
-//    counter = 0;
-//    len = 0;
-//    sub = 0;
-//    while (str[len] != '(')
-//        len = (str[len] == '\\') ? len + 2 : ++len;
-//    while (str[len] == '(')
-//    {
-//        counter++;
-//        ++len;
-//        sub++;
-//    }
-//    while (counter && str[len] && !is_sep_no_space(str[len]))
-//    {
-//        if (str[len] == '(')
-//            ++counter;
-//        else if (str[len] == ')')
-//            --counter;
-//        len = (str[len] == '\\') ? len + 2 : ++len;
-//    }
-//    --len;
-//    while (str[len] == ')')
-//        len = (str[len] == '\\') ? len - 2 : --len;
-//    return (len);
-//}
-
-char    *skip_brackets(char *str, char br)
-{
-    while (*str == br)
-        str = (*str == '\\') ? str + 2 : ++str;
-    return (str);
 }
 
 size_t  cut_math_seq(char *str)
@@ -270,78 +210,3 @@ char   *parse_math(char *str, t_dlist **tok, t_stx **tree, short ind)
         str = pull_math_seq(str, tok);
     return (ind < 0 ? "\0" : str);
 }
-
-//size_t   cut_brackets(char *patt, char *str, t_dlist **tok, char br)
-//{
-//    char *end;
-//    size_t i;
-//    short   j;
-//
-//    i = 0;
-//    j = 0;
-//    while (*str && *str == br)
-//    {
-//        str++;
-//        j++;
-//    }
-//    if (!(end = ft_process_wall(str, patt + j, "\0")))
-//        return (0);
-//    while (str != end && *str)
-//    {
-//        str++;
-//        i++;
-//    }
-//    //make_token(tok, pull_token(str - i, i), TK_MATH);
-//    return (i);
-//}
-//
-//short    math_process(char *patt, char *str, t_dlist **tok)
-//{
-//    size_t i;
-//
-//    if (ft_strstr(patt, "(("))
-//        return (cut_brackets(patt, str, tok, '('));
-//    else if ((str = ft_process_ignore(str, patt, "\0")))
-//    {
-//        while (*str && (*str == ' ' || *str == '\t' || *str == '\\'))
-//        {
-//            if (*str == '\\')
-//                return (0);
-//            str++;
-//        }
-//        i = layer_parse_two(patt + 4, str);
-//        if (*str && (*str == '\'' || *str == '"' || *str == '`'))
-//        {
-//            if (*str == '\\')
-//                return (0);
-//            i++;
-//            str++;
-//        }
-//    }
-//}
-//
-//char*   parse_math(char *str, t_dlist **tok, t_stx **tree, short ind)
-//{
-//    char *patt1;
-//    char *patt2;
-//    short tmp;
-//
-//    patt1 = "((!))";
-//    patt2 = ".let%";
-//    if (!(*str))
-//        return (str);
-//    str = parse_empty(str, 0x0, tok);
-//    if (*str == '$')
-//    {
-//        make_token(tok, ft_strdup("$"), TK_DEREF);
-//        str++;
-//    }
-//    if (*str == '\\')
-//        return (block_pass(EXPRS, str, tok, tree));
-//    if ((tmp = math_process(patt1, str, tok)))
-//        return (valid_math(str, tmp, 1));
-//    else if ((tmp = math_process(patt2, str, tok)))
-//        return (valid_math(str, tmp, 2));
-//    return (block_pass(EXPRS, str, tok, tree));
-//}
-

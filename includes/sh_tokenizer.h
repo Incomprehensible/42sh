@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_tokenizer.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 00:43:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ size_t      valid_operator(char *str, size_t i);
 short       valid_apof(char *str, size_t i);
 size_t      valid_bracket(char *str, char *patt);
 short       valid_sep(char *str);
-char        *closed_dels(char *str);
+short		closed_dels(char *str);
 t_tk_type   make_offset(t_dlist **token, t_tk_type type);
 size_t      get_seq(char *str);
 short       list_ready_to_go(t_dlist **token_list);

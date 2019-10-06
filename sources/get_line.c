@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
-# define BUFF_SIZE 1
 # define MAX_FD 10240
 
 char	*ft_strndup(const char *s1, char n)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_validate.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 00:44:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ short   seps_check(t_dlist *token_list)
                 return (0);
             if (TOK_TYPE == TK_BCKR_PS && !tokens_follow(token_list))
                 return (0);
-//            if (is_sep_token(TOK_TYPE) && is_sep_token(type))
-//                return (0);
         }
         token_list = token_list->next;
     }
@@ -173,7 +171,7 @@ char    *get_last_qu(char *str, char del)
     return (i ? 0 : str);
 }
 
-char   *closed_br(char *str)
+short	closed_br(char *str)
 {
     size_t counter;
     short size;
@@ -218,10 +216,10 @@ char   *closed_br(char *str)
     }
     if (is_separator(*str))
         str++;
-    return (counter ? 0 : str);
+    return (counter ? 0 : 1);
 }
 
-char   *closed_q(char *str, char del)
+short   closed_q(char *str, char del)
 {
     size_t counter;
 
@@ -246,17 +244,17 @@ char   *closed_q(char *str, char del)
         else
             str++;
     }
-    return (counter ? NULL : is_separator(*str));
+    return (counter ? 0 : is_separator(*str));
 }
 
-char   *closed_dels(char *str)
+short   closed_dels(char *str)
 {
     if (is_token_here(str, "let"))
     {
         str = ft_process_ignore(str, ".let%");
         str = skip_spaces(str);
         if (*str != '\'')
-            return (str + ft_strlen(str));
+            return (1);
         return (closed_q(str, '\''));
     }
     str = skip_spaces(str);
@@ -264,12 +262,6 @@ char   *closed_dels(char *str)
         return (0);
     return (closed_br(str));
 }
-
-//открывающая кавычка - пока идет кавычка и дальше не следует пробел и не str[i + 1] == число или буква или !
-//выражение - пока идет разделитель идем вперед?  если бы раздедлитель читаем выражение до разделителя, потом идем вперед по разделителю до пробела ,
-//в другом случае идем до пробела и по пробелу или до разделителя
-//еслши все кавычки закрылись и идет пробел - матан завершился
-//если во втором этапе кавычка выражения открылась и дальше следует пробел - синтакс еррор, нет выражения
 
 size_t  valid_prefix(char *str)
 {
@@ -353,7 +345,6 @@ size_t valid_operand(char *str, size_t i)
 
 size_t  valid_operator(char *str, size_t i)
 {
-    //str = skip_spaces(str);
     while (str[i] && (ft_isspace(str[i]) || is_end(str[i])))
         i++;
     if (!str[i] || str[i] == '\\' || !(is_operator(str[i])))
