@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_bash_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 01:23:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 03:29:48 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,7 +281,6 @@ static t_graph  *exprtk2_init(void)
     script->patt = "~;";
     script->forward = fitk_init();
     script->left = elsetk_init(script);
-   // script->forward->left = script->left;
     script->right = continue_init(NULL);
     script->next = NULL;
     return (script);

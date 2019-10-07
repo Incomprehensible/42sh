@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_subsh_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 04:14:06 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static short    special_reg(char c, short tk)
             return (1);
         return (0);
     }
-    if (c == '!' || c == '*' || c == '$' || c == '#' || c == '?')
+    if (c == '!' || c == '*' || c == '$' || c == '#' || c == '?' || c == '/')
         return (1);
     return (0);
 }
@@ -55,31 +55,8 @@ static char    *parse_curly_br(char *str, t_dlist **tok)
     return (++str);
 }
 
-//char    *parse_nametk(char *str, t_dlist **tok)
-//{
-//    size_t i;
-//
-//    i = 0;
-//    if (str[i] >= 48 && str[i] <= 57)
-//        while (str[i] && str[i] >= 48 && str[i] <= 57)
-//            i++;
-//    else
-//    {
-//        if (special_reg(str[i]))
-//        {
-//            make_token(tok, pull_token(str, 1), TK_NAME);
-//            return (str + 1);
-//        }
-//        while (str[i] && !is_separator(str[i]) && str[i] != '$')
-//            i = (str[i] == '\\' && str[i + 1]) ? i + 2 : ++i;
-//    }
-//    make_token(tok, pull_token(str, i), TK_NAME);
-//    return (str + i);
-//}
-
 char    *parse_deref(char *str, t_dlist **tok, t_stx **tree, short i)
 {
-   // str = parse_empty(str, 0x0, tok);
     if (*str++ == '$' && *str != '\\')
     {
         if ((is_separator(*str) && *str != '"') || !(*str))

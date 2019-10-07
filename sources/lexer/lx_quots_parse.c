@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   lx_quots_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 08:14:21 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,11 @@ short   special_case(char br, char *str)
         if (!is_sep_no_space(*str))
             return (0);
     }
+	// else if (br == '<')
+	// {
+    //     if (*str != '<' && *str != '>')
+    //         return (0);
+    // }
     else
         if (*str != br)
             return (0);
@@ -116,35 +121,3 @@ char*   parse_dquotes(char *str, t_dlist **tok, t_stx **tree, short i)
     str = parse_str_block(str, tok, tree, '"');
     return (str);
 }
-
-//static char *pull_comm(char *str, t_dlist **tok)
-//{
-//    short i;
-//    short flag;
-//
-//    i = 0;
-//    flag = 1;
-//
-//    if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
-//        str = parse_exec(str, tok);
-//    while (*str && ((*str != '"' && *str != '\'') || !flag))
-//    {
-//        flag = 1;
-//        if (i && *str == ' ' && *(str - 1) != '\\')
-//        {
-//            make_token(tok, pull_token(str - i, i), TK_EXPR);
-//            str = parse_empty(str, 0x0, tok);
-//            i = 0;
-//        }
-//        else
-//        {
-//            if (*str == '\\')
-//                flag = 0;
-//            i++;
-//            str++;
-//        }
-//    }
-//    if (i)
-//        make_token(tok, pull_token(str - i, i), TK_EXPR);
-//    return (str);
-//}

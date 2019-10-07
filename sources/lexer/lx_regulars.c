@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   lx_regulars.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 08:37:06 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int special_meta(char meta)
 {
     if (meta == '@' || meta == '^' || meta == '~' || meta == '_' || meta == '!' || meta == '%' || meta == '.'
-    || meta == '?' || meta == '+' || meta == 'z' || meta == 'x')
+    || meta == '?' || meta == 'z' || meta == 'x')
         return (1);
     return (0);
 }
@@ -122,20 +122,6 @@ char *ft_process_all(char *str, char *meta)
     return (0);
 }
 
-//char *ft_process_all(char *str, char *meta)
-//{
-//    ++meta;
-//    while (*str && *str != *meta)
-//    {
-//        if (*str == '\\' && *(str + 1))
-//            str++;
-//        str++;
-//    }
-//    if (*str == *meta)
-//        return (str);
-//    return (0);
-//}
-
 char *ft_process_any(char *str, char *meta)
 {
     ++meta;
@@ -198,7 +184,6 @@ char *ft_process_limits(char *str)
         limit = *str++;
     else
         limit = ' ';
-    //we cut shit that sits between these metas ; need for math
     while (*str && !is_sep_no_space(*str) && *str != limit)
         str++;
     return (str - 1);
@@ -214,7 +199,6 @@ char *ft_process_ignore(char *str, char *meta)
         str++;
         meta++;
     }
-    //we ignore symbols that proceed this meta, before we approach another meta (need this for math)
     return (str);
 }
 
@@ -274,7 +258,8 @@ char    *reg_process(char *patt, t_tk_type type, char *str, t_dlist **tok, t_stx
         return (parse_deref(str, tok, tr, 0));
     if ((i = layer_parse_two(patt, str)))
     {
-        if (type == TK_SUBSH || type == TK_PROC_OUT || type == TK_PROC_IN)
+        if (type == TK_SUBSH || type == TK_PROF_IN || type == TK_PROF_OUT ||
+		type == TK_PROC_OUT || type == TK_PROC_IN)
             new = pull_token(str + 1, --i - 2);
         else if (type == TK_FUNCTION)
             new = NULL;
@@ -283,7 +268,5 @@ char    *reg_process(char *patt, t_tk_type type, char *str, t_dlist **tok, t_stx
         make_token(tok, new, type);
     }
     str += i;
-//    if (str && *str == ';')
-//        str = parse_sep(str, tok, 0);
     return (str);
 }

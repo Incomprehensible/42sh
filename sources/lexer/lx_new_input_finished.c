@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_inputcheck.c                                    :+:      :+:    :+:   */
+/*   sh_new_input_finished.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/09/15 23:49:09 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 05:44:51 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,8 @@ short   br_closed(char *str, char strt, char fin)
 //here we enter and check if any following symbol is a quote - then check type of quote - then go pass through this and  skip some bytes
 short   brackets_closed(char *str)
 {
-    if (!(br_closed(str, '{', '}')))
-        return (0);
+    // if (!(br_closed(str, '{', '}')))
+    //     return (0);
     if (!(br_closed(str, '[', ']')))
         return (0);
     if (!(br_closed(str, '(', ')')))
@@ -255,7 +255,8 @@ short func_really_closed(char *str)
     if (!(*str))
         return (0);
     if (*str == '{')
-        return (is_func_fucking_closed(str + 1));
+		return (br_closed(str, '{', '}'));
+        //return (is_func_fucking_closed(str + 1));
     return (0);
 }
 
@@ -267,8 +268,6 @@ short func_is_closed(char *str)
     str = skip_spaces(str);
     if (!*str)
         return (1);
-//    if ((i = layer_parse_two("?()_", str)))
-//        return (func_really_closed(str + i));
     if ((i = layer_parse_two("? ", str)))
         return (func_really_closed(str + i));
     return (1);

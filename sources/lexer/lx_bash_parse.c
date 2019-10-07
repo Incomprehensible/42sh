@@ -1,53 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_bash_parse.c                                    :+:      :+:    :+:   */
+/*   lx_bash_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 01:23:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 08:48:16 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
-
-static short    tokens_detected(char *str)
-{
-    static char *toks[13];
-    short i;
-    size_t j;
-
-    toks[0] = "if";
-    toks[1] = "then";
-    toks[2] = "else";
-    toks[3] = "fi";
-    toks[4] = "do";
-    toks[5] = "done";
-    toks[6] = "for";
-    toks[7] = "in";
-    toks[8] = "while";
-    toks[9] = "until";
-    toks[10] = "break";
-    toks[11] = "continue";
-    toks[12] = NULL;
-    i = 0;
-    j = 0;
-    while (toks[i])
-    {
-        while (str[j] != ' ' && str[j] != ';')
-        {
-            if (is_token_here(&str[j], toks[i]))
-                return (1);
-            j++;
-        }
-        j = 0;
-        i++;
-    }
-    return (0);
-}
 
 static short   pull_type(char *str)
 {
@@ -225,10 +190,6 @@ char    *pull_math(char *s, t_dlist **tok, short tp)
     while (ft_isspace(s[i]))
         i = (s[i] == '\\') ? i + 2 : ++i;
     s = pull_legit_math(s, tok, i, tp);
-//    if (tp == FORMATH)
-//        s = pull_for_math(s, tok, i);
-//    else
-//        s = pull_usual_math(s, tok, i);
     return (s);
 }
 
@@ -239,7 +200,7 @@ static char *make_it_glue(char *s, t_stx **tr, t_dlist **tok)
     tmp = parse_str_block(s, tok, tr, '\n');
     if (!tmp || tmp == s)
         return (NULL);
-    if (!sep_detected(tok[1], 0) || !check_valid_sep(tok[1]))
+    if (!sep_detected(tok[1]) || !check_valid_sep(tok[1]))
         return (NULL);
     return (tmp);
 }
@@ -254,8 +215,9 @@ static char *normal_token(char *patt, t_tk_type tp, char *s, t_dlist **tok)
     {
         if (ft_isspace(*(s + i - 1)))
             space = remove_spaces(s + i - 1, i);
-        if (tp != TK_IN)
-            make_token(tok, pull_token(s, i - space), tp);
+		make_token(tok, NULL, tp);
+        // if (tp != TK_IN)
+        //     make_token(tok, pull_token(s, i - space), tp);
         s = s + i;
     }
     return (s);
@@ -297,14 +259,6 @@ static char *into_the_portal(t_graph *g, char *s, t_dlist **tok, t_stx **tr, sho
         s = new_graph(s, tok, tr);
     return (s);
 }
-
-//static short    double_pass(t_tk_type type)
-//{
-////    if (type == TK_EXPR || type == TK_FI || type == TK_DONE)
-//    if (type == TK_EXPR || type == TK_FI)
-//        return (1);
-//    return (0);
-//}
 
 char    *get_script(t_graph *g, char *s, t_dlist **tok, t_stx **tr, short i)
 {

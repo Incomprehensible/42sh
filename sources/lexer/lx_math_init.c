@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_math_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 03:45:08 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ t_graph  *close_in(char *del, t_tk_type type)
     math->type = type;
     math->patt = del;
     math->forward = sep_in();
-    //the case in which we stop tokenizing further - we must check on return if traversed graph was 0 one and if closing token was empty rather then sep -> which means we check if we can find a sep, otherwise traverse empty part graph
     if (type == APOF_END)
         math->left = empty_in();
     else
@@ -64,9 +63,6 @@ t_graph  *close_in(char *del, t_tk_type type)
     return (math);
 }
 
-//check on your smartphone - rules for variable names
-//if we have smething like ' kek + 'kek' + 'kek' 'we may just skip and переставить operand to operator
-// ' kek ' => + (if another ' expr ' happens, ' opens, we recursively get submath and treat it as operand if it was valid), we rebase graph = graph->forward
 t_graph  *operator_in(t_graph *operand)
 {
     static t_graph *math;
@@ -116,7 +112,6 @@ t_graph  *operation_in()
     math->type = MATH_SEQ;
     math->patt = NULL;
     math->forward = sep_in();
-    //closing quote
     math->left = empty_in();
     math->right = NULL;
     math->next = NULL;
