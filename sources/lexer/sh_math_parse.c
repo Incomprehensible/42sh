@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_math_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 00:41:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 03:54:27 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ size_t   math_pull(char *str, t_graph *math)
         return (valid_bracket(str, math->patt));
     else if (math->type == TK_SEP)
         return (valid_sep(str));
-    //valid empty
     return ((*str == ' ' || *str == '\t') ? 1 : 0);
 }
 

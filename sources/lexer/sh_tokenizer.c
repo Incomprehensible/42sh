@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_tokenizer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 06:02:37 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,55 +50,10 @@ void    make_token(t_dlist **list, char *value, t_tk_type type)
             *((t_tok *)(tmp->content)) = *token_data;
             tmp->next = NULL;
             tmp->prev = list[1];
-            //list[1]->next = tmp;
             list[1] = tmp;
-//            tmp = list[1];
-//            tmp->next = ft_dlstnew(NULL, 0);
-//            tmp->next->content = (t_tok *)malloc(sizeof(t_tok));
-//            *((t_tok *)(tmp->next->content)) = *token_data;
-//            tmp->next->next = NULL;
-//            tmp->next->prev = tmp;
-//            list[1] = tmp->next;
         }
     }
 }
-
-//void    make_token(t_dlist **list, char *value, t_tk_type type)
-//{
-//    t_tok           *token_data;
-//    t_dlist         *tmp;
-//
-//    token_data = (t_tok *)malloc(sizeof(t_tok));
-//    if (token_data)
-//    {
-//        token_data->value = value;
-//        token_data->type = type;
-//        if (list[0] == list[1] && !list[0]->content)
-//        {
-//            *((t_tok *)list[0]->content) = *token_data;
-//            list[1]->content = (void *)token_data;
-//            list[0]->next = NULL;
-//        }
-//        else if (list[0] == list[1])
-//        {
-//            tmp = list[0];
-//            tmp->next = ft_dlstnew(NULL, 0);
-//            tmp->next->content = (void *)token_data;
-//            tmp->next->next = NULL;
-//            tmp->next->prev = list[0];
-//            list[1] = tmp->next;
-//        }
-//        else
-//        {
-//            tmp = list[1];
-//            tmp->next = ft_dlstnew(NULL, 0);
-//            tmp->next->content = (void *)token_data;
-//            tmp->next->next = NULL;
-//            tmp->next->prev = tmp;
-//            list[1] = tmp->next;
-//        }
-//    }
-//}
 
 int     layer_parse_one(char *meta, char *str)
 {
@@ -151,29 +106,6 @@ char    *block_pass(short i, char *str, t_dlist **tok, t_stx **tree)
     return (str);
 }
 
-//int     check_branch(char *str, t_stx *tree)
-//{
-//    short choice;
-//    char *end;
-//
-//    choice = 0;
-//    if (*str == '\\')
-//        return (8);
-//    if (!(end = ft_strchr(str, ';')))
-//        end = ft_strchr(str, ')') + 1;
-//    else
-//        end += 1;
-//    if (!end)
-//        if (!(end = ft_strchr(str, '\n')))
-//            end = str + ft_strlen(str);
-//    while (tree && !choice)
-//    {
-//        choice = layer_parse_one(tree->meta, str, end);
-//        tree = tree->next;
-//    }
-//    return (choice);
-//}
-
 int     check_branch(char *str, t_stx *tree)
 {
     short choice;
@@ -218,18 +150,14 @@ short     find_token(t_stx **tree, char *str)
 short   clear_tokens(t_dlist **tokens)
 {
     t_dlist *token_list;
-//    t_tok *token_data;
 
     unexpected_token();
     while (*tokens)
     {
         token_list = *tokens;
         *tokens = (*tokens)->next;
-//        token_data = (t_tok *)token_list->content;
         if (token_list->content && TOK_VALUE)
             free(TOK_VALUE);
-//        if (token_data->value)
-//            free(token_data->value);
         free(token_list->content);
         free(token_list);
     }
@@ -302,14 +230,11 @@ short				sh_tokenizer(char *str, t_dlist **token_list)
         tmp = str;
     if ((i = get_tokens(tmp, token_list)) <= 0)
     {
-        if (!i && !last_input)
-            last_input = ft_strdup(str);
-        else if (i < 0 && last_input)
-        {
+        if (i < 0 && last_input)
             free(last_input);
-            last_input = NULL;
-        }
-        return (0);
+		// last_input = get_last_input(i, last_input)
+        last_input = i ? NULL : ft_strdup(tmp);
+        return (i ? 0 : -1);
     }
     if (last_input)
     {

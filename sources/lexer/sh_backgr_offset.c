@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_backgr_offset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 03:29:21 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,24 +73,11 @@ static void all_to_backgr(t_dlist **token, t_dlist *backgr)
     t_dlist *first;
 
     first = token[0];
-//    token[1] = backgr->prev;
-//    token[1]->next = NULL;
     first->prev = backgr;
     backgr->next = first;
     backgr->prev = NULL;
     token[0] = backgr;
     token[1]->next = NULL;
-//    if (first == token[1])
-//        token[1]->prev = token[0];
-//    else
-//        first->prev = token[0];
-//    if (tmp == token[1])
-//        token[1]->prev = token[0];
-//    else
-//        tmp->prev = token[0];
-//    backgr->next = token[0];
-//    token[0] = backgr;
-//    token[0]->prev = NULL;
 }
 
 static void to_backgr(t_dlist *token_list, t_dlist *backgr)
@@ -148,20 +135,10 @@ t_tk_type   make_offset(t_dlist **token, t_tk_type type)
         token_list = (token_list->prev) ? token_list->prev : token_list;
     }
     token[1] = backgr->prev;
-//    token[0] = backgr;
-//    if (!token_list->prev)
-//        all_to_backgr(token, backgr);
-//    if (TOK_TYPE == HOLE)
-//        fill_empty_hole(token_list, backgr);
     if (!token_list || !token_list->prev)
         all_to_backgr(token, backgr);
     else
         to_backgr(token_list, backgr);
     make_token(token, NULL, HOLE);
-//    while (token[0])
-//    {
-//        printf("value %s type %zx\n", ((t_tok *)(token[0]->content))->value, ((t_tok *)(token[0]->content))->type);
-//        token[0] = token[0]->next;
-//    }
     return (TK_BCKR_PS);
 }

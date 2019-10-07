@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_metatree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 03:54:52 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,6 @@ t_stx    *init_subsh(t_stx *tree)
     t_stx *start;
 
     i = 0;
-//    sub = "(z) $(z) $(~; (~;";
     sub = "(x) $(x)";
     subs = ft_strsplit(sub, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
@@ -267,36 +266,6 @@ t_stx    *init_comm(t_stx *tree)
     tree->next = NULL;
     return (tree);
 }
-
-//we don't access it like usual - but at the end of program
-//maybe we don't need it and will have to make our own rules to check whether input is over
-//like in heredoc and scripts we may request more input
-//t_stx    *init_eof(t_stx *tree)
-//{
-//    char *eof;
-//    char **eofs;
-//    short i;
-//    t_stx *tmp;
-//    t_stx *start;
-//
-//    i = 0;
-//    eof = "; & \n";
-//    eofs = ft_strsplit(eof, ' ');
-//    tree = (t_stx *)malloc(sizeof(t_stx));
-//    tree->meta = eofs[i];
-//    tree->prev = NULL;
-//    start = tree;
-//    while (eofs[++i])
-//    {
-//        tmp = tree;
-//        tree->next = (t_stx *)malloc(sizeof(t_stx));
-//        tree = tree->next;
-//        tree->meta = eofs[i];
-//        tree->next = NULL;
-//        tree->prev = tmp;
-//    }
-//    return (start);
-//}
 
 void    tree_init(t_stx **tree)
 {

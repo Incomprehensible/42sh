@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tokenizer.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 01:23:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 06:14:17 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define MATHS (short)0x0000000002
 # define SUBSHS (short)0x0000000003
 # define FLOWS (short)0x0000000004
+# define REDIR (short)0x0000000008
 # define FUNCS (short)0x0000000009
 # define EXPRS (short)0xB
 # define DEREF (short)0xC
@@ -119,7 +120,7 @@ t_graph     *redir_two(void);
 t_graph     *redir_one(void);
 t_graph     *let_math_in(void);
 t_graph     *brackets_math_in(void);
-char        *check_subbranch(char *str,  t_dlist **tok, t_stx **tree, t_tk_type block);
+char		*check_subbranch(char *str, t_dlist **tok, t_stx **tree);
 short       graph_forward_only(t_graph *g);
 short       graph_end(t_graph *g, char *str);
 char        *pull_expr2(char *str, t_stx **tr, t_dlist **tok);
@@ -150,13 +151,14 @@ short       list_ready_to_go(t_dlist **token_list);
 short       is_redir(char *str);
 size_t      remove_spaces(char *str, size_t len);
 short       is_q(char c);
-short       sep_detected(t_dlist *token_list, short sep);
+short		sep_detected(t_dlist *token_list);
 size_t      can_pull_tk(size_t j, char *str, t_dlist **tok, short t);
 short       special_case(char br, char *str);
 short       check_valid_sep(t_dlist *token_list);
 short       back_ps_check(t_dlist *token_list);
 short       seps_check(t_dlist *token_list);
 short       is_prefix(char str);
+short       is_tok_redir(t_tk_type type, short id);
 
 //more comfortable form of type cast
 # define TOK_TYPE ((t_tok *)(token_list->content))->type

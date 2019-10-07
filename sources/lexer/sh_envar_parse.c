@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_envar_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 03:05:32 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,11 +175,13 @@ static char    *get_envar_name(char *str, t_dlist **tok, short i)
 char*   parse_envar(char *str, t_dlist **tok, t_stx **tree, short i)
 {
     char *patt;
+	char *patt2;
     char *tmp;
 
     patt = "?= ";
+	patt2 = "?+= ";
     str = parse_empty(str, 0x0, tok);
-    if (layer_parse_two(patt, str))
+    if (layer_parse_two(patt, str) || layer_parse_two(patt2, str))
     {
         if (following_pipe(tok[1]))
             return (NULL);

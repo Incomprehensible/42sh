@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/07 01:57:16 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 07:03:47 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,11 @@ static void		sh_loop(ENV *env)
 		    free(line);
             continue;
         }
+		// while (token_list[0])
+        // {
+		//     printf("value %s type %zx\n", ((t_tok *)(token_list[0]->content))->value, ((t_tok *)(token_list[0]->content))->type);
+		//     token_list[0] = token_list[0]->next;
+        // }
 		ft_putendl("== go to parsing ==");
 		sh_tparse(token_list[0], env, TK_EOF, &status);
 		printf("== GETPRG %d ==\n", tcgetpgrp(0));

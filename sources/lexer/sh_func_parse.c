@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   sh_func_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 06:24:13 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,27 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
+static char	*skip_spaces_nd_nl(char *str)
+{
+	 while (*str && (ft_isspace(*str)))
+        str++;
+    return (str);
+}
+
 static char *func_args(char *str, t_dlist **tok, t_stx **tr)
 {
     str++;
+	str = skip_spaces_nd_nl(str);
     while (*str && *str != '}')
     {
         if (check_branch(str, tr[FLOWS]))
             str = block_pass(FLOWS, str, tok, tr);
         else
             str = parse_comm(str, tok, tr, '}');
-        str = (str) ? skip_spaces(str) : str;
-        if (!sep_detected(tok[1], ';') || !check_valid_sep(tok[1]))
+        if (!sep_detected(tok[1]) || !check_valid_sep(tok[1]))
             return (NULL);
-        str = skip_spaces(str);
+		str = (str) ? skip_spaces_nd_nl(str) : str;
+        // str = skip_spaces(str);
     }
     if (!(*str))
         return (0);
@@ -78,7 +86,6 @@ char*   parse_func(char *str, t_dlist **tok, t_stx **tree, short ind)
         return (get_function(str, "!()", tok, tree));
     }
     return (NULL);
-    //return (str - ind);
 }
 
 char*   parse_lambda(char *str, t_dlist **tok, t_stx **tree, short i)
