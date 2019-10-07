@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:01:26 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/15 18:01:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 12:40:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,5 @@ t_dlist			*prs_assigm(t_dlist *tks, ENV *envs, int *status)
 	*status = prs_assigm_do(var_val[0], var_val[1], assigm_type, envs);
 	if (var_val[1])
 		free(var_val[1]);
-	return (tks->next);
+	return (tks);
 }

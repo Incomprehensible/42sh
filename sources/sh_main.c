@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/07 09:00:55 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 13:24:35 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ static void		sh_loop(ENV *env)
             continue;
         }
 		DBG_PRINT_TOKENS(token_list[0]);
-		ft_putendl("== go to parsing ==");
+		// ft_putendl("== go to parsing ==");
 		sh_tparse(token_list[0], env, TK_EOF, &status);
 		ft_dlst_delf(token_list, 0, free_token);
 		free(line);
@@ -160,4 +160,3 @@ int				main(const int argc, char **argv, char **envp)
 	et_rm_clear_env(&env);
 	return (0);
 }
-
