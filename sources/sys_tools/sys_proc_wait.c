@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:07:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/06 23:36:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 06:28:46 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,6 @@ int			sys_wait_ptable(int *status, pid_t lpid)
 		if (p_table[i] != 0)
 			sys_wait_prg(&p_table[i], status, lpid);
 	}
+	tcsetpgrp(0, getpid());
 	return (0);
 }

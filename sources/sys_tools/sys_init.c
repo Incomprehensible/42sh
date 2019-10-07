@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/07 01:36:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 07:02:30 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,7 @@ int			sys_init(void)
 	
 	// Здесь будет идти установка стандартных обработчиков сигналов!
 	signal(SIGTSTP, SIG_IGN);
-	//signal(SIGCONT, sighand);
-	//signal(SIGCHLD, sighand);
+	signal(SIGINT, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	ft_bzero(p_table, SYS_PRGS_SIZE * sizeof(t_pgrp *));

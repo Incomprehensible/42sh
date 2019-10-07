@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/07 01:57:16 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/07 07:31:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ static void		sh_loop(ENV *env)
 	while (1)
 	{
 		ft_putstr("42SH$ ");
-		if (get_line(0, &line) < 0)
+		if (get_line(0, &line) <= 0)
 		{
-			ft_putendl("== Input failed ==");
+			ft_putendl("== Input failed or ENDED ==");
 			break ;
 		}
 		if (sh_tokenizer(line, token_list) <= 0)
@@ -79,7 +79,6 @@ static void		sh_loop(ENV *env)
         }
 		ft_putendl("== go to parsing ==");
 		sh_tparse(token_list[0], env, TK_EOF, &status);
-		printf("== GETPRG %d ==\n", tcgetpgrp(0));
 		ft_dlst_delf(token_list, 0, free_token);
 		free(line);
 	}
