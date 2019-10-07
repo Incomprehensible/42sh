@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   lx_proc_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 08:35:18 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,23 +57,26 @@ static short   validate_proc(char *str)
 char*   parse_proc(char *str, t_dlist **tok, t_stx **tree, short i)
 {
     char    *tmp;
+	short	choice;
     t_tk_type  type;
 
     if (*str == '\\')
         return (parse_comm(str, tok, tree, i));
-    else if (!(i = (validate_proc(str))))
+	choice = i;
+	// str = (*str != '<' && *str != '>') ? parse_comm(str, tok, tree, '<') : str;
+    if (!(i = (validate_proc(str))))
         return (NULL);
     if (i < 0)
         return (parse_redir(str, tok, tree, 0));
     if (*str++ == '<')
     {
-        type = (i == PROF) ? TK_PROF_OUT : TK_PROC_OUT;
+        type = (choice == PROF) ? TK_PROF_OUT : TK_PROC_OUT;
         if ((tmp = reg_process("(z)", type, str, tok, tree)) == str)
             return (NULL);
     }
     else
     {
-        type = (i == PROF) ? TK_PROF_IN : TK_PROC_IN;
+        type = (choice == PROF) ? TK_PROF_IN : TK_PROC_IN;
         if ((tmp = reg_process("(z)", type, str, tok, tree)) == str)
             return (NULL);
     }

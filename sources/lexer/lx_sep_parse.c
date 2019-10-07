@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   lx_sep_parse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 08:46:22 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char    *parse_sep(char *str, t_dlist **tok, short i)
 char    *parse_empty(char *str, char *patt, t_dlist **tok)
 {
     if (str && (*str == ' ' || *str == '\t' || *str == '\n'))
-        make_token(tok, ft_strdup(" "), TK_EMPTY);
+        make_token(tok, NULL, TK_EMPTY);
     if (patt)
     {
         while ((*patt != '^' && *patt != '_') && ((ft_isspace(*str) || *str == '\n')))

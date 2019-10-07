@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_bash_parse.c                                    :+:      :+:    :+:   */
+/*   lx_bash_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 06:14:31 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 08:48:16 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,8 +215,9 @@ static char *normal_token(char *patt, t_tk_type tp, char *s, t_dlist **tok)
     {
         if (ft_isspace(*(s + i - 1)))
             space = remove_spaces(s + i - 1, i);
-        if (tp != TK_IN)
-            make_token(tok, pull_token(s, i - space), tp);
+		make_token(tok, NULL, tp);
+        // if (tp != TK_IN)
+        //     make_token(tok, pull_token(s, i - space), tp);
         s = s + i;
     }
     return (s);

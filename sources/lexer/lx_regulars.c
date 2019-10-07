@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_regulars.c                                      :+:      :+:    :+:   */
+/*   lx_regulars.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 04:04:44 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 08:37:06 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,8 @@ char    *reg_process(char *patt, t_tk_type type, char *str, t_dlist **tok, t_stx
         return (parse_deref(str, tok, tr, 0));
     if ((i = layer_parse_two(patt, str)))
     {
-        if (type == TK_SUBSH || type == TK_PROC_OUT || type == TK_PROC_IN)
+        if (type == TK_SUBSH || type == TK_PROF_IN || type == TK_PROF_OUT ||
+		type == TK_PROC_OUT || type == TK_PROC_IN)
             new = pull_token(str + 1, --i - 2);
         else if (type == TK_FUNCTION)
             new = NULL;

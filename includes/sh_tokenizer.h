@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 06:14:17 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 08:20:50 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@
 # define DEREF (short)0xC
 # define EMPTY (short)0x0000000013
 # define HOLE (short)0x0000000014
-# define PROF (short)0x0000000066
-# define CURLY (short)0x0000000067
+# define PROC (short)0x0000000065
+# define PROF (short)0x0000000067
+# define CURLY (short)0x0000000068
 
 //math tokens for syntax analysis
 # define OPERATOR (t_tk_type)0x0000000111

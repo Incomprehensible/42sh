@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/10/07 01:14:34 by hgranule         ###   ########.fr        #
+#    Updated: 2019/10/07 07:44:32 by bomanyte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,19 +70,19 @@ SRC_FILES = sh_main.c get_line.c \
 			env/env_get_bins/env_get_bins_parsebltn.c env/env_get_bins/env_get_bins_parsefunc.c \
 			env/env_get_bins/env_get_bins_parsepath.c env/env_get_bins/env_get_bins.c \
 			\
-			lexer/sh_backgr_offset.c lexer/sh_bash_init.c \
-			lexer/sh_bash_parse.c lexer/sh_cleaners.c \
-			lexer/sh_comm_parse.c lexer/sh_envar_parse.c \
-			lexer/sh_func_parse.c \
-			lexer/sh_hedoc_parse.c lexer/sh_lexer.c \
-			lexer/sh_math_init.c \
-			lexer/sh_math_parse.c lexer/sh_metatree.c \
-			lexer/sh_new_input_finished.c lexer/sh_proc_parse.c \
-			lexer/sh_quots_parse.c lexer/sh_redir_init.c \
-			lexer/sh_redir_parse.c lexer/sh_regulars.c \
-			lexer/sh_sep_parse.c lexer/sh_subsh_parse.c \
-			lexer/sh_tokenizer.c lexer/sh_usefull_func.c \
-			lexer/sh_validate.c
+			lexer/lx_backgr_offset.c lexer/lx_bash_init.c \
+			lexer/lx_bash_parse.c lexer/lx_cleaners.c \
+			lexer/lx_comm_parse.c lexer/lx_envar_parse.c \
+			lexer/lx_func_parse.c \
+			lexer/lx_hedoc_parse.c lexer/lx_lexer.c \
+			lexer/lx_math_init.c \
+			lexer/lx_math_parse.c lexer/lx_metatree.c \
+			lexer/lx_new_input_finished.c lexer/lx_proc_parse.c \
+			lexer/lx_quots_parse.c lexer/lx_redir_init.c \
+			lexer/lx_redir_parse.c lexer/lx_regulars.c \
+			lexer/lx_sep_parse.c lexer/lx_subsh_parse.c \
+			lexer/lx_tokenizer.c lexer/lx_usefull_func.c \
+			lexer/lx_validate.c
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type lexer)
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_redir_parse.c                                   :+:      :+:    :+:   */
+/*   lx_redir_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 07:02:47 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 08:45:29 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static char *redir_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
     short   i;
 
     if (layer_parse_one("<(z)", s) || layer_parse_one(">(z)", s))
-        return (parse_proc(s, tok, tr, PROF));
+		return (parse_proc(s, tok, tr, PROC));
     while (g && !(i = layer_parse_two(g->patt, s)))
         g = g->next;
     if (i && i < 3)
@@ -104,15 +104,26 @@ static char *redir_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
     return (s);
 }
 
+// static short	redir_proceeded(t_dlist *token_list)
+// {
+// 	while (token_list && TOK_TYPE == TK_EMPTY)
+// 		token_list = token_list->prev;
+// 	if (token_list && token_list->content && is_tok_redir(TOK_TYPE, 1))
+// 		return (1);
+// 	return (0);
+// }
+
 static char *in_redir_blocks(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
 {
     if (g->type == TK_FD)
         s = fd_pull(g, s, tok);
     else if (g->type == TK_PROF_OUT)
-    {
-        if (layer_parse_one("<(z)", s) || layer_parse_one(">(z)", s))
-            s = parse_proc(s, tok, tr, PROF);
-    }
+	{
+		if (layer_parse_one("<(z)", s) || layer_parse_one(">(z)", s))
+			return (parse_proc(s, tok, tr, PROF));
+		// if (tok[1] && redir_proceeded(tok[1]))
+		// return (parse_proc(s, tok, tr, PROF));
+	}
     else
         s = redir_pull(g, s, tr, tok);
     return (s);
