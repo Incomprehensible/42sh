@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 08:48:16 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/07 09:24:29 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ char    *pull_legit_math(char *s, t_dlist **tok, size_t i, short tp)
     k = remove_spaces(s + i - 1, i);
     make_token(tok, pull_token(s, i - k), TK_MATH);
     s += i;
-    while (*s == ')' || ft_isspace(*s))
+    while (*s == ')' || (ft_isspace(*s) && *s != '\n'))
         s = (*s == '\\') ? s + 2 : ++s;
     if (*s != ';' && *s != '\n')
         return (NULL);
