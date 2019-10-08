@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_comm_parse.c                                    :+:      :+:    :+:   */
+/*   lx_comm_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 06:52:24 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/08 14:01:59 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
     i = 0;
     if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
         return (parse_exec(str, tok));
-    while (!(special_case(stop, str)))
+    while (!(special_case(stop, str)) && *str)
     {
         if (*str == '\\' && (++j) && (++str))
             i = 1;

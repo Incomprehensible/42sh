@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_redir_init.c                                    :+:      :+:    :+:   */
+/*   lx_redir_init.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 03:57:01 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/08 13:16:14 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static t_graph    *prof_in(void)
     prof->patt = "<(z)";
     prof->forward = redir_one();
     prof->left = redir_two();
-    prof->right = NULL;
+	//was NULL
+    prof->right = redir_in();
     prof->next = (t_graph *)malloc((sizeof(t_graph)));
     prof->next->type = TK_PROF_IN;
     prof->next->patt = ">(z)";
@@ -91,13 +92,13 @@ t_graph    *redir_two(void)
     t_graph *red;
     static t_graph *start;
     char **redir;
-    size_t r[4] = {TK_RD_A, TK_RD_RW, TK_RD_W, TK_RD_R};
+    size_t r[] = {TK_RD_R, TK_RD_W, TK_RD_A, TK_RD_RW, TK_RD_W, TK_RD_R};
     short i;
 
     if (start)
         return (start);
     i = 0;
-    redir = ft_strsplit(">> <> > <", ' ');
+    redir = ft_strsplit("&> &< >> <> > <", ' ');
     red = (t_graph *)malloc(sizeof(t_graph));
     red->patt = redir[i];
     start = red;
@@ -124,13 +125,13 @@ t_graph  *redir_one(void)
     t_graph *red;
     static t_graph *start;
     char **redir;
-    size_t r[6] = {TK_RD_A, TK_RD_RW, TK_RD_W, TK_RD_R, TK_RD_R, TK_RD_W};
+    size_t r[] = {TK_RD_A, TK_RD_RW, TK_RD_W, TK_RD_R};
     short i;
 
     if (start)
         return (start);
     i = 0;
-    redir = ft_strsplit(">>& <>& >& <& &> &<", ' ');
+    redir = ft_strsplit(">>& <>& >& <&", ' ');
     red = (t_graph *)malloc(sizeof(t_graph));
     red->patt = redir[i];
     start = red;
