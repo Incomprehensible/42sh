@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_usefull_func.c                                  :+:      :+:    :+:   */
+/*   lx_usefull_func.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 06:12:42 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/08 22:27:58 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ short   check_valid_sep(t_dlist *token_list)
     token_list = (token_list) ? token_list->prev : token_list;
     while (token_list && TOK_TYPE == TK_EMPTY)
         token_list = token_list->prev;
-    if (TOK_TYPE != TK_EXPR && TOK_TYPE != TK_NAME &&
+    if (TOK_TYPE != TK_EXPR && TOK_TYPE != TK_NAME && TOK_TYPE != TK_VALUE && 
         TOK_TYPE != TK_SUBSH && TOK_TYPE != TK_MATH && !is_tok_redir(TOK_TYPE, 0))
         return (0);
     return (1);

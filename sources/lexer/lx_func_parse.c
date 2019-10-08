@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_func_parse.c                                    :+:      :+:    :+:   */
+/*   lx_func_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 06:24:13 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/08 22:35:01 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,32 @@ static char	*skip_spaces_nd_nl(char *str)
     return (str);
 }
 
+static void	expr_to_value(t_dlist *token_list)
+{
+	while (token_list && (TOK_TYPE == TK_EMPTY || TOK_TYPE == TK_SEP))
+		token_list = token_list->prev;
+	while (token_list && (TOK_TYPE != TK_EMPTY && TOK_TYPE != RETURN))
+	{
+		if (TOK_TYPE == TK_EXPR)
+			TOK_TYPE = TK_VALUE;
+		token_list = token_list->prev;
+	}
+}
+
+static char	*pull_return(char *str, t_dlist **tok, t_stx **tr)
+{
+	make_token(tok, NULL, RETURN);
+	if (*(str + 6) == ' ' || *(str + 6) == '\t')
+		make_token(tok, NULL, TK_EMPTY);
+	str = skip_spaces(str + 6);
+	if (!(*str))
+		return (str);
+	if (!(str = parse_str_block(str, tok, tr, '}')))
+		return (NULL);
+	expr_to_value(tok[1]);
+	return (str);
+}
+
 static char *func_args(char *str, t_dlist **tok, t_stx **tr)
 {
     str++;
@@ -29,12 +55,13 @@ static char *func_args(char *str, t_dlist **tok, t_stx **tr)
     {
         if (check_branch(str, tr[FLOWS]))
             str = block_pass(FLOWS, str, tok, tr);
-        else
+        else if (is_token_here(str, "return"))
+			str = pull_return(str, tok, tr);
+		else
             str = parse_comm(str, tok, tr, '}');
         if (!sep_detected(tok[1]) || !check_valid_sep(tok[1]))
             return (NULL);
 		str = (str) ? skip_spaces_nd_nl(str) : str;
-        // str = skip_spaces(str);
     }
     if (!(*str))
         return (0);

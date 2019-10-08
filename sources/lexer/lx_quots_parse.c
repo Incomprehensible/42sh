@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 08:14:21 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/08 22:17:49 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ short   special_case(char br, char *str)
 {
     if (br == '\n')
     {
-        if (*str != ';' && *str != '\n')
+        if (*str != ';' && *str != '\n' && *str)
             return (0);
     }
     else if (br == IN)
@@ -75,7 +75,7 @@ short   special_case(char br, char *str)
     //         return (0);
     // }
     else
-        if (*str != br)
+        if (*str != br && !is_sep_no_space(*str))
             return (0);
     return (1);
 }

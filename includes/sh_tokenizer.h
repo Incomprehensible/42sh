@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/08 13:56:42 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/08 22:02:40 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include "sh_token.h"
 
 void			DBG_PRINT_TOKENS(t_dlist *toklst);
+
+//TEMPORARY
+# define RETURN (t_tk_type)0x0000000666
 
 //tree indexes
 # define SEPS (short)0x0000000015
