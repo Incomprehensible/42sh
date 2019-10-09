@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_new_input_finished.c                            :+:      :+:    :+:   */
+/*   lx_new_input_finished.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 05:44:51 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/09 23:53:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,8 @@ short func_really_closed(char *str)
     if (*str == '{')
 		return (br_closed(str, '{', '}'));
         //return (is_func_fucking_closed(str + 1));
+	else if (*str)
+		return (1);
     return (0);
 }
 

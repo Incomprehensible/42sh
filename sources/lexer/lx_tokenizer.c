@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_tokenizer.c                                     :+:      :+:    :+:   */
+/*   lx_tokenizer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 06:02:37 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/09 23:12:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,11 +147,14 @@ short     find_token(t_stx **tree, char *str)
     return (tree[i] ? i : EXPRS);
 }
 
+extern void			DBG_PRINT_TOKENS(t_dlist *toklst);
+
 short   clear_tokens(t_dlist **tokens)
 {
     t_dlist *token_list;
 
     unexpected_token();
+	DBG_PRINT_TOKENS(*tokens);
     while (*tokens)
     {
         token_list = *tokens;

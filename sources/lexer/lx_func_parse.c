@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_func_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/08 22:35:01 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/09 23:56:45 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ static char *get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)
     char *reg2;
 
     reg2 = "{z}";
-    str = parse_empty(str, 0x0, tok);
+	str = skip_spaces(str);
+    //str = parse_empty(str, 0x0, tok);
     if ((*str >= 65 && *str <= 90) || (*str >= 97 && *str <= 122))
     {
         if ((i = layer_parse_two(reg1, str)))
@@ -88,9 +89,10 @@ static char *get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)
                 return (func_args(str, tok, tr));
             else
             {
-                str = ft_process_vars(TK_EXPR, str, "/;/\n/&/|", tok);
-                make_token(tok, NULL, TK_FEND);
-                return (parse_sep(str, tok, 0));
+                // str = ft_process_vars(TK_EXPR, str, "/;/\n/&/|", tok);
+                // make_token(tok, NULL, TK_FEND);
+                // return (parse_sep(str, tok, 0));
+				return (NULL);
             }
         }
     }

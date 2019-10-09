@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_redir_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/08 14:04:42 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/09 23:44:52 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,11 +255,13 @@ short   is_tok_redir(t_tk_type type, short id)
     return (0);
 }
 
-static short    stop_point(t_dlist *token_list)
+static short    stop_point(t_dlist **to_list, char **s)
 {
-	t_tk_type tk;
+	t_tk_type	tk;
+	t_dlist		*token_list;
 
 	tk = 0;
+	token_list = to_list[1];
 	while (token_list && TOK_TYPE == TK_EMPTY)
 		token_list = token_list->prev;
 	if (token_list)
@@ -269,6 +271,8 @@ static short    stop_point(t_dlist *token_list)
     //     return (1);
     if (is_tok_redir(tk, 1) || tk == TK_EXPR)
         return (0);
+	if (is_sep_no_space(**s))
+		*s = parse_sep(*s, to_list, 0);
     return (1);
 }
 
@@ -293,8 +297,10 @@ char        *redir_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
 	if (prof_found(g->type, tok[1]))
         g = g->forward;
     sig = 1;
-	s = parse_empty(tmp, g->patt, tok);
-	 if (stop_point(tok[1]))
+	s = tmp;
+	if (*s != '\n')
+		s = parse_empty(s, g->patt, tok);
+	if (stop_point(tok, &s))
         return (s);
     // if ((!(*s) || is_sep_no_space(*s)) && stop_point(g->type, tok[1]))
     //     return (s);

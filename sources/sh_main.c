@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/07 13:24:35 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/09 23:42:10 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 	char		*msg;
 	char		*value;
 
+	msg = 0;
 	while (toklst)
 	{
 		token = toklst->content;
@@ -98,7 +99,7 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 		msg = token->type == TK_EXEC ? "eXC" : msg;
 		msg = token->type == TK_FUNCTION ? "FUNC" : msg;
 		msg = token->type == TK_LAMBDA ? "LMD" : msg;
-		msg = token->type == TK_DQUOTE ? "DQ" : msg;
+		msg = token->type == TK_RETURN ? "RT" : msg;
 		msg = token->type == TK_EOF ? "EOF" : msg;
 		msg = token->type == TK_FEND ? "FND" : msg;
 		msg = token->type == TK_VAR ? "VAR" : msg;
