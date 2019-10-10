@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/07 13:24:51 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 06:27:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 		{
 			// SETTING PGID FOR ALL GROUP PIDS AND TAKING THEM INTO P_TABLE
 			sys_hot_charge(cpid, PS_M_FG, 0);
-			setpgid(cpid, hot_gid);
+			int a = setpgid(cpid, hot_gid);
 		}
 	}
 	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);

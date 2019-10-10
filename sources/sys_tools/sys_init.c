@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/07 07:02:30 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 11:04:53 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,15 @@ int			sys_var_init(ENV *env, char **argv, int argc)
 void		sighand(int s)
 {
 	printf("SIGNAL input: %d\n", s);
-	signal(s, SIG_DFL);
+}
+
+void		sys_sig_init(void)
+{
+	signal(SIGINT, sighand);
+	signal(SIGQUIT, sighand);
+	signal(SIGTSTP, sighand);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
 }
 
 int			sys_init(void)
@@ -77,10 +85,7 @@ int			sys_init(void)
 	extern char		sys_pipes[SYS_PIPES_SIZE];
 	
 	// Здесь будет идти установка стандартных обработчиков сигналов!
-	signal(SIGTSTP, SIG_IGN);
-	signal(SIGINT, SIG_IGN);
-	signal(SIGTTIN, SIG_IGN);
-	signal(SIGTTOU, SIG_IGN);
+	sys_sig_init();
 	ft_bzero(p_table, SYS_PRGS_SIZE * sizeof(t_pgrp *));
 	ft_bzero(sys_pipes, SYS_PIPES_SIZE * sizeof(char));
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/09 23:42:10 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 10:21:06 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,49 @@ int				bltn_echo(char **args, ENV *envr)
 		ft_putstr(args[i]);
 	}
 	ft_putstr(" @\n");
+	return (0);
+}
+
+int				bltn_fg(char **args, ENV *envr)
+{
+	if (!args[1])
+	{
+		ssize_t		a = -1;
+		
+		while (++a < SYS_PRGS_SIZE)
+		{
+			if (p_table[a] && p_table[a]->mode == PS_M_BG && p_table[a]->state == PS_S_STP)
+			{
+				t_dlist		*pd_lst = p_table[a]->members;
+				t_ps_d		*psd;
+
+				while (pd_lst)
+				{
+					psd = (t_ps_d *)&pd_lst->size;
+					if (psd->state == PS_S_STP)
+						psd->state = PS_S_RUN;
+					pd_lst = pd_lst->next;
+				}
+				p_table[a]->state = PS_S_RUN;
+				p_table[a]->mode = PS_M_FG;
+				break ;
+			}
+		}
+		if (a == SYS_PRGS_SIZE)
+			return (2);
+		killpg(p_table[a]->pgid, SIGCONT);
+		return (0);
+	}
+	return (1);
+}
+
+int				bltn_dbg_snap(char **args, ENV *envr)
+{
+	if (args[1])
+	{
+		if (ft_strequ(args[1], "ps"))
+			DBG_SYS_SNAP();
+	}
 	return (0);
 }
 
@@ -137,7 +180,7 @@ static void		sh_loop(ENV *env)
 		    free(line);
             continue;
         }
-		DBG_PRINT_TOKENS(token_list[0]);
+		// DBG_PRINT_TOKENS(token_list[0]);
 		// ft_putendl("== go to parsing ==");
 		sh_tparse(token_list[0], env, TK_EOF, &status);
 		ft_dlst_delf(token_list, 0, free_token);
@@ -155,7 +198,10 @@ int				main(const int argc, char **argv, char **envp)
 	sys_var_init(&env, argv, argc);
 	sys_init();
 
+	// temp bltns
 	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));
+	ft_avl_set(env.builtns, ft_avl_node_cc("dbg_42", &bltn_dbg_snap, 8));
+	ft_avl_set(env.builtns, ft_avl_node_cc("fg", &bltn_fg, 8));
 
 	sh_loop(&env);
 	et_rm_clear_env(&env);
