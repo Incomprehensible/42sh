@@ -6,48 +6,90 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:03:04 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 21:30:45 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 16:51:25 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "sys_tools/sys_tools.h"
+#include "sys_tools/sys_errors.h"
+#include "sh_tokenizer.h"
 #include "ft_lbuffer.h"
 
-/*
-!! TEMPORARY FUNCTION
-!! Soon will be changed!
-*/
+extern pid_t	hot_sbsh;
+
+int				io_subsh_ex(char *code, ENV *envr)
+{
+	t_pgrp		*pg;
+	t_dlist		*toks[2];
+	int			status;
+
+	hot_sbsh = getpid();
+	ft_bzero(toks, sizeof(t_dlist *) * 2);
+	sys_init();
+	// SYNTAX ERROR
+	if (sh_tokenizer(code, toks) <= 0)
+	{
+		sys_error_message("smt", 0);
+		exit(255);
+	}
+	pg = sys_prg_create(hot_sbsh, 0, code, PS_M_FG);
+	sh_tparse(toks[0], envr, TK_EOF, &status);
+	sys_delete_prg(&pg);
+	exit(status);
+}
+
+// ERROR CHECKING
 char			*get_deref_subsh(char *code, ENV *envr)
 {
 	int			pips[2];
 	pid_t		pid;
+	char		*res;
+	t_lbuf		*buff;
 
 	pipe(pips);
+	res = 0;
 	pid = fork();
 	if (pid == 0)
 	{
 		close(pips[0]);
 		dup2(pips[1], 1);
 		close(pips[1]);
-		char *argv[4];
-		argv[0] = "bash";
-		argv[1] = "-c";
-		argv[2] = code;
-		argv[3] = 0;
-		execv("/bin/bash", argv);
-		exit(2);
+		io_subsh_ex(code, envr);
 	}
 	close(pips[1]);
-	t_lbuf *buff = ft_lb_readbytes(pips[0], 0);
-	char *res = ft_lb_flush(buff);
+	buff = ft_lb_readbytes(pips[0], 0);
+	res = ft_lb_flush(buff);
 	return(res);
 }
 
-/*
-!! TEMPORARY FUNCTION
-!! Soon will be changed!
-*/
+char			*ps_sbst_mods(int *pips, int mode)
+{
+	if (mode == 1)
+	{
+		close(pips[1]);
+		dup2(pips[0], 0);
+		close(pips[0]);
+	}
+	else if (mode == 2)
+	{
+		close(pips[0]);
+		dup2(pips[1], 1);
+		close(pips[1]);
+	}
+	else if (mode == 3)
+	{
+		sys_destroy_pipe(pips[0]);
+		return (ft_itoa(pips[1]));
+	}
+	else if (mode == 4)
+	{
+		sys_destroy_pipe(pips[1]);
+		return (ft_itoa(pips[0]));
+	}
+	return (0);
+}
+
 char			*prc_substitute(char *code, ENV *envr, int is_in)
 {
 	int			pips[2];
@@ -56,43 +98,22 @@ char			*prc_substitute(char *code, ENV *envr, int is_in)
 	char		*tmp;
 
 	sys_create_pipe(pips);
-	pid = fork();
-	if (pid == 0)
+	if ((pid = fork()) == 0)
 	{
 		if (is_in)
-		{
-			close(pips[1]);
-			dup2(pips[0], 0);
-			close(pips[0]);
-		}
+			ps_sbst_mods(pips, 1);
 		else
-		{
-			close(pips[0]);
-			dup2(pips[1], 1);
-			close(pips[1]);
-		}
-		char *argv[4];
-		argv[0] = "bash";
-		argv[1] = "-c";
-		argv[2] = code;
-		argv[3] = 0;
-		execv("/bin/bash", argv);
-		exit(2);
+			ps_sbst_mods(pips, 2);
+		io_subsh_ex(code, envr);
 	}
 	dstr = dstr_new("/dev/fd/");
-	if (is_in)
-	{
-		sys_destroy_pipe(pips[0]);
-		tmp = ft_itoa(pips[1]);
-	}
-	else
-	{
-		sys_destroy_pipe(pips[1]);
-		tmp = ft_itoa(pips[0]);
-	}
+	tmp = is_in ? ps_sbst_mods(pips, 3) : ps_sbst_mods(pips, 4);
+	if (!tmp || !dstr)
+		sys_fatal_memerr("PRC_SBST FAIL");
 	dstr_insert_str(dstr, tmp, MAX_LL);
 	free(tmp);
-	tmp = ft_strdup(dstr->txt);
+	if (!(tmp = ft_strdup(dstr->txt)) || !dstr)
+		sys_fatal_memerr("PRC_SBST FAIL");
 	dstr_del(&dstr);
 	return (tmp);
 }

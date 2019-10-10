@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 09:13:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/06 23:38:57 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 13:52:44 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,13 +129,13 @@ int			DBG_SYS_SNAP(void)
 			continue;
 		pg = p_table[i];
 		printf(
-			"\033[31mPRG_DBG:\033[0m\n"
+			"\033[31mPRG_DBG: %d / %p\033[0m\n"
 			"\tPROC GROUP No_ %ld\n"
 			"\tPGID: %d\n"
 			"\tSTATE: %s\n"
 			"\tMODE: %s\n"
 			"\tPIDS: "
-			, i, pg->pgid, states[pg->state], mode[pg->mode]);
+			, hot_sbsh, &hot_sbsh, i, pg->pgid, states[pg->state], mode[pg->mode]);
 		pids = pg->members;
 		while (pids)
 		{
@@ -146,5 +146,16 @@ int			DBG_SYS_SNAP(void)
 		}
 		printf("\n\n");
 	}
+	return (0);
+}
+
+int			DBG_SYS_GLB(void)
+{
+	printf(
+		"\033[31mGL_DBG: %d / %p\033[0m\n"
+		"\tPPID: %d\n"
+		"\tPID: %d\n"
+		"\tADR: &sys_pipes=%p / &hot_gid=%p\n\n"
+		, hot_sbsh, &hot_sbsh, getppid(), getpid(), &sys_pipes, &hot_gid);
 	return (0);
 }

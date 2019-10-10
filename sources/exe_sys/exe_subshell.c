@@ -1,0 +1,82 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exe_subshell.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
+/*   Updated: 2019/10/10 15:29:39 by hgranule         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "sys_tools/sys_tools.h"
+#include "sys_tools/sys_hidden.h"
+#include "sys_tools/sys_errors.h"
+#include "executer.h"
+#include "sh_tokenizer.h"
+#include "rms.h"
+
+#include "stdio.h"
+
+//DEBUG
+extern void	DBG_PRINT_TOKENS(t_dlist *toklst);
+
+/*
+** SUB-SHELL executing
+** 1) Tokenizing string
+** 2) If syntax error status set too 255 and leave
+** 3) fork and save child's pid
+**		0pf) pipes inits, rdrs inits
+** 		1f) set hot_sbsh to getpid()
+**		2f) shtparse tokens
+**		3f) exit with code at *status
+** 4) pipes init
+** 5) return pid
+*/
+int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
+{
+	t_dlist			*redirs;
+	extern pid_t	hot_sbsh;
+	t_pgrp			*pg;
+
+	redirs = sb->redirections;
+	hot_sbsh = getpid();
+	while (redirs)
+	{
+		exe_redir_ex(redirs->content);
+		redirs = redirs->next;
+	}
+	if (sb->ipipe_fds && (dup2(sb->ipipe_fds[0], 0) >= 0))
+		close(sb->ipipe_fds[1]);
+	if (sb->opipe_fds && (dup2(sb->opipe_fds[1], 1) >= 0))
+		close(sb->opipe_fds[0]);
+	sys_init();
+	pg = sys_prg_create(hot_sbsh, 0, sb->commands, PS_M_FG);
+	sh_tparse(toks, envr, TK_EOF, status);
+	sys_delete_prg(&pg);
+	exit(*status);
+}
+
+int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
+{
+	t_dlist			*toks[2];
+	pid_t			cpid;
+	extern pid_t	hot_sbsh;
+
+	ft_bzero(toks, sizeof(t_dlist *) * 2);
+	if (sh_tokenizer(subsh->commands, toks) <= 0)
+	{
+		*status = 255;
+		return (0);
+	}
+	if ((cpid = fork()) < 0)
+		return (-E_FRKFL);
+	else if (cpid == 0)
+		exe_subshell_alg(toks[0], subsh, envr, status);
+	subsh->ipipe_fds ? close(subsh->ipipe_fds[0]) : 0;
+	subsh->opipe_fds ? close(subsh->opipe_fds[1]) : 0;
+	ft_dlst_delf(toks, 0, free_token);
+	hot_sbsh = 0;
+	return ((int)cpid);
+}

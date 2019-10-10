@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 06:27:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 15:41:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,46 +18,58 @@
 #include "stdio.h"
 
 extern pid_t	hot_gid;
+extern pid_t	hot_sbsh;
+
+int				pex_p_table_pgid(pid_t cpid)
+{
+	if (hot_sbsh)
+		hot_gid = hot_sbsh;
+	sys_hot_charge(cpid, PS_M_FG, 0);
+	setpgid(cpid, hot_gid);
+	return (0);
+}
+
+int				prs_etab_handlers(ETAB **etab_row, ETAB **pipe_cache, int *status, ENV *envr)
+{
+	pid_t		cpid;
+
+	cpid = 0;
+	if ((*etab_row)->type == ET_EXPR)
+		cpid = exe_execute_expr((*etab_row)->instruction, envr, status);
+	// NEW SUBSHELL EXECUTING
+	if ((*etab_row)->type == ET_SUBSH)
+		cpid = exe_subshell_expr((*etab_row)->instruction, envr, status);
+	if ((*etab_row)->type == ET_PIPE && !(cpid = 0))
+		ft_dlstunshift((t_dlist **)pipe_cache, (t_dlist *)(*etab_row));
+	else
+	{
+		cpid < 0 ? prs_error_handler(-1 * cpid, status, envr, (*etab_row)->instruction) : 0;
+		ft_dlst_delcut((t_dlist **)etab_row, et_rm_ett);
+	}
+	return (cpid);
+}
 
 int				prs_execute_expr(ETAB **etab ,ENV *envs)
 {
 	ETAB		*etab_row;
 	ETAB		*pipe_free;
 	int			status;
-	int			signal_v;
 	pid_t		cpid;
 
 	etab_row = 0;
 	pipe_free = 0;
-	cpid = 0;
 	status = 127;
-	while (*etab && ((*etab)->type == ET_EXPR || (*etab)->type == ET_PIPE))
+	while (*etab && ((*etab)->type == ET_EXPR || (*etab)->type == ET_PIPE || (*etab)->type == ET_SUBSH))
 	{
 		etab_row = (ETAB *)ft_dlstshift((t_dlist **)etab);
-		if (etab_row->type == ET_EXPR)
-			cpid = exe_execute_expr(etab_row->instruction, envs, &status);
-		if (etab_row->type == ET_PIPE && !(cpid = 0))
-			ft_dlstunshift((t_dlist **)&pipe_free, (t_dlist *)etab_row);
-		else
-		{
-			cpid < 0 ? prs_error_handler(-1 * cpid, &status, envs, etab_row->instruction) : 0;
-			ft_dlst_delcut((t_dlist **)&etab_row, et_rm_ett);
-		}
+		cpid = prs_etab_handlers(&etab_row, &pipe_free, &status, envs);
 		if (cpid > 0)
-		{
-			// SETTING PGID FOR ALL GROUP PIDS AND TAKING THEM INTO P_TABLE
-			sys_hot_charge(cpid, PS_M_FG, 0);
-			int a = setpgid(cpid, hot_gid);
-		}
+			pex_p_table_pgid(cpid);
 	}
 	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);
 	if (cpid > 0)
-	{
-		// if we have a forked process group, we give terminal control to it.
 		tcsetpgrp(0, hot_gid);
-	}
-	signal_v = sys_wait_ptable(&status, cpid);
-	// DBG_SYS_SNAP();
+	sys_wait_ptable(&status, cpid);
 	sys_hot_off(2);
 	prs_set_last_status(&status, envs);
 	sys_kill_pipes();
@@ -82,28 +94,6 @@ int				math_to_expr_maker(ETAB **etab)
 	return (0);
 }
 
-/*
-!! TEMPORARY FUNCTION
-!! Soon will be changed!
-*/
-int				subsh_to_expr_maker(ETAB **etab)
-{
-	SUBSH		*subsh;
-	EXPRESSION	*cmd;
-	char		*tmp;
-
-	subsh = (*etab)->instruction;
-	tmp = subsh->commands;
-	(*etab)->type = ET_EXPR;
-	cmd = (EXPRESSION *)subsh;
-	if (!(cmd->args = ft_memalloc(4 * sizeof(char *))))
-		return (-1);
-	cmd->args[0] = ft_strdup("bash"); // TODO: need to handle malloc fails
-	cmd->args[1] = ft_strdup("-c");
-	cmd->args[2] = tmp;
-	return (0);
-}
-
 int				prs_executor(ETAB **etab, ENV *envs) // TODO: ERROR CHECKING NEED
 {
 	ETAB		*etab_row;
@@ -115,9 +105,7 @@ int				prs_executor(ETAB **etab, ENV *envs) // TODO: ERROR CHECKING NEED
 	{
 		if (etab_row->type == ET_MATH)
 			status = math_to_expr_maker(etab);
-		if (etab_row->type == ET_SUBSH)
-			status = subsh_to_expr_maker(etab);
-		if (etab_row->type == ET_EXPR)
+		if (etab_row->type == ET_EXPR || etab_row->type == ET_SUBSH)
 			status = prs_execute_expr(etab, envs);
 	}
 	return (status);
@@ -136,7 +124,10 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 		if (tok->type & (TK_BREAK | TK_CONTIN))
 			return (tks);
 		if (tok->type & (end_tk | TK_EOF))
+		{
+			// printf("%d\n", *status);
 			return (tks);
+		}
 		tks = tok->type & (TK_EXPR | TK_DEREF) ? prs_expr(&etab, tks, envs) : tks;
 		tks = tok->type == TK_FUNCTION ? prs_func(tks, envs) : tks;
 		// tks = tok->type == TK_BCKR_PS ? prs_bg(&etab, tks, envs) : tks;

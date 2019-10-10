@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/10/07 07:44:32 by bomanyte         ###   ########.fr        #
+#    Updated: 2019/10/10 12:40:03 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 SRC_FILES = sh_main.c get_line.c \
 			ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
 			ft_basename.c exe_sys/exe_binaries.c exe_sys/exe_builtns.c \
-			exe_sys/exe_redirs.c parser/prs_arch.c parser/prs_args.c \
+			exe_sys/exe_redirs.c parser/prs_arch.c parser/prs_args.c exe_sys/exe_subshell.c \
 			parser/prs_instructions.c parser/prs_rdrs.c parser/prs_types.c \
 			env/env_init.c env/env_get_variable.c env/env_set_variable.c env/env_unset_variable.c \
 			bltns/bltn_init.c bltns/bltn_setenv.c bltns/bltn_env.c bltns/bltn_getenv.c bltns/bltn_unsetenv.c \

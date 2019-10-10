@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:07:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 11:03:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 15:42:19 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void		sys_wtps_ext(t_ps_d *psd, int *status, pid_t lpid, int statloc)
 	rstat = WEXITSTATUS(statloc);
 	if (psd->pid == lpid)
 		*status = rstat;
+	// printf("PSD->PID: %d\nLPID: %d\nSTAT: %d\n", psd->pid, lpid, *status);
 	psd->state = PS_S_DON;
 	psd->pid = 0;
 }
@@ -71,7 +72,7 @@ int			sys_wait_prg(t_pgrp **ps_grp, int *status, pid_t lpid, int mode)
 	t_dlist	*delp;
 	t_ps_d	*psd;
 
-	if ((*ps_grp)->state == PS_S_DON || (*ps_grp)->state == PS_S_SIG)
+	if (!hot_sbsh && ((*ps_grp)->state == PS_S_DON || (*ps_grp)->state == PS_S_SIG))
 		return (sys_delete_prg(ps_grp));
 	(*ps_grp)->state = PS_S_DON;
 	ps = (*ps_grp)->members;

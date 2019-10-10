@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 10:21:06 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 13:48:08 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ int				bltn_dbg_snap(char **args, ENV *envr)
 	{
 		if (ft_strequ(args[1], "ps"))
 			DBG_SYS_SNAP();
+		if (ft_strequ(args[1], "gl"))
+			DBG_SYS_GLB();
 	}
 	return (0);
 }
@@ -190,13 +192,15 @@ static void		sh_loop(ENV *env)
 
 int				main(const int argc, char **argv, char **envp)
 {
-	ENV			env;
-	int			status;
-	DSTRING		*dstr;
+	ENV				env;
+	int				status;
+	DSTRING			*dstr;
+	extern pid_t	hot_sbsh;
 	
 	env_init(argc, argv, envp, &env);
 	sys_var_init(&env, argv, argc);
 	sys_init();
+	hot_sbsh = 0;
 
 	// temp bltns
 	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));

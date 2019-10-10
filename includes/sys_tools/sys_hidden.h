@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/05 04:12:56 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 11:30:39 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ typedef struct	s_proc_ds
 t_pgrp		*p_table[SYS_PRGS_SIZE];
 char		sys_pipes[SYS_PIPES_SIZE];
 pid_t		hot_gid;
+pid_t		hot_sbsh;
 
 #endif
