@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_redir_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/09 23:44:52 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 21:01:10 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,33 +190,6 @@ static char *parse_expr(char *s, t_dlist **tok, t_stx **tr)
     return (flag ? s : s - i);
 }
 
-// static char *parse_expr(char *s, t_dlist **tok)
-// {
-//     size_t i;
-//     size_t spaces;
-//     short flag;
-
-//     i = 0;
-//     flag = 0;
-//     spaces = 0;
-//     while (*s && *s != '&' && *s != '<' && *s != '>' && *s != ';' && !(spaces && *s >= 48 && *s <= 57))
-//     {
-//         flag = (ft_isspace(*s)) ? flag : 1;
-// 		spaces = (ft_isspace(*s)) ? 1 : 0;
-//         i++;
-//         s++;
-//     }
-//     if (flag && i)
-//     {
-//         spaces = remove_spaces(s - 1, i);
-//         make_token(tok, pull_token(s - i, i - spaces), TK_EXPR);
-// 		if (spaces)
-// 			make_token(tok, NULL, TK_EMPTY);
-//         s = parse_empty(s, 0x0, tok);
-//     }
-//     return (flag ? s : s - i);
-// }
-
 static char *redirect_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
 {
     short i;
@@ -266,9 +239,6 @@ static short    stop_point(t_dlist **to_list, char **s)
 		token_list = token_list->prev;
 	if (token_list)
         tk = TOK_TYPE;
-    // if (token_list && (TOK_TYPE == TK_PROF_OUT || TOK_TYPE == TK_PROF_IN ||
-    // TOK_TYPE == TK_PROC_IN || TOK_TYPE == TK_PROC_OUT))
-    //     return (1);
     if (is_tok_redir(tk, 1) || tk == TK_EXPR)
         return (0);
 	if (is_sep_no_space(**s))

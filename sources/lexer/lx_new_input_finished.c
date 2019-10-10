@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_new_input_finished.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/09 23:53:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 21:26:09 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ short   br_closed(char *str, char strt, char fin)
     return (times ? 0 : 1);
 }
 
-//here we enter and check if any following symbol is a quote - then check type of quote - then go pass through this and  skip some bytes
 short   brackets_closed(char *str)
 {
     // if (!(br_closed(str, '{', '}')))
@@ -210,6 +209,7 @@ int  validate_cycles(char *str, char *meta)
             str += skip_field(str, *str);
             ++str;
         }
+		// else if (is_token_here(str, "echo") || is_token_here(str, "cat"))
         else
         {
             if (are_tokens_here(str))
@@ -224,9 +224,27 @@ int  validate_cycles(char *str, char *meta)
 
 short   scripts_closed(char *str)
 {
-    if (validate_ifs(str) > 0)
+	str = skip_spaces(str);
+	while (*str && !(is_token_here(str, "if")))
+	{
+		while (*str && *str != '\n' && *str != ';')
+			str++;
+		if (*str)
+		    str++;
+        str = skip_spaces(str);
+	}
+	str = skip_spaces(str);
+    if (*str && validate_ifs(str) > 0)
         return (0);
-    if (validate_cycles(str, "done") > 0)
+	while (*str && !(are_tokens_here(str)))
+	{
+		while (*str && *str != '\n' && *str != ';')
+			str++;
+        if (*str)
+            str++;
+		str = skip_spaces(str);
+	}
+    if (*str && validate_cycles(str, "done") > 0)
         return (0);
     return (1);
 }
@@ -255,9 +273,8 @@ short func_really_closed(char *str)
     if (!(*str))
         return (0);
     if (*str == '{')
-		return (br_closed(str, '{', '}'));
-        //return (is_func_fucking_closed(str + 1));
-	else if (*str)
+		return (br_closed(str, '{', '}')); //return (is_func_fucking_closed(str + 1));
+	if (*str)
 		return (1);
     return (0);
 }
@@ -266,7 +283,6 @@ short func_is_closed(char *str)
 {
     size_t i;
 
-    i = 0;
     str = skip_spaces(str);
     if (!*str)
         return (1);

@@ -69,13 +69,9 @@ short   special_case(char br, char *str)
         if (!is_sep_no_space(*str))
             return (0);
     }
-	// else if (br == '<')
-	// {
-    //     if (*str != '<' && *str != '>')
-    //         return (0);
-    // }
     else
-        if (*str != br && !is_sep_no_space(*str))
+        //        if (*str != br && !is_sep_no_space(*str))
+        if (*str != br && *str != ';' && *str != '\n')
             return (0);
     return (1);
 }

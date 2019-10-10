@@ -23,8 +23,9 @@ short   check_valid_sep(t_dlist *token_list)
     token_list = (token_list) ? token_list->prev : token_list;
     while (token_list && TOK_TYPE == TK_EMPTY)
         token_list = token_list->prev;
-    if (TOK_TYPE != TK_EXPR && TOK_TYPE != TK_NAME && TOK_TYPE != TK_VALUE && 
-        TOK_TYPE != TK_SUBSH && TOK_TYPE != TK_MATH && !is_tok_redir(TOK_TYPE, 0))
+    if (TOK_TYPE != TK_EXPR && TOK_TYPE != TK_NAME && TOK_TYPE != TK_VALUE &&
+        TOK_TYPE != TK_SUBSH && TOK_TYPE != TK_MATH && !is_tok_redir(TOK_TYPE, 0)
+        && TOK_TYPE != TK_FI && TOK_TYPE != TK_DONE)
         return (0);
     return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_func_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/09 23:56:45 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 21:02:23 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,14 @@ static char *func_args(char *str, t_dlist **tok, t_stx **tr)
         if (check_branch(str, tr[FLOWS]))
             str = block_pass(FLOWS, str, tok, tr);
         else if (is_token_here(str, "return"))
-			str = pull_return(str, tok, tr);
-		else
+            str = pull_return(str, tok, tr);
+        else
             str = parse_comm(str, tok, tr, '}');
+        if (!str)
+            return (NULL);
         if (!sep_detected(tok[1]) || !check_valid_sep(tok[1]))
             return (NULL);
-		str = (str) ? skip_spaces_nd_nl(str) : str;
+		str = skip_spaces_nd_nl(str);
     }
     if (!(*str))
         return (0);
