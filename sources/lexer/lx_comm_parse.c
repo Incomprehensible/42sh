@@ -68,9 +68,6 @@ short   time_for_portal(char *str, t_stx **tree)
     if (redir_detected(str, tree) || valid_deref(str) || *str == '(' || *str == '"' || *str == '\'' ||
         is_sep_no_space(*str) || ft_isspace(*str) || is_token_here(str, "exec"))
         return (1);
-//    if (redir_detected(str, tree) || valid_deref(str) || *str == '(' || *str == '"' || *str == '\'' ||
-//    *str == ';' || *str == '\n' ||  ft_isspace(*str) || is_and_or(str) || is_token_here(str, "exec"))
-//        return (1);
     return (0);
 }
 

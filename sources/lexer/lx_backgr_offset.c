@@ -92,22 +92,22 @@ static void to_backgr(t_dlist *token_list, t_dlist *backgr)
         tmp->prev = backgr;
 }
 
-static void fill_empty_hole(t_dlist *token_list, t_dlist *backgr)
-{
-    t_dlist *tmp_next;
-    t_dlist *tmp_prev;
-
-    tmp_next = token_list->next;
-    tmp_prev = token_list->prev;
-    if (TOK_VALUE)
-        free(TOK_VALUE);
-    free(token_list->content);
-    free(token_list);
-    backgr->next = tmp_next;
-    backgr->prev = tmp_prev;
-    tmp_prev->next = backgr;
-    tmp_next->prev = backgr;
-}
+//static void fill_empty_hole(t_dlist *token_list, t_dlist *backgr)
+//{
+//    t_dlist *tmp_next;
+//    t_dlist *tmp_prev;
+//
+//    tmp_next = token_list->next;
+//    tmp_prev = token_list->prev;
+//    if (TOK_VALUE)
+//        free(TOK_VALUE);
+//    free(token_list->content);
+//    free(token_list);
+//    backgr->next = tmp_next;
+//    backgr->prev = tmp_prev;
+//    tmp_prev->next = backgr;
+//    tmp_next->prev = backgr;
+//}
 
 short   stop_point(t_tk_type type)
 {

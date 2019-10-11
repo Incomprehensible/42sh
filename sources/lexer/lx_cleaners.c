@@ -92,7 +92,6 @@ static void trim_separators(t_dlist *token_list)
         }
         token_list = token_list->next;
     }
-
 }
 
 short    list_ready_to_go(t_dlist **token_list)

@@ -75,6 +75,8 @@ short   q_closed(char *str, char q, char q1, char q2)
                     return (0);
                 str += jump;
             }
+            else if (*str == '(')
+                str += skip_field(str, *str);
             str++;
         }
     }
@@ -84,17 +86,33 @@ short   q_closed(char *str, char q, char q1, char q2)
 short   quotes_closed(char *str)
 {
     if (!(q_closed(str, '\'', '"', '`')))
+    {
+        INPUT_NOT_OVER = PRO_APOF;
         return (0);
+    }
     if (!(q_closed(str, '"', '\'', '`')))
+    {
+        INPUT_NOT_OVER = PRO_DQUOT;
         return (0);
+    }
     if (!(q_closed(str, '`', '\'', '"')))
+    {
+        INPUT_NOT_OVER = PRO_APOF;
         return (0);
+    }
     return (1);
 }
 
 short   is_it_q(char c)
 {
     if (c == '\'' || c == '"' || c == '`')
+        return (1);
+    return (0);
+}
+
+short   is_it_br(char c)
+{
+    if (c == '(' || c == '[')
         return (1);
     return (0);
 }
@@ -114,22 +132,31 @@ short   br_closed(char *str, char strt, char fin)
                 times++;
             if (*str == fin)
                 times--;
-            if (is_it_q(*str))
-                str += skip_field(str, *str);
+            if (*str != strt && (is_it_q(*str) || (strt != '(' && *str == '(')))
+                str += (*str == '(') ? skip_field(str, ')') : skip_field(str, *str);
             str++;
         }
     }
-    return (times ? 0 : 1);
+    return (times);
 }
 
 short   brackets_closed(char *str)
 {
-    // if (!(br_closed(str, '{', '}')))
-    //     return (0);
-    if (!(br_closed(str, '[', ']')))
-        return (0);
-    if (!(br_closed(str, '(', ')')))
-        return (0);
+    short times;
+
+    times = br_closed(str, '[', ']');
+    if (times > 0)
+    {
+        PARSE_ERR = PRO_SQU;
+        return (-1);
+    }
+    times = br_closed(str, '(', ')');
+    if (times)
+    {
+        PARSE_ERR = times < 0 ? PRO_SUBSH : PARSE_ERR;
+        INPUT_NOT_OVER = times > 0 ? PRO_SUBSH : INPUT_NOT_OVER;
+        return (times > 0 ? 0 : -1);
+    }
     return (1);
 }
 
@@ -150,11 +177,20 @@ short   input_closed(char *str)
 
     size = ft_strlen(str);
     if (*(str + size - 1) == '|' && (size - 2) && *(str + size - 2) != '\\')
+    {
+        INPUT_NOT_OVER = *(str + size - 2) == '|' ? PRO_OR : PRO_PIPE;
         return (0);
+    }
     if (*(str + size - 1) == '\\' && (size - 2) && *(str + size - 2) != '\\')
+    {
+        INPUT_NOT_OVER = PRO_NONE;
         return (0);
+    }
     if (!is_and_closed(str, size))
+    {
+        INPUT_NOT_OVER = PRO_AND;
         return (0);
+    }
     return (1);
 }
 
@@ -167,7 +203,7 @@ int  validate_ifs(char *str)
     {
         if (*str == '\\')
             str += mirror_passes(str);
-        else if (is_it_q(*str))
+        else if (is_it_q(*str) || is_it_br(*str))
         {
             str += skip_field(str, *str);
             ++str;
@@ -204,12 +240,11 @@ int  validate_cycles(char *str, char *meta)
     {
         if (*str == '\\')
             str += mirror_passes(str);
-        else if (is_it_q(*str))
+        else if (is_it_q(*str) || is_it_br(*str))
         {
             str += skip_field(str, *str);
             ++str;
         }
-		// else if (is_token_here(str, "echo") || is_token_here(str, "cat"))
         else
         {
             if (are_tokens_here(str))
@@ -222,43 +257,74 @@ int  validate_cycles(char *str, char *meta)
     return (num);
 }
 
+static char *if_to_the_start(char *str)
+{
+    while (*str && !(is_token_here(str, "if")))
+    {
+        if (*str == '\\')
+            str += mirror_passes(str);
+        else if (is_it_q(*str) || is_it_br(*str))
+        {
+            str += skip_field(str, *str);
+            ++str;
+        }
+        else
+        {
+            while (*str && *str != '\n' && *str != ';')
+                str++;
+            if (*str)
+                str++;
+            str = skip_spaces(str);
+        }
+    }
+    return (skip_spaces(str));
+}
+
+static char *cycle_to_the_start(char *str)
+{
+    while (*str && !(are_tokens_here(str)))
+    {
+        if (*str == '\\')
+            str += mirror_passes(str);
+        else if (is_it_q(*str) || is_it_br(*str))
+        {
+            str += skip_field(str, *str);
+            ++str;
+        }
+        else
+        {
+            while (*str && *str != '\n' && *str != ';')
+                str++;
+            if (*str)
+                str++;
+            str = skip_spaces(str);
+        }
+    }
+    return (skip_spaces(str));
+}
+
 short   scripts_closed(char *str)
 {
 	str = skip_spaces(str);
-	while (*str && !(is_token_here(str, "if")))
-	{
-		while (*str && *str != '\n' && *str != ';')
-			str++;
-		if (*str)
-		    str++;
-        str = skip_spaces(str);
-	}
-	str = skip_spaces(str);
+	str = if_to_the_start(str);
     if (*str && validate_ifs(str) > 0)
         return (0);
-	while (*str && !(are_tokens_here(str)))
-	{
-		while (*str && *str != '\n' && *str != ';')
-			str++;
-        if (*str)
-            str++;
-		str = skip_spaces(str);
-	}
+    str = cycle_to_the_start(str);
     if (*str && validate_cycles(str, "done") > 0)
         return (0);
     return (1);
 }
 
-short is_func_fucking_closed(char *str)
-{
-    if (!(*str))
-        return (0);
-    while (*str && *str != '}')
-        str += (*str == '\\') ? mirror_passes(str) : 1;
-    if (!(*str))
-        return (0);
-    return (1);
-}
+//short is_func_fucking_closed(char *str)
+//{
+//    if (!(*str))
+//        return (0);
+//    while (*str && *str != '}')
+//        str += (*str == '\\') ? mirror_passes(str) : 1;
+//    if (!(*str))
+//        return (0);
+//    return (1);
+//}
 
 char    *skip_spaces_newline(char *str)
 {
@@ -269,11 +335,21 @@ char    *skip_spaces_newline(char *str)
 
 short func_really_closed(char *str)
 {
+    short times;
+
     str = skip_spaces_newline(str);
     if (!(*str))
         return (0);
     if (*str == '{')
-		return (br_closed(str, '{', '}')); //return (is_func_fucking_closed(str + 1));
+    {
+        times = br_closed(str, '{', '}');
+        if (times)
+        {
+            PARSE_ERR = times < 0 ? PRO_NONE : PARSE_ERR;
+            return (times > 0 ? 0 : -1);
+        }
+        return (1);
+    }
 	if (*str)
 		return (1);
     return (0);
@@ -302,23 +378,58 @@ short   funcs_closed(char *str)
             return (func_is_closed(str + 8));
         else if ((i = layer_parse_two("?()_", str)))
             return (func_really_closed(str + i));
+        else if (*str == '{')
+        {
+            if (!(i = func_really_closed(str)))
+                return (2);
+            PARSE_ERR = i < 0 ? PRO_NONE : PARSE_ERR;
+            return (i);
+
+        }
         str += (*str == '\\') ? mirror_passes(str) : 1;
     }
     return (1);
 }
 
+short   parse_error(void)
+{
+    if (PARSE_ERR == PRO_SUBSH)
+        ft_putstr("42sh: parse error in subshell: unexpected ')'");
+    else if (PARSE_ERR == PRO_SQU)
+        ft_putstr("42sh: parse error: '[' didn't close");
+    else if (PARSE_ERR == PRO_NONE)
+        ft_putstr("42sh: parse error in function: unexpected '}'");
+    else
+        ft_putstr("42sh: parse error occured");
+    PARSE_ERR = 1;
+    return (-1);
+}
+
 short   input_finished(char *str)
 {
-    if (!brackets_closed(str))
-        return (-1);
-    if (!quotes_closed(str))
-        return (-1);
+    short id;
+
+    id = brackets_closed(str);
+    if (id != 1)
+        return (id ? parse_error() : 0);
+    id = quotes_closed(str);
+    if (id != 1)
+        return (id ? parse_error() : 0);
     if (!input_closed(str))
-        return (-1);
+        return (0);
     if (!scripts_closed(str))
-        return (-1);
-    if (!funcs_closed(str))
-        return (-1);
+    {
+        INPUT_NOT_OVER = PRO_NONE;
+        return (0);
+    }
+    id = funcs_closed(str);
+    if (id != 1)
+    {
+        INPUT_NOT_OVER = id ? INPUT_NOT_OVER : PRO_NONE;
+        INPUT_NOT_OVER = id == 2 ? PRO_LAM : INPUT_NOT_OVER;
+        id = id == 2 ? 0 : id;
+        return (id ? parse_error() : 0);
+    }
     return (1);
 }
 

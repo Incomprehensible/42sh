@@ -28,6 +28,8 @@
 # define SH_PROMPT_SBH "subsh> "
 # define SH_PROMPT_LM "lambda> "
 # define SH_PROMPT_PIP "pipe> "
+# define SH_PROMPT_AND "cmdand> "
+# define SH_PROMPT_OR "cmdor> "
 
 # define HIST_FILE_DENY_TRIES 16;
 

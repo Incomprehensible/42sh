@@ -78,7 +78,6 @@ static char *get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)
 
     reg2 = "{z}";
 	str = skip_spaces(str);
-    //str = parse_empty(str, 0x0, tok);
     if ((*str >= 65 && *str <= 90) || (*str >= 97 && *str <= 122))
     {
         if ((i = layer_parse_two(reg1, str)))
@@ -90,12 +89,7 @@ static char *get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)
             if ((layer_parse_two(reg2, str)))
                 return (func_args(str, tok, tr));
             else
-            {
-                // str = ft_process_vars(TK_EXPR, str, "/;/\n/&/|", tok);
-                // make_token(tok, NULL, TK_FEND);
-                // return (parse_sep(str, tok, 0));
 				return (NULL);
-            }
         }
     }
     return (NULL);

@@ -122,6 +122,7 @@ static void		sh_loop(ENV *env)
 	char		*line;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
 	int			status;
+	char        *code;
 
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
@@ -135,7 +136,10 @@ static void		sh_loop(ENV *env)
 		if (sh_tokenizer(line, token_list) <= 0)
 		{
 		    free(line);
-            continue;
+		    code = get_code();
+		    printf("code %s\n", code);
+		    INPUT_NOT_OVER = -1;
+            continue  ;
         }
 		DBG_PRINT_TOKENS(token_list[0]);
 		// ft_putendl("== go to parsing ==");
