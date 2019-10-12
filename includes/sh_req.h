@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:34:45 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/25 16:18:20 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 07:02:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,9 @@
 
 int			sys_init(void);
 int			sys_var_init(ENV *env, char **argv, int argc);
+int			sh_launch_system(ENV *env, char **lfs, char *fs, char **argv);
+int			sh_launch_file(ENV *env, char *file);
+int			sys_core_set_init(ENV *env, char **argv);
+void		sh_loop(ENV *env);
 
 #endif

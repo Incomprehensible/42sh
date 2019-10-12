@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 02:18:35 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 07:12:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,31 @@ int				bltn_dbg_snap(char **args, ENV *envr)
 	return (0);
 }
 
+int				bltn_source(char **args, ENV *envr)
+{
+	t_avl_tree	*tmp;
+	int			status;
+
+	if (args[1] == 0)
+	{
+		sys_error_message("source: argument file required\n"
+		"Usage: source filename [arguments]", 0);
+		return (2);
+	}
+	tmp = envr->core;
+	if (!(envr->core = ft_avl_tree_create(free)))
+	{
+		sys_error_message("source: Failed allocation", 0);
+		envr->core = tmp;
+		return (255);
+	}
+	sys_core_set_init(envr, args);
+	status = sh_launch_file(envr, args[1]);
+	ft_avl_tree_free(envr->core);
+	envr->core = tmp;
+	return (status);
+}
+
 void			DBG_PRINT_TOKENS(t_dlist *toklst)
 {
 	t_tok		*token;
@@ -170,7 +195,7 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 // !! TEMPORARY FUNCTIONS ===================================================================== !!
 // !! Soon will be changed! =================================================================== !!
 
-static void		sh_loop(ENV *env)
+void			sh_loop(ENV *env)
 {
 	char		*line;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
@@ -201,21 +226,29 @@ static void		sh_loop(ENV *env)
 int				main(const int argc, char **argv, char **envp)
 {
 	ENV				env;
-	int				status;
-	DSTRING			*dstr;
-	extern pid_t	hot_sbsh;
-	
+	char			**lflags = 0;
+	char			*flags = 0;
+
+	if (sys_argv_parse(argv, &lflags, &flags))
+		sys_fatal_memerr("ARGV_PRS_FAILED");
+
 	env_init(argc, argv, envp, &env);
 	sys_var_init(&env, argv, argc);
 	sys_init();
-	hot_sbsh = 0;
 
 	// temp bltns
 	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));
 	ft_avl_set(env.builtns, ft_avl_node_cc("dbg_42", &bltn_dbg_snap, 8));
 	ft_avl_set(env.builtns, ft_avl_node_cc("fg", &bltn_fg, 8));
+	ft_avl_set(env.builtns, ft_avl_node_cc("source", &bltn_source, 8));
 
-	sh_loop(&env);
+	// CHOOSE A TYPE OF LAUNCH WITH lflags n flags
+	sh_launch_system(&env, lflags, flags, argv);
+
 	et_rm_clear_env(&env);
+	if (lflags)
+		et_rm_warr(lflags);
+	if (flags)
+		free(flags);
 	return (0);
 }

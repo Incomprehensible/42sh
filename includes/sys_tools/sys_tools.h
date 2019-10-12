@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/11 23:59:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 03:58:06 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ int			DBG_SYS_GLB(void);
 int			DBG_SYS_SNAP(void);
 
 int			sys_wait_ptable(int *status, pid_t lpid);
+
+int			sys_argv_parse(char **argv, char ***long_flags, char **flags);
 
 
 #endif

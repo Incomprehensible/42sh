@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 11:04:53 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 06:01:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,6 @@
 #include "env.h"
 
 #include <stdio.h>
-
-int			sys_core_set_init(ENV *env, char **argv, int argc)
-{
-	int			i;
-	char		*key;
-	char		*argc_val;
-
-	i = -1;
-	if (!(argc_val = ft_itoa(argc)) || \
-	(env_core_set("#", argc_val, env->core) < 0))
-		sys_fatal_memerr("MALLOC CALL FAILED, CORE VARIABLES LOST!");
-	while (++i < argc)
-	{
-		key = ft_itoa(i);
-		if (!key || env_core_set((char *)key, argv[i], env->core) < 0)
-			sys_fatal_memerr("MALLOC CALL FAILED, CORE VARIABLES LOST!");
-		free(key);
-	}
-	free(argc_val);
-	return (0);
-}
 
 int			sys_var_stdname_pr(ENV *env)
 {
@@ -60,8 +39,6 @@ int			sys_var_init(ENV *env, char **argv, int argc)
 {
 	sys_var_stdname_pr(env);
 	prs_set_pid(env);
-	if ((sys_core_set_init(env, argv, argc)) < 0)
-		sys_fatal_memerr("MALLOC CALL FAILED, CORE VARIABLES LOST!");
 	return (0);
 }
 
@@ -83,9 +60,11 @@ int			sys_init(void)
 {
 	extern t_pgrp	*p_table[SYS_PRGS_SIZE];
 	extern char		sys_pipes[SYS_PIPES_SIZE];
+	extern pid_t	hot_sbsh;
 	
 	// Здесь будет идти установка стандартных обработчиков сигналов!
 	sys_sig_init();
+	hot_sbsh = 0;
 	ft_bzero(p_table, SYS_PRGS_SIZE * sizeof(t_pgrp *));
 	ft_bzero(sys_pipes, SYS_PIPES_SIZE * sizeof(char));
 	return (0);
