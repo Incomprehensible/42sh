@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_envar_parse.c                                   :+:      :+:    :+:   */
+/*   lx_envar_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 03:05:32 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/13 00:26:57 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ char    *parse_assig_block(char *str, t_dlist **tok, t_stx **tree)
             j = can_pull_tk(j, str, tok, 0);
             if (!(str = assig_into_portal(str, tok, tree)))
                 return (NULL);
+			if (sep_detected(tok[1]))
+                return (str);
         }
         else
         {
@@ -172,6 +174,22 @@ static char    *get_envar_name(char *str, t_dlist **tok, short i)
     return (str);
 }
 
+char	*into_envar(char *str, t_dlist **tok, t_stx **tree)
+{
+	char *tmp;
+
+    if (!(tmp = get_assigment(str, tok)))
+        return (parse_comm(str, tok, tree, 0));
+    if (!(str = get_value(tmp, tree, tok)))
+        return (NULL);
+	if (*str == ' ' || *str == '\t')
+		str = parse_empty(str, 0x0, tok);
+    str = parse_sep(str, tok, 0);
+    if (following_pipe(tok[1]))
+        return (NULL);
+	return (str);
+}
+
 char*   parse_envar(char *str, t_dlist **tok, t_stx **tree, short i)
 {
     char *patt;
@@ -182,21 +200,18 @@ char*   parse_envar(char *str, t_dlist **tok, t_stx **tree, short i)
 	patt2 = "?+= ";
     str = parse_empty(str, 0x0, tok);
     if (layer_parse_two(patt, str) || layer_parse_two(patt2, str))
-    {
-        if (following_pipe(tok[1]))
-            return (NULL);
-        if (!(tmp = get_envar_name(str, tok, i)))
-            return (parse_comm(str, tok, tree, 0));
-        if (!(tmp = get_assigment(tmp, tok)))
-            return (parse_comm(str, tok, tree, 0));
-        if (!(str = get_value(tmp, tree, tok)))
-            return (NULL);
-    }
+	{
+		if (following_pipe(tok[1]))
+        	return (NULL);
+		if (!(tmp = get_envar_name(str, tok, 0)))
+        	return (parse_comm(str, tok, tree, 0));
+        str = into_envar(tmp, tok, tree);
+	}
     else
         return (parse_comm(str, tok, tree, i));
-    str = parse_empty(str, 0x0, tok);
-    str = parse_sep(str, tok, i);
-    if (following_pipe(tok[1]))
-        return (NULL);
+    // str = parse_empty(str, 0x0, tok);
+    // str = parse_sep(str, tok, i);
+    // if (following_pipe(tok[1]))
+    //     return (NULL);
     return (str);
 }

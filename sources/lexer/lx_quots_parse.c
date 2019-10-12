@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/08 22:17:49 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/13 01:01:52 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char    *parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br)
     i = 0;
     while (*str && !special_case(br, str))
     {
-        if (*str == '\\' && (j++) && (++str))
+        if (br != '"' && *str == '\\' && (j++) && (++str))
             i = 1;
         else if (!i && *str == '$')
         {

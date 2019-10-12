@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/12 22:29:46 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/12 23:01:03 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,6 +353,5 @@ char*   parse_scripts(char *str, t_dlist **tok, t_stx **tree, short ind)
         ind = graph_type(str);
     if ((str = scripts_traverse(script[ind], str, tok, tree)) == tmp)
         return (NULL);
-	DBG_PRINT_TOKENS(tok[0]);
     return (str);
 }

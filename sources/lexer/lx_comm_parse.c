@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/08 14:01:59 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/13 02:39:27 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ static short    is_and_or(char *str)
     return (0);
 }
 
-static short   redir_detected(char *str, t_stx **tree)
+static short   redir_detected(char *str, t_stx **tree, short stop)
 {
+	if (stop == '<')
+		return (0);
     str = (*str == '\\') ? str + 2 : str;
     while (*str && !(is_sep_no_space(*str)))
     {
@@ -63,9 +65,10 @@ static short valid_deref(char *str)
     return (0);
 }
 
-short   time_for_portal(char *str, t_stx **tree)
+short   time_for_portal(char *str, t_stx **tree, short stop)
 {
-    if (redir_detected(str, tree) || valid_deref(str) || *str == '(' || *str == '"' || *str == '\'' ||
+    if ((*str == '=' && !(ft_isspace(*(str + 1)))) || (*str == '+' && *(str + 1) == '=' && !(ft_isspace(*(str + 2)))) ||
+	redir_detected(str, tree, stop) || valid_deref(str) || *str == '(' || *str == '"' || *str == '\'' ||
         is_sep_no_space(*str) || ft_isspace(*str) || is_token_here(str, "exec"))
         return (1);
     return (0);
@@ -86,7 +89,7 @@ char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
             i = 1;
 		if (!i && !j && *str == '\n')
 			str = parse_empty(str, 0x0, tok);
-		else if (!i && *str && time_for_portal(str, tree) && *(str + 1) != '\\')
+		else if (!i && *str && time_for_portal(str, tree, stop) && *(str + 1) != '\\')
         {
             j = can_pull_tk(j, str, tok, stop);
             if (!(str = check_subbranch(str, tok, tree)))
