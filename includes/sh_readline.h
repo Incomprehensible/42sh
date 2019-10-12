@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/27 20:40:04 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 08:53:30 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 # include "libft.h"
 # include "env.h"
 
-# define HISTORY_PATH "/Users/gdaemoni/Desktop/42sh/histr.txt"
-
 #define S_ASTR_STR 50000
+
+char			*tmp_readline(char *prompt);
 
 /* to save strings ft_concat */
 typedef struct	s_concat

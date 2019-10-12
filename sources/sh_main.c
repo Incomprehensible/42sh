@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 07:12:47 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 13:07:11 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,64 @@
 #define UT_TOK_END()		ft_dlst_delf(&tokens, (size_t)-1, free_token)
 #define UT_TOK				tokens
 
-int				bltn_echo(char **args, ENV *envr)
+void			DBG_PRINT_TOKENS(t_dlist *toklst)
 {
-	size_t		i;
+	t_tok		*token;
+	char		*msg;
+	char		*value;
 
-	i = 0;
-	while (args[++i])
+	msg = 0;
+	while (toklst)
 	{
-		i != 1 ? ft_putstr(" ") : 0;
-		ft_putstr(args[i]);
+		token = toklst->content;
+		msg = token->type == TK_EMPTY ? "-" : msg;
+		msg = token->type == TK_EXPR ? "XP" : msg;
+		msg = token->type == TK_SEP ? "SP" : msg;
+		msg = token->type == TK_OR ? "OR" : msg;
+		msg = token->type == TK_AND ? "AND" : msg;
+		msg = token->type == TK_BCKR_PS ? "BGR" : msg;
+		msg = token->type == TK_RD_W ? "rW" : msg;
+		msg = token->type == TK_RD_R ? "rR" : msg;
+		msg = token->type == TK_RD_A ? "rA" : msg;
+		msg = token->type == TK_RD_RW ? "rRW" : msg;
+		msg = token->type == TK_HERED ? "HRD" : msg;
+		msg = token->type == TK_WORD ? "WRD" : msg;
+		msg = token->type == TK_FD ? "FD" : msg;
+		msg = token->type == TK_FILENAME ? "FLN" : msg;
+		msg = token->type == TK_PIPE ? "PIPE" : msg;
+		msg = token->type == TK_ASSIGM ? "ASG" : msg;
+		msg = token->type == TK_NAME ? "NAME" : msg;
+		msg = token->type == TK_VALUE ? "VAL" : msg;
+		msg = token->type == TK_MATH ? "MATH" : msg;
+		msg = token->type == TK_SUBSH ? "SBSH" : msg;
+		msg = token->type == TK_DEREF ? "DRF" : msg;
+		msg = token->type == TK_IF ? "IF" : msg;
+		msg = token->type == TK_THEN ? "THEN" : msg;
+		msg = token->type == TK_ELSE ? "ELSE" : msg;
+		msg = token->type == TK_FI ? "FI" : msg;
+		msg = token->type == TK_WHILE ? "WHL" : msg;
+		msg = token->type == TK_DO ? "DO" : msg;
+		msg = token->type == TK_DONE ? "DONE" : msg;
+		msg = token->type == TK_FOR ? "FOR" : msg;
+		msg = token->type == TK_IN ? "IN" : msg;
+		msg = token->type == TK_BREAK ? "BRK" : msg;
+		msg = token->type == TK_CONTIN ? "CNT" : msg;
+		msg = token->type == TK_EXEC ? "eXC" : msg;
+		msg = token->type == TK_FUNCTION ? "FUNC" : msg;
+		msg = token->type == TK_LAMBDA ? "LMD" : msg;
+		msg = token->type == TK_RETURN ? "RT" : msg;
+		msg = token->type == TK_EOF ? "EOF" : msg;
+		msg = token->type == TK_FEND ? "FND" : msg;
+		msg = token->type == TK_VAR ? "VAR" : msg;
+		msg = token->type == TK_UNTIL ? "UTL" : msg;
+		msg = token->type == TK_PROC_IN ? "PSIN" : msg;
+		msg = token->type == TK_PROC_OUT ? "PSOU" : msg;
+		msg = token->type == TK_PROF_IN ? "PFIN" : msg;
+		msg = token->type == TK_PROF_OUT ? "PFOU" : msg;
+		value = token->value ? token->value : "<->";
+		printf("%5s: %s\n", msg, value);
+		toklst = toklst->next;
 	}
-	ft_putstr(" @\n");
-	return (0);
 }
 
 int				bltn_fg(char **args, ENV *envr)
@@ -132,64 +178,27 @@ int				bltn_source(char **args, ENV *envr)
 	return (status);
 }
 
-void			DBG_PRINT_TOKENS(t_dlist *toklst)
+char			*tmp_readline(char *prompt)
 {
-	t_tok		*token;
-	char		*msg;
-	char		*value;
+	DSTRING		*dstr;
+	char		*line;
+	int			status;
 
-	msg = 0;
-	while (toklst)
+	ft_putstr(prompt);
+	dstr = 0;
+	status = get_next_line(0, &dstr);
+	if (status == 0)
+		return (0);
+	if (status < 0)
 	{
-		token = toklst->content;
-		msg = token->type == TK_EMPTY ? "-" : msg;
-		msg = token->type == TK_EXPR ? "XP" : msg;
-		msg = token->type == TK_SEP ? "SP" : msg;
-		msg = token->type == TK_OR ? "OR" : msg;
-		msg = token->type == TK_AND ? "AND" : msg;
-		msg = token->type == TK_BCKR_PS ? "BGR" : msg;
-		msg = token->type == TK_RD_W ? "rW" : msg;
-		msg = token->type == TK_RD_R ? "rR" : msg;
-		msg = token->type == TK_RD_A ? "rA" : msg;
-		msg = token->type == TK_RD_RW ? "rRW" : msg;
-		msg = token->type == TK_HERED ? "HRD" : msg;
-		msg = token->type == TK_WORD ? "WRD" : msg;
-		msg = token->type == TK_FD ? "FD" : msg;
-		msg = token->type == TK_FILENAME ? "FLN" : msg;
-		msg = token->type == TK_PIPE ? "PIPE" : msg;
-		msg = token->type == TK_ASSIGM ? "ASG" : msg;
-		msg = token->type == TK_NAME ? "NAME" : msg;
-		msg = token->type == TK_VALUE ? "VAL" : msg;
-		msg = token->type == TK_MATH ? "MATH" : msg;
-		msg = token->type == TK_SUBSH ? "SBSH" : msg;
-		msg = token->type == TK_DEREF ? "DRF" : msg;
-		msg = token->type == TK_IF ? "IF" : msg;
-		msg = token->type == TK_THEN ? "THEN" : msg;
-		msg = token->type == TK_ELSE ? "ELSE" : msg;
-		msg = token->type == TK_FI ? "FI" : msg;
-		msg = token->type == TK_WHILE ? "WHL" : msg;
-		msg = token->type == TK_DO ? "DO" : msg;
-		msg = token->type == TK_DONE ? "DONE" : msg;
-		msg = token->type == TK_FOR ? "FOR" : msg;
-		msg = token->type == TK_IN ? "IN" : msg;
-		msg = token->type == TK_BREAK ? "BRK" : msg;
-		msg = token->type == TK_CONTIN ? "CNT" : msg;
-		msg = token->type == TK_EXEC ? "eXC" : msg;
-		msg = token->type == TK_FUNCTION ? "FUNC" : msg;
-		msg = token->type == TK_LAMBDA ? "LMD" : msg;
-		msg = token->type == TK_RETURN ? "RT" : msg;
-		msg = token->type == TK_EOF ? "EOF" : msg;
-		msg = token->type == TK_FEND ? "FND" : msg;
-		msg = token->type == TK_VAR ? "VAR" : msg;
-		msg = token->type == TK_UNTIL ? "UTL" : msg;
-		msg = token->type == TK_PROC_IN ? "PSIN" : msg;
-		msg = token->type == TK_PROC_OUT ? "PSOU" : msg;
-		msg = token->type == TK_PROF_IN ? "PFIN" : msg;
-		msg = token->type == TK_PROF_OUT ? "PFOU" : msg;
-		value = token->value ? token->value : "<->";
-		printf("%5s: %s\n", msg, value);
-		toklst = toklst->next;
+		sys_error_message("INPUT ERROR :(", 0);
+		return (0);
 	}
+	line = ft_strdup(dstr->txt);
+	if (line == 0)
+		sys_error_message("INPUT ERROR :(", 0);
+	dstr_del(&dstr);
+	return (line);
 }
 
 // !! TEMPORARY FUNCTIONS ===================================================================== !!
@@ -198,28 +207,32 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 void			sh_loop(ENV *env)
 {
 	char		*line;
+	DSTRING		*prompt;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
 	int			status;
 
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
 	{
-		ft_putstr("42SH$ ");
-		if (get_line(0, &line) <= 0)
+		if (!(prompt = sys_get_prompt_num(env, 0)))
+			sys_fatal_memerr("PROMPT FAILED");
+		if (!(line = tmp_readline(prompt->txt)))
 		{
 			ft_putendl("== Input failed or ENDED ==");
 			break ;
 		}
 		if (sh_tokenizer(line, token_list) <= 0)
 		{
+			dstr_del(&prompt);
 		    free(line);
             continue;
         }
 		// DBG_PRINT_TOKENS(token_list[0]);
 		// ft_putendl("== go to parsing ==");
+		dstr_del(&prompt);
+		free(line);
 		sh_tparse(token_list[0], env, TK_EOF, &status);
 		ft_dlst_delf(token_list, 0, free_token);
-		free(line);
 	}
 }
 
@@ -237,7 +250,6 @@ int				main(const int argc, char **argv, char **envp)
 	sys_init();
 
 	// temp bltns
-	ft_avl_set(env.builtns, ft_avl_node_cc("echo", &bltn_echo, 8));
 	ft_avl_set(env.builtns, ft_avl_node_cc("dbg_42", &bltn_dbg_snap, 8));
 	ft_avl_set(env.builtns, ft_avl_node_cc("fg", &bltn_fg, 8));
 	ft_avl_set(env.builtns, ft_avl_node_cc("source", &bltn_source, 8));
