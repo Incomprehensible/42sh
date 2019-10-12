@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 13:07:11 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 18:13:29 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 		msg = token->type == TK_PROF_IN ? "PFIN" : msg;
 		msg = token->type == TK_PROF_OUT ? "PFOU" : msg;
 		value = token->value ? token->value : "<->";
-		printf("%5s: %s\n", msg, value);
+		dprintf(2, "%5s: %s\n", msg, value);
 		toklst = toklst->next;
 	}
 }
@@ -210,11 +210,13 @@ void			sh_loop(ENV *env)
 	DSTRING		*prompt;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
 	int			status;
+	char        code;
 
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
+	code = 0;
 	while (1)
 	{
-		if (!(prompt = sys_get_prompt_num(env, 0)))
+		if (!(prompt = sys_get_prompt_num(env, code)))
 			sys_fatal_memerr("PROMPT FAILED");
 		if (!(line = tmp_readline(prompt->txt)))
 		{
@@ -225,10 +227,11 @@ void			sh_loop(ENV *env)
 		{
 			dstr_del(&prompt);
 		    free(line);
-            continue;
+		    code = get_code();
+		    INPUT_NOT_OVER = -1;
+            continue ;
         }
-		// DBG_PRINT_TOKENS(token_list[0]);
-		// ft_putendl("== go to parsing ==");
+		code = 0;
 		dstr_del(&prompt);
 		free(line);
 		sh_tparse(token_list[0], env, TK_EOF, &status);

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 15:41:47 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 17:52:32 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 			return (tks);
 		if (tok->type & (end_tk | TK_EOF))
 		{
-			// printf("%d\n", *status);
 			return (tks);
 		}
 		tks = tok->type & (TK_EXPR | TK_DEREF) ? prs_expr(&etab, tks, envs) : tks;

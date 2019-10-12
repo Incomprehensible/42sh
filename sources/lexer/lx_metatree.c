@@ -198,7 +198,7 @@ t_stx    *init_func(t_stx *tree)
 t_stx    *init_lambda(t_stx *tree)
 {
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = ft_strdup("{z}");
+    tree->meta = ft_strdup("{x}");
     tree->prev = NULL;
     tree->next = NULL;
     return (tree);

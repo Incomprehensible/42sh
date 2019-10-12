@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_bash_init.c                                     :+:      :+:    :+:   */
+/*   lx_bash_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 03:29:48 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/12 20:23:04 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static t_graph  *break_init(t_graph *tk)
 
     script = (t_graph *)malloc((sizeof(t_graph)));
     script->type = TK_BREAK;
-    script->patt = "break;";
+    script->patt = "break_";
     script->forward = tk;
     script->left = NULL;
     script->right = NULL;
@@ -228,19 +228,17 @@ t_graph  *until_script_in(void)
 
 static t_graph  *continue_init(t_graph *tk)
 {
-    static t_graph *script;
+    t_graph *script;
 
-    if (!script)
-    {
-        script = (t_graph *)malloc((sizeof(t_graph)));
-        script->type = TK_CONTIN;
-        script->patt = "continue;";
-        script->left = NULL;
-        script->right = NULL;
-        script->next = NULL;
-    }
-    if (tk)
-        script->forward = tk;
+	script = (t_graph *)malloc((sizeof(t_graph)));
+	script->type = TK_CONTIN;
+	script->patt = "continue_";
+	script->forward = tk;
+	script->left = NULL;
+	script->right = NULL;
+	script->next = NULL;
+    // if (tk)
+    //     script->forward = tk;
     return (script);
 }
 
@@ -281,7 +279,7 @@ static t_graph  *exprtk2_init(void)
     script->patt = "~;";
     script->forward = fitk_init();
     script->left = elsetk_init(script);
-    script->right = continue_init(NULL);
+    script->right = continue_init(script->left);
     script->next = NULL;
     return (script);
 }

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 17:56:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/27 16:20:18 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 14:12:48 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ DSTRING	*sys_get_prompt_num(ENV *envr, char type)
 	sprompt = type == 's' ? SH_PROMPT_SBH : sprompt;
 	sprompt = type == 'l' ? SH_PROMPT_LM : sprompt;
 	sprompt = type == 'p' ? SH_PROMPT_PIP : sprompt;
+	sprompt = type == '&' ? SH_PROMPT_AND : sprompt;
+	sprompt = type == '|' ? SH_PROMPT_OR : sprompt;
 	sprompt = sprompt == 0 ? SH_PROMPT : sprompt;
 	if (!(prm = dstr_new(sprompt)))
 		sys_fatal_memerr("PROMT ALLOC FAILED");

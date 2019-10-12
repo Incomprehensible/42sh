@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 06:55:42 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 15:31:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,15 @@ int			sh_launch_string(ENV *env, char *string)
 {
 	int			status;
 	t_dlist		*toks[2];
+	int			wtf;
 
 	if (!string)
 		sys_fatal_memerr("STRING_EX_FAIL");
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
-	if (sh_tokenizer(string, toks) <= 0)
-	// SYNTAX BAD EOF
+	if ((wtf = sh_tokenizer(string, toks)) <= 0)
+	{
 		sys_error_message("ERROR FILE END", 0);
+	}
 	else
 		sh_tparse(toks[0], env, TK_EOF, &status);
 	if (toks[0])

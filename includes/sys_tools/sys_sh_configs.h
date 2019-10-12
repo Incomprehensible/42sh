@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/27 14:43:00 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 14:12:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # define SH_PROMPT_SBH "subsh> "
 # define SH_PROMPT_LM "lambda> "
 # define SH_PROMPT_PIP "pipe> "
+# define SH_PROMPT_AND "and> "
+# define SH_PROMPT_OR "or> "
 
 # define HIST_FILE_DENY_TRIES 16;
 

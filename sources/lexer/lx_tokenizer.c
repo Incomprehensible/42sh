@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/09 23:12:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 14:36:14 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,15 +169,25 @@ short   clear_tokens(t_dlist **tokens)
     return (-1);
 }
 
+void    global_init(void)
+{
+    PARSE_ERR = -1;
+    SYNTAX_ERR = -1;
+    INPUT_NOT_OVER = -1;
+}
+
 short    get_tokens(char *str, t_dlist **token_list)
 {
     static t_stx    *tree[13];
     t_tk_type       choice;
+    short           code;
 
+    code = 0;
     if (!tree[0])
         tree_init(tree);
-    if (input_finished(str) < 0 || !(*str))
-        return (0);
+    global_init();
+    if (!(*str) || (code = input_finished(str)) != 1)
+        return (code);
     while (*str)
     {
         choice = find_token(tree, str);
@@ -231,13 +241,13 @@ short				sh_tokenizer(char *str, t_dlist **token_list)
     }
     else
         tmp = str;
-    if ((i = get_tokens(tmp, token_list)) <= 0)
+    if ((i = get_tokens(tmp, token_list)) != 1)
     {
         if (i < 0 && last_input)
             free(last_input);
 		// last_input = get_last_input(i, last_input)
         last_input = i ? NULL : ft_strdup(tmp);
-        return (i ? 0 : -1);
+        return (i ? -1 : 0);
     }
     if (last_input)
     {

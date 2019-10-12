@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/10/12 12:43:29 by hgranule         ###   ########.fr        #
+#    Updated: 2019/10/12 14:21:54 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			lexer/lx_redir_parse.c lexer/lx_regulars.c \
 			lexer/lx_sep_parse.c lexer/lx_subsh_parse.c \
 			lexer/lx_tokenizer.c lexer/lx_usefull_func.c \
-			lexer/lx_validate.c
+			lexer/lx_validate.c lexer/lx_input_codes.c
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type lexer)
 

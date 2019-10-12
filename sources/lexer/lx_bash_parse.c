@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_bash_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 09:24:29 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/12 15:25:11 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ static char *into_the_portal(t_graph *g, char *s, t_dlist **tok, t_stx **tr, sho
 {
     if (!g || !(*s))
         return (s);
-    if (i && g->type == TK_EXPR)
+    if (g->type & TK_EXPR)
         s = new_graph(s, tok, tr);
     return (s);
 }
@@ -269,17 +269,28 @@ char    *get_script(t_graph *g, char *s, t_dlist **tok, t_stx **tr, short i)
     return (script_pull(g->patt, g->type, s, tr, tok));
 }
 
+static char *pull_empty(t_graph *g, char *s, t_dlist **tok)
+{
+    if (g && g->type != TK_FI && g->type != TK_DONE && g->type != TK_SEP)
+        s = parse_empty(s, g->patt, tok);
+    else if (g && (*s == ' ' || *s == '\t'))
+        s = parse_empty(s, g->patt, tok);
+    return (s);
+}
+
 char        *scripts_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
 {
     static short sig;
     char *tmp;
 
-    s = g ? parse_empty(s, g->patt, tok) : s;
+//    s = g ? parse_empty(s, g->patt, tok) : s;
+    s = g ? pull_empty(g, s, tok) : s;
     if (!s || !g || ((tmp = get_script(g, s, tok, tr, sig)) && tmp == s) || !tmp)
         return ((sig && tmp) ? s : NULL);
-    s = parse_empty(tmp, g->patt, tok);
+    s = pull_empty(g, tmp, tok);
     sig = 1;
-    while (*s && g->type == TK_EXPR && ((tmp = script_pull(g->patt, g->type, s, tr, tok)) != s) && tmp)
+    // while (*s && g->type == TK_EXPR && ((tmp = script_pull(g->patt, g->type, s, tr, tok)) != s) && tmp)
+	while (*s && g->type == TK_EXPR && ((tmp = get_script(g, s, tok, tr, sig)) != s) && tmp)
         s = parse_empty(tmp, g->patt, tok);
     if (!tmp)
         return (NULL);

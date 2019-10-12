@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/09 23:01:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 14:19:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,6 @@ size_t      layer_parse_two(char *meta, char *str);
 char        *pull_token(char *str, size_t i);
 char        *script_pull(char *patt, t_tk_type type, char *str, t_stx **tr, t_dlist **tok);
 char        *reg_process(char *patt, t_tk_type type, char *str, t_dlist **tok, t_stx **tr);
-char        *ft_process_vars(t_tk_type type, char *str, char *meta, t_dlist **tok);
 char        *parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br);
 short       is_separator(char str);
 short       unexpected_token(void);
@@ -165,9 +164,34 @@ short       back_ps_check(t_dlist *token_list);
 short       seps_check(t_dlist *token_list);
 short       is_prefix(char str);
 short       is_tok_redir(t_tk_type type, short id);
+char        get_code(void);
 
 //more comfortable form of type cast
 # define TOK_TYPE ((t_tok *)(token_list->content))->type
 # define TOK_VALUE ((t_tok *)(token_list->content))->value
+
+//MISTAKES
+short   PARSE_ERR;
+short   SYNTAX_ERR;
+short   INPUT_NOT_OVER;
+
+//for INPUT_NOT_OVER and SYNTAX_ERR
+# define PRO_SUBSH  0
+# define PRO_PIPE   1
+# define PRO_AND    2
+# define PRO_OR     3
+# define PRO_NONE   4
+# define PRO_APOF   5
+# define PRO_DQUOT  6
+# define PRO_SQU    7
+# define PRO_LAM    8
+
+//for SYNTAX_ERR
+# define PRO_IF     11
+# define PRO_FOR    12
+# define PRO_WHILE  13
+# define PRO_DO     14
+# define PRO_THEN   15
+# define PRO_ELSE   16
 
 #endif

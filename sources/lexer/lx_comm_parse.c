@@ -66,7 +66,7 @@ static short valid_deref(char *str)
 short   time_for_portal(char *str, t_stx **tree)
 {
     if (redir_detected(str, tree) || valid_deref(str) || *str == '(' || *str == '"' || *str == '\'' ||
-    *str == ';' || *str == '\n' ||  ft_isspace(*str) || is_and_or(str) || is_token_here(str, "exec"))
+        is_sep_no_space(*str) || ft_isspace(*str) || is_token_here(str, "exec"))
         return (1);
     return (0);
 }
@@ -86,7 +86,7 @@ char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
             i = 1;
 		if (!i && !j && *str == '\n')
 			str = parse_empty(str, 0x0, tok);
-        else if (!i && *str && time_for_portal(str, tree) && *(str + 1) != '\\')
+		else if (!i && *str && time_for_portal(str, tree) && *(str + 1) != '\\')
         {
             j = can_pull_tk(j, str, tok, stop);
             if (!(str = check_subbranch(str, tok, tree)))
@@ -94,7 +94,7 @@ char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
             if (sep_detected(tok[1]))
                 return (str);
         }
-        else
+		else
         {
             str++;
             j++;

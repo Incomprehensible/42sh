@@ -104,7 +104,7 @@ char    *parse_assig_block(char *str, t_dlist **tok, t_stx **tree)
 
     j = 0;
     i = 0;
-    while (*str && !(is_separator(*str) && *str != '"'))
+    while (*str && !((!i && is_separator(*str)) && *str != '"'))
     {
         if (*str == '\\' && (j++) && (++str))
             i = 1;

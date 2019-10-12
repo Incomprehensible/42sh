@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:03:04 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 16:51:25 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 18:24:20 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "sys_tools/sys_errors.h"
 #include "sh_tokenizer.h"
 #include "ft_lbuffer.h"
+
+#include "stdio.h"
 
 extern pid_t	hot_sbsh;
 
@@ -58,8 +60,12 @@ char			*get_deref_subsh(char *code, ENV *envr)
 		io_subsh_ex(code, envr);
 	}
 	close(pips[1]);
-	buff = ft_lb_readbytes(pips[0], 0);
-	res = ft_lb_flush(buff);
+	if (pid > 0)
+	{
+		waitpid(pid, 0, 0);
+		buff = ft_lb_readbytes(pips[0], 0);
+		res = ft_lb_flush(buff);
+	}
 	return(res);
 }
 
