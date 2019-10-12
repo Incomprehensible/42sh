@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:00:14 by hgranule          #+#    #+#             */
-/*   Updated: 2019/08/25 02:31:09 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 03:13:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,15 @@ int (*bltn)(char **, ENV *))
 		redrs = redrs->next;
 	}
 	if (expr->ipipe_fds && (dup2(expr->ipipe_fds[0], 0) >= 0))
+	{
+		close(expr->ipipe_fds[0]);
 		close(expr->ipipe_fds[1]);
+	}
 	if (expr->opipe_fds && (dup2(expr->opipe_fds[1], 1) >= 0))
+	{
 		close(expr->opipe_fds[0]);
+		close(expr->opipe_fds[1]);
+	}
 	exit(bltn(expr->args, envr));
 }
 

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/13 17:19:55 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/02 17:15:35 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 03:13:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,15 @@ int			exe_b_func_alg(EXPRESSION *expr, ENV *envr, FUNC *func)
 		redirs = redirs->next;
 	}
 	if (expr->ipipe_fds && (dup2(expr->ipipe_fds[0], 0) >= 0))
+	{
+		close(expr->ipipe_fds[0]);
 		close(expr->ipipe_fds[1]);
+	}
 	if (expr->opipe_fds && (dup2(expr->opipe_fds[1], 1) >= 0))
+	{
 		close(expr->opipe_fds[0]);
+		close(expr->opipe_fds[1]);
+	}
 	tmp = envr->core;
 	envr->core = func_core_create(expr);
 	sh_tparse(func->func_code, envr, TK_FEND, &status);

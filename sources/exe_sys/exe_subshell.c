@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 15:29:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 03:05:21 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,35 @@
 #include "rms.h"
 
 #include "stdio.h"
+
+int			sbsh_is_fork_n_need(t_dlist *tl)
+{
+	t_tok	*tok;
+
+	while (tl)
+	{
+		tok = tl->content;
+		if (tok->type & TK_SEPS)
+		{
+			if (tok->type == TK_EOF)
+				return (1);
+			else if (tok->type & (TK_AND | TK_OR | TK_PIPE))
+				break ;
+			tl = arg_tok_skip(tl->next, TK_EMPTY);
+			if ((tok = tl->content)->type == TK_EOF)
+				return (1);
+			else
+				break ;
+		}
+		if (tok->type == TK_DEREF)
+			tl = tl->next;
+		if (!(tok->type & (TK_EXPR | TK_EMPTY | \
+		0xf0000000000 | TK_VALUE | TK_NAME | 0x3f81)))
+			break ;
+		tl = tl->next;
+	}
+	return (0);
+}
 
 //DEBUG
 extern void	DBG_PRINT_TOKENS(t_dlist *toklst);
@@ -58,6 +87,33 @@ int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
 	exit(*status);
 }
 
+int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st)
+{
+	ETAB		*etab;
+	EXPRESSION	*xp;
+	char		*arg;
+	pid_t		cpid;
+
+	etab = 0;
+	prs_expr(&etab, tl, envr);
+	xp = (EXPRESSION *)etab->instruction;
+	xp->ipipe_fds = subsh->ipipe_fds;
+	xp->opipe_fds = subsh->opipe_fds;
+	printf("%p\n", xp->opipe_fds);
+	if (xp->ipipe_fds || xp->opipe_fds || \
+	!(ft_avl_search(envr->builtns, xp->args[0]) || \
+	ft_avl_search(envr->funcs, xp->args[0])))
+		return (exe_execute_expr(xp, envr, st));
+	if ((cpid = fork()) < 0)
+		return (-E_FRKFL);
+	else if (cpid == 0)
+	{
+		exe_execute_expr(xp, envr, st);
+		exit(*st);
+	}
+	return (exe_execute_expr(xp, envr, st));
+}
+
 int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 {
 	t_dlist			*toks[2];
@@ -70,12 +126,19 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 		*status = 255;
 		return (0);
 	}
-	if ((cpid = fork()) < 0)
-		return (-E_FRKFL);
-	else if (cpid == 0)
-		exe_subshell_alg(toks[0], subsh, envr, status);
-	subsh->ipipe_fds ? close(subsh->ipipe_fds[0]) : 0;
-	subsh->opipe_fds ? close(subsh->opipe_fds[1]) : 0;
+	if (sbsh_is_fork_n_need(toks[0]))
+		cpid = exe_one_command_lnch(subsh, toks[0], envr, status);
+	else
+	{
+		if ((cpid = fork()) < 0)
+			return (-E_FRKFL);
+		else if (cpid == 0)
+			exe_subshell_alg(toks[0], subsh, envr, status);
+		subsh->ipipe_fds ? close(subsh->ipipe_fds[0]) : 0;
+		subsh->opipe_fds ? close(subsh->opipe_fds[1]) : 0;
+	}
+	if (cpid < 0)
+		return ((int)cpid);
 	ft_dlst_delf(toks, 0, free_token);
 	hot_sbsh = 0;
 	return ((int)cpid);

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 13:48:08 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 02:18:35 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int				bltn_fg(char **args, ENV *envr)
 		}
 		if (a == SYS_PRGS_SIZE)
 			return (2);
+		tcsetpgrp(0, p_table[a]->pgid);
 		killpg(p_table[a]->pgid, SIGCONT);
 		return (0);
 	}
@@ -95,6 +96,13 @@ int				bltn_dbg_snap(char **args, ENV *envr)
 			DBG_SYS_SNAP();
 		if (ft_strequ(args[1], "gl"))
 			DBG_SYS_GLB();
+		if (ft_strequ(args[1], "sleep"))
+		{
+			if (args[2])
+				sleep((unsigned int)ft_atoi(args[2]));
+			else
+				sleep(10);
+		} 
 	}
 	return (0);
 }
