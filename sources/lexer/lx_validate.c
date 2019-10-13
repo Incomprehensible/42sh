@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/13 00:01:44 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/13 02:55:37 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ short   back_ps_check(t_dlist *token_list)
 
     while (token_list)
     {
-        while (token_list && TOK_TYPE != HOLE)
+        while (token_list && TOK_TYPE != TK_ARSHLOCH)
         {
             type = (TOK_TYPE == TK_EMPTY) ? type : TOK_TYPE;
             token_list = token_list->next;
@@ -74,8 +74,6 @@ short   seps_check(t_dlist *token_list)
                 token_list = token_list->next;
             if (!token_list || !token_list->next)
             {
-				DBG_PRINT_TOKENS(token_list);
-				ft_putstr("\n\n\n:(\n\n\n");
                 if (!token_list && type == TK_BCKR_PS)
                     return (0);
                 if (token_list && !token_list->next && TOK_TYPE == TK_BCKR_PS)
@@ -86,8 +84,6 @@ short   seps_check(t_dlist *token_list)
                     return (0);
                 return (1);
             }
-			DBG_PRINT_TOKENS(token_list);
-			ft_putstr("\n\n\n>:(\n\n\n");
             if (is_sep_token(TOK_TYPE) && TOK_TYPE != TK_BCKR_PS)
                 return (0);
             if (TOK_TYPE == TK_BCKR_PS && !tokens_follow(token_list))

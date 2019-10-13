@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/13 02:43:05 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/13 03:05:19 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 		msg = token->type == TK_PROC_OUT ? "PSOU" : msg;
 		msg = token->type == TK_PROF_IN ? "PFIN" : msg;
 		msg = token->type == TK_PROF_OUT ? "PFOU" : msg;
+		msg = token->type == TK_ARSHLOCH ? "ARSHLOCH" : msg;
 		value = token->value ? token->value : "<->";
 		dprintf(2, "%5s: %s\n", msg, value);
 		toklst = toklst->next;

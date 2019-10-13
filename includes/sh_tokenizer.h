@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/12 23:34:38 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/13 03:03:24 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst);
 # define EXPRS (short)0xB
 # define DEREF (short)0xC
 # define EMPTY (short)0x0000000013
-# define HOLE (short)0x0000000014
 # define PROC (short)0x0000000065
 # define PROF (short)0x0000000067
 # define CURLY (short)0x0000000068
