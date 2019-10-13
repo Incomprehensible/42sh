@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/13 03:05:19 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/13 05:48:24 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 		msg = token->type == TK_PROC_OUT ? "PSOU" : msg;
 		msg = token->type == TK_PROF_IN ? "PFIN" : msg;
 		msg = token->type == TK_PROF_OUT ? "PFOU" : msg;
-		msg = token->type == TK_ARSHLOCH ? "ARSHLOCH" : msg;
+		msg = token->type == TK_ARSHLOCH ? "AHLH" : msg;
 		value = token->value ? token->value : "<->";
 		dprintf(2, "%5s: %s\n", msg, value);
 		toklst = toklst->next;
@@ -235,7 +235,7 @@ void			sh_loop(ENV *env)
 		code = 0;
 		dstr_del(&prompt);
 		free(line);
-//		sh_tparse(token_list[0], env, TK_EOF, &status);
+		sh_tparse(token_list[0], env, TK_EOF, &status);
 		ft_dlst_delf(token_list, 0, free_token);
 	}
 }

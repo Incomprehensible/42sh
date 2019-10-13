@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 16:35:44 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/13 04:17:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ size_t			args_count(t_dlist *tokens)
 	else if (((t_tok *)tokens->content)->type & (TK_SEPS | TK_FLOWS))
 		return (0);
 	else
-		return (args_count(arg_tok_skip(tokens, TK_FDS_RDS | TK_EMPTY)));
+		return (args_count(arg_tok_skip(tokens, TK_FDS_RDS | TK_EMPTY | TK_WORD | TK_HERED)));
 }
 
 char			*get_deref_name(char *key, ENV *envr)
@@ -93,9 +93,9 @@ t_dlist			*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr)
 	char		*trimmed;
 
 	expr_buff = dstr_new("");
-	tokens = arg_tok_skip(tokens, TK_FDS_RDS | TK_EMPTY);
+	tokens = arg_tok_skip(tokens, TK_FDS_RDS | TK_EMPTY | TK_HERED | TK_WORD);
 	while (!((tok = tokens->content)->type & \
-	(TK_SEPS | TK_FLOWS | TK_FDS_RDS | TK_EMPTY)))
+	(TK_SEPS | TK_FLOWS | TK_FDS_RDS | TK_EMPTY | TK_WORD | TK_HERED)))
 	{
 		if (tok->type == TK_EXPR || tok->type == TK_VALUE)
 			dstr_insert_str(expr_buff, tok->value, MAX_LL);

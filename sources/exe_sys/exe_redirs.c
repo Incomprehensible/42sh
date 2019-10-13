@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:02:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 22:49:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/13 04:39:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,20 @@ void			exe_redir_type(int *file_flag, t_rdtype tp)
 	tp == a_rdr ? *file_flag |= O_APPEND | O_WRONLY : 0;
 }
 
+void			exe_rdr_heredoc_pipes(DSTRING *buff, int *fd)
+{
+	pipe(fd);
+	dup2(fd[0], 0);
+	write(fd[1], buff->txt, buff->strlen);
+	close(fd[1]);
+	close(fd[0]);
+}
+
 void			exe_rdr_heredocument(REDIRECT *rdr)
 {
 	char	*line;
 	DSTRING	*buff;
+	int		fd[2];
 
 	buff = dstr_new("");
 	while ((line = tmp_readline("heredoc> ")) || 1)
@@ -55,7 +65,7 @@ void			exe_rdr_heredocument(REDIRECT *rdr)
 		dstr_insert_ch(buff, '\n', buff->strlen);
 		free(line);
 	}
-	write(0, buff->txt, buff->strlen);
+	exe_rdr_heredoc_pipes(buff, fd);
 	dstr_del(&buff);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/14 05:17:48 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/13 07:23:53 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,20 @@ void			et_rm_expr(EXPRESSION *expr)
 	}
 }
 
+void			et_rm_sbsh(SUBSH *sbh)
+{
+	t_dlist		*redir;
+
+	if (sbh)
+	{
+		if ((redir = sbh->redirections))
+			ft_dlst_delf(&redir, (size_t)-1, et_rm_rdr);
+		if (sbh->commands)
+			free(sbh->commands);
+		free((void *)sbh);
+	}
+}
+
 void			et_rm_ett(void *et_cont, size_t type)
 {
 	ETAB		*cnt;
@@ -89,6 +103,8 @@ void			et_rm_ett(void *et_cont, size_t type)
 		et_rm_expr((EXPRESSION *)et_cont);
 	else if (type == ET_PIPE)
 		free(et_cont);
+	else if (type == ET_SUBSH)
+		et_rm_sbsh((SUBSH *)et_cont);
 }
 
 void			et_rm_clear_env(ENV *env)
