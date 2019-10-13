@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 15:31:28 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 20:28:36 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,14 +125,14 @@ char *flags, char **argv)
 	{
 		sys_core_set_init(env, afile);
 		sh_launch_string(env, file);
-		if (!ft_strchr(flags, 'r'))
+		if (!flags || (flags && !ft_strchr(flags, 'r')))
 			return (0);
 	}
 	else if (file)
 	{
 		sys_core_set_init(env, argv);
 		sh_launch_file(env, file);
-		if (flags && !ft_strchr(flags, 'r'))
+		if (!flags || (flags && !ft_strchr(flags, 'r')))
 			return (0);
 	}
 	else if (!file)

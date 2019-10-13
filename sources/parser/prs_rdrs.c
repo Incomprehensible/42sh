@@ -6,11 +6,13 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:21:47 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/20 15:11:52 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 22:33:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "sys_tools/sys_tools.h"
+#include "sys_tools/sys_errors.h"
 
 char			*rdr_get_filename(t_tok *tok, ENV *envr)
 {
@@ -63,6 +65,22 @@ int				prs_rdr_fdr_file(t_dlist *tokens, REDIRECT *redir, ENV *envr)
 	return (-1);
 }
 
+int				prs_hrd_word(t_dlist *tl, REDIRECT *redr)
+{
+	t_tok		*tok;
+
+	if (!(tl = arg_tok_skip(tl->next, TK_EMPTY)))
+		return (-2);
+	tok = tl->content;
+	if (tok->type != TK_WORD)
+		return (-1);
+	if (!(redr->file = ft_strdup(tok->value)))
+		sys_fatal_memerr("FAILED_MAKE_HEREDOC");
+	redr->fdr = 0;
+	redr->fdl = 0;
+	return (0);
+}
+
 t_dlist			*prs_new_rdr_cr(t_dlist *tokens, ENV *envr)
 {
 	t_dlist		*res;
@@ -73,8 +91,13 @@ t_dlist			*prs_new_rdr_cr(t_dlist *tokens, ENV *envr)
 	if (!(redir = ft_memalloc(sizeof(REDIRECT))))
 		return (0);
 	redir->type = prs_rdr_type(tokens->content);
-	prs_rdr_fdr_file(tokens, redir, envr);
-	prs_rdr_fdl(tokens, redir);
+	if (redir->type != herd)
+	{
+		prs_rdr_fdr_file(tokens, redir, envr);
+		prs_rdr_fdl(tokens, redir);
+	}
+	else
+		prs_hrd_word(tokens, redir);
 	res->content = redir;
 	res->size = sizeof(REDIRECT);
 	return (res);

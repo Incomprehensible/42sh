@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/25 16:24:01 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 22:24:27 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ typedef enum		e_rd_type		// TYPES OF REDIRS
 	r_rdr, // 0<
 	w_rdr, // 1>
 	rw_rdr, // <>
-	a_rdr // 1>>
+	a_rdr, // 1>>
+	herd // <<
 }					t_rdtype;
 
 typedef struct		s_redirection	// REDIR DESCRIPTOR!!

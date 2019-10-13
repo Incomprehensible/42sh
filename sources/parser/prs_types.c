@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:14:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/08 14:08:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/12 22:24:24 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ t_rdtype		prs_rdr_type(t_tok *tok)
 		return (r_rdr);
 	if (tok->type == TK_RD_W)
 		return (w_rdr);
+	if (tok->type == TK_HERED)
+		return (herd);
 	return (rw_rdr);
 }
