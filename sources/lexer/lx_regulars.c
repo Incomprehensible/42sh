@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 08:37:06 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/13 04:01:52 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ char *ft_process_all(char *str, char *meta)
     ++meta;
     while (*str && *str != *meta)
     {
+		if (*meta == ')' && (*str == '"' || *str == '\''))
+			str += skip_field(str, *str);
         if (*str && !is_separator(*str))
             flag = 1;
         if (*str == '\\' && *(str + 1) && (flag = 1))
