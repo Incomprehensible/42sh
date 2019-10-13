@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_backgr_offset.c                                 :+:      :+:    :+:   */
+/*   lx_backgr_offset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 03:29:21 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/13 03:34:22 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ static void to_backgr(t_dlist *token_list, t_dlist *backgr)
 
 short   stop_point(t_tk_type type)
 {
-    if (type != TK_SEP && type != TK_BCKR_PS && type != HOLE)
+    if (type != TK_SEP && type != TK_BCKR_PS && type != TK_ARSHLOCH)
         return (0);
     return (1);
 }
@@ -139,6 +139,6 @@ t_tk_type   make_offset(t_dlist **token, t_tk_type type)
         all_to_backgr(token, backgr);
     else
         to_backgr(token_list, backgr);
-    make_token(token, NULL, HOLE);
+    make_token(token, NULL, TK_ARSHLOCH);
     return (TK_BCKR_PS);
 }

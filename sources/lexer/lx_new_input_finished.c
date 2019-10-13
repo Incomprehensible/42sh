@@ -160,8 +160,6 @@ short	br_closed_n(char *str, short i)
 	return (i);
 }
 
-
-
 short   brackets_closed(char *str)
 {
     short times;

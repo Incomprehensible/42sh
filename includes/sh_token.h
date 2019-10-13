@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_token.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/09 23:00:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/13 02:23:31 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef size_t		t_tk_type;
 #define TK_PROC_OUT	(t_tk_type)0x0000020000000000 // 2 199 023 255 552
 #define TK_PROF_IN	(t_tk_type)0x0000040000000000 // 4 398 046 511 104
 #define TK_PROF_OUT	(t_tk_type)0x0000080000000000 // 8 796 093 022 208
+#define TK_ARSHLOCH	(t_tk_type)0x0000100000000000 // 17 592 186 044 416
 
 #define TK_SEPS		(t_tk_type)0x1000004038 // SEP + PIPE + EOF
 #define TK_FLOWS	(t_tk_type)0x90ffe00000 // [IF -> CONTIN] + UNTIL + EOF

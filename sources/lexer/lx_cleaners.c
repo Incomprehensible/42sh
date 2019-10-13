@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   lx_cleaners.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/08/19 00:53:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/13 03:03:45 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,6 @@
 #include "sh_tokenizer.h"
 
 #include <stdio.h>
-
-void    get_rid_of_holes(t_dlist *token_list)
-{
-    t_dlist *tmp_next;
-    t_dlist *tmp_prev;
-
-    while (token_list)
-    {
-        if (TOK_TYPE == HOLE)
-        {
-            tmp_next = token_list->next;
-            tmp_prev = token_list->prev;
-            free(token_list->content);
-            free(token_list);
-            if (tmp_prev)
-                tmp_prev->next = tmp_next;
-            if (tmp_next)
-                tmp_next->prev = tmp_prev;
-        }
-        token_list = token_list->next;
-    }
-}
 
 static void    get_rid_of_void(t_dlist *token_list)
 {
@@ -98,7 +76,6 @@ short    list_ready_to_go(t_dlist **token_list)
 {
     t_dlist *start;
 
-    get_rid_of_holes(token_list[0]);
     get_rid_of_void(token_list[0]);
     exec_on(token_list[0]);
     trim_separators(token_list[0]);
@@ -106,7 +83,7 @@ short    list_ready_to_go(t_dlist **token_list)
     while (start->next)
         start = start->next;
     token_list[1] = start;
-    if (!seps_check(token_list[0]))
-        return (0);
+    // if (!seps_check(token_list[0]))
+    //     return (0);
     return (1);
 }

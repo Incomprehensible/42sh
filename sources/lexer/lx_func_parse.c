@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/10 21:02:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/12 23:53:49 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static char *func_args(char *str, t_dlist **tok, t_stx **tr)
     if (!(*str))
         return (0);
     make_token(tok, NULL, TK_FEND);
-    return (str + 1);
+    return (parse_sep(str + 1, tok, 0));
 }
 
 static char *get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)

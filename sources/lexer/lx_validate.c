@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_validate.c                                      :+:      :+:    :+:   */
+/*   lx_validate.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 00:44:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/13 02:55:37 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ short   back_ps_check(t_dlist *token_list)
 
     while (token_list)
     {
-        while (token_list && TOK_TYPE != HOLE)
+        while (token_list && TOK_TYPE != TK_ARSHLOCH)
         {
             type = (TOK_TYPE == TK_EMPTY) ? type : TOK_TYPE;
             token_list = token_list->next;

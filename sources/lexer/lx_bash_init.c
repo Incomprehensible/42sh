@@ -15,20 +15,6 @@
 #include "sh_tokenizer.h"
 static t_graph     *do_init(t_graph *tk);
 
-static t_graph  *break_init(t_graph *tk)
-{
-    t_graph *script;
-
-    script = (t_graph *)malloc((sizeof(t_graph)));
-    script->type = TK_BREAK;
-    script->patt = "break_";
-    script->forward = tk;
-    script->left = NULL;
-    script->right = NULL;
-    script->next = NULL;
-    return (script);
-}
-
 static t_graph  *sep_init(void)
 {
     static t_graph *script;
@@ -100,7 +86,7 @@ static t_graph     *do_init(t_graph *tk)
     script->patt = "do_";
     script->forward = expr_init(tk);
     script->left = tk;
-    script->right = break_init(script->forward->forward);
+    script->right = NULL;
     script->next = NULL;
     return (script);
 }
@@ -226,22 +212,6 @@ t_graph  *until_script_in(void)
 
 // if init done
 
-static t_graph  *continue_init(t_graph *tk)
-{
-    t_graph *script;
-
-	script = (t_graph *)malloc((sizeof(t_graph)));
-	script->type = TK_CONTIN;
-	script->patt = "continue_";
-	script->forward = tk;
-	script->left = NULL;
-	script->right = NULL;
-	script->next = NULL;
-    // if (tk)
-    //     script->forward = tk;
-    return (script);
-}
-
 static t_graph  *elsetk_init(t_graph *expr)
 {
     t_graph *script;
@@ -279,7 +249,7 @@ static t_graph  *exprtk2_init(void)
     script->patt = "~;";
     script->forward = fitk_init();
     script->left = elsetk_init(script);
-    script->right = continue_init(script->left);
+    script->right = NULL;
     script->next = NULL;
     return (script);
 }
@@ -292,8 +262,8 @@ static t_graph  *thentk_init()
     script->type = TK_THEN;
     script->patt = "then_";
     script->forward = exprtk2_init();
-    script->left = break_init(script->forward->forward);
-    script->right = continue_init(script->forward->forward);
+    script->left = NULL;
+    script->right = NULL;
     script->next = NULL;
     return (script);
 }

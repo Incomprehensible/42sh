@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/08 22:27:58 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/12 21:31:18 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ short   check_valid_sep(t_dlist *token_list)
         return (0);
     if (TOK_TYPE != TK_EXPR && TOK_TYPE != TK_NAME && TOK_TYPE != TK_VALUE &&
         TOK_TYPE != TK_SUBSH && TOK_TYPE != TK_MATH && !is_tok_redir(TOK_TYPE, 0)
-        && TOK_TYPE != TK_FI && TOK_TYPE != TK_DONE)
+        && TOK_TYPE != TK_FI && TOK_TYPE != TK_DONE && TOK_TYPE != TK_BREAK
+		&& TOK_TYPE != TK_CONTIN)
         return (0);
     return (1);
 }
