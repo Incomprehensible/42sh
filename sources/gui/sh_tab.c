@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:36:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/14 14:09:29 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/14 14:45:49 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_indch			sh_tab(DSTRING **buf, ENV *env, t_indch indch)
 
 	fl = 0;
 	n_ind.ind = 0;
-	overlap = sh_tab_help(buf, env);
+	overlap = sh_tab_help(buf, env, indch);
 	n_ind.ind_name = get_ind_name((*buf));
 	sort_darr(&overlap);
 	indch.fl = 0;

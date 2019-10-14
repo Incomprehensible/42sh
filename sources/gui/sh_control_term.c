@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:35:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/07 21:00:49 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/14 16:05:22 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf, ENV *envr)
 			return (indch);
 		}
 		else if (indch.ch == UP[0] || indch.ch == DOWN[0])
-			return (show_history(buf, indch, envr));
+			return (show_new_history(buf, indch, envr));
 		else if (indch.ch == 51)
 			sh_del_char(buf, indch.ind, ft_getch());
 	}

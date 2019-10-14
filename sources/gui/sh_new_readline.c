@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 16:41:47 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/14 14:03:38 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/14 14:59:35 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ DSTRING			*new_return_line(DSTRING **buf, t_indch indch)
 		return (dstr_nerr("exit"));
 	}
 	free_lines_down();
-	sh_rewrite(*buf, indch.ind);
+	sh_new_rewrite(indch.prompt, *buf, indch.ind);
 	ft_putstr("\n");
 	if (indch.reg)
 		new_reg_expr(buf, &indch);
@@ -66,6 +66,7 @@ DSTRING			*sh_new_redline(const DSTRING *prompt, ENV *env)
 	preind = 0;
 	ft_bzero(&indch, sizeof(t_indch));
 	ft_putstr(prompt->txt);
+	indch.prompt = (DSTRING *)prompt;
 	while (1)
 	{
 		if (!indch.fl && (indch.ch != (char)0x04 && (indch.ch != '\n')))

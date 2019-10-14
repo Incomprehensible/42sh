@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/14 14:10:44 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/14 16:05:30 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,10 @@ typedef struct	s_fl
 
 DSTRING			*prebuf;
 int				preind;
+t_darr			g_histr;
+
+void			init_histr(ENV *envr);
+t_indch			show_new_history(DSTRING **buf, t_indch indc, ENV *envr);
 
 DSTRING			*sh_readline(ENV *env);
 DSTRING			*sh_new_redline(const DSTRING *prompt, ENV *env);
@@ -175,7 +179,7 @@ void			free_lines_down(void);
 
 /* auto completion */
 t_indch			sh_tab(DSTRING **buf, ENV *env, t_indch indch);
-t_darr			sh_tab_help(DSTRING **buf, ENV *env);
+t_darr			sh_tab_help(DSTRING **buf, ENV *env, t_indch indch);
 int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
 					int fl, t_name_ind n_ind);
 t_darr			sh_add_cmd(DSTRING **buf, ENV *env);

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:43:03 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/14 14:09:27 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/14 14:24:19 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
 	return (n_ind.ind);
 }
 
-t_darr			sh_tab_help(DSTRING **buf, ENV *env)
+t_darr			sh_tab_help(DSTRING **buf, ENV *env, t_indch indch)
 {
 	ssize_t		start_dir;
 	t_darr		overlap;
@@ -79,6 +79,6 @@ t_darr			sh_tab_help(DSTRING **buf, ENV *env)
 		overlap = sh_add_cmd(buf, env);
 	else if (sh_check_back_slash(buf, start_dir))
 		overlap = sh_add_path(buf, start_dir);
-	sh_rewrite((*buf), (*buf)->strlen);
+	sh_new_rewrite(indch.prompt, (*buf), (*buf)->strlen);
 	return (overlap);
 }

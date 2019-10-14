@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 16:01:21 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/14 21:56:12 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,12 @@ static void		sh_loop(ENV *env)
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
 	int			status;
 	DSTRING		*prompt = dstr_new("prompt ");
-
+	init_histr(env);
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
 	{
 		line = sh_new_redline(prompt, env);
+		
 		printf("\n%s @\n", line->txt);
 		if (sh_tokenizer(line->txt, token_list) <= 0)
 		{

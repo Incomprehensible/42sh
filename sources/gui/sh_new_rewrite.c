@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/13 18:00:00 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/14 20:46:06 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ void			sh_clear_line(struct winsize term, int len_all, int index)
 	lines = len_all / term.ws_col;
 	while (lines--)
 	{
-		ft_putstr(CLEARL);
+		ft_putstr("\x001b[2K");
 		ft_putstr(MOVEUP);
 	}
-	ft_putstr(CLEARL);
+	ft_putstr("\x001b[2K");
 	ft_putstr(MOVEBGN);
 }
 
