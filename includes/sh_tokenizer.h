@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/13 03:57:51 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/14 02:57:43 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst);
 # define EXPRS (short)0xB
 # define DEREF (short)0xC
 # define EMPTY (short)0x0000000013
+# define COMMENT (short)0x0000000014
 # define PROC (short)0x0000000065
 # define PROF (short)0x0000000067
 # define CURLY (short)0x0000000068
@@ -166,6 +167,7 @@ short       is_tok_redir(t_tk_type type, short id);
 char        get_code(void);
 char		*into_envar(char *str, t_dlist **tok, t_stx **tree);
 size_t		skip_field(char *str, char skip);
+char		*skip_comment(char *str);
 
 //more comfortable form of type cast
 # define TOK_TYPE ((t_tok *)(token_list->content))->type

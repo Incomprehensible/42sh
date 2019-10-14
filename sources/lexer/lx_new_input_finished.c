@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/13 03:57:06 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/14 00:55:48 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,40 @@ size_t   mirror_passes(char *str)
     return (i);
 }
 
+// size_t  skip_field(char *str, char skip)
+// {
+//     size_t jump;
+
+//     jump = 0;
+//     ++str;
+//     while (*str && *str != skip)
+//     {
+//         jump++;
+//         if (*str == '\\' && *(++str))
+//             str++;
+//         else
+//             str++;
+//     }
+//     if (!(*str))
+//         return (0);
+//     return (++jump);
+// }
+
 size_t  skip_field(char *str, char skip)
 {
     size_t jump;
 
-    jump = 0;
-    ++str;
-    while (*str && *str != skip)
+    jump = 1;
+    while (str[jump] && str[jump] != skip)
     {
-        jump++;
-        if (*str == '\\' && *(++str))
-            str++;
+        if (str[jump] == '\\' && str[++jump])
+            jump++;
         else
-            str++;
+            jump++;
     }
-    if (!(*str))
+    if (!str[jump])
         return (0);
-    return (++jump);
+    return (jump);
 }
 
 short   q_closed(char *str, char q, char q1, char q2)

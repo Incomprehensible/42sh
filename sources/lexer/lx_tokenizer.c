@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_tokenizer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/12 14:36:14 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/14 03:03:59 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ char    *block_pass(short i, char *str, t_dlist **tok, t_stx **tree)
     }
     if (i == EMPTY)
         return (parse_empty(str, 0x0, tok));
+	else if (i == COMMENT)
+		return (skip_comment(str));
     else if (i == SEPS)
         return (parse_sep(str, tok, 0));
     str = ptr[i](str, tok, tree, 0);
@@ -126,9 +128,7 @@ short     find_token(t_stx **tree, char *str)
 
     i = 0;
     choice = 0;
-    if (*str == '\\')
-        return (EXPRS);
-    else if (ft_isspace(*str) || *str == '\n')
+    if (ft_isspace(*str) || *str == '\n')
         return (EMPTY);
     else if (*str == '$' && *(str + 1) != '=')
         return (DEREF);
@@ -137,8 +137,10 @@ short     find_token(t_stx **tree, char *str)
     while (*str && !(is_sep_no_space(*str) && !is_redir(str + 1)) && !choice)
     {
         i = 0;
-        if (*str == '$')
+        if (*str == '$' || *str == '\\')
             return (EXPRS);
+		if (*str == '#')
+			return (COMMENT);
         while (tree[i] && !(choice = check_branch(str, tree[i])))
             i++;
         if (!tree[i])
@@ -194,9 +196,9 @@ short    get_tokens(char *str, t_dlist **token_list)
         if (!(str = block_pass(choice, str, token_list, tree)))
             return (clear_tokens(token_list));
     }
-    if (!back_ps_check(token_list[0]))
+    if (token_list[0]->content && !back_ps_check(token_list[0]))
         return (clear_tokens(token_list));
-    if (!(list_ready_to_go(token_list)))
+    if (token_list[0]->content && !(list_ready_to_go(token_list)))
         return (clear_tokens(token_list));
     make_token(token_list, NULL, TK_EOF);
     return (1);
