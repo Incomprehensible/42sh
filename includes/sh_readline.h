@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/27 20:40:04 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/14 14:10:44 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ typedef struct	s_name_ind
 /* 
 ** ch - user entered character
 ** ind - where to insert the character
+** fl - 0 вызываем гетчар. 1 не вызываем
+** reg = 1 если регулярное выражение
+** tab = 1 если нажат таб
 */
 typedef struct	s_indch
 {
@@ -53,6 +56,9 @@ typedef struct	s_indch
 	int			ind;
 	char		fl;
 	int			his;
+	int			reg;
+	int			tab;
+	DSTRING		*prompt;
 }				t_indch;
 
 /* array of strings with a counter */
@@ -75,14 +81,25 @@ typedef struct	s_fl
 	char		reg;
 }				t_fl;
 
+DSTRING			*prebuf;
+int				preind;
+
 DSTRING			*sh_readline(ENV *env);
+DSTRING			*sh_new_redline(const DSTRING *prompt, ENV *env);
+
+
+t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr);
+char			is_reg(DSTRING *buf);
+void			fill_buf(DSTRING **buf, const t_astr rez);
+int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
+
 
 DSTRING			*dstr_nerr(char *src);
 DSTRING			*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei);
 DSTRING			*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei);
 DSTRING			*check_null(DSTRING *line);
 
-char		is_ctrl(const t_indch indch);
+char			is_ctrl(const t_indch indch);
 
 /* 
 ** Command line editing
@@ -97,13 +114,16 @@ char		is_ctrl(const t_indch indch);
 */
 t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr);
 void			clear_screen(void);
-int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
+int				sh_t_insertion_point(const DSTRING *str, int ind, const char ch);
 
 /*	GET ALL CMDS FROM $PATH */
 t_darr			get_list_cmds(ENV *envp);
 
 /* overwrites the buffer string in the console and sets the cursor at the index */
 void			sh_rewrite(const DSTRING *buf, const size_t index);
+
+void			sh_new_rewrite(const DSTRING *prompt, const DSTRING *buf,\
+						 const size_t index);
 
 /* deletes a character by index. flag == BAKSP moves carriage one character back */
 ssize_t			sh_del_char(DSTRING **buf, size_t index, const char flag);

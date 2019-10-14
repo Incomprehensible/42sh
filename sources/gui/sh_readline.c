@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/23 15:44:11 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/07 17:09:53 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static DSTRING			*return_line(DSTRING **buf, t_indch indch, t_fl fl)
 		dstr_del(buf);
 		free_lines_down();
 		ft_putstr("\n");
-		return (dstr_nerr("exit()"));
+		return (dstr_nerr("exit"));
 	}
 	free_lines_down();
 	sh_rewrite(*buf, indch.ind);
@@ -63,7 +63,7 @@ static DSTRING			*return_line(DSTRING **buf, t_indch indch, t_fl fl)
 	return (*buf);
 }
 
-static char				is_reg(DSTRING *buf)
+char				is_reg(DSTRING *buf)
 {
 	int		i;
 

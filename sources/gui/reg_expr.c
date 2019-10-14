@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 06:51:22 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 17:59:13 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/07 17:09:41 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ DSTRING			*slice_reg(DSTRING *reg)
 	return (rez);
 }
 
-static void		fill_buf(DSTRING **buf, const t_astr rez)
+void		fill_buf(DSTRING **buf, const t_astr rez)
 {
 	int		ind;
 	size_t	j;

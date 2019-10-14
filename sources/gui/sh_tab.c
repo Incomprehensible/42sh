@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tab.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:36:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/27 20:40:56 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/14 14:09:29 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ t_indch			sh_tab(DSTRING **buf, ENV *env, t_indch indch)
 	overlap = sh_tab_help(buf, env);
 	n_ind.ind_name = get_ind_name((*buf));
 	sort_darr(&overlap);
+	indch.fl = 0;
 	while (1)
 	{
 		n_ind.ind = sh_tab_loop_help(overlap, buf, fl++, n_ind);
@@ -98,10 +99,12 @@ t_indch			sh_tab(DSTRING **buf, ENV *env, t_indch indch)
 			break ;
 		}
 		if ((indch.ch = ft_getch()) != TAB)
+		{
+			indch.fl = 1;
 			break ;
+		}
 	}
 	free_darr_n(overlap.strings, overlap.count);
 	indch.ind = (*buf)->strlen;
-	indch.fl = 0;
 	return (indch);
 }

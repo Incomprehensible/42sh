@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/07 13:24:35 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/10 16:01:21 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,29 +118,26 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 
 static void		sh_loop(ENV *env)
 {
-	char		*line;
+	DSTRING		*line;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
 	int			status;
+	DSTRING		*prompt = dstr_new("prompt ");
 
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
 	{
-		ft_putstr("42SH$ ");
-		if (get_line(0, &line) <= 0)
+		line = sh_new_redline(prompt, env);
+		printf("\n%s @\n", line->txt);
+		if (sh_tokenizer(line->txt, token_list) <= 0)
 		{
-			ft_putendl("== Input failed or ENDED ==");
-			break ;
-		}
-		if (sh_tokenizer(line, token_list) <= 0)
-		{
-		    free(line);
+		    dstr_del(&line);
             continue;
         }
 		DBG_PRINT_TOKENS(token_list[0]);
 		// ft_putendl("== go to parsing ==");
 		sh_tparse(token_list[0], env, TK_EOF, &status);
 		ft_dlst_delf(token_list, 0, free_token);
-		free(line);
+		dstr_del(&line);
 	}
 }
 
