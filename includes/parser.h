@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 22:24:27 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 07:39:22 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 typedef enum		e_rd_type		// TYPES OF REDIRS
 {
-	r_rdr, // 0<
+	r_rdr = 1, // 0<
 	w_rdr, // 1>
 	rw_rdr, // <>
 	a_rdr, // 1>>

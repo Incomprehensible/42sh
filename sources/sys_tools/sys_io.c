@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:33:01 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/27 15:19:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 08:02:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,32 @@ int		sys_error_message(char *message, size_t len)
 	write(2, message, len);
 	write(2, "\n", 1);
 	return (0);
+}
+
+int				sys_perror(char *contex, int ret_code, ENV *envr)
+{
+	DSTRING		*message;
+
+	if (!envr)
+	{
+		if (!(message = dstr_new(SHELL_NAME_STD)))
+			sys_fatal_memerr("MALLOC CALL FAILED");
+	}
+	else if (!(message = env_get_variable(SH_VAR_SHNAME, envr)) \
+	|| message->strlen == 0)
+	{
+		if (message)
+			dstr_del(&message);
+		if (!(message = dstr_new(SHELL_NAME_STD)))
+			sys_fatal_memerr("MALLOC CALL FAILED");
+	}
+	if (!contex)
+		contex = "Undefined error";
+	dstr_insert_str(message, ": ", MAX_LL);
+	dstr_insert_str(message, contex, MAX_LL);
+	sys_error_message(message->txt, message->strlen);
+	dstr_del(&message);
+	return (ret_code);
 }
 
 int				sys_put_prompt(ENV *envr, char type)

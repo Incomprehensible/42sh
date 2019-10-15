@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:21:47 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 22:33:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 08:06:45 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ char			*rdr_get_filename(t_tok *tok, ENV *envr)
 	if ((TK_PROF_IN | TK_PROF_OUT) & tok->type)
 		ch = prc_substitute(tok->value, envr, TK_PROF_IN == tok->type ? 1 : 0);
 	else
-		ch = ft_strdup(tok->value);
+	{
+		if (!(ch = ft_strdup(tok->value)))
+			sys_fatal_memerr("STRDUP_FILENAME_FAIL");
+	}
 	return (ch);
 }
 
@@ -85,19 +88,24 @@ t_dlist			*prs_new_rdr_cr(t_dlist *tokens, ENV *envr)
 {
 	t_dlist		*res;
 	REDIRECT	*redir;
+	int			err;
 
 	if (!(res = ft_dlstnew_cc(0, 0)))
-		return (0);
+		sys_fatal_memerr("LIST_RDR_FAILED");
 	if (!(redir = ft_memalloc(sizeof(REDIRECT))))
-		return (0);
+		sys_fatal_memerr("MEMALLOC_CREAT_FAILED");
 	redir->type = prs_rdr_type(tokens->content);
-	if (redir->type != herd)
+	if (redir->type >= r_rdr && redir->type < herd)
 	{
-		prs_rdr_fdr_file(tokens, redir, envr);
-		prs_rdr_fdl(tokens, redir);
+		err = prs_rdr_fdr_file(tokens, redir, envr);
+		err = err >= 0 ? prs_rdr_fdl(tokens, redir) : err;
 	}
+	else if (redir->type == herd)
+		err = prs_hrd_word(tokens, redir);
 	else
-		prs_hrd_word(tokens, redir);
+		return (0);
+	if (err != 0)
+		return (0);
 	res->content = redir;
 	res->size = sizeof(REDIRECT);
 	return (res);
@@ -118,7 +126,11 @@ t_dlist			*prs_rdrs(t_dlist **tokens, ENV *envr)
 			return (0);
 		if ((tok = (it->content)) && (tok->type & TK_RDS))
 		{
-			new_rdr = prs_new_rdr_cr(it, envr);
+			if ((new_rdr = prs_new_rdr_cr(it, envr)) == 0)
+			{
+				ft_dlst_delf(&rdrs, 0, et_rm_rdr);
+				return (0);
+			}
 			ft_dlstpush(&rdrs, new_rdr);
 			it = it->next;
 		}

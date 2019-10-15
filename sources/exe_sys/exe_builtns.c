@@ -6,21 +6,25 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:00:14 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 03:13:18 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 08:41:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
+#include "sys_tools/sys_tools.h"
 
 int		exe_b_cbiltn_alg(EXPRESSION *expr, ENV *envr, \
 int (*bltn)(char **, ENV *))
 {
 	t_dlist		*redrs;
+	int			err;
 
+	err = 0;
 	redrs = expr->redirections;
 	while (redrs)
 	{
-		exe_redir_ex(redrs->content);
+		if (!err && (err = exe_redir_ex(redrs->content, envr)))
+			sys_error_handler(0, -err, envr);
 		redrs = redrs->next;
 	}
 	if (expr->ipipe_fds && (dup2(expr->ipipe_fds[0], 0) >= 0))
@@ -33,7 +37,10 @@ int (*bltn)(char **, ENV *))
 		close(expr->opipe_fds[0]);
 		close(expr->opipe_fds[1]);
 	}
-	exit(bltn(expr->args, envr));
+	if (!err)
+		exit(bltn(expr->args, envr));
+	else
+		exit (2);
 }
 
 // *RETURNS CPID OF FORKED BLTN BASH
@@ -59,17 +66,23 @@ int (*bltn)(char **, ENV *), int *status)
 {
 	//* Перенаправление и сохранение потоков
 	t_dlist		*redrs;
+	int			err;
 
+	err = 0;
 	exe_redir_save420(expr->redirections);
 	redrs = expr->redirections;
 	while (redrs)
 	{
-		exe_redir_ex(redrs->content);
+		if (!err && (err = exe_redir_ex(redrs->content, envr)))
+			break ;
 		redrs = redrs->next;
 	}
 	//* запуск функции и сохранение статуса работы в status
-	*status = bltn(expr->args, envr);
+	if (!err)
+		*status = bltn(expr->args, envr);
+	else
+		*status = 2;
 	//* Восстановление потоков.
 	exe_redir_load420(expr->redirections);
-	return (0);
+	return (err);
 }

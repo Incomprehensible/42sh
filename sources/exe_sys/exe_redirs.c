@@ -6,22 +6,24 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:02:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/13 04:39:56 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 09:03:29 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
 #include "sh_readline.h"
+#include "sys_tools/sys_tools.h"
+#include "sys_tools/sys_errors.h"
 
 int				exe_redir_do(int fdl, int fdr, char *file, int flags)
 {
 	const mode_t	mode = 0644;
 
-	if (file)
-		fdr = open(file, flags, mode);
+	if (file && (fdr = sys_file_op(file, 0, flags, (char *)1)) < 0)
+		return (fdr);
 	dup2(fdr, fdl);
 	close(fdr);
-	return (1);
+	return (0);
 }
 
 void			exe_redir_type(int *file_flag, t_rdtype tp)
@@ -42,7 +44,7 @@ void			exe_rdr_heredoc_pipes(DSTRING *buff, int *fd)
 	close(fd[0]);
 }
 
-void			exe_rdr_heredocument(REDIRECT *rdr)
+int			exe_rdr_heredocument(REDIRECT *rdr)
 {
 	char	*line;
 	DSTRING	*buff;
@@ -54,12 +56,12 @@ void			exe_rdr_heredocument(REDIRECT *rdr)
 		if (!line)
 		{
 			dstr_del(&buff);
-			return ;
+			return (-1);
 		}
 		if (ft_strequ(line, rdr->file))
 		{
 			free(line);
-			break;
+			break ;
 		}
 		dstr_insert_str(buff, line, buff->strlen);
 		dstr_insert_ch(buff, '\n', buff->strlen);
@@ -67,32 +69,38 @@ void			exe_rdr_heredocument(REDIRECT *rdr)
 	}
 	exe_rdr_heredoc_pipes(buff, fd);
 	dstr_del(&buff);
+	return (0);
 }
 
-void			exe_redir_ex(REDIRECT *rdr)
+int				exe_redir_ex(REDIRECT *rdr, ENV *envr)
 {
 	int				fd;
 	int				file_flag;
 	const mode_t	mode = 0644;
 
 	if (rdr->type == herd)
-		exe_rdr_heredocument(rdr);
+	{
+		if (exe_rdr_heredocument(rdr) < 0)
+			return (sys_perror("Heredocument io failed!", -1, 0));
+	}
 	else if ((fd = rdr->fdr) >= 0)
 	{
 		exe_redir_type(&file_flag, rdr->type);
 		if (rdr->fdl == -21)
 		{
-			if (rdr->file)
-				fd = open(rdr->file, file_flag, mode);
+			if (rdr->file && \
+			(fd = sys_file_op(rdr->file, envr, file_flag, (char *)1)) < 0)
+				return (fd);
 			dup2(fd, STDOUT_FILENO);
 			dup2(fd, STDERR_FILENO);
 			close(fd);
-			return ;
+			return (0);
 		}
-		exe_redir_do(rdr->fdl, rdr->fdr, rdr->file, file_flag);
+		return (exe_redir_do(rdr->fdl, rdr->fdr, rdr->file, file_flag));
 	}
 	else if (fd == -42)
 		close(rdr->fdl);
+	return (0);
 }
 
 void			exe_redir_save420(t_dlist *redrs)

@@ -6,13 +6,14 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/13 17:19:55 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 03:13:55 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 08:56:39 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
 #include "parser.h"
 #include "sh_token.h"
+#include "sys_tools/sys_tools.h"
 
 t_avl_tree	*func_core_create(EXPRESSION *expr)
 {
@@ -44,11 +45,14 @@ int			exe_b_func_alg(EXPRESSION *expr, ENV *envr, FUNC *func)
 	t_dlist		*redirs;
 	int			status;
 	t_avl_tree	*tmp;
+	int			err;
 
+	err = 0;
 	redirs = expr->redirections;
 	while (redirs)
 	{
-		exe_redir_ex(redirs->content);
+		if (!err && (err = exe_redir_ex(redirs->content, envr)))
+			sys_error_handler(0, -err, envr);
 		redirs = redirs->next;
 	}
 	if (expr->ipipe_fds && (dup2(expr->ipipe_fds[0], 0) >= 0))
@@ -61,6 +65,8 @@ int			exe_b_func_alg(EXPRESSION *expr, ENV *envr, FUNC *func)
 		close(expr->opipe_fds[0]);
 		close(expr->opipe_fds[1]);
 	}
+	if (err)
+		exit(2);
 	tmp = envr->core;
 	envr->core = func_core_create(expr);
 	sh_tparse(func->func_code, envr, TK_FEND, &status);
@@ -88,21 +94,27 @@ int			exe_execute_f(EXPRESSION *expr, ENV *envr, FUNC *func, int *status)
 {
 	t_dlist		*redirs;
 	t_avl_tree	*tmp;
+	int			err;
 
+	err = 0;
 	exe_redir_save420(expr->redirections);
 	redirs = expr->redirections;
 	while (redirs)
 	{
-		exe_redir_ex(redirs->content);
+		if (!err && (err = exe_redir_ex(redirs->content, envr)))
+			break ;
 		redirs = redirs->next;
 	}
 	//safe special params and args of global scope and create new
-	tmp = envr->core;
-	envr->core = func_core_create(expr);
-	sh_tparse(func->func_code, envr, TK_FEND, status);
-	ft_avl_tree_free(envr->core);
-	envr->core = tmp;
+	if (!err)
+	{
+		tmp = envr->core;
+		envr->core = func_core_create(expr);
+		sh_tparse(func->func_code, envr, TK_FEND, status);
+		ft_avl_tree_free(envr->core);
+		envr->core = tmp;
+	}
 	//load special params and args of GS and delete locals of function
 	exe_redir_load420(expr->redirections);
-	return (0);
+	return (err);
 }

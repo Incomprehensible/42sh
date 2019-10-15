@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:37:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/02 05:17:56 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 08:26:36 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,15 @@ int		sys_error_handler(char *descr, int ecode, ENV *envr)
 {
 	DSTRING		*message;
 
-	if (!(message = env_get_variable(SH_VAR_SHNAME, envr)) || message->strlen == 0)
-	{
-		if (message)
-			dstr_del(&message);
-		if (!(message = dstr_new(SHELL_NAME_STD)))
-			sys_fatal_memerr("MALLOC CALL FAILED");
-	}
-	dstr_insert_str(message, ": ", MAX_LL);
+	if (!(message = dstr_new("")))
+		sys_fatal_memerr("ERR_MESG_FAILED");
 	if (descr)
 	{
 		dstr_insert_str(message, descr, MAX_LL);
 		ecode ? dstr_insert_str(message, ": ", MAX_LL) : 0;
 	}
 	ecode ? dstr_insert_str(message, sys_get_std_message(ecode), MAX_LL) : 0;
-	sys_error_message(message->txt, message->strlen);
+	sys_perror(message->txt, -ecode, envr);
 	dstr_del(&message);
 	return (-ecode);
 }

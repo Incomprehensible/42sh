@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 03:58:06 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 08:02:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ char		*sys_get_conf_path(char *file, ENV *envr);
 */
 DSTRING		*sys_get_prompt_num(ENV *envr, char type);
 int			sys_put_prompt(ENV *envr, char type);
+
+int			sys_perror(char *contex, int ret_code, ENV *envr);
 
 int			sys_write_history(DSTRING *line, ENV *envr);
 

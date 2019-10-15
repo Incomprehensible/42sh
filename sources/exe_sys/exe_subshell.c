@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 17:52:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 08:41:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,23 @@ int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
 	t_dlist			*redirs;
 	extern pid_t	hot_sbsh;
 	t_pgrp			*pg;
+	int				err;
 
+	err = 0;
 	redirs = sb->redirections;
 	hot_sbsh = getpid();
 	while (redirs)
 	{
-		exe_redir_ex(redirs->content);
+		if (!err && (err = exe_redir_ex(redirs->content, envr)))
+			sys_error_handler(0, -err, 0);
 		redirs = redirs->next;
 	}
 	if (sb->ipipe_fds && (dup2(sb->ipipe_fds[0], 0) >= 0))
 		close(sb->ipipe_fds[1]);
 	if (sb->opipe_fds && (dup2(sb->opipe_fds[1], 1) >= 0))
 		close(sb->opipe_fds[0]);
+	if (err)
+		exit(2);
 	sys_init();
 	pg = sys_prg_create(hot_sbsh, 0, sb->commands, PS_M_FG);
 	sh_tparse(toks, envr, TK_EOF, status);
