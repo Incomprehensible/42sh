@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_token.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/13 02:23:31 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/15 09:49:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ typedef size_t		t_tk_type;
 #define TK_FLOWS	(t_tk_type)0x90ffe00000 // [IF -> CONTIN] + UNTIL + EOF
 #define TK_FDS_RDS	(t_tk_type)0x0c0000003780
 
-#define TK_RDS		(t_tk_type)0x781		// RDS + HERED
+#define TK_RDS1		(t_tk_type)(TK_RD_W | TK_RD_R | TK_RD_A | TK_RD_RW)
+#define TK_RDS		(t_tk_type)(TK_HERED | TK_RDS1)		// RDS + HERED
 
 #define TK_FLS_FDR	(t_tk_type)(TK_PROF_IN | TK_PROF_OUT | TK_FILENAME)
 

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:02:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 09:03:29 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 10:13:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ int				exe_redir_do(int fdl, int fdr, char *file, int flags)
 
 	if (file && (fdr = sys_file_op(file, 0, flags, (char *)1)) < 0)
 		return (fdr);
-	dup2(fdr, fdl);
-	close(fdr);
+	if (fdr != fdl)
+	{
+		dup2(fdr, fdl);
+		close(fdr);
+	}
 	return (0);
 }
 
@@ -93,7 +96,7 @@ int				exe_redir_ex(REDIRECT *rdr, ENV *envr)
 				return (fd);
 			dup2(fd, STDOUT_FILENO);
 			dup2(fd, STDERR_FILENO);
-			close(fd);
+			STDOUT_FILENO != fd && fd != STDERR_FILENO ? close(fd) : 0;
 			return (0);
 		}
 		return (exe_redir_do(rdr->fdl, rdr->fdr, rdr->file, file_flag));

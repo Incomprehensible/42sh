@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:21:47 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 08:06:45 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 10:03:13 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,29 @@ char			*rdr_get_filename(t_tok *tok, ENV *envr)
 	return (ch);
 }
 
-int				prs_rdr_fdl(t_dlist *tokens, REDIRECT *redir)
+int				prs_rdr_is_std_fd(t_dlist *fd_tl)
 {
 	t_tok		*tok;
 
-	tokens = arg_tok_r_skip(tokens, TK_EMPTY | TK_RDS);
-	if (!tokens || !(tok = tokens->content) || tok->type != TK_FD)
+	tok = (t_tok *)fd_tl->content;
+	if (tok->type != TK_FD)
+		return (1);
+	fd_tl = arg_tok_r_skip(fd_tl->prev, TK_EMPTY);
+	if (!fd_tl || !fd_tl->content)
+		return (0);
+	tok = (t_tok *)fd_tl->content;
+	if (tok->type & TK_RDS1)
+		return (1);
+	return (0);
+}
+
+int				prs_rdr_fdl(t_dlist *tokens, REDIRECT *redir)
+{
+	t_tok		*tok;
+	int			r;
+
+	tokens = arg_tok_r_skip(tokens, TK_EMPTY | TK_RDS1);
+	if (!tokens || !(tok = tokens->content) || (r = prs_rdr_is_std_fd(tokens)))
 	{
 		redir->fdl = redir->type == r_rdr ? 0: redir->fdl;
 		redir->fdl = redir->type & (a_rdr | w_rdr) ? 1: redir->fdl;
