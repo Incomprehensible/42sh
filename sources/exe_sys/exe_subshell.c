@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 08:41:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 22:50:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ int			sbsh_is_fork_n_need(t_dlist *tl)
 		tok = tl->content;
 		if (tok->type & TK_SEPS)
 		{
-			if (tok->type == TK_EOF)
+			if (tok->type & (TK_EOF | TK_ARSHLOCH))
 				return (1);
 			else if (tok->type & (TK_AND | TK_OR | TK_PIPE))
 				break ;
 			tl = arg_tok_skip(tl->next, TK_EMPTY);
-			if ((tok = tl->content)->type == TK_EOF)
+			if ((tok = tl->content)->type & (TK_EOF | TK_ARSHLOCH))
 				return (1);
 			else
 				break ;
@@ -72,7 +72,6 @@ int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
 
 	err = 0;
 	redirs = sb->redirections;
-	hot_sbsh = getpid();
 	while (redirs)
 	{
 		if (!err && (err = exe_redir_ex(redirs->content, envr)))
@@ -85,8 +84,9 @@ int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
 		close(sb->opipe_fds[0]);
 	if (err)
 		exit(2);
-	sys_init();
-	pg = sys_prg_create(hot_sbsh, 0, sb->commands, PS_M_FG);
+	sys_init(1);
+	hot_sbsh = getpid();
+	pg = sys_prg_create(hot_sbsh, 0, 0, PS_M_FG);
 	sh_tparse(toks, envr, TK_EOF, status);
 	sys_delete_prg(&pg);
 	exit(*status);
@@ -104,18 +104,19 @@ int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st)
 	xp = (EXPRESSION *)etab->instruction;
 	xp->ipipe_fds = subsh->ipipe_fds;
 	xp->opipe_fds = subsh->opipe_fds;
+	xp->redirections = subsh->redirections;
 	if (xp->ipipe_fds || xp->opipe_fds || \
 	!(ft_avl_search(envr->builtns, xp->args[0]) || \
 	ft_avl_search(envr->funcs, xp->args[0])))
 		return (exe_execute_expr(xp, envr, st));
-	if ((cpid = fork()) < 0)
+	else if ((cpid = fork()) < 0)
 		return (-E_FRKFL);
 	else if (cpid == 0)
 	{
 		exe_execute_expr(xp, envr, st);
 		exit(*st);
 	}
-	return (exe_execute_expr(xp, envr, st));
+	return (cpid);
 }
 
 int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)

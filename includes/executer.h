@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:09:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 08:40:29 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 23:08:42 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define ET_PIPE (size_t)2
 # define ET_MATH (size_t)3
 # define ET_SUBSH (size_t)4
+# define ET_BCKGR (size_t)5
 
 typedef struct		s_extab			// RELOADING OF T_DLIST
 {
@@ -45,6 +46,9 @@ int			exe_redir_ex(REDIRECT *rdr, ENV *envr);
 int			exe_wait_cps(pid_t);
 int			exe_execute_expr(EXPRESSION *expr, ENV *envr, int *status);
 int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status);
+int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st);
+int			exe_bkgr_expr(BCKGR *bkgr, ENV *envr, int *status);
+int			sbsh_is_fork_n_need(t_dlist *tok);
 
 void		exe_redir_save420(t_dlist *redrs);
 void		exe_redir_load420(t_dlist *redrs);

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 06:01:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/16 02:26:14 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,23 @@ int			sys_var_init(ENV *env, char **argv, int argc)
 
 void		sighand(int s)
 {
-	printf("SIGNAL input: %d\n", s);
+	printf("SIGNAL input: %d (%d)\n", s, hot_sbsh);
+	if (hot_sbsh && s == SIGTSTP)
+		raise(SIGSTOP);
+	if (hot_sbsh && s == SIGINT)
+	{
+		signal(SIGINT, SIG_DFL);
+		raise(SIGINT);
+	}
+}
+
+void		sys_sig_dfl(void)
+{
+	signal(SIGTTIN, SIG_DFL);
+	signal(SIGTTOU, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGTSTP, SIG_DFL);
 }
 
 void		sys_sig_init(void)
@@ -52,20 +68,25 @@ void		sys_sig_init(void)
 	signal(SIGINT, sighand);
 	signal(SIGQUIT, sighand);
 	signal(SIGTSTP, sighand);
-	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
 }
 
-int			sys_init(void)
+int			sys_init(int sbh_on)
 {
 	extern t_pgrp	*p_table[SYS_PRGS_SIZE];
 	extern char		sys_pipes[SYS_PIPES_SIZE];
 	extern pid_t	hot_sbsh;
+	extern char		*hot_bkgr;
+	extern int		prompt_ofd;
 	
 	// Здесь будет идти установка стандартных обработчиков сигналов!
 	sys_sig_init();
 	hot_sbsh = 0;
+	prompt_ofd = dup2(2, PROMPT_OUT_FD);
+	if (prompt_ofd < 0)
+		prompt_ofd = STDERR_FILENO;
 	ft_bzero(p_table, SYS_PRGS_SIZE * sizeof(t_pgrp *));
 	ft_bzero(sys_pipes, SYS_PIPES_SIZE * sizeof(char));
-	return (0);
+	return (sbh_on);
 }

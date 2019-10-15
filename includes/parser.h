@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 07:39:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 13:45:26 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define MATH t_math
 # define FUNC t_func
 # define SUBSH t_subsh
+# define BCKGR t_bkgr
 
 typedef enum		e_rd_type		// TYPES OF REDIRS
 {
@@ -63,6 +64,11 @@ typedef struct		s_subsh
 	int				*opipe_fds;
 	t_dlist			*redirections;
 }					t_subsh;
+
+typedef struct		s_bkgr
+{
+	t_dlist			*tls;
+}					t_bkgr;
 
 typedef struct		s_pipe			// PIPE DESCRIPTOR
 {
@@ -144,6 +150,7 @@ t_dlist			*prs_pipe(ETAB **tab, t_dlist *tk);
 
 t_dlist			*prs_math(ETAB **tab, t_dlist *tokens, ENV *envs);
 t_dlist			*prs_subsh(ETAB **tab, t_dlist *tokens, ENV *envs);
+t_dlist			*prs_bkgr(ETAB **tab, t_dlist *tokens, ENV *envr);
 t_dlist			*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr);
 
 /*
@@ -178,6 +185,7 @@ t_dlist			*prs_assigm(t_dlist *tks, ENV *envs, int *status);
 t_dlist			*prs_while(t_dlist *tks, ENV *envs, int *status);
 t_dlist			*prs_if(t_dlist *tks, ENV *envs, int *status);
 t_dlist			*prs_for(t_dlist *tks, ENV *envs, int *status);
+
 
 char			*get_deref_subsh(char *code, ENV *envr);
 char			*prc_substitute(char *code, ENV *envr, int is_in);

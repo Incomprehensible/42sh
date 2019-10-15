@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 09:13:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 13:52:44 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 19:18:31 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,55 +107,9 @@ int			sys_hot_charge(pid_t pid, int mode, char *str)
 int			sys_hot_off(int ret_status)
 {
 	extern pid_t	hot_gid;
+	extern char		*hot_bkgr;
 
 	hot_gid = 0;
+	hot_bkgr = 0;
 	return (ret_status);
-}
-
-// DEBUG
-int			DBG_SYS_SNAP(void)
-{
-	ssize_t		i;
-	t_pgrp		*pg;
-	t_ps_d		*psd;
-	char		*states[] = {"NULL", "DONE", "SIGNALED", "STOPPED", "RUNNING"};
-	char		*mode[] = {"NULL", "FG", "BG"};
-	t_dlist		*pids;
-
-	i = -1;
-	while (++i < SYS_PRGS_SIZE)
-	{
-		if (!p_table[i])
-			continue;
-		pg = p_table[i];
-		printf(
-			"\033[31mPRG_DBG: %d / %p\033[0m\n"
-			"\tPROC GROUP No_ %ld\n"
-			"\tPGID: %d\n"
-			"\tSTATE: %s\n"
-			"\tMODE: %s\n"
-			"\tPIDS: "
-			, hot_sbsh, &hot_sbsh, i, pg->pgid, states[pg->state], mode[pg->mode]);
-		pids = pg->members;
-		while (pids)
-		{
-			psd = (t_ps_d *)&pids->size;
-			printf("%d:%c%c%c ", psd->pid, *(states[psd->state]), *(states[psd->state] + 1), \
-			*(states[psd->state] + 2));
-			pids = pids->next;
-		}
-		printf("\n\n");
-	}
-	return (0);
-}
-
-int			DBG_SYS_GLB(void)
-{
-	printf(
-		"\033[31mGL_DBG: %d / %p\033[0m\n"
-		"\tPPID: %d\n"
-		"\tPID: %d\n"
-		"\tADR: &sys_pipes=%p / &hot_gid=%p\n\n"
-		, hot_sbsh, &hot_sbsh, getppid(), getpid(), &sys_pipes, &hot_gid);
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:03:04 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 18:24:20 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 19:19:27 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int				io_subsh_ex(char *code, ENV *envr)
 
 	hot_sbsh = getpid();
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
-	sys_init();
+	sys_init(1);
 	// SYNTAX ERROR
 	if (sh_tokenizer(code, toks) <= 0)
 	{

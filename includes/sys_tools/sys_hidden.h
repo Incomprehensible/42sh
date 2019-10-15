@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 11:30:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/16 00:44:48 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@
 # include "ft_mem.h"
 # include "ft_dlist.h"
 
-# define SYS_FDS_USR_LIMIT 40
+# define SYS_FDS_USR_LIMIT 60
 # define SYS_PIPES_SIZE 1024
 # define SYS_PRGS_SIZE 1024
+
+# define SYS_REDR_OFFST 80
 
 # define CHECK_INTS_P 0x0000008000000080
 
@@ -73,5 +75,6 @@ t_pgrp		*p_table[SYS_PRGS_SIZE];
 char		sys_pipes[SYS_PIPES_SIZE];
 pid_t		hot_gid;
 pid_t		hot_sbsh;
+char		*hot_bkgr;
 
 #endif

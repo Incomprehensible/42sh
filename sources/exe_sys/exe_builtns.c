@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:00:14 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 08:41:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 20:05:26 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@ int (*bltn)(char **, ENV *))
 
 	err = 0;
 	redrs = expr->redirections;
-	while (redrs)
-	{
-		if (!err && (err = exe_redir_ex(redrs->content, envr)))
-			sys_error_handler(0, -err, envr);
-		redrs = redrs->next;
-	}
 	if (expr->ipipe_fds && (dup2(expr->ipipe_fds[0], 0) >= 0))
 	{
 		close(expr->ipipe_fds[0]);
@@ -36,6 +30,12 @@ int (*bltn)(char **, ENV *))
 	{
 		close(expr->opipe_fds[0]);
 		close(expr->opipe_fds[1]);
+	}
+	while (redrs)
+	{
+		if (!err && (err = exe_redir_ex(redrs->content, envr)))
+			sys_error_handler(0, -err, envr);
+		redrs = redrs->next;
 	}
 	if (!err)
 		exit(bltn(expr->args, envr));

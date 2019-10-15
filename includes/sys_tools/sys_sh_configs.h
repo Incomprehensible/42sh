@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 14:12:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 20:11:13 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,12 @@
 # define SH_PROMPT_AND "and> "
 # define SH_PROMPT_OR "or> "
 
+# define PROMPT_OUT_FD 100
+
 # define HIST_FILE_DENY_TRIES 16;
 
 int			history_file_status;
 int			rc_file_status;
+int			prompt_ofd;
 
 #endif

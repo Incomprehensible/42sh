@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 08:02:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 23:09:30 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,12 @@ t_pgrp		*sys_prg_get(pid_t prg);
 int			sys_delete_prg(t_pgrp **prg);
 int			sys_hot_charge(pid_t pid, int mode, char *str);
 int			sys_hot_off(int ret_status);
-// DEBUG
-int			DBG_SYS_GLB(void);
-int			DBG_SYS_SNAP(void);
 
 int			sys_wait_ptable(int *status, pid_t lpid);
 
 int			sys_argv_parse(char **argv, char ***long_flags, char **flags);
+void		sys_sig_init(void);
+void		sys_sig_dfl(void);
 
 
 #endif

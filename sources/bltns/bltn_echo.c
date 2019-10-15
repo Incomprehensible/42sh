@@ -6,13 +6,14 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 12:40:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 13:03:48 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 20:03:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "bltn.h"
 #include "sys_tools/sys_tools.h"
+#include "sys_tools/sys_errors.h"
 
 static int		ft_isodigit(int ch)
 {
@@ -89,30 +90,40 @@ static void		echo_put_estr(char **args)
 	}
 }
 
-int				bltn_echo(char **args, ENV *envr)
+int				echo_put_str(char **args)
 {
-	size_t		i;
-	char		*flags;
-	char		ch;
 	size_t		j;
+	size_t		i;
 
 	i = 0;
 	j = 0;
+	while (args[++i])
+	{
+		j != 0 ? ft_putstr(" ") : 0;
+		if (!j && args[i][0] == '-')
+			continue ;
+		else
+			j = 1;
+		ft_putstr(args[i]);
+	}
+	return (0);
+}
+
+int				bltn_echo(char **args, ENV *envr)
+{
+	char		*flags;
+	char		ch;
+
+	if (write(STDOUT_FILENO, 0, 0) < 0)
+	{
+		sys_error_handler("echo: write error", E_BADFD, envr);
+		return (1);
+	}
 	flags = ft_parse_flags(args);
 	if (flags && ft_strchr(flags, 'e'))
 		echo_put_estr(args);
 	else
-	{
-		while (args[++i])
-		{
-			j != 0 ? ft_putstr(" ") : 0;
-			if (!j && args[i][0] == '-')
-				continue ;
-			else
-				j = 1;
-			ft_putstr(args[i]);
-		}
-	}
+		echo_put_str(args);
 	if (!flags || !ft_strchr(flags, 'n'))
 		ft_putstr("\n");
 	return (0);

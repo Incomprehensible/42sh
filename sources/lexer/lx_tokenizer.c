@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/12 14:36:14 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:04:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ short   clear_tokens(t_dlist **tokens)
     t_dlist *token_list;
 
     unexpected_token();
-	DBG_PRINT_TOKENS(*tokens);
+	// DBG_PRINT_TOKENS(*tokens);
     while (*tokens)
     {
         token_list = *tokens;

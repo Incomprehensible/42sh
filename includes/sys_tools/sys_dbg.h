@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_req.h                                           :+:      :+:    :+:   */
+/*   sys_dbg.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/12 01:34:45 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/16 02:26:35 by hgranule         ###   ########.fr       */
+/*   Created: 2019/10/15 19:14:06 by hgranule          #+#    #+#             */
+/*   Updated: 2019/10/15 19:30:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH_REQ_H
-# define SH_REQ_H
+#ifndef SYS_DBG_H
+# define SYS_DBG_H
 
-# include "libft.h"
-# include "ft_avl_tree.h"
-# include "env.h"
+#include "sys_tools/sys_errors.h"
+#include "sys_tools/sys_sh_configs.h"
+#include "sys_tools/sys_tools.h"
 
-int			sys_init(int sbh);
-int			sys_var_init(ENV *env, char **argv, int argc);
-int			sh_launch_system(ENV *env, char **lfs, char *fs, char **argv);
-int			sh_launch_file(ENV *env, char *file);
-int			sys_core_set_init(ENV *env, char **argv);
-void		sh_loop(ENV *env);
+int			DBG_SYS_GLB(void);
+int			DBG_SYS_SNAP(void);
+void		DBG_PRINT_TOKENS(t_dlist *toklst);
+void		DBG_SYS_CONFS(void);
+
+int			bltn_dbg_snap(char **args, ENV *envr);
+
+int			dbg_tok_pr_flag;
 
 #endif

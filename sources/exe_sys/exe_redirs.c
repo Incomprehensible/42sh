@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:02:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 10:13:54 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 19:51:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int				exe_redir_do(int fdl, int fdr, char *file, int flags)
 		return (fdr);
 	if (fdr != fdl)
 	{
-		dup2(fdr, fdl);
+		if (dup2(fdr, fdl) < 0)
+			return (-E_BADFD);
 		close(fdr);
 	}
 	return (0);
@@ -94,8 +95,8 @@ int				exe_redir_ex(REDIRECT *rdr, ENV *envr)
 			if (rdr->file && \
 			(fd = sys_file_op(rdr->file, envr, file_flag, (char *)1)) < 0)
 				return (fd);
-			dup2(fd, STDOUT_FILENO);
-			dup2(fd, STDERR_FILENO);
+			if (dup2(fd, STDOUT_FILENO) < 0 || dup2(fd, STDERR_FILENO) < 0)
+				return (-E_BADFD);
 			STDOUT_FILENO != fd && fd != STDERR_FILENO ? close(fd) : 0;
 			return (0);
 		}
@@ -113,7 +114,7 @@ void			exe_redir_save420(t_dlist *redrs)
 	while (redrs)
 	{
 		rdr = (REDIRECT *)redrs->content;
-		dup2(rdr->fdl, rdr->fdl + 420);
+		dup2(rdr->fdl, rdr->fdl + SYS_REDR_OFFST);
 		redrs = redrs->next;
 	}
 }
@@ -125,8 +126,8 @@ void			exe_redir_load420(t_dlist *redrs)
 	while (redrs)
 	{
 		rdr = (REDIRECT *)redrs->content;
-		dup2(rdr->fdl + 420, rdr->fdl);
-		close(rdr->fdl + 420);
+		dup2(rdr->fdl + SYS_REDR_OFFST, rdr->fdl);
+		close(rdr->fdl + SYS_REDR_OFFST);
 		redrs = redrs->next;
 	}
 }

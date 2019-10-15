@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/13 07:23:53 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 14:04:01 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ void			et_rm_ett(void *et_cont, size_t type)
 		free(et_cont);
 	else if (type == ET_SUBSH)
 		et_rm_sbsh((SUBSH *)et_cont);
+	else if (type == ET_BCKGR)
+		free(et_cont);
 }
 
 void			et_rm_clear_env(ENV *env)

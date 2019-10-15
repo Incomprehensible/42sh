@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:07:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 15:42:19 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 16:17:01 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void		sys_wtps_ext(t_ps_d *psd, int *status, pid_t lpid, int statloc)
 	rstat = WEXITSTATUS(statloc);
 	if (psd->pid == lpid)
 		*status = rstat;
-	// printf("PSD->PID: %d\nLPID: %d\nSTAT: %d\n", psd->pid, lpid, *status);
 	psd->state = PS_S_DON;
 	psd->pid = 0;
 }

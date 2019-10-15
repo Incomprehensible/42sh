@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 14:43:29 by fnancy            #+#    #+#             */
-/*   Updated: 2019/10/07 02:51:28 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:02:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "rms.h"
 #include "bltn.h"
 #include "aliases.h"
+
+#include <stdio.h>
 
 int			env_init_error(ENV *env, int errcode)
 {
@@ -50,7 +52,7 @@ int			env_init(int argc, char **argv, char **envp, ENV *env)
 	{
 		spl = ft_strsplit(*envp, '=');
 		if ((ft_avl_set(env->globals, ft_avl_node(spl[0], (char *)spl[1],\
-					ft_strlen(spl[1]) + 1)) == -1))
+		spl[1] ? ft_strlen(spl[1]) + 1 : 0)) == -1))
 		{
 			free_spl(&spl);
 			return (env_init_error(env, 12));

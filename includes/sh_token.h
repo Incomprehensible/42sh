@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 09:49:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 15:15:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef size_t		t_tk_type;
 #define TK_PROF_OUT	(t_tk_type)0x0000080000000000 // 8 796 093 022 208
 #define TK_ARSHLOCH	(t_tk_type)0x0000100000000000 // 17 592 186 044 416
 
-#define TK_SEPS		(t_tk_type)0x1000004038 // SEP + PIPE + EOF
+#define TK_SEPS		(t_tk_type)(0x1000004038 | TK_ARSHLOCH) // SEP + PIPE + EOF
 #define TK_FLOWS	(t_tk_type)0x90ffe00000 // [IF -> CONTIN] + UNTIL + EOF
 #define TK_FDS_RDS	(t_tk_type)0x0c0000003780
 

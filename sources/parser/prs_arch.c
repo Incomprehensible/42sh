@@ -6,12 +6,13 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 17:52:32 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 23:11:16 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "sh_token.h"
+#include "sh_tokenizer.h"
 #include "ft_io.h"
 #include "sys_tools/sys_tools.h"
 
@@ -19,12 +20,16 @@
 
 extern pid_t	hot_gid;
 extern pid_t	hot_sbsh;
+extern char		*hot_bkgr;
 
 int				pex_p_table_pgid(pid_t cpid)
 {
+	int			mode;
+
+	mode = hot_bkgr ? PS_M_BG : PS_M_FG;
 	if (hot_sbsh)
 		hot_gid = hot_sbsh;
-	sys_hot_charge(cpid, PS_M_FG, 0);
+	sys_hot_charge(cpid, mode, hot_bkgr);
 	setpgid(cpid, hot_gid);
 	return (0);
 }
@@ -34,11 +39,15 @@ int				prs_etab_handlers(ETAB **etab_row, ETAB **pipe_cache, int *status, ENV *e
 	pid_t		cpid;
 
 	cpid = 0;
+	sys_sig_dfl();
 	if ((*etab_row)->type == ET_EXPR)
 		cpid = exe_execute_expr((*etab_row)->instruction, envr, status);
 	// NEW SUBSHELL EXECUTING
-	if ((*etab_row)->type == ET_SUBSH)
+	else if ((*etab_row)->type == ET_SUBSH)
 		cpid = exe_subshell_expr((*etab_row)->instruction, envr, status);
+	// NEW BACKGROUND EXECUTING
+	else if ((*etab_row)->type == ET_BCKGR)
+		cpid = exe_bkgr_expr((*etab_row)->instruction, envr, status);
 	if ((*etab_row)->type == ET_PIPE && !(cpid = 0))
 		ft_dlstunshift((t_dlist **)pipe_cache, (t_dlist *)(*etab_row));
 	else
@@ -46,6 +55,7 @@ int				prs_etab_handlers(ETAB **etab_row, ETAB **pipe_cache, int *status, ENV *e
 		cpid < 0 ? prs_error_handler(-1 * cpid, status, envr, (*etab_row)->instruction) : 0;
 		ft_dlst_delcut((t_dlist **)etab_row, et_rm_ett);
 	}
+	sys_sig_init();
 	return (cpid);
 }
 
@@ -59,7 +69,8 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 	etab_row = 0;
 	pipe_free = 0;
 	status = 127;
-	while (*etab && ((*etab)->type == ET_EXPR || (*etab)->type == ET_PIPE || (*etab)->type == ET_SUBSH))
+	while (*etab && ((*etab)->type == ET_EXPR || (*etab)->type == ET_PIPE \
+	|| (*etab)->type == ET_SUBSH || (*etab)->type == ET_BCKGR))
 	{
 		etab_row = (ETAB *)ft_dlstshift((t_dlist **)etab);
 		cpid = prs_etab_handlers(&etab_row, &pipe_free, &status, envs);
@@ -68,7 +79,12 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 	}
 	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);
 	if (cpid > 0)
-		tcsetpgrp(0, hot_gid);
+	{
+		if (!hot_bkgr)
+			tcsetpgrp(0, hot_gid);
+		else
+			hot_bkgr = 0;
+	}
 	sys_wait_ptable(&status, cpid);
 	sys_hot_off(2);
 	prs_set_last_status(&status, envs);
@@ -105,7 +121,8 @@ int				prs_executor(ETAB **etab, ENV *envs) // TODO: ERROR CHECKING NEED
 	{
 		if (etab_row->type == ET_MATH)
 			status = math_to_expr_maker(etab);
-		if (etab_row->type == ET_EXPR || etab_row->type == ET_SUBSH)
+		if (etab_row->type == ET_EXPR || etab_row->type == ET_SUBSH || \
+		etab_row->type == ET_BCKGR)
 			status = prs_execute_expr(etab, envs);
 	}
 	return (status);
@@ -119,7 +136,9 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 	etab = 0;
 	while (tks && (tok = tks->content))
 	{
-		if (etab && (tok->type & (TK_SEPS1 | end_tk)))
+		//if (end_tk & TK_ARSHLOCH)
+			//DBG_PRINT_TOKENS(tks);
+		if (etab && (tok->type & (TK_SEPS1 | end_tk | TK_ARSHLOCH)))
 			*status = prs_executor(&etab, envs); // TODO: ERROR CHECKING NEED
 		if (tok->type & (TK_BREAK | TK_CONTIN))
 			return (tks);
@@ -127,9 +146,9 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 		{
 			return (tks);
 		}
-		tks = tok->type & (TK_EXPR | TK_DEREF) ? prs_expr(&etab, tks, envs) : tks;
+		tks = tok->type & (TK_EXPR | TK_DEREF | TK_RDS1 | TK_FD) ? prs_expr(&etab, tks, envs) : tks;
 		tks = tok->type == TK_FUNCTION ? prs_func(tks, envs) : tks;
-		// tks = tok->type == TK_BCKR_PS ? prs_bg(&etab, tks, envs) : tks;
+		tks = tok->type == TK_BCKR_PS ? prs_bkgr(&etab, tks, envs) : tks;
 		tks = tok->type == TK_MATH ? prs_math(&etab, tks, envs) : tks;
 		tks = tok->type == TK_PIPE ? prs_pipe(&etab, tks) : tks; 
 		tks = tok->type == TK_IF ? prs_if(tks, envs, status) : tks;
@@ -139,7 +158,7 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 		tks = tok->type == TK_AND ? prs_and(tks, envs, status) : tks;
 		tks = tok->type == TK_OR ? prs_or(tks, envs, status) : tks;
 		tks = tok->type == TK_SUBSH ? prs_subsh(&etab, tks, envs) : tks;
-		tks = tks->next && tok->type & (TK_EMPTY | TK_SEPS1 | \
+		tks = tks->next && tok->type & (TK_EMPTY | TK_SEPS1 | TK_ARSHLOCH | \
 		(TK_FLOWS & ~(TK_IF | TK_WHILE))) & ~TK_EOF ? tks->next : tks;
 	}
 	return (tks);
