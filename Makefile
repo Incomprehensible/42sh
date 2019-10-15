@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/10/12 14:21:54 by hgranule         ###   ########.fr        #
+#    Updated: 2019/10/15 17:10:17 by fnancy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,9 +51,10 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			parser/prs_instructions.c parser/prs_rdrs.c parser/prs_types.c \
 			env/env_init.c env/env_get_variable.c env/env_set_variable.c env/env_unset_variable.c \
 			bltns/bltn_init.c bltns/bltn_setenv.c bltns/bltn_env.c bltns/bltn_getenv.c bltns/bltn_unsetenv.c \
-			bltns/bltn_exit.c bltns/bltn_alias.c bltns/bltn_unalias.c bltns/bltn_cd.c bltns/bltn_pwd.c\
+			bltns/bltn_exit.c bltns/bltn_alias.c bltns/bltn_unalias.c bltns/bltn_pwd.c\
 			bltns/bltn_type/bltn_type.c bltns/bltn_type/bltn_type_free.c bltns/bltn_type/bltn_type_alias_check.c bltns/bltn_type/bltn_type_bins_check.c\
 			bltns/bltn_type/bltn_type_help.c bltns/bltn_echo.c \
+			bltns/bltn_cd/bltn_cd_parser.c bltns/bltn_cd/bltn_cd_pathfuncs.c bltns/bltn_cd/bltn_cd.c\
 			aliases/alias_add.c aliases/alias_init.c \
 			exe_sys/exe_funcs.c parser/prs_and_or.c parser/prs_assigm.c \
 			parser/prs_funcs.c parser/prs_if_while.c parser/prs_skipers.c \
@@ -85,7 +86,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			lexer/lx_tokenizer.c lexer/lx_usefull_func.c \
 			lexer/lx_validate.c lexer/lx_input_codes.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type lexer)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer)
 
 GUI_FILES = sh_control_term.c sh_dir_content.c sh_readline.c sh_readline_help.c\
 	sh_term.c dstr.c ft_concat.c sh_put_col.c sh_tab.c sh_darr.c sh_path.c reg_expr.c\
