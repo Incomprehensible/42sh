@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/10/12 12:42:46 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:31:27 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ int	bltn_unalias(char **args, ENV *env);
 /* Математический билтын */
 int bltn_math(char **args, ENV *env);
 
-int	bltn_cd(char **args, ENV *env);
+int			bltn_cd(char **args, ENV *env);
+int			bltn_cd_parser(ENV *env, t_dlist **path);
+DSTRING		*bltn_cd_pathtostr(t_dlist *path);
+void		bltn_cd_destroy_path(t_dlist **path);
 
 int	bltn_pwd(char **args, ENV *env);
 
