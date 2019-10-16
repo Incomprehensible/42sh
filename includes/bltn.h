@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/10/15 17:31:27 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/10/16 05:48:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ int	bltn_pwd(char **args, ENV *env);
 int	bltn_type(char **args, ENV *env);
 
 int	bltn_echo(char **args, ENV *envr);
+
+void		et_rm_str(void *cont, size_t ske);
 
 static int	(*bltns_func[]) (char **, ENV *) = {&bltn_setenv,\
 	&bltn_env, &bltn_getenv, &bltn_unsetenv, &bltn_exit, &bltn_alias, &bltn_unalias,\
