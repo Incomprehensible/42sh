@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 04:21:28 by fnancy            #+#    #+#             */
-/*   Updated: 2019/10/15 17:35:33 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/10/16 02:42:00 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	bltn_cd_rmlast(t_dlist **path)
 	last = (*path);
 	while (last->next != NULL)
 		last = last->next;
-	ft_dlst_delcut(&last, free);
+	ft_dlst_delcut(&last, et_rm_str);
 	return (1);
 }
 
