@@ -17,3 +17,4 @@ cmake*
 Cmake*
 .DS_Store
 _test*
+.env

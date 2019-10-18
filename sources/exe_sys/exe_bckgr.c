@@ -6,13 +6,14 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 13:46:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 23:10:07 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/18 14:26:22 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sys_tools/sys_tools.h"
 #include "sys_tools/sys_hidden.h"
 #include "sys_tools/sys_errors.h"
+#include "sys_tools/sys_token_to_str.h"
 #include "executer.h"
 #include "sh_tokenizer.h"
 #include "rms.h"
@@ -55,9 +56,10 @@ int		exe_bkgr_expr(BCKGR *bkgr, ENV *envr, int *status)
 		else if (cpid == 0)
 			exe_bkgr_alg(bkgr, envr, status);
 	}
-	hot_bkgr = ft_strdup("BGKR_COMMAND");
 	if (cpid < 0)
 		return ((int)cpid);
+	if (!(hot_bkgr = str_from_n_tkls(bkgr->tls, TOKSTR_LMT, 0, TK_ARSHLOCH)))
+		hot_bkgr = TOKSTR_FAIL;
 	hot_sbsh = 0;
 	return ((int)cpid);
 }

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 15:15:54 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/18 09:35:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 typedef size_t		t_tk_type;
 
+#define TK_HERED	(t_tk_type)0x0000000000000001 // 1
 #define TK_EMPTY	(t_tk_type)0x0000000000000002 // 2
 #define TK_EXPR		(t_tk_type)0x0000000000000004 // 4
 #define TK_SEP		(t_tk_type)0x0000000000000008 // 8
@@ -27,7 +28,6 @@ typedef size_t		t_tk_type;
 #define TK_RD_R		(t_tk_type)0x0000000000000100 // 256
 #define TK_RD_A		(t_tk_type)0x0000000000000200 // 512
 #define TK_RD_RW	(t_tk_type)0x0000000000000400 // 1 024
-#define TK_HERED	(t_tk_type)0x0000000000000001 // 1
 #define TK_WORD		(t_tk_type)0x0000000000000800 // 2 048
 #define TK_FD		(t_tk_type)0x0000000000001000 // 4 096
 #define TK_FILENAME	(t_tk_type)0x0000000000002000 // 8 192

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/16 02:26:14 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/18 17:47:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@
 
 #include <stdio.h>
 
-int			sys_var_stdname_pr(ENV *env)
+extern pid_t	hot_sbsh;
+extern char		*hot_bkgr;
+extern int		prompt_ofd;
+extern int		g_jid;
+
+int				sys_var_stdname_pr(ENV *env)
 {
 	DSTRING		*val;
 
@@ -35,14 +40,14 @@ int			sys_var_stdname_pr(ENV *env)
 	return (0);
 }
 
-int			sys_var_init(ENV *env, char **argv, int argc)
+int				sys_var_init(ENV *env, char **argv, int argc)
 {
 	sys_var_stdname_pr(env);
 	prs_set_pid(env);
 	return (0);
 }
 
-void		sighand(int s)
+void			sighand(int s)
 {
 	printf("SIGNAL input: %d (%d)\n", s, hot_sbsh);
 	if (hot_sbsh && s == SIGTSTP)
@@ -54,7 +59,7 @@ void		sighand(int s)
 	}
 }
 
-void		sys_sig_dfl(void)
+void			sys_sig_dfl(void)
 {
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
@@ -63,7 +68,7 @@ void		sys_sig_dfl(void)
 	signal(SIGTSTP, SIG_DFL);
 }
 
-void		sys_sig_init(void)
+void			sys_sig_init(void)
 {
 	signal(SIGINT, sighand);
 	signal(SIGQUIT, sighand);
@@ -72,17 +77,17 @@ void		sys_sig_init(void)
 	signal(SIGTTIN, SIG_IGN);
 }
 
-int			sys_init(int sbh_on)
+int				sys_init(int sbh_on)
 {
 	extern t_pgrp	*p_table[SYS_PRGS_SIZE];
 	extern char		sys_pipes[SYS_PIPES_SIZE];
-	extern pid_t	hot_sbsh;
-	extern char		*hot_bkgr;
-	extern int		prompt_ofd;
 	
 	// Здесь будет идти установка стандартных обработчиков сигналов!
 	sys_sig_init();
 	hot_sbsh = 0;
+	g_jid = 1;
+	g_i_line[1] = 0;
+	g_i_line[0] = 0;
 	prompt_ofd = dup2(2, PROMPT_OUT_FD);
 	if (prompt_ofd < 0)
 		prompt_ofd = STDERR_FILENO;

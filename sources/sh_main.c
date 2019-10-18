@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/16 00:38:16 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/18 11:43:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "bltn.h"
 #include "sys_tools/sys_errors.h"
 #include "sys_tools/sys_tools.h"
+#include "sys_tools/sys_token_to_str.h"
 
 #include "sys_tools/sys_dbg.h"
 
@@ -46,9 +47,9 @@ int				bltn_fg(char **args, ENV *envr)
 {
 	if (!args[1])
 	{
-		ssize_t		a = -1;
+		ssize_t		a = g_jid;
 
-		while (++a < SYS_PRGS_SIZE)
+		while (--a > 0)
 		{
 			if (p_table[a] && p_table[a]->mode == PS_M_BG)
 			{
@@ -67,8 +68,8 @@ int				bltn_fg(char **args, ENV *envr)
 				break ;
 			}
 		}
-		if (a == SYS_PRGS_SIZE)
-			return (2);
+		if (a <= 0)
+			return (sys_perror("no jobs left!", 2, envr));
 		tcsetpgrp(0, p_table[a]->pgid);
 		killpg(p_table[a]->pgid, SIGCONT);
 		return (0);

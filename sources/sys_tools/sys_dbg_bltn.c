@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 19:31:29 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/18 14:29:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "fcntl.h"
 #include "libft.h"
 #include "stdio.h"
+
+extern int		g_jid;
 
 int				bltn_dbg_snap(char **args, ENV *envr)
 {
@@ -128,26 +130,27 @@ int			DBG_SYS_SNAP(void)
 	char		*mode[] = {"NULL", "FG", "BG"};
 	t_dlist		*pids;
 
-	i = -1;
-	while (++i < SYS_PRGS_SIZE)
+	i = g_jid;
+	while (i > 0)
 	{
+		--i;
 		if (!p_table[i])
 			continue;
 		pg = p_table[i];
 		printf(
 			"\033[31mPRG_DBG: %d / %p\033[0m\n"
-			"\tPROC GROUP No_ %ld\n"
+			"\t[%ld] %s\n"
 			"\tPGID: %d\n"
-			"\tSTATE: %s\n"
+			"\tSTATE: %s (%d)\n"
 			"\tMODE: %s\n"
 			"\tPIDS: "
-			, hot_sbsh, &hot_sbsh, i, pg->pgid, states[pg->state], mode[pg->mode]);
+			, hot_sbsh, &hot_sbsh, i, pg->input_line, pg->pgid, states[pg->state], pg->signal, mode[pg->mode]);
 		pids = pg->members;
 		while (pids)
 		{
 			psd = (t_ps_d *)&pids->size;
-			printf("%d:%c%c%c ", psd->pid, *(states[psd->state]), *(states[psd->state] + 1), \
-			*(states[psd->state] + 2));
+			printf("%d: %c%c%c (%d); ", psd->pid, *(states[psd->state]), *(states[psd->state] + 1), \
+			*(states[psd->state] + 2), psd->signal);
 			pids = pids->next;
 		}
 		printf("\n\n");
@@ -159,10 +162,10 @@ int			DBG_SYS_GLB(void)
 {
 	printf(
 		"\033[31mGL_DBG: %d / %p\033[0m\n"
+		"\tJID: %d\n"
 		"\tPPID: %d\n"
 		"\tPID: %d\n"
 		"\tADR: &sys_pipes=%p / &hot_gid=%p\n\n"
-		, hot_sbsh, &hot_sbsh, getppid(), getpid(), &sys_pipes, &hot_gid);
+		, hot_sbsh, &hot_sbsh, g_jid, getppid(), getpid(), &sys_pipes, &hot_gid);
 	return (0);
 }
-

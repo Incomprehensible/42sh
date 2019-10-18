@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 09:13:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 19:18:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/18 05:32:19 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,39 +35,38 @@ int			sys_prc_create(pid_t pid, t_dlist **members)
 	psd = (t_ps_d *)(&(prc->size));
 	psd->pid = pid;
 	psd->state = PS_S_RUN;
+	psd->signal = -1;
 	ft_dlstpush(members, prc);
 	return (0);
 }
 
 t_pgrp		*sys_prg_create(pid_t prg, t_dlist *prcs, char *str, int mode)
 {
-	ssize_t	i;
+	extern int	g_jid;
 
-	i = 0;
 	if (!prg)
 		return (0);
-	while (p_table[i] != 0)
-		++i;
-	if (!(p_table[i] = ft_memalloc(sizeof(t_pgrp))))
+	if (!(p_table[g_jid] = ft_memalloc(sizeof(t_pgrp))))
 		sys_fatal_memerr("PROC_GROUP_FAILED");
-	p_table[i]->pgid = prg;
-	p_table[i]->members = prcs;
-	p_table[i]->mode = mode;
-	p_table[i]->input_line = str;
-	p_table[i]->state = PS_S_RUN;
-	return (p_table[i]);
+	p_table[g_jid]->pgid = prg;
+	p_table[g_jid]->members = prcs;
+	p_table[g_jid]->mode = mode;
+	p_table[g_jid]->input_line = str;
+	p_table[g_jid]->state = PS_S_RUN;
+	p_table[g_jid]->signal = -1;
+	++g_jid;
+	return (p_table[g_jid - 1]);
 }
 
 t_pgrp		*sys_prg_get(pid_t prg)
 {
 	ssize_t	i;
 
-	i = 0;
-	while (i < SYS_PRGS_SIZE)
+	i = g_jid;
+	while (--i > 0)
 	{
 		if (p_table[i] && p_table[i]->pgid == prg)
 			return (p_table[i]);
-		++i;
 	}
 	return (0);
 }
@@ -87,10 +86,7 @@ int			sys_hot_charge(pid_t pid, int mode, char *str)
 {
 	extern pid_t	hot_gid;
 	t_pgrp			*prg;
-	t_dlist			*prc;
-	ssize_t			i;
 
-	i = 0;
 	if (pid == 0)
 		return (-1);
 	if (hot_gid == 0)

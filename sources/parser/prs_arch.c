@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 23:11:16 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/18 21:29:26 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);
 	if (cpid > 0)
 	{
-		if (!hot_bkgr)
+		if (!hot_bkgr && !hot_sbsh)
 			tcsetpgrp(0, hot_gid);
 		else
 			hot_bkgr = 0;
