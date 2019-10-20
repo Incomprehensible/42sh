@@ -6,13 +6,20 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/13 02:39:27 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/14 02:37:10 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
+
+char	*skip_comment(char *str)
+{
+	while (*str && *str != '\n')
+		str++;
+	return (str);
+}
 
 char    *parse_exec(char *str, t_dlist **tok)
 {
@@ -67,7 +74,7 @@ static short valid_deref(char *str)
 
 short   time_for_portal(char *str, t_stx **tree, short stop)
 {
-    if ((*str == '=' && !(ft_isspace(*(str + 1)))) || (*str == '+' && *(str + 1) == '=' && !(ft_isspace(*(str + 2)))) ||
+    if (*str == '#' || (*str == '=' && !(ft_isspace(*(str + 1)))) || (*str == '+' && *(str + 1) == '=' && !(ft_isspace(*(str + 2)))) ||
 	redir_detected(str, tree, stop) || valid_deref(str) || *str == '(' || *str == '"' || *str == '\'' ||
         is_sep_no_space(*str) || ft_isspace(*str) || is_token_here(str, "exec"))
         return (1);

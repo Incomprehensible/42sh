@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/13 00:30:02 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/14 02:31:46 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,8 @@ char   *check_subbranch(char *str, t_dlist **tok, t_stx **tree)
         str = parse_sep(str, tok, 0);
     else if (ft_isspace(*str))
         str = parse_empty(str, 0x0, tok);
+	else if (*str == '#')
+		str = skip_comment(str);
 	else if (*str == '=' || *str == '+')
 	{
 		if (tok[1]->content && valid_assig(tok[1]))
