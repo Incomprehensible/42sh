@@ -168,6 +168,20 @@ static char	*get_expr(char *s, size_t i, t_dlist **tok, t_stx **tr)
     return (parse_empty(s, 0x0, tok));
 }
 
+short fd_proceed(size_t spaces, char *s)
+{
+    if (!spaces)
+        return (0);
+    if (*s >= 48 && *s <= 57)
+    {
+        while (*s && (*s >= 48 && *s <= 57))
+            s++;
+        if (*s == '&' || *s == '<' || *s == '>')
+            return (1);
+    }
+    return (0);
+}
+
 static char *parse_expr(char *s, t_dlist **tok, t_stx **tr)
 {
     size_t i;
@@ -177,7 +191,7 @@ static char *parse_expr(char *s, t_dlist **tok, t_stx **tr)
     i = 0;
     flag = 0;
     spaces = 0;
-    while (*s && *s != '&' && *s != '<' && *s != '>' && *s != ';' && !(spaces && *s >= 48 && *s <= 57))
+    while (*s && *s != '&' && *s != '<' && *s != '>' && *s != ';' && !(fd_proceed(spaces, s)))
     {
         flag = (ft_isspace(*s)) ? flag : 1;
 		spaces = (ft_isspace(*s)) ? 1 : 0;
@@ -272,8 +286,6 @@ char        *redir_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
 		s = parse_empty(s, g->patt, tok);
 	if (stop_point(tok, &s))
         return (s);
-    // if ((!(*s) || is_sep_no_space(*s)) && stop_point(g->type, tok[1]))
-    //     return (s);
     if (graph_forward_only(g) && !(sig = 0))
         return (redir_traverse(g->forward, s, tok, tr));
     else
