@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 09:13:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/18 05:32:19 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/20 11:26:12 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "sys_tools/sys_hidden.h"
 #include "sys_tools/sys_errors.h"
 #include "stdio.h"
+#include "dstring.h"
+#include "rms.h"
 
 extern t_pgrp	*p_table[SYS_PRGS_SIZE];
 
@@ -23,7 +25,7 @@ extern t_pgrp	*p_table[SYS_PRGS_SIZE];
 ** В каждом list->size лежит PID процесса и больше ничего.
 */
 
-int			sys_prc_create(pid_t pid, t_dlist **members)
+int			sys_prc_create(pid_t pid, t_dlist **members, char *str)
 {
 	t_dlist	*prc;
 	t_ps_d	*psd;
@@ -35,7 +37,9 @@ int			sys_prc_create(pid_t pid, t_dlist **members)
 	psd = (t_ps_d *)(&(prc->size));
 	psd->pid = pid;
 	psd->state = PS_S_RUN;
-	psd->signal = -1;
+	psd->signal = 0;
+	prc->content = str;
+	psd->exit_st = (unsigned char)255;
 	ft_dlstpush(members, prc);
 	return (0);
 }
@@ -74,7 +78,7 @@ t_pgrp		*sys_prg_get(pid_t prg)
 int			sys_delete_prg(t_pgrp **prg)
 {
 	if ((*prg)->members)
-		ft_dlst_delf(&(*prg)->members, 0, 0);
+		ft_dlst_delf(&(*prg)->members, 0, et_rm_prc);
 	if ((*prg)->input_line)
 		free((*prg)->input_line);
 	free(*prg);
@@ -82,21 +86,47 @@ int			sys_delete_prg(t_pgrp **prg)
 	return (0);
 }
 
+char		*sys_get_prg_iline(char *old_il, char *new_cm)
+{
+	DSTRING		*buff;
+	char		*res;
+
+	if (!new_cm)
+		return (old_il);
+	if (!(buff = dstr_new(new_cm)))
+		sys_fatal_memerr("ERR_P_TABLE_COMM_FAIL");
+	if (old_il)
+	{
+		dstr_insert_str(buff, " ", 0);
+		dstr_insert_str(buff, old_il, 0);
+	}
+	if (!(res = ft_strdup(buff->txt)))
+		sys_fatal_memerr("ERR_P_TABLE_COMM_FAIL");
+	dstr_del(&buff);
+	return (res);
+}
+
 int			sys_hot_charge(pid_t pid, int mode, char *str)
 {
 	extern pid_t	hot_gid;
 	t_pgrp			*prg;
+	DSTRING			*d_buff;
+	char			*tmp;	
 
 	if (pid == 0)
 		return (-1);
 	if (hot_gid == 0)
 	{
 		hot_gid = pid;
-		prg = sys_prg_create(pid, 0, str, mode);
+		prg = sys_prg_create(pid, 0, 0, mode);
 	}
 	else
 		prg = sys_prg_get(hot_gid);
-	sys_prc_create(pid, &(prg->members));
+	tmp = sys_get_prg_iline(prg->input_line, str);
+	if (prg->input_line)
+		free(prg->input_line);
+	prg->input_line = tmp;
+	sys_prc_create(pid, &(prg->members), str);
 	return (0);
 }
 

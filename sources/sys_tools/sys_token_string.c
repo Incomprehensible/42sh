@@ -6,13 +6,13 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 09:49:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/18 14:35:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/20 05:19:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sys_tools/sys_token_to_str.h"
 #include "sys_tools/sys_errors.h"
-#include "parser.h"
+// #include "parser.h"
 
 char		*string_toks[] = {
 	"<<", " ", 0, "; ", "|| ", "&& ", " ", ">", "<", ">>", "<>", 0, 0, 0, "| ",

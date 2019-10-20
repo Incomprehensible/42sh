@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 13:46:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/18 14:26:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/20 05:51:17 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ int		exe_bkgr_expr(BCKGR *bkgr, ENV *envr, int *status)
 	}
 	if (cpid < 0)
 		return ((int)cpid);
-	if (!(hot_bkgr = str_from_n_tkls(bkgr->tls, TOKSTR_LMT, 0, TK_ARSHLOCH)))
-		hot_bkgr = TOKSTR_FAIL;
+	hot_bkgr = "OK";
 	hot_sbsh = 0;
 	return ((int)cpid);
 }

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:56:29 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/13 18:11:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/20 11:26:53 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,7 @@ void		free_token(void *tok, size_t sz);
 void		et_rm_clear_env(ENV *env);
 
 void		et_rm_func(void *func);
+
+void		et_rm_prc(void *ptr, size_t sz);
 
 #endif

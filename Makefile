@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/10/18 11:05:14 by hgranule         ###   ########.fr        #
+#    Updated: 2019/10/20 09:39:35 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ FLAGS = -g
 WS_PATH = $(shell pwd)
 SRC_PATH = $(WS_PATH)/sources/
 OBJ_PATH = $(WS_PATH)/objects/
-INC_PATH = $(WS_PATH)/includes/
+INC_PATH = $(WS_PATH)/includes/ $(WS_PATH)/includes/printf/
 LIB_PATH = $(WS_PATH)/Libft/
 LIB_INC_PATH = $(LIB_PATH)includes/
 
@@ -67,6 +67,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
 			sys_tools/sys_touch.c sys_tools/sys_argc.c sys_tools/sys_token_string.c \
+			sys_tools/sys_exprs_strings.c \
 			$(addprefix gui/, $(GUI_FILES)) \
 			sys_tools/sys_config.c sys_tools/sys_files.c sys_tools/sys_proc_tables.c \
 			env/env_get_bins/env_get_bins_parsebltn.c env/env_get_bins/env_get_bins_parsefunc.c \
@@ -86,9 +87,19 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			lexer/lx_tokenizer.c lexer/lx_usefull_func.c \
 			lexer/lx_validate.c lexer/lx_input_codes.c \
 			\
-			sys_tools/sys_dbg_bltn.c
+			sys_tools/sys_dbg_bltn.c \
+			\
+			printf/ft_insert_c.c printf/ft_insert_doubles.c \
+			printf/ft_bf_ariphmetic.c printf/ft_bf_cmp.c \
+			printf/ft_bf_io.c printf/ft_bf_shifts.c \
+			printf/ft_bigint.c printf/ft_format_parser.c \
+			printf/ft_help_insert_b.c printf/ft_insert_b.c \
+			printf/ft_insert_p.c printf/ft_insert_percent.c \
+			printf/ft_insert_r.c printf/ft_insert_s.c \
+			printf/ft_insert_spec.c printf/ft_printf.c \
+			printf/ft_putll_base_spec.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer printf)
 
 GUI_FILES = sh_control_term.c sh_dir_content.c sh_readline.c sh_readline_help.c\
 	sh_term.c dstr.c ft_concat.c sh_put_col.c sh_tab.c sh_darr.c sh_path.c reg_expr.c\
@@ -134,4 +145,3 @@ ex:
 appc: $(OBJ)
 	@make make_lft
 	@gcc $(FLAGS) -o $(NAME) $(INC) $(INC_LIB) $(OBJ) -L $(LIB_PATH) -lft -L /usr/lib/x86_64-linux-gnu/libncurses.so -lncurses
-

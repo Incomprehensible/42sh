@@ -6,13 +6,20 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 14:04:01 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/20 11:26:59 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rms.h"
 #include "bltn.h"
 #include "ft_dlist.h"
+
+void			et_rm_prc(void *ptr, size_t sz)
+{
+	if (ptr)
+		free(ptr);
+	sz = 0;
+}
 
 void			et_rm_func(void *func)
 {

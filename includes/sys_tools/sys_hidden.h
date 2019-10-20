@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/18 17:46:56 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/20 07:46:39 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,27 +58,28 @@
 
 typedef struct	s_proc_grp
 {
-	t_dlist		*members;
-	char		*input_line;
-	pid_t		pgid;
-	int			mode;
-	int			state;
-	int			signal;
-}				t_pgrp;
+	t_dlist			*members;
+	char			*input_line;
+	pid_t			pgid;
+	int				mode;
+	int				state;
+	int				signal;
+}					t_pgrp;
 
-typedef struct	s_proc_ds
+typedef struct		s_proc_ds
 {
-	pid_t		pid;
-	short		state;
-	short		signal;
-}				t_ps_d;
+	pid_t			pid;
+	unsigned char	state;
+	unsigned char	exit_st;
+	char			signal;
+}					t_ps_d;
 
-t_pgrp		*p_table[SYS_PRGS_SIZE];
-char		sys_pipes[SYS_PIPES_SIZE];
-pid_t		hot_gid;
-pid_t		hot_sbsh;
-char		*hot_bkgr;
-int			g_jid;
-t_dlist		*g_i_line[2];
+t_pgrp				*p_table[SYS_PRGS_SIZE];
+char				sys_pipes[SYS_PIPES_SIZE];
+pid_t				hot_gid;
+pid_t				hot_sbsh;
+char				*hot_bkgr;
+int					g_jid;
+t_dlist				*g_i_line[2];
 
 #endif

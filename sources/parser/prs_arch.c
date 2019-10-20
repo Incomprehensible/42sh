@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/18 21:29:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/20 05:54:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "sh_tokenizer.h"
 #include "ft_io.h"
 #include "sys_tools/sys_tools.h"
+#include "sys_tools/sys_token_to_str.h"
 
 #include "stdio.h"
 
@@ -22,14 +23,16 @@ extern pid_t	hot_gid;
 extern pid_t	hot_sbsh;
 extern char		*hot_bkgr;
 
-int				pex_p_table_pgid(pid_t cpid)
+int				pex_p_table_pgid(pid_t cpid, char *i_line)
 {
 	int			mode;
+	char		*str;
 
 	mode = hot_bkgr ? PS_M_BG : PS_M_FG;
+	str = i_line;
 	if (hot_sbsh)
 		hot_gid = hot_sbsh;
-	sys_hot_charge(cpid, mode, hot_bkgr);
+	sys_hot_charge(cpid, mode, str);
 	setpgid(cpid, hot_gid);
 	return (0);
 }
@@ -65,6 +68,7 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 	ETAB		*pipe_free;
 	int			status;
 	pid_t		cpid;
+	char		*i_line;
 
 	etab_row = 0;
 	pipe_free = 0;
@@ -72,10 +76,11 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 	while (*etab && ((*etab)->type == ET_EXPR || (*etab)->type == ET_PIPE \
 	|| (*etab)->type == ET_SUBSH || (*etab)->type == ET_BCKGR))
 	{
+		i_line = sys_get_str_from_etab(etab);
 		etab_row = (ETAB *)ft_dlstshift((t_dlist **)etab);
 		cpid = prs_etab_handlers(&etab_row, &pipe_free, &status, envs);
 		if (cpid > 0)
-			pex_p_table_pgid(cpid);
+			pex_p_table_pgid(cpid, i_line);
 	}
 	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);
 	if (cpid > 0)

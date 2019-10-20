@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/18 14:29:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/20 09:05:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,8 @@ int			DBG_SYS_SNAP(void)
 	ssize_t		i;
 	t_pgrp		*pg;
 	t_ps_d		*psd;
-	char		*states[] = {"NULL", "DONE", "SIGNALED", "STOPPED", "RUNNING"};
-	char		*mode[] = {"NULL", "FG", "BG"};
+	char		*states[] = {"NULL", "Done", "Terminated", "Suspended", "Running"};
+	char		*mode[] = {"NULL", "Foreground", "Background"};
 	t_dlist		*pids;
 
 	i = g_jid;
@@ -138,22 +138,23 @@ int			DBG_SYS_SNAP(void)
 			continue;
 		pg = p_table[i];
 		printf(
-			"\033[31mPRG_DBG: %d / %p\033[0m\n"
-			"\t[%ld] %s\n"
-			"\tPGID: %d\n"
-			"\tSTATE: %s (%d)\n"
-			"\tMODE: %s\n"
-			"\tPIDS: "
-			, hot_sbsh, &hot_sbsh, i, pg->input_line, pg->pgid, states[pg->state], pg->signal, mode[pg->mode]);
+			"\n\033[31;7mSBSH_INFO: %d / %p\n\033[0m"
+			"    [%ld] %d %-11s \t%s\n"
+			"        %s\t\ts=%d\n"
+			"     ----------------------------------------------- \n"
+			, hot_sbsh, &hot_sbsh, i, pg->pgid, states[pg->state], pg->input_line, mode[pg->mode], pg->signal);
 		pids = pg->members;
 		while (pids)
 		{
 			psd = (t_ps_d *)&pids->size;
-			printf("%d: %c%c%c (%d); ", psd->pid, *(states[psd->state]), *(states[psd->state] + 1), \
-			*(states[psd->state] + 2), psd->signal);
+			printf(
+				"    ->  \033[33;1m%d\033[0m %-11s e:s=[%hhu,%hhd]\t%s\n", \
+				psd->pid, states[psd->state], \
+				psd->exit_st, psd->signal, (char *)pids->content
+			);
 			pids = pids->next;
 		}
-		printf("\n\n");
+		printf("\n");
 	}
 	return (0);
 }

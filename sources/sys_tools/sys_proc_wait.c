@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:07:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/18 21:36:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/20 07:57:52 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,22 @@ void		sys_wtps_ext(t_ps_d *psd, int *status, pid_t lpid, int statloc)
 	if (psd->pid == lpid)
 		*status = rstat;
 	psd->state = PS_S_DON;
-	psd->signal = 0;
-	psd->pid = 0;
+	psd->signal = (char)0;
+	psd->exit_st = (unsigned char)rstat;
 }
 
 void		sys_wtps_sig(t_ps_d *psd, int *status, pid_t lpid, int statloc)
 {
 	int		signal;
+	int		rstat;
 
 	signal = WTERMSIG(statloc);
+	rstat = 128 + signal;
 	if (psd->pid == lpid)
-		*status = 128 + signal;
+		*status = rstat;
 	psd->state = PS_S_SIG;
-	psd->signal = signal;
+	psd->signal = (char)signal;
+	psd->exit_st = (unsigned char)rstat;
 }
 
 void		sys_wtps_stp(t_ps_d *psd, int statloc)
@@ -46,7 +49,7 @@ void		sys_wtps_stp(t_ps_d *psd, int statloc)
 
 	signal = WSTOPSIG(statloc);
 	psd->state = PS_S_STP;
-	psd->signal = signal;
+	psd->signal = (char)signal;
 }
 
 int			sys_wait_ps(t_dlist *ps, int *status, pid_t lpid, int mode)
@@ -117,7 +120,7 @@ int			sys_wait_ptable(int *status, pid_t lpid)
 		if (p_table[i] != 0 && p_table[i]->mode != PS_M_BG)
 			sys_wait_prg(&p_table[i], status, lpid, WUNTRACED);
 		else if (p_table[i] != 0)
-			sys_wait_prg(&p_table[i], status, lpid, WNOHANG | WCONTINUED);
+			sys_wait_prg(&p_table[i], status, lpid, WUNTRACED | WNOHANG | WCONTINUED);
 		--i;
 	}
 	i = g_jid;
