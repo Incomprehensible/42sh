@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 22:50:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 09:32:39 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,6 @@ int			sbsh_is_fork_n_need(t_dlist *tl)
 	return (0);
 }
 
-//DEBUG
-extern void	DBG_PRINT_TOKENS(t_dlist *toklst);
-
 /*
 ** SUB-SHELL executing
 ** 1) Tokenizing string
@@ -79,9 +76,15 @@ int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
 		redirs = redirs->next;
 	}
 	if (sb->ipipe_fds && (dup2(sb->ipipe_fds[0], 0) >= 0))
+	{
+		close(sb->ipipe_fds[0]);
 		close(sb->ipipe_fds[1]);
+	}
 	if (sb->opipe_fds && (dup2(sb->opipe_fds[1], 1) >= 0))
+	{
 		close(sb->opipe_fds[0]);
+		close(sb->opipe_fds[1]);
+	}
 	if (err)
 		exit(2);
 	sys_init(1);
@@ -129,18 +132,20 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 	if (sh_tokenizer(subsh->commands, toks) <= 0)
 	{
 		*status = 255;
-		return (0);
+		INPUT_NOT_OVER = -1;
+		return (sys_perror("subshell: Input not ove, or syntax error", 0, envr));
 	}
 	if (sbsh_is_fork_n_need(toks[0]))
 		cpid = exe_one_command_lnch(subsh, toks[0], envr, status);
 	else
 	{
+		subsh->opipe_fds ? pipe(subsh->opipe_fds) : 0;
 		if ((cpid = fork()) < 0)
 			return (-E_FRKFL);
 		else if (cpid == 0)
 			exe_subshell_alg(toks[0], subsh, envr, status);
 		subsh->ipipe_fds ? close(subsh->ipipe_fds[0]) : 0;
-		subsh->opipe_fds ? close(subsh->opipe_fds[1]) : 0;
+		subsh->ipipe_fds ? close(subsh->ipipe_fds[1]) : 0;
 	}
 	if (cpid < 0)
 		return ((int)cpid);

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:03:04 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 19:19:27 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 10:38:29 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int				io_subsh_ex(char *code, ENV *envr)
 	t_dlist		*toks[2];
 	int			status;
 
-	hot_sbsh = getpid();
-	ft_bzero(toks, sizeof(t_dlist *) * 2);
 	sys_init(1);
+	hot_sbsh = getppid();
+	ft_bzero(toks, sizeof(t_dlist *) * 2);
 	// SYNTAX ERROR
 	if (sh_tokenizer(code, toks) <= 0)
 	{
@@ -41,32 +41,32 @@ int				io_subsh_ex(char *code, ENV *envr)
 	exit(status);
 }
 
-// ERROR CHECKING
+// ERROR CHECKING!
+// NORM CHEKING!
+// PRCSUBSTITUTED REFACTOR!
+// SIGNAL CHECKER!
 char			*get_deref_subsh(char *code, ENV *envr)
 {
-	int			pips[2];
-	pid_t		pid;
+	int			pips[2]; //* fifo for output
+	SUBSH		sbh;
+	int			status;
+	int			pid;
 	char		*res;
 	t_lbuf		*buff;
 
-	pipe(pips);
-	res = 0;
-	pid = fork();
-	if (pid == 0)
-	{
-		close(pips[0]);
-		dup2(pips[1], 1);
-		close(pips[1]);
-		io_subsh_ex(code, envr);
-	}
-	close(pips[1]);
-	if (pid > 0)
-	{
-		waitpid(pid, 0, 0);
-		buff = ft_lb_readbytes(pips[0], 0);
-		res = ft_lb_flush(buff);
-	}
-	return(res);
+	ft_bzero(&sbh, sizeof(SUBSH));
+	sbh.commands = code;
+	sbh.opipe_fds = pips;
+	status = 127;
+
+	pid = exe_subshell_expr(&sbh, envr, &status);
+
+	buff = ft_lb_readbytes(pips[0], 0);
+	res = ft_lb_flush(buff);
+	waitpid(pid, 0, 0);
+
+	close(pips[0]);
+	return (res);
 }
 
 char			*ps_sbst_mods(int *pips, int mode)
