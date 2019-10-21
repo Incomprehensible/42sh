@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:03:53 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/17 23:51:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 16:11:31 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,22 @@ t_dlist			*prs_if(t_dlist *tks, ENV *envs, int *status)
 	t_tok			*tok;
 
 	tks = sh_tparse(tks->next, envs, TK_THEN, status);
-	if (*status == EXIT_SUCCESS)
+	if (*status == EXIT_SUCCESS && tks != INTERRUPT_CALL)
 	{
-		tks = sh_tparse(tks->next, envs, TK_ELSE | TK_FI, status);
+		if ((tks = sh_tparse(tks->next, envs, TK_ELSE | TK_FI, status)) == INTERRUPT_CALL)
+			return (INTERRUPT_CALL);
 		tok = tks->content;
 		if (tok->type & (TK_BREAK | TK_CONTIN))
 			return (tks);
 		tks = prs_skip_paired_trg(tks, TK_IF, TK_FI, -1);
 	}
-	else
+	else if (tks != INTERRUPT_CALL)
 	{
 		tks = prs_skip_after_else(tks);
 		if ((tok = tks->content)->type == TK_FI)
 			return (tks->next);
-		tks = sh_tparse(tks->next, envs, TK_FI, status);
+		if ((tks = sh_tparse(tks->next, envs, TK_FI, status)) == INTERRUPT_CALL)
+			return (INTERRUPT_CALL);
 		if ((tok = tks->content)->type == TK_BREAK)
 			return (tks);
 	}
@@ -60,9 +62,10 @@ t_dlist			*prs_while(t_dlist *tks, ENV *envs, int *status)
 	t_tok			*tok;
 
 	while ((end = sh_tparse((t_dlist *)cond, envs, TK_DO, status)) \
-	&& *status == EXIT_SUCCESS)
+	&& *status == EXIT_SUCCESS && end != INTERRUPT_CALL)
 	{
-		tks = sh_tparse(end->next, envs, TK_DONE, status);
+		if ((tks = sh_tparse(end->next, envs, TK_DONE, status)) == INTERRUPT_CALL)
+			return (INTERRUPT_CALL);
 		tok = tks->content;
 		if (tok->type == TK_BREAK)
 			break ;
@@ -118,7 +121,8 @@ t_dlist			*prs_forin_loop_exec(t_dlist **tks_ds, ENV *envs, int *status, char **
 		if (env_set_variable(key, tmp, envs) < 0)
 			return (0); // ERROR
 		dstr_del(&tmp);
-		if (!(tks_ds[0] = sh_tparse(tks_ds[1]->next, envs, TK_DONE, status)))
+		if (!(tks_ds[0] = sh_tparse(tks_ds[1]->next, envs, TK_DONE, status)) ||
+		tks_ds[0] == INTERRUPT_CALL)
 			break ;
 		if ((tok = tks_ds[0]->content)->type == TK_BREAK)
 			break ;
@@ -168,7 +172,8 @@ t_dlist			*prs_formt(t_dlist *tks, ENV *envs, int *status)
 	do_math_bltn(mt_conds[0], envs);
 	while (do_math_bltn(mt_conds[1], envs))
 	{
-		tks = sh_tparse(loop_bg->next, envs, TK_DONE, status);
+		if ((tks = sh_tparse(loop_bg->next, envs, TK_DONE, status)) == INTERRUPT_CALL)
+			return (INTERRUPT_CALL);
 		if ((tok = tks->content)->type == TK_BREAK)
 			break ;
 		do_math_bltn(mt_conds[2], envs);

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/20 17:41:42 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 16:22:50 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,13 @@ char			*tmp_readline(char *prompt)
 		return (0);
 	if (status < 0)
 	{
-		sys_error_message("INPUT ERROR :(", 0);
+		sys_error_message("INPUT ERROR1 :(", 0);
+		perror("INP");
 		return (0);
 	}
 	line = ft_strdup(dstr->txt);
 	if (line == 0)
-		sys_error_message("INPUT ERROR :(", 0);
+		sys_error_message("INPUT ERROR2 :(", 0);
 	dstr_del(&dstr);
 	return (line);
 }
@@ -161,6 +162,7 @@ void			sh_loop(ENV *env)
 		free(line);
 		if (dbg_tok_pr_flag)
 			DBG_PRINT_TOKENS(token_list[0]);
+		g_intr = 0;
 		sh_tparse(token_list[0], env, TK_EOF, &status);
 		ft_dlst_delf(token_list, 0, free_token);
 	}

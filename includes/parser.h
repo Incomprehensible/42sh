@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 13:45:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 16:04:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # define FUNC t_func
 # define SUBSH t_subsh
 # define BCKGR t_bkgr
+
+# define INTERRUPT_CALL (t_dlist *)0xFFFFFFFFFFFFFFFF
 
 typedef enum		e_rd_type		// TYPES OF REDIRS
 {

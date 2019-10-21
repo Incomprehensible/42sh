@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/20 05:54:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 16:18:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,16 +141,16 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 	etab = 0;
 	while (tks && (tok = tks->content))
 	{
-		//if (end_tk & TK_ARSHLOCH)
-			//DBG_PRINT_TOKENS(tks);
+		if (g_intr)
+		{
+			g_intr = 0;
+			ft_dlst_delf((t_dlist **)(&etab), 0, et_rm_ett);
+			return (INTERRUPT_CALL);
+		}
 		if (etab && (tok->type & (TK_SEPS1 | end_tk | TK_ARSHLOCH)))
 			*status = prs_executor(&etab, envs); // TODO: ERROR CHECKING NEED
-		if (tok->type & (TK_BREAK | TK_CONTIN))
+		if (tok->type & (end_tk | TK_EOF | TK_BREAK | TK_CONTIN))
 			return (tks);
-		if (tok->type & (end_tk | TK_EOF))
-		{
-			return (tks);
-		}
 		tks = tok->type & (TK_EXPR | TK_DEREF | TK_RDS1 | TK_FD) ? prs_expr(&etab, tks, envs) : tks;
 		tks = tok->type == TK_FUNCTION ? prs_func(tks, envs) : tks;
 		tks = tok->type == TK_BCKR_PS ? prs_bkgr(&etab, tks, envs) : tks;
@@ -163,6 +163,8 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 		tks = tok->type == TK_AND ? prs_and(tks, envs, status) : tks;
 		tks = tok->type == TK_OR ? prs_or(tks, envs, status) : tks;
 		tks = tok->type == TK_SUBSH ? prs_subsh(&etab, tks, envs) : tks;
+		if (tks == INTERRUPT_CALL)
+			return (INTERRUPT_CALL);
 		tks = tks->next && tok->type & (TK_EMPTY | TK_SEPS1 | TK_ARSHLOCH | \
 		(TK_FLOWS & ~(TK_IF | TK_WHILE))) & ~TK_EOF ? tks->next : tks;
 	}

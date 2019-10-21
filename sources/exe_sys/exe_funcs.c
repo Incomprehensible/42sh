@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/13 17:19:55 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 08:56:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 18:12:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int			exe_execute_f(EXPRESSION *expr, ENV *envr, FUNC *func, int *status)
 	int			err;
 
 	err = 0;
+	sys_sig_init();
 	exe_redir_save420(expr->redirections);
 	redirs = expr->redirections;
 	while (redirs)

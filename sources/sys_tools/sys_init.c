@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/18 17:47:55 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 16:27:01 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ extern pid_t	hot_sbsh;
 extern char		*hot_bkgr;
 extern int		prompt_ofd;
 extern int		g_jid;
+extern int		g_intr;
 
 int				sys_var_stdname_pr(ENV *env)
 {
@@ -50,13 +51,7 @@ int				sys_var_init(ENV *env, char **argv, int argc)
 void			sighand(int s)
 {
 	printf("SIGNAL input: %d (%d)\n", s, hot_sbsh);
-	if (hot_sbsh && s == SIGTSTP)
-		raise(SIGSTOP);
-	if (hot_sbsh && s == SIGINT)
-	{
-		signal(SIGINT, SIG_DFL);
-		raise(SIGINT);
-	}
+	g_intr = s;
 }
 
 void			sys_sig_dfl(void)
@@ -86,8 +81,7 @@ int				sys_init(int sbh_on)
 	sys_sig_init();
 	hot_sbsh = 0;
 	g_jid = 1;
-	g_i_line[1] = 0;
-	g_i_line[0] = 0;
+	g_intr = 0;
 	prompt_ofd = dup2(2, PROMPT_OUT_FD);
 	if (prompt_ofd < 0)
 		prompt_ofd = STDERR_FILENO;

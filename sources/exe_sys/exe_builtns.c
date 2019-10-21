@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:00:14 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 20:05:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 18:11:07 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int (*bltn)(char **, ENV *), int *status)
 	int			err;
 
 	err = 0;
+	sys_sig_init();
 	exe_redir_save420(expr->redirections);
 	redrs = expr->redirections;
 	while (redrs)

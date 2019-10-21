@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/20 07:46:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 15:37:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,6 @@ pid_t				hot_gid;
 pid_t				hot_sbsh;
 char				*hot_bkgr;
 int					g_jid;
-t_dlist				*g_i_line[2];
+int					g_intr;
 
 #endif

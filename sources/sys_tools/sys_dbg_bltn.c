@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/20 09:05:28 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/21 15:39:29 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,13 @@ void			DBG_SYS_CONFS(void)
 	getcwd(cwd_buff, 2048);
 	dprintf(2, 
 	"\n\033[31;1mDEBG_INFO_CONFIGS:\033[0m\n"
+	"    GINTRPT ......... %d\n"
 	"    FD_TABLE_SIZE ... %d\n"
 	"    PID ............. %d\n"
 	"    PPID ............ %d\n"
 	"    PGRP ............ %d\n"
 	"    CWD ............. %s\n"
-	, getdtablesize(), getpid(), getppid(), getpgrp(), cwd_buff
+	, g_intr, getdtablesize(), getpid(), getppid(), getpgrp(), cwd_buff
 	);
 }
 
