@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:05:05 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/14 14:58:19 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/16 18:56:51 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,33 +89,4 @@ static void		write_cmd_to_buf(int ind, t_darr histr, DSTRING **buf)
 	}
 	dstr_del(buf);
 	(*buf) = dstr_nerr(histr.strings[ind]->txt);
-}
-
-t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr)
-{
-	t_darr		his;
-
-	ft_bzero(&his, sizeof(t_darr));
-	if (get_histr(&his, envr) == 0)
-		return (indc);
-	if (indc.his == 0)
-		indc.his = S_DARR_STRINGS - (his.count + 1);
-	if (indc.ch == UP[0] && (*buf)->strlen && indc.ind++)
-		sys_write_history(*buf, envr);
-	while (1)
-	{
-		if (indc.ch == UP[0] && (indc.his + 1) < S_DARR_STRINGS)
-			write_cmd_to_buf(++indc.his, his, buf);
-		else if (indc.ch == DOWN[0] \
-			&& ((size_t)indc.his - 1) >= S_DARR_STRINGS - (his.count + 1))
-			write_cmd_to_buf(--indc.his, his, buf);
-		indc.ind = (*buf)->strlen;
-		sh_rewrite((*buf), (*buf)->strlen);
-		indc.ch = ispers_arws(ft_getch(), &indc, &his, (*buf));
-		if (indc.ch != UP[0] && indc.ch != DOWN[0] \
-			&& indc.ch != 0xB && indc.ch != 0x10)
-			break ;
-	}
-	rewrite_histr(&his, envr);
-	return (indc);
 }

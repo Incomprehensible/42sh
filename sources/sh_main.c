@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/14 21:56:12 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/22 15:10:06 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 		msg = token->type == TK_PROF_IN ? "PFIN" : msg;
 		msg = token->type == TK_PROF_OUT ? "PFOU" : msg;
 		value = token->value ? token->value : "<->";
-		printf("%5s: %s\n", msg, value);
+		// printf("%5s: %s\n", msg, value);
 		toklst = toklst->next;
 	}
 }
@@ -116,19 +116,62 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 // !! TEMPORARY FUNCTIONS ===================================================================== !!
 // !! Soon will be changed! =================================================================== !!
 
+void			add_buf_history(DSTRING *buf)
+{
+	int			ind;
+
+	ind = S_DARR_STRINGS - (g_histr.count + 1);
+	if (ind > 0)
+	{
+		if (buf->strlen && !(ft_strequ(buf->txt, "exit")))
+		{
+			g_histr.strings[ind] = dstr_nerr(buf->txt);
+			g_histr.count++;
+			g_histr.allsize += buf->strlen;
+		}
+	}
+}
+
+void			save_histr(ENV *envr)
+{
+	int		fd;
+	int		ind;
+	size_t	count;
+
+	if (!g_histr.count || ((fd = get_history_fd \
+	(O_WRONLY | O_TRUNC, "REWRITE_HISTORY: File error", envr)) < 0))
+		return ;
+	if (g_histr.count > 1000)
+		ind = S_DARR_STRINGS - (g_histr.count - 1000);
+	else
+		ind = S_DARR_STRINGS - 1;
+	count = 0;
+	while (count <= 1000 && count < g_histr.count)
+	{
+		write(fd, g_histr.strings[ind]->txt, g_histr.strings[ind]->strlen);
+		write(fd, "\n", 1);
+		ind--;
+		count++;
+	}
+	close(fd);
+	// free_darr_re(g_histr.strings, g_histr.count);
+}
+
 static void		sh_loop(ENV *env)
 {
 	DSTRING		*line;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
 	int			status;
 	DSTRING		*prompt = dstr_new("prompt ");
-	init_histr(env);
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
 	{
+		init_histr(env);
 		line = sh_new_redline(prompt, env);
-		
-		printf("\n%s @\n", line->txt);
+		add_buf_history(line);
+		printf("%s", line->txt);
+		save_histr(env);
+		dstr_del(&prebuf);
 		if (sh_tokenizer(line->txt, token_list) <= 0)
 		{
 		    dstr_del(&line);

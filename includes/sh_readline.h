@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/14 16:05:30 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/18 12:45:43 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,6 @@ typedef struct	s_concat
 
 }				t_concat;
 
-/* to save strings sh_tab */
-typedef struct	s_name_ind
-{
-	int			ind;
-	int			ind_name;
-}				t_name_ind;
-
 /* 
 ** ch - user entered character
 ** ind - where to insert the character
@@ -60,6 +53,14 @@ typedef struct	s_indch
 	int			tab;
 	DSTRING		*prompt;
 }				t_indch;
+
+/* to save strings sh_tab */
+typedef struct	s_name_ind
+{
+	int			ind;
+	int			ind_name;
+	t_indch		indch;
+}				t_name_ind;
 
 /* array of strings with a counter */
 typedef struct	s_astr
@@ -88,7 +89,6 @@ t_darr			g_histr;
 void			init_histr(ENV *envr);
 t_indch			show_new_history(DSTRING **buf, t_indch indc, ENV *envr);
 
-DSTRING			*sh_readline(ENV *env);
 DSTRING			*sh_new_redline(const DSTRING *prompt, ENV *env);
 
 
@@ -173,8 +173,9 @@ t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf, ENV *env);
 int				ft_getch(void);
 
 /* prints an array in the form of columns. does not move the carriage */
-void			put_col(t_darr overlap, const DSTRING *buf);
+void			put_col(t_darr overlap, const DSTRING *buf, t_indch indch);
 ushort			get_col(const int lencol);
+DSTRING			*sh_get_col(t_darr dar, const ushort col, ushort iter);
 void			free_lines_down(void);
 
 /* auto completion */
@@ -186,7 +187,8 @@ t_darr			sh_add_cmd(DSTRING **buf, ENV *env);
 t_darr			sh_add_path(DSTRING **buf, size_t start_dir);
 char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
 int				ind_begin_cmd(DSTRING *buf);
-void			subst_name(DSTRING **buf, t_darr overlap, int ind, int ind_nam);
+void			subst_name(DSTRING **buf, t_darr overlap,\
+					int ind, t_name_ind n_ind);
 char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
 
 /* appends directory name */
@@ -250,7 +252,8 @@ void			write_history(DSTRING *line);
 /* history management */
 t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr);
 
-t_indch			search_history(DSTRING **buf, ENV *envr);
+t_indch			sh_new_search_h(DSTRING **buf, ENV *envr, t_indch indch);
+
 void			direction_help(t_darr o, t_darr his, t_indch *ich,\
 					DSTRING **strd);
 

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 18:19:03 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/23 15:50:42 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/20 17:09:51 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,8 @@ void		init_param(t_darr *his, DSTRING **strd, DSTRING **strs, ENV *envr)
 	(*strs) = dstr_nerr("");
 }
 
-t_darr		get_overlap(const t_darr his, DSTRING *strs)
-{
-	t_darr	rez;
-	size_t	ind;
-	int		indr;
+t_darr		get_overlap(const t_darr his, DSTRING *strs);
 
-	ind = -1;
-	indr = -1;
-	ft_bzero(&rez, sizeof(t_darr));
-	while (++ind < his.count)
-		if ((ft_strncmp(his.strings[ind]->txt, strs->txt, strs->strlen)) == 0)
-		{
-			rez.strings[++indr] = dstr_nerr(his.strings[ind]->txt);
-			if (++rez.count && rez.maxlen < (size_t)his.strings[ind]->strlen)
-				rez.maxlen = his.strings[ind]->strlen;
-			rez.allsize += rez.maxlen;
-		}
-	return (rez);
-}
 
 char		direction(t_darr his, DSTRING **strd, DSTRING **strs)
 {
@@ -79,7 +62,7 @@ char		direction(t_darr his, DSTRING **strd, DSTRING **strs)
 	while (1)
 	{
 		free_t_darr(&o);
-		sh_rewrite((*strd), LENSERCH + c);
+		sh_new_rewrite(dstr_nerr("lol "),(*strd), LENSERCH + c);
 		ich.ch = ft_getch();
 		if (ft_isprint(ich.ch) && !(ich.ind = 0) && ++c != -1)
 			dstr_insert_ch((*strs), ich.ch, (*strs)->strlen);

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 14:47:35 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/14 20:57:46 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/15 19:21:56 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "sys_tools/sys_tools.h"
 #include <fcntl.h>
 #include <unistd.h>
+
+extern t_darr g_histr;
 
 int				get_new_history_fd(int flags, char *er_context, ENV *envr)
 {
@@ -61,16 +63,6 @@ void		init_histr(ENV *envr)
 		return ;
 }
 
-char		skip_esc(char ch)
-{
-	if (ch == 27)
-	{
-		ch = ft_getch();
-		ch = ft_getch();
-	}
-	return (ch);	
-}	
-
 int		write_history_buf(char side, int ind, DSTRING **buf, t_indch indc)
 {
 	ind = (side == UP[0]) ? ++ind : --ind;
@@ -80,12 +72,42 @@ int		write_history_buf(char side, int ind, DSTRING **buf, t_indch indc)
 	return (ind);
 }
 
+void		get_oldbuf(DSTRING **buf, DSTRING *oldbuf, t_indch indch)
+{
+	if (ft_strequ((*buf)->txt, oldbuf->txt))
+	{
+		sh_new_rewrite(indch.prompt, (*buf), (*buf)->strlen);
+		return ;
+	}
+	dstr_del(buf);
+	(*buf) = dstr_nerr(oldbuf->txt);
+	sh_new_rewrite(indch.prompt, (*buf), (*buf)->strlen);
+}
+
+t_indch		skip_esc(t_indch indch)
+{
+	char	ch;
+
+	ch = ft_getch();
+	indch.fl = 1;
+	if (ch == ESC)
+	{
+		ch = ft_getch();
+		ch = ft_getch();
+		if (ch != UP[0] && ch != DOWN[0])
+			indch.fl = 0;
+	}
+	indch.ch = ch;
+	return (indch);
+}
+
 t_indch		show_new_history(DSTRING **buf, t_indch indc, ENV *envr)
 {
 	int		ind;
+	DSTRING	*oldbuf;
 
 	ind = S_DARR_STRINGS - (g_histr.count + 1);
-	g_histr.strings[ind] = dstr_nerr((*buf)->txt);
+	oldbuf = dstr_nerr((*buf)->txt);
 	while (1)
 	{
 		if (indc.ch == UP[0] && (ind + 1) < S_DARR_STRINGS)
@@ -93,17 +115,12 @@ t_indch		show_new_history(DSTRING **buf, t_indch indc, ENV *envr)
 		else if (indc.ch == DOWN[0] && \
 			(ind - 1) > (S_DARR_STRINGS - (g_histr.count + 1)))
 			ind = write_history_buf(DOWN[0], ind, buf, indc);
-		if ((indc.ch = ft_getch()) == ESC) 
-		{
-			indc.ch = ft_getch();
-			if ((indc.ch = ft_getch()) != UP[0] && \
-				(indc.ch = ft_getch()) != DOWN[0])
-				break ;				
-		}
-		else
+		else if ((ind - 1) == (S_DARR_STRINGS - (g_histr.count + 1)))
+			get_oldbuf(buf, oldbuf, indc);
+		if ((indc = skip_esc(indc)).ch != UP[0] && indc.ch != DOWN[0])
 			break ;
 	}
-	indc.fl = 1;
+	dstr_del(&oldbuf);
 	indc.ind = (*buf)->strlen;
 	return (indc);
 }
