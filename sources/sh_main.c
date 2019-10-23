@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/14 00:24:36 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/22 23:53:47 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,7 @@ void			sh_loop(ENV *env)
 		    INPUT_NOT_OVER = -1;
             continue ;
         }
+		DBG_PRINT_TOKENS(token_list[0]);
 		code = 0;
 		dstr_del(&prompt);
 		free(line);

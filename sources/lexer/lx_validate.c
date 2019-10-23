@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/14 02:34:42 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/22 04:51:30 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,34 +59,48 @@ short   tokens_follow(t_dlist *token_list)
     return (1);
 }
 
+short	n_after_n(char *prev_sep, char sep)
+{
+	if (!prev_sep || !sep)
+		return (0);
+	else if (*prev_sep == '\n' && sep == '\n')
+		return (1);
+	return (0);
+}
+
+short	check_sep_cond(t_dlist *token_list, t_tk_type type)
+{
+	if (!token_list && type == TK_BCKR_PS)
+		return (0);
+    if (token_list && !token_list->next && TOK_TYPE == TK_BCKR_PS)
+        return (0);
+    if (token_list && TOK_TYPE == TK_SEP)
+        return (1);
+    if (token_list && is_sep_token(TOK_TYPE) && is_sep_token((type)))
+        return (0);
+    return (1);
+}
+
 short   seps_check(t_dlist *token_list)
 {
-    t_tk_type type;
+    t_tk_type		type;
+	char			sep;
 
     while (token_list)
     {
         if (is_sep_token(TOK_TYPE))
         {
             type = TOK_TYPE;
+			sep = TOK_VALUE ? *TOK_VALUE : 0;
             if (token_list->next)
                 token_list = token_list->next;
             while (token_list && TOK_TYPE == TK_EMPTY)
                 token_list = token_list->next;
             if (!token_list || !token_list->next)
-            {
-                if (!token_list && type == TK_BCKR_PS)
-                    return (0);
-                if (token_list && !token_list->next && TOK_TYPE == TK_BCKR_PS)
-                    return (0);
-                if (token_list && TOK_TYPE == TK_SEP)
-                    return (1);
-                if (token_list && is_sep_token(TOK_TYPE) && is_sep_token((type)))
-                    return (0);
-                return (1);
-            }
-            if (is_sep_token(TOK_TYPE) && TOK_TYPE != TK_BCKR_PS)
+				return (check_sep_cond(token_list, type));
+            if (is_sep_token(TOK_TYPE) && TOK_TYPE != TK_BCKR_PS && !(n_after_n(TOK_VALUE, sep)))
                 return (0);
-            if (TOK_TYPE == TK_BCKR_PS && !tokens_follow(token_list))
+            else if (TOK_TYPE == TK_BCKR_PS && !tokens_follow(token_list))
                 return (0);
         }
         token_list = token_list->next;

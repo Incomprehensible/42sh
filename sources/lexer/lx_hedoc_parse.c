@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_inputcheck.c                                    :+:      :+:    :+:   */
+/*   lx_hedoc_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/09/15 23:49:09 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/22 23:46:53 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@ char    *pull_word(char *str, t_dlist **tok, short i)
     i = 0;
     while (*str && !(flag && is_separator(*str)))
     {
-        if (*str == '\\')
+        if (*str == '\\' && ++i)
             flag = 0;
         else
         {
             i++;
             flag = 1;
         }
-        str++;
+        str = (*str && *(str + 1) == '\n' && ++i) ? str + 2 : ++str;
     }
     if (!i)
         return (NULL);
-    make_token(tok, pull_token(str - i, i), TK_WORD);
+    make_token(tok, cutting_mirr_station(pull_token(str - i, i), TK_HERED), TK_WORD);
     return (str);
 }
 

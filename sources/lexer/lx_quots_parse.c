@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/13 01:01:52 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/22 05:25:37 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,17 @@ short   special_case(char br, char *str)
         if (!is_sep_no_space(*str))
             return (0);
     }
+	else if (br == '"' || br == '\'')
+	{
+		if (*str != br)
+			return (0);
+	}
     else
-        //        if (*str != br && !is_sep_no_space(*str))
-        if (*str != br && *str != ';' && *str != '\n')
+	{
+		if (*str != br && *str != ';' && *str != '\n')
             return (0);
+	}
+        //        if (*str != br && !is_sep_no_space(*str))
     return (1);
 }
 

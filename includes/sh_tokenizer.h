@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/14 02:57:43 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/23 05:40:04 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct  s_graph
 }               t_graph;
 
 short		sh_tokenizer(char *str, t_dlist **token_list);
+char		*pull_token(char *str, size_t i);
 t_stx       *init_comm(t_stx *tree);
 t_stx       *init_scripts(t_stx *tree);
 t_stx       *init_math(t_stx *tree);
@@ -131,6 +132,7 @@ short       graph_forward_only(t_graph *g);
 short       graph_end(t_graph *g, char *str);
 char        *pull_expr2(char *str, t_stx **tr, t_dlist **tok);
 char        *pull_expr1(char *patt, char *str, t_stx **tr, t_dlist **tok);
+char		*pull_subsh(char *str, t_dlist **tok, t_tk_type type);
 int         layer_parse_one(char *meta, char *str);
 size_t      layer_parse_two(char *meta, char *str);
 char        *pull_token(char *str, size_t i);
@@ -168,6 +170,7 @@ char        get_code(void);
 char		*into_envar(char *str, t_dlist **tok, t_stx **tree);
 size_t		skip_field(char *str, char skip);
 char		*skip_comment(char *str);
+char		*cutting_mirr_station(char *str, t_tk_type type);
 
 //more comfortable form of type cast
 # define TOK_TYPE ((t_tok *)(token_list->content))->type

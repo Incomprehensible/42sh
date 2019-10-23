@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/14 00:55:48 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/19 21:36:37 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,6 @@ size_t   mirror_passes(char *str)
     i++;
     return (i);
 }
-
-// size_t  skip_field(char *str, char skip)
-// {
-//     size_t jump;
-
-//     jump = 0;
-//     ++str;
-//     while (*str && *str != skip)
-//     {
-//         jump++;
-//         if (*str == '\\' && *(++str))
-//             str++;
-//         else
-//             str++;
-//     }
-//     if (!(*str))
-//         return (0);
-//     return (++jump);
-// }
 
 size_t  skip_field(char *str, char skip)
 {
