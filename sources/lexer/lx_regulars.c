@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/13 04:01:52 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/23 05:39:42 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,15 +258,18 @@ char    *reg_process(char *patt, t_tk_type type, char *str, t_dlist **tok, t_stx
     str = parse_empty(str, patt, tok);
     if (*str == '$' && !(is_separator(*(str + 1))))
         return (parse_deref(str, tok, tr, 0));
+	else if (type == TK_SUBSH || type == TK_PROF_IN || type == TK_PROF_OUT ||
+		type == TK_PROC_OUT || type == TK_PROC_IN)
+		return (pull_subsh(str, tok, type));
     if ((i = layer_parse_two(patt, str)))
     {
-        if (type == TK_SUBSH || type == TK_PROF_IN || type == TK_PROF_OUT ||
-		type == TK_PROC_OUT || type == TK_PROC_IN)
-            new = pull_token(str + 1, --i - 2);
-        else if (type == TK_FUNCTION)
+        // if (type == TK_SUBSH || type == TK_PROF_IN || type == TK_PROF_OUT ||
+		// type == TK_PROC_OUT || type == TK_PROC_IN)
+        //     new = pull_token(str + 1, --i - 2);
+        if (type == TK_FUNCTION)
             new = NULL;
         else
-            new = pull_token(str, i);
+            new = pull_token(str, --i);
         make_token(tok, new, type);
     }
     str += i;

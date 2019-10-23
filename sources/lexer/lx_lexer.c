@@ -6,25 +6,13 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/14 02:31:46 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/22 20:16:31 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
-
-char    *pull_token(char *str, size_t i)
-{
-    char *new;
-    size_t tmp;
-
-    tmp = i;
-    new = (char *)ft_memalloc((i + 1));
-    while (*str && i--)
-        *new++ = *str++;
-    return (new - tmp);
-}
 
 static short    dont_count(char *meta)
 {

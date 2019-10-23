@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/10/20 09:39:35 by hgranule         ###   ########.fr        #
+#    Updated: 2019/10/23 09:45:41 by bomanyte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,6 +86,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			lexer/lx_sep_parse.c lexer/lx_subsh_parse.c \
 			lexer/lx_tokenizer.c lexer/lx_usefull_func.c \
 			lexer/lx_validate.c lexer/lx_input_codes.c \
+			lexer/lx_parse_func.c lexer/lx_deref_parse.c \
 			\
 			sys_tools/sys_dbg_bltn.c \
 			\
