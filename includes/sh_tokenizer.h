@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/23 05:40:04 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/24 11:33:22 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,6 @@
 
 #include "sh_req.h"
 #include "sh_token.h"
-
-void			DBG_PRINT_TOKENS(t_dlist *toklst);
-
-//TEMPORARY
-# define RETURN TK_RETURN
 
 //tree indexes
 # define SEPS (short)0x0000000015
@@ -37,6 +32,8 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst);
 # define PROC (short)0x0000000065
 # define PROF (short)0x0000000067
 # define CURLY (short)0x0000000068
+//TEMPORARY
+# define RETURN TK_RETURN
 
 //math tokens for syntax analysis
 # define OPERATOR (t_tk_type)0x0000000111
@@ -171,6 +168,8 @@ char		*into_envar(char *str, t_dlist **tok, t_stx **tree);
 size_t		skip_field(char *str, char skip);
 char		*skip_comment(char *str);
 char		*cutting_mirr_station(char *str, t_tk_type type);
+void		*ft_arrmemdel(void **ap);
+
 
 //more comfortable form of type cast
 # define TOK_TYPE ((t_tok *)(token_list->content))->type
@@ -199,5 +198,8 @@ short   INPUT_NOT_OVER;
 # define PRO_DO     14
 # define PRO_THEN   15
 # define PRO_ELSE   16
+
+//DEBUGGING
+void			DBG_PRINT_TOKENS(t_dlist *toklst);
 
 #endif

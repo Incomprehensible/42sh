@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/24 05:05:01 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/24 12:48:09 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 char*   parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
 {
     size_t j;
+	char	*new;
 
     j = 0;
     if (!is_q(*str))
@@ -35,14 +36,17 @@ char*   parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
             str++;
             j++;
         }
-        make_token(tok, cutting_mirr_station(pull_token(str - j, j), APOFS), TK_EXPR);
+		new = cutting_mirr_station(pull_token(str - j, j), APOFS);
+		make_token(tok, new, TK_EXPR);
+        //make_token(tok, cutting_mirr_station(pull_token(str - j, j), APOFS), TK_EXPR);
     }
     return (parse_sep(++str, tok, i));
 }
 
 size_t   can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
 {
-	t_tk_type type;
+	t_tk_type	type;
+	char		*new;
 
 	if (t == '"')
 		type = DQUOTS;
@@ -53,9 +57,17 @@ size_t   can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
     if (j)
     {
         if (t == IN)
-            make_token(tok, cutting_mirr_station(pull_token(str - j, j), TK_VAR), TK_VAR);
+		{
+			new = cutting_mirr_station(pull_token(str - j, j), TK_VAR);
+			make_token(tok, new, TK_VAR);
+		}
+            //make_token(tok, cutting_mirr_station(pull_token(str - j, j), TK_VAR), TK_VAR);
         else
-            make_token(tok, cutting_mirr_station(pull_token(str - j, j), type), TK_EXPR);
+		{
+			new = cutting_mirr_station(pull_token(str - j, j), type);
+			make_token(tok, new, TK_EXPR);
+		}
+         //   make_token(tok, cutting_mirr_station(pull_token(str - j, j), type), TK_EXPR);
     }
     return (0);
 }

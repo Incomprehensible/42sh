@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/08 13:16:14 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/24 12:23:58 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,13 @@ static t_graph    *prof_in(void)
         return (prof);
     prof = (t_graph *)malloc((sizeof(t_graph)));
     prof->type = TK_PROF_OUT;
-    prof->patt = "<(z)";
+    prof->patt = ft_strdup("<(z)");
     prof->forward = redir_one();
     prof->left = redir_two();
-	//was NULL
     prof->right = redir_in();
     prof->next = (t_graph *)malloc((sizeof(t_graph)));
     prof->next->type = TK_PROF_IN;
-    prof->next->patt = ">(z)";
+    prof->next->patt = ft_strdup(">(z)");
     prof->next->forward = prof->forward;
     prof->next->left = prof->left;
     prof->next->right = prof->right;
@@ -51,7 +50,7 @@ static t_graph    *fd_in(void)
     i = 0;
     redir = ft_strsplit("@123456789@ @123456789@- -", ' ');
     red = (t_graph *)malloc(sizeof(t_graph));
-    red->patt = redir[i];
+    red->patt = ft_strdup(redir[i]);
     start = red;
     red->type = TK_FD;
     red->forward = redir_one();
@@ -65,9 +64,10 @@ static t_graph    *fd_in(void)
         red->next->right = NULL;
         red->next->next = NULL;
         red = red->next;
-        red->patt = redir[i];
+        red->patt = ft_strdup(redir[i]);
         red->type = CLOSE;
     }
+	ft_arrmemdel((void **)redir);
     return (start);
 }
 
@@ -79,7 +79,7 @@ static t_graph    *filename_in(void)
         return (red);
     red = (t_graph *)malloc((sizeof(t_graph)));
     red->type = TK_FILENAME;
-    red->patt = "~ ";
+    red->patt = ft_strdup("~ ");
     red->forward = fd_in();
     red->left = redir_one();
     red->right = redir_two();
@@ -100,7 +100,7 @@ t_graph    *redir_two(void)
     i = 0;
     redir = ft_strsplit("&> &< >> <> > <", ' ');
     red = (t_graph *)malloc(sizeof(t_graph));
-    red->patt = redir[i];
+    red->patt = ft_strdup(redir[i]);
     start = red;
     red->type = r[i];
     red->forward = prof_in();
@@ -114,9 +114,10 @@ t_graph    *redir_two(void)
         red->next->right = red->right;
         red->next->next = NULL;
         red = red->next;
-        red->patt = redir[i];
+        red->patt = ft_strdup(redir[i]);
         red->type = r[i];
     }
+	ft_arrmemdel((void **)redir);
     return (start);
 }
 
@@ -133,7 +134,7 @@ t_graph  *redir_one(void)
     i = 0;
     redir = ft_strsplit(">>& <>& >& <&", ' ');
     red = (t_graph *)malloc(sizeof(t_graph));
-    red->patt = redir[i];
+    red->patt = ft_strdup(redir[i]);
     start = red;
     red->type = r[i];
     red->forward = prof_in();
@@ -147,16 +148,17 @@ t_graph  *redir_one(void)
         red->next->right = red->right;
         red->next->next = NULL;
         red = red->next;
-        red->patt = redir[i];
+        red->patt = ft_strdup(redir[i]);
         red->type = r[i];
     }
+	ft_arrmemdel((void **)redir);
     return (start);
 }
 
 static void     comm_init(t_graph *red)
 {
     red->type = TK_EXPR;
-    red->patt = "~";
+    red->patt = ft_strdup("~");
     red->forward = fd_in();
     red->left = redir_one();
     red->right = redir_two();

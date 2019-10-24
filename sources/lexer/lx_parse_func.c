@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/24 06:35:36 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/24 16:10:10 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,21 @@ void	*ft_arrmemdel(void **ap)
 	free(ap);
 	return (NULL);
 }
+
+// char    *pull_token(char *str, size_t i)
+// {
+//     char *new;
+//     size_t tmp;
+
+//     tmp = 0;
+//     new = (char *)ft_memalloc((i + 1));
+//     while (tmp != i)
+// 	{
+// 		new[tmp] = str[tmp];
+// 		tmp++;
+// 	}
+//     return (new);
+// }
 
 char    *pull_token(char *str, size_t i)
 {

@@ -6,15 +6,13 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/24 07:46:51 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/24 11:31:28 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
-
-#include <stdio.h>
 
 static void    get_rid_of_void(t_dlist *token_list)
 {

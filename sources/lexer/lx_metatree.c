@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_metatree.c                                      :+:      :+:    :+:   */
+/*   lx_metatree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 03:54:52 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/24 12:04:51 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_stx    *init_scripts(t_stx *tree)
     scrp = "if_ then_ else_ fi_ while_ do_ done_ for_ until_ break_ continue_";
     scrps = ft_strsplit(scrp, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = scrps[i];
+    tree->meta = ft_strdup(scrps[i]);
     tree->prev = NULL;
     start = tree;
     while (scrps[++i])
@@ -34,10 +34,11 @@ t_stx    *init_scripts(t_stx *tree)
         tmp = tree;
         tree->next = (t_stx *)malloc(sizeof(t_stx));
         tree = tree->next;
-        tree->meta = scrps[i];
+        tree->meta = ft_strdup(scrps[i]);
         tree->next = NULL;
         tree->prev = tmp;
     }
+	ft_arrmemdel((void **)scrps);
     return (start);
 }
 
@@ -53,7 +54,7 @@ t_stx    *init_hedoc(t_stx *tree)
     hed = "<< <<<";
     heds = ft_strsplit(hed, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = heds[i];
+    tree->meta = ft_strdup(heds[i]);
     tree->prev = NULL;
     start = tree;
     while (heds[++i])
@@ -61,12 +62,12 @@ t_stx    *init_hedoc(t_stx *tree)
         tmp = tree;
         tree->next = (t_stx *)malloc(sizeof(t_stx));
         tree = tree->next;
-        tree->meta = heds[i];
+        tree->meta = ft_strdup(heds[i]);
         tree->next = NULL;
         tree->prev = tmp;
     }
+	ft_arrmemdel((void **)heds);
     return (start);
-
 }
 
 t_stx    *init_math(t_stx *tree)
@@ -81,7 +82,7 @@ t_stx    *init_math(t_stx *tree)
     mat = "let_ ((";
     mats = ft_strsplit(mat, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = mats[i];
+    tree->meta = ft_strdup(mats[i]);
     tree->prev = NULL;
     start = tree;
     while (mats[++i])
@@ -89,10 +90,11 @@ t_stx    *init_math(t_stx *tree)
         tmp = tree;
         tree->next = (t_stx *)malloc(sizeof(t_stx));
         tree = tree->next;
-        tree->meta = mats[i];
+        tree->meta = ft_strdup(mats[i]);
         tree->next = NULL;
         tree->prev = tmp;
     }
+	ft_arrmemdel((void **)mats);
     return (start);
 }
 
@@ -126,7 +128,7 @@ t_stx    *init_envar(t_stx *tree)
     env = "= += -=";
     envs = ft_strsplit(env, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = envs[i];
+    tree->meta = ft_strdup(envs[i]);
     tree->prev = NULL;
     start = tree;
     while (envs[++i])
@@ -134,10 +136,11 @@ t_stx    *init_envar(t_stx *tree)
         tmp = tree;
         tree->next = (t_stx *)malloc(sizeof(t_stx));
         tree = tree->next;
-        tree->meta = envs[i];
+        tree->meta = ft_strdup(envs[i]);
         tree->next = NULL;
         tree->prev = tmp;
     }
+	ft_arrmemdel((void **)envs);
     return (start);
 }
 
@@ -153,7 +156,7 @@ t_stx    *init_redir(t_stx *tree)
     red = "@123456789@> >& &> @123456789@>& > < >> <>";
     reds = ft_strsplit(red, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = reds[i];
+    tree->meta = ft_strdup(reds[i]);
     tree->prev = NULL;
     start = tree;
     while (reds[++i])
@@ -161,12 +164,40 @@ t_stx    *init_redir(t_stx *tree)
         tmp = tree;
         tree->next = (t_stx *)malloc(sizeof(t_stx));
         tree = tree->next;
-        tree->meta = reds[i];
+        tree->meta = ft_strdup(reds[i]);
         tree->next = NULL;
         tree->prev = tmp;
     }
+	ft_arrmemdel((void **)reds);
     return (start);
 }
+
+// t_stx    *init_redir(t_stx *tree)
+// {
+//     char *red;
+//     char **reds;
+//     short i;
+//     t_stx *tmp;
+//     t_stx *start;
+
+//     i = 0;
+//     red = "@123456789@> >& &> @123456789@>& > < >> <>";
+//     reds = ft_strsplit(red, ' ');
+//     tree = (t_stx *)malloc(sizeof(t_stx));
+//     tree->meta = reds[i];
+//     tree->prev = NULL;
+//     start = tree;
+//     while (reds[++i])
+//     {
+//         tmp = tree;
+//         tree->next = (t_stx *)malloc(sizeof(t_stx));
+//         tree = tree->next;
+//         tree->meta = reds[i];
+//         tree->next = NULL;
+//         tree->prev = tmp;
+//     }
+//     return (start);
+// }
 
 t_stx    *init_func(t_stx *tree)
 {
@@ -180,7 +211,7 @@ t_stx    *init_func(t_stx *tree)
     fun = "function_ ?(~) ?(~)^{z}";
     funs = ft_strsplit(fun, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = funs[i];
+    tree->meta = ft_strdup(funs[i]);
     tree->prev = NULL;
     start = tree;
     while (funs[++i])
@@ -188,10 +219,11 @@ t_stx    *init_func(t_stx *tree)
         tmp = tree;
         tree->next = (t_stx *)malloc(sizeof(t_stx));
         tree = tree->next;
-        tree->meta = funs[i];
+        tree->meta = ft_strdup(funs[i]);
         tree->next = NULL;
         tree->prev = tmp;
     }
+	ft_arrmemdel((void **)funs);
     return (start);
 }
 
@@ -216,7 +248,7 @@ t_stx    *init_proc(t_stx *tree)
     proc = "<~(z) >~(z)";
     procs = ft_strsplit(proc, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = procs[i];
+    tree->meta = ft_strdup(procs[i]);
     tree->prev = NULL;
     start = tree;
     while (procs[++i])
@@ -224,10 +256,11 @@ t_stx    *init_proc(t_stx *tree)
         tmp = tree;
         tree->next = (t_stx *)malloc(sizeof(t_stx));
         tree = tree->next;
-        tree->meta = procs[i];
+        tree->meta = ft_strdup(procs[i]);
         tree->next = NULL;
         tree->prev = tmp;
     }
+	ft_arrmemdel((void **)procs);
     return (start);
 }
 
@@ -243,7 +276,7 @@ t_stx    *init_subsh(t_stx *tree)
     sub = "(x) $(x)";
     subs = ft_strsplit(sub, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = subs[i];
+    tree->meta = ft_strdup(subs[i]);
     tree->prev = NULL;
     start = tree;
     while (subs[++i])
@@ -251,10 +284,11 @@ t_stx    *init_subsh(t_stx *tree)
         tmp = tree;
         tree->next = (t_stx *)malloc(sizeof(t_stx));
         tree = tree->next;
-        tree->meta = subs[i];
+        tree->meta = ft_strdup(subs[i]);
         tree->next = NULL;
         tree->prev = tmp;
     }
+	ft_arrmemdel((void **)subs);
     return (start);
 }
 
