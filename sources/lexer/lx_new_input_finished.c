@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/19 21:36:37 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/24 10:10:03 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,15 +180,15 @@ static short    is_and_closed(char *str, size_t size)
 
 short   input_closed(char *str)
 {
-    size_t size;
+    int size;
 
     size = ft_strlen(str);
-    if (*(str + size - 1) == '|' && (size - 2) && *(str + size - 2) != '\\')
+    if (*(str + size - 1) == '|' && (size - 2 >= 0) && *(str + size - 2) != '\\')
     {
         INPUT_NOT_OVER = *(str + size - 2) == '|' ? PRO_OR : PRO_PIPE;
         return (0);
     }
-    if (*(str + size - 1) == '\\' && (size - 2) && *(str + size - 2) != '\\')
+    if (*(str + size - 1) == '\\' && (size - 2 >= 0) && *(str + size - 2) != '\\')
     {
         INPUT_NOT_OVER = PRO_NONE;
         return (0);
@@ -201,6 +201,63 @@ short   input_closed(char *str)
     return (1);
 }
 
+short   are_tokens_here(char *str)
+{
+    if (is_token_here(str, "while"))
+        return (1);
+    if (is_token_here(str, "for"))
+        return (1);
+    if (is_token_here(str, "until"))
+        return (1);
+    return (0);
+}
+
+static char *if_to_the_start(char *str)
+{
+    while (*str && !(is_token_here(str, "if")) && !(is_token_here(str, "fi")))
+    {
+        if (*str == '\\')
+            str += mirror_passes(str);
+        else if (is_it_q(*str) || is_it_br(*str))
+        {
+            str += skip_field(str, *str);
+            ++str;
+        }
+        else
+        {
+            while (*str && *str != '\n' && *str != ';')
+                str++;
+            if (*str)
+                str++;
+            str = skip_spaces(str);
+        }
+    }
+    return (skip_spaces(str));
+}
+
+static char *cycle_to_the_start(char *str)
+{
+    while (*str && !(are_tokens_here(str)) && !(is_token_here(str, "done")))
+    {
+        if (*str == '\\')
+            str += mirror_passes(str);
+        else if (is_it_q(*str) || is_it_br(*str))
+        {
+            str += skip_field(str, *str);
+            ++str;
+        }
+        else
+        {
+            while (*str && *str != '\n' && *str != ';')
+                str++;
+            if (*str)
+                str++;
+            str = skip_spaces(str);
+        }
+    }
+    return (skip_spaces(str));
+}
+
 int  validate_ifs(char *str)
 {
     int num;
@@ -208,6 +265,8 @@ int  validate_ifs(char *str)
     num = 0;
     while (*str)
     {
+		if ((*str == '\n' || *str == ';') && ++str)
+			str = if_to_the_start(str);
         if (*str == '\\')
             str += mirror_passes(str);
         else if (is_it_q(*str) || is_it_br(*str))
@@ -228,17 +287,6 @@ int  validate_ifs(char *str)
         }
     }
     return (num);
-}
-
-short   are_tokens_here(char *str)
-{
-    if (is_token_here(str, "while"))
-        return (1);
-    if (is_token_here(str, "for"))
-        return (1);
-    if (is_token_here(str, "until"))
-        return (1);
-    return (0);
 }
 
 short   br_closed(char *str, char strt, char fin)
@@ -339,6 +387,8 @@ int  validate_cycles(char *str, char *meta)
     num = 0;
     while (*str)
     {
+		if ((*str == '\n' || *str == ';') && ++str)
+			str = cycle_to_the_start(str);
         if (*str == '\\')
             str += mirror_passes(str);
         else if (is_it_q(*str) || is_it_br(*str))
@@ -356,52 +406,6 @@ int  validate_cycles(char *str, char *meta)
         }
     }
     return (num);
-}
-
-static char *if_to_the_start(char *str)
-{
-    while (*str && !(is_token_here(str, "if")))
-    {
-        if (*str == '\\')
-            str += mirror_passes(str);
-        else if (is_it_q(*str) || is_it_br(*str))
-        {
-            str += skip_field(str, *str);
-            ++str;
-        }
-        else
-        {
-            while (*str && *str != '\n' && *str != ';')
-                str++;
-            if (*str)
-                str++;
-            str = skip_spaces(str);
-        }
-    }
-    return (skip_spaces(str));
-}
-
-static char *cycle_to_the_start(char *str)
-{
-    while (*str && !(are_tokens_here(str)))
-    {
-        if (*str == '\\')
-            str += mirror_passes(str);
-        else if (is_it_q(*str) || is_it_br(*str))
-        {
-            str += skip_field(str, *str);
-            ++str;
-        }
-        else
-        {
-            while (*str && *str != '\n' && *str != ';')
-                str++;
-            if (*str)
-                str++;
-            str = skip_spaces(str);
-        }
-    }
-    return (skip_spaces(str));
 }
 
 short   scripts_closed(char *str)

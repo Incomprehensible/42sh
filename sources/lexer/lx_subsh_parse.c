@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/23 05:38:55 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/23 10:21:08 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*pull_subsh(char *str, t_dlist **tok, t_tk_type type)
 			i = (str[++i] == '\\') ? ++i : i;
 	}
 	make_token(tok, pull_token(str + 1, i - 1), type);
-	str += i + 2;
+	str += i + 1;
 	return (str);
 }
 

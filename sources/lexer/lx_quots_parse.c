@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/22 05:25:37 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/24 05:05:01 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,27 @@ char*   parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
             str++;
             j++;
         }
-        make_token(tok, pull_token(str - j, j), TK_EXPR);
+        make_token(tok, cutting_mirr_station(pull_token(str - j, j), APOFS), TK_EXPR);
     }
     return (parse_sep(++str, tok, i));
 }
 
 size_t   can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
 {
+	t_tk_type type;
+
+	if (t == '"')
+		type = DQUOTS;
+	else if (t == '\'')
+		type = APOFS;
+	else
+		type = TK_EXPR;
     if (j)
     {
         if (t == IN)
-            make_token(tok, pull_token(str - j, j), TK_VAR);
+            make_token(tok, cutting_mirr_station(pull_token(str - j, j), TK_VAR), TK_VAR);
         else
-            make_token(tok, pull_token(str - j, j), TK_EXPR);
+            make_token(tok, cutting_mirr_station(pull_token(str - j, j), type), TK_EXPR);
     }
     return (0);
 }
@@ -90,13 +98,13 @@ char    *parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br)
 
     j = 0;
     i = 0;
-    while (*str && !special_case(br, str))
+    while (*str && !(!i && special_case(br, str)))
     {
-        if (br != '"' && *str == '\\' && (j++) && (++str))
+        if (*str == '\\' && (j++) && (++str))
             i = 1;
         else if (!i && *str == '$')
         {
-            j = can_pull_tk(j, str, tok, 0);
+            j = can_pull_tk(j, str, tok, br);
             if (!(str = parse_deref(str, tok, tree, DQUOTS)))
                 return (NULL);
         }
@@ -107,7 +115,7 @@ char    *parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br)
             i = 0;
         }
     }
-    can_pull_tk(j, str, tok, 0);
+    can_pull_tk(j, str, tok, br);
     str = (br == '"') ? ++str : str;
     str = (*str == ' ' || *str == '\t') ? parse_empty(str, 0x0, tok) : str;
     return (parse_sep(str, tok, 0));

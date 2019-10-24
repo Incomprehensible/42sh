@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/14 02:37:10 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/23 11:30:23 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ char    *parse_exec(char *str, t_dlist **tok)
         str++;
         i++;
     }
-    make_token(tok, pull_token(str - i, i), TK_EXPR);
+	make_token(tok, cutting_mirr_station(pull_token(str - i, i), TK_EXPR), TK_EXPR);
+    // make_token(tok, pull_token(str - i, i), TK_EXPR);
     return (parse_sep(str, tok, 0));
 }
 
