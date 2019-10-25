@@ -6,7 +6,7 @@
 #    By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/10/23 09:45:41 by bomanyte         ###   ########.fr        #
+#    Updated: 2019/10/25 08:54:44 by bomanyte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,6 +87,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			lexer/lx_tokenizer.c lexer/lx_usefull_func.c \
 			lexer/lx_validate.c lexer/lx_input_codes.c \
 			lexer/lx_parse_func.c lexer/lx_deref_parse.c \
+			lexer/lx_syntax_err.c \
 			\
 			sys_tools/sys_dbg_bltn.c \
 			\

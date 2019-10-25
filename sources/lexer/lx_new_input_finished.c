@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/24 10:10:03 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/25 09:03:59 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@ short   is_it_q(char c)
     if (c == '\'' || c == '"' || c == '`')
         return (1);
     return (0);
-}
-
-short    unexpected_token(void)
-{
-    ft_putstr("bash: syntax error occured.\n");
-    return (-1);
 }
 
 size_t   mirror_passes(char *str)

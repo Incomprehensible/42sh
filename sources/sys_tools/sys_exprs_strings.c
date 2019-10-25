@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_exprs_strings.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 19:52:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/20 11:15:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/25 15:59:49 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int			ilput_fdl(DSTRING *buff, REDIRECT *rd)
 		if (!(num = ft_itoa(rd->fdl)))
 			return (1);
 		dstr_insert_str(buff, num, buff->strlen);
+		free(num);
 	}
 	else
 		return (2);

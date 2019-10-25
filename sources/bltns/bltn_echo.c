@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 12:40:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 20:03:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/25 15:53:41 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,6 @@ int				bltn_echo(char **args, ENV *envr)
 		echo_put_str(args);
 	if (!flags || !ft_strchr(flags, 'n'))
 		ft_putstr("\n");
+	free(flags);
 	return (0);
 }

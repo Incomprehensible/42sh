@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/24 16:03:59 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/25 15:52:48 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,42 +17,38 @@
 //убери лишние аргументы из функций
 void    make_token(t_dlist **list, char *value, t_tk_type type)
 {
-    t_tok           *token_data;
+    t_tok           token_data;
     t_dlist         *tmp;
 
-    token_data = (t_tok *)malloc(sizeof(t_tok));
-    if (token_data)
-    {
-        token_data->value = value;
-        token_data->type = type;
-        if (list[0] == list[1] && !list[0]->content)
-        {
-            list[1]->content = (t_tok *)malloc(sizeof(t_tok));
-            *((t_tok *)(list[1]->content)) = *token_data;
-            list[0]->next = NULL;
-        }
-        else if (list[0] == list[1])
-        {
-            tmp = list[0];
-            tmp->next = ft_dlstnew(NULL, 0);
-            tmp->next->content = (t_tok *)malloc(sizeof(t_tok));
-            *((t_tok *)(tmp->next->content)) = *token_data;
-            tmp->next->next = NULL;
-            tmp->next->prev = list[0];
-            list[1] = tmp->next;
-        }
-        else
-        {
-            tmp = list[1];
-            tmp->next = ft_dlstnew(NULL, 0);
-            tmp = tmp->next;
-            tmp->content = (t_tok *)malloc(sizeof(t_tok));
-            *((t_tok *)(tmp->content)) = *token_data;
-            tmp->next = NULL;
-            tmp->prev = list[1];
-            list[1] = tmp;
-        }
-    }
+	token_data.value = value;
+	token_data.type = type;
+	if (list[0] == list[1] && !list[0]->content)
+	{
+		list[1]->content = (t_tok *)malloc(sizeof(t_tok));
+		*((t_tok *)(list[1]->content)) = token_data;
+		list[0]->next = NULL;
+	}
+	else if (list[0] == list[1])
+	{
+		tmp = list[0];
+		tmp->next = ft_dlstnew(NULL, 0);
+		tmp->next->content = (t_tok *)malloc(sizeof(t_tok));
+		*((t_tok *)(tmp->next->content)) = token_data;
+		tmp->next->next = NULL;
+		tmp->next->prev = list[0];
+		list[1] = tmp->next;
+	}
+	else
+	{
+		tmp = list[1];
+		tmp->next = ft_dlstnew(NULL, 0);
+		tmp = tmp->next;
+		tmp->content = (t_tok *)malloc(sizeof(t_tok));
+		*((t_tok *)(tmp->content)) = token_data;
+		tmp->next = NULL;
+		tmp->prev = list[1];
+		list[1] = tmp;
+	}
 }
 
 int     layer_parse_one(char *meta, char *str)
@@ -155,7 +151,7 @@ short   clear_tokens(t_dlist **tokens)
 {
     t_dlist *token_list;
 
-    unexpected_token();
+    unexpected_token(tokens);
 	// DBG_PRINT_TOKENS(*tokens);
     while (*tokens)
     {

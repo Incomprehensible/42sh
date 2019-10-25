@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/24 11:33:22 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/25 09:03:12 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ char        *script_pull(char *patt, t_tk_type type, char *str, t_stx **tr, t_dl
 char        *reg_process(char *patt, t_tk_type type, char *str, t_dlist **tok, t_stx **tr);
 char        *parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br);
 short       is_separator(char str);
-short       unexpected_token(void);
+short		unexpected_token(t_dlist **tok);
 short       is_sep_no_space(char str);
 char        *ft_process_wall(char *str, char *meta);
 char        *ft_process_ignore(char *str, char *meta);

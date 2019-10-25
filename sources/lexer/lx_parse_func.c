@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/24 16:10:10 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/25 06:10:43 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,6 @@ void	*ft_arrmemdel(void **ap)
 	return (NULL);
 }
 
-// char    *pull_token(char *str, size_t i)
-// {
-//     char *new;
-//     size_t tmp;
-
-//     tmp = 0;
-//     new = (char *)ft_memalloc((i + 1));
-//     while (tmp != i)
-// 	{
-// 		new[tmp] = str[tmp];
-// 		tmp++;
-// 	}
-//     return (new);
-// }
-
 char    *pull_token(char *str, size_t i)
 {
     char *new;
@@ -58,10 +43,6 @@ char    *pull_token(char *str, size_t i)
         *new++ = *str++;
     return (new - tmp);
 }
-
-// cut by '\' - kek\\nkek
-// we get kek and \nkek
-//just skip \n in the front 
 
 static char	*cut_mirr(char *str)
 {
@@ -96,12 +77,8 @@ static char	*cut_mirr(char *str)
 	return (new);
 }
 
-//В двойных кавычках он экранирует только " и $
-
 static short	mirrored(char **arr, size_t i)
 {
-	// if (!ft_strchr(arr[i - 1], '"') && !ft_strchr(arr[i - 1], '$'))
-	// 	if (!ft_strchr(arr[i], '"') && !ft_strchr(arr[i], '$'))
 	if (!ft_strchr(arr[i], '"') && !ft_strchr(arr[i], '$'))
 		return (0);
 	return (1);
@@ -156,8 +133,6 @@ static char	*cut_mirr_dq(char *str)
 	ft_arrmemdel((void **)splitted);
 	return (new);
 }
-
-// //в одинарных экранирует только одинарную кавычку
 
 static char	*cut_mirr_q(char *str)
 {

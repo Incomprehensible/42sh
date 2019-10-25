@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_arch.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 16:18:56 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/25 15:56:20 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 		cpid = prs_etab_handlers(&etab_row, &pipe_free, &status, envs);
 		if (cpid > 0)
 			pex_p_table_pgid(cpid, i_line);
+		else if (i_line)
+			free(i_line);
 	}
 	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);
 	if (cpid > 0)
