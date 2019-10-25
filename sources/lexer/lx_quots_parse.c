@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/24 12:48:09 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/25 16:21:33 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,11 @@ size_t   can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
 			new = cutting_mirr_station(pull_token(str - j, j), TK_VAR);
 			make_token(tok, new, TK_VAR);
 		}
-            //make_token(tok, cutting_mirr_station(pull_token(str - j, j), TK_VAR), TK_VAR);
         else
 		{
 			new = cutting_mirr_station(pull_token(str - j, j), type);
 			make_token(tok, new, TK_EXPR);
 		}
-         //   make_token(tok, cutting_mirr_station(pull_token(str - j, j), type), TK_EXPR);
     }
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/25 09:03:59 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/25 16:39:14 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,7 @@ short   are_tokens_here(char *str)
 
 static char *if_to_the_start(char *str)
 {
+	str = skip_spaces(str);
     while (*str && !(is_token_here(str, "if")) && !(is_token_here(str, "fi")))
     {
         if (*str == '\\')
@@ -416,17 +417,6 @@ short   scripts_closed(char *str)
         return (0);
     return (1);
 }
-
-//short is_func_fucking_closed(char *str)
-//{
-//    if (!(*str))
-//        return (0);
-//    while (*str && *str != '}')
-//        str += (*str == '\\') ? mirror_passes(str) : 1;
-//    if (!(*str))
-//        return (0);
-//    return (1);
-//}
 
 char    *skip_spaces_newline(char *str)
 {

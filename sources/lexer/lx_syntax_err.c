@@ -6,13 +6,19 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/25 15:39:05 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/25 16:29:53 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
+#include "sys_tools/sys_errors.h"
+#include "sys_tools/sys_tools.h"
+#include "ft_io.h"
+#include "dstring.h"
+#include <unistd.h>
+#include <termios.h>
 
 char	*get_err_messg(t_tk_type type)
 {
@@ -40,6 +46,13 @@ char	*get_err_messg(t_tk_type type)
 	str = (type == TK_HERED) ? ft_strdup("syntax error or unexpected token near '<<' token") : str;
 	str = (type == TK_OR) ? ft_strdup("syntax error or unexpected token near 'or' token") : str;
 	str = (type == TK_AND) ? ft_strdup("syntax error or unexpected token near 'and' token") : str;
+	str = (type == TK_RD_W) ? ft_strdup("syntax error or unexpected token near '<' token") : str;
+	str = (type == TK_RD_R) ? ft_strdup("syntax error or unexpected token near '>' token") : str;
+	str = (type == TK_RD_A) ? ft_strdup("syntax error or unexpected token near '>>' token") : str;
+	str = (type == TK_RD_RW) ? ft_strdup("syntax error or unexpected token near '<>' token") : str;
+	str = (type == TK_PIPE) ? ft_strdup("syntax error or unexpected token near '|' token") : str;
+	str = (type == TK_DEREF) ? ft_strdup("syntax error or unexpected token near '$' token") : str;
+	return (str);
 }
 
 short	unexpected_token(t_dlist **tok)
@@ -65,8 +78,8 @@ short	unexpected_token(t_dlist **tok)
 			str = ft_strjoin(tmp, "'");
 			free(tmp);
 		}
-		ft_putstr(str);
-		free(str);
 	}
+	sys_perror(str, 0, NULL);
+	free(str);
 	return (-1);
 }
