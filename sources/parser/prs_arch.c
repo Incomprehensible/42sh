@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_arch.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/25 15:56:20 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/26 06:07:31 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int				prs_etab_handlers(ETAB **etab_row, ETAB **pipe_cache, int *status, ENV *e
 		ft_dlstunshift((t_dlist **)pipe_cache, (t_dlist *)(*etab_row));
 	else
 	{
-		cpid < 0 ? prs_error_handler(-1 * cpid, status, envr, (*etab_row)->instruction) : 0;
+		cpid < 0 ? prs_error_handler(-1 * cpid, (*etab_row)->type, envr, (*etab_row)->instruction) : 0;
 		ft_dlst_delcut((t_dlist **)etab_row, et_rm_ett);
 	}
 	sys_sig_init();
