@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 16:04:47 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/23 15:56:16 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ t_dlist			*prs_for(t_dlist *tks, ENV *envs, int *status);
 char			*get_deref_subsh(char *code, ENV *envr);
 char			*prc_substitute(char *code, ENV *envr, int is_in);
 
-int				prs_error_handler(int ecode, int *stat, ENV *envr, EXPRESSION *expr);
+int				prs_error_handler(int ecode, size_t type, ENV *envr, EXPRESSION *expr);
 
 int				prs_set_last_status(int *status, ENV *envr);
 
