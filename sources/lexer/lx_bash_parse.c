@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/12 23:01:03 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 05:42:56 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,8 +216,6 @@ static char *normal_token(char *patt, t_tk_type tp, char *s, t_dlist **tok)
         if (ft_isspace(*(s + i - 1)))
             space = remove_spaces(s + i - 1, i);
 		make_token(tok, NULL, tp);
-        // if (tp != TK_IN)
-        //     make_token(tok, pull_token(s, i - space), tp);
         s = s + i;
     }
     return (s);
@@ -250,11 +248,11 @@ char    *script_pull(char *patt, t_tk_type tp, char *s, t_stx **tr, t_dlist **to
         return (parse_sep(s, tok, 0));
     if (tp == GLUE)
         return (make_it_glue(s, tr, tok));
-    if (tp == TK_EXPR || tp == TK_VAR)
+    if (tp == TK_EXPR || tp == TK_VAR || tp == EX)
     {
-        if (tp == TK_EXPR && is_token_here(skip_spaces(s), "break"))
+        if (tp != TK_VAR && is_token_here(skip_spaces(s), "break"))
             return (pull_break_cont(s, TK_BREAK, tr, tok));
-        else if (tp == TK_EXPR && is_token_here(skip_spaces(s), "continue"))
+        else if (tp != TK_VAR && is_token_here(skip_spaces(s), "continue"))
             return (pull_break_cont(s, TK_CONTIN, tr, tok));
         else
             return (((special_condition(patt)) ? pull_expr1(patt, s, tr, tok) : pull_expr2(s, tr, tok)));

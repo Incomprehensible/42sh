@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_bash_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/12 20:23:04 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/27 05:41:22 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static t_graph  *condition_init(t_graph *whiletk)
     t_graph *script;
 
     script = (t_graph *)malloc((sizeof(t_graph)));
-    script->type = TK_EXPR;
+    script->type = EX;
     script->patt = "~;";
     script->forward = do_init(whiletk);
     script->left = NULL;
@@ -287,7 +287,7 @@ static t_graph  *exprtk1_init()
     t_graph *script;
 
     script = (t_graph *)malloc((sizeof(t_graph)));
-    script->type = TK_EXPR;
+    script->type = EX;
     script->patt = "~;";
     script->forward = thentk_init();
     script->left = NULL;

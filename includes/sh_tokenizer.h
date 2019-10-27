@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/25 09:03:12 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 05:39:55 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@
 # define IN (short)0x0000000018
 # define FORMATH (short)0x0000000019
 # define MATH_NT (short)0x0000000020
+# define EX (short)0x0000000021
 
 int		get_line(int fd, char **line);
 

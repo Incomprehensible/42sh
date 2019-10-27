@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/13 03:34:22 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 04:41:04 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,23 +91,6 @@ static void to_backgr(t_dlist *token_list, t_dlist *backgr)
     if (tmp && tmp->prev)
         tmp->prev = backgr;
 }
-
-//static void fill_empty_hole(t_dlist *token_list, t_dlist *backgr)
-//{
-//    t_dlist *tmp_next;
-//    t_dlist *tmp_prev;
-//
-//    tmp_next = token_list->next;
-//    tmp_prev = token_list->prev;
-//    if (TOK_VALUE)
-//        free(TOK_VALUE);
-//    free(token_list->content);
-//    free(token_list);
-//    backgr->next = tmp_next;
-//    backgr->prev = tmp_prev;
-//    tmp_prev->next = backgr;
-//    tmp_next->prev = backgr;
-//}
 
 short   stop_point(t_tk_type type)
 {
