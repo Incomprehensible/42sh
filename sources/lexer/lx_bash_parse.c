@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 05:42:56 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 05:56:23 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,7 +314,7 @@ char        *scripts_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
         return ((sig && tmp) ? s : NULL);
     s = pull_empty(g, tmp, tok);
     sig = 1;
-	while (*s && g->type == TK_EXPR && ((tmp = get_script(g, s, tok, tr, sig)) != s) && tmp)
+	while (*s && (g->type == TK_EXPR || g->type == EX) && ((tmp = get_script(g, s, tok, tr, sig)) != s) && tmp)
         s = parse_empty(tmp, g->patt, tok);
     if (!tmp)
         return (NULL);
