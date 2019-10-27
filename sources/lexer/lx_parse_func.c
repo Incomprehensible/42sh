@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 18:54:15 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 19:07:40 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static char	*cut_mirr(char *str)
 
 static short	mirrored(char **arr, size_t i)
 {
-	if (!ft_strchr(arr[i], '"') && !ft_strchr(arr[i], '$') && arr[i][0] == '\n')
+	if (!ft_strchr(arr[i], '"') && !ft_strchr(arr[i], '$') && arr[i][0] != '\n')
 		return (0);
 	return (1);
 }
@@ -142,23 +142,22 @@ static char	*cut_mirr_dq(char *str)
 				new = tmp;
 			}
 			else
-			{
 				new = pull_first(str, splitted[i - 1], splitted[i]);
-				// tmp = ft_strjoin(splitted[i - 1], "\\");
-				// new = ft_strjoin(tmp, splitted[i]);
-				// free(tmp);
-			}
 		}
 		else
 		{
+			if (splitted[i] && splitted[i][0] == '\n')
+				tmp = &splitted[i][1];
+			else
+				tmp = splitted[i];
 			if (new)
 			{
-				tmp = ft_strjoin(new, splitted[i]);
+				tmp = ft_strjoin(new, tmp);
 				free(new);
 				new = tmp;
 			}
 			else
-				new = ft_strjoin(splitted[i - 1], splitted[i]);
+				new = ft_strjoin(splitted[i - 1], tmp);
 		}
 		i++;
 	}
@@ -263,7 +262,6 @@ char	*get_copy(char *strt, char *fin, t_tk_type type)
 
 	flag = 0;
 	i = 0;
-	//strt = (*strt == '\\' && *(strt + 1) == '\\' && (flag = 1)) ? strt + 2 : strt;
 	if (strt == fin)
 		return (ft_strdup("\\"));
 	while (strt != fin)
@@ -274,8 +272,6 @@ char	*get_copy(char *strt, char *fin, t_tk_type type)
 	if (*fin && *fin == '\\' && *(fin + 1) == '\\')
 		flag = flag ? 3 : 2;
 	strt -= i;
-	// *(strt + i) = '\0';
-	// str = ft_strdup(strt);
 	str = ft_strnew(i + 1);
 	ft_strlcat(str, strt, i + 1);
 	if (!ft_strchr(str, '\\'))
