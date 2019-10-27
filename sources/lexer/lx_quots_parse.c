@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/25 16:21:33 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 14:31:17 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char*   parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
             str++;
             j++;
         }
-		new = cutting_mirr_station(pull_token(str - j, j), APOFS);
+		new = cutting_mirr_station(pull_token(str - j, j), APOF);
 		make_token(tok, new, TK_EXPR);
         //make_token(tok, cutting_mirr_station(pull_token(str - j, j), APOFS), TK_EXPR);
     }
@@ -51,7 +51,7 @@ size_t   can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
 	if (t == '"')
 		type = DQUOTS;
 	else if (t == '\'')
-		type = APOFS;
+		type = APOF;
 	else
 		type = TK_EXPR;
     if (j)
@@ -97,7 +97,6 @@ short   special_case(char br, char *str)
 		if (*str != br && *str != ';' && *str != '\n')
             return (0);
 	}
-        //        if (*str != br && !is_sep_no_space(*str))
     return (1);
 }
 
@@ -110,7 +109,7 @@ char    *parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br)
     i = 0;
     while (*str && !(!i && special_case(br, str)))
     {
-        if (*str == '\\' && (j++) && (++str))
+        if (*str == '\\' && (++j) && (++str))
             i = 1;
         else if (!i && *str == '$')
         {
@@ -138,6 +137,7 @@ char*   parse_dquotes(char *str, t_dlist **tok, t_stx **tree, short i)
         str = parse_comm(str, tok, tree, '"');
     if (!str)
         return (NULL);
+	str = parse_empty(str, 0x0, tok);
     str++;
     str = parse_str_block(str, tok, tree, '"');
     return (str);

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/23 11:30:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 12:45:41 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
             i = 1;
 		if (!i && !j && *str == '\n')
 			str = parse_empty(str, 0x0, tok);
-		else if (!i && *str && time_for_portal(str, tree, stop) && *(str + 1) != '\\')
+		else if (!i && *str && time_for_portal(str, tree, stop))
         {
             j = can_pull_tk(j, str, tok, stop);
             if (!(str = check_subbranch(str, tok, tree)))

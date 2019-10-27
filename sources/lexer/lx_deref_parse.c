@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/23 03:41:10 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 13:02:06 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,23 @@ char    *parse_nametk(char *str, t_dlist **tok, short tk)
         }
         while (str[i] && !is_separator(str[i]) && !special_reg(str[i], tk))
                 i = (str[i] == '\\' && str[i + 1]) ? i + 2 : ++i;
+		if (tk == CURLY && is_separator(str[i]))
+			return (NULL);
     }
-    make_token(tok, pull_token(str, i), TK_NAME);
+    make_token(tok, cutting_mirr_station(pull_token(str, i), TK_NAME), TK_NAME);
     return (str + i);
 }
 
 static char    *parse_curly_br(char *str, t_dlist **tok)
 {
-    str = parse_nametk(++str, tok, CURLY);
+    if (!(str = parse_nametk(++str, tok, CURLY)))
+		return (NULL);
     return (++str);
 }
 
 char    *parse_deref(char *str, t_dlist **tok, t_stx **tree, short i)
 {
-    if (*str++ == '$' && *str != '\\')
+    if (*str++ == '$' && *str && (*str != '\\' || *(str + 1) == '\n'))
     {
         if ((is_separator(*str) && *str != '"') || !(*str))
         {

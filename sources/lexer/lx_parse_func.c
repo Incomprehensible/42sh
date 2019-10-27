@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/25 06:10:43 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 13:26:32 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,13 @@ char    *pull_token(char *str, size_t i)
     return (new - tmp);
 }
 
+static char	*pull_single(char *str)
+{
+	if (str && *str == '\n')
+		++str;
+	return (ft_strdup(str));
+}
+
 static char	*cut_mirr(char *str)
 {
 	char	**splitted;
@@ -56,6 +63,8 @@ static char	*cut_mirr(char *str)
 	splitted = ft_strsplit(str, '\\');
 	if (!splitted || !splitted[0])
 		return (NULL);
+	else if (!splitted[i] && splitted[0])
+		new = pull_single(splitted[0]);
 	while (splitted[i])
 	{
 		if (splitted[i] && splitted[i][0] == '\n')
@@ -82,6 +91,27 @@ static short	mirrored(char **arr, size_t i)
 	if (!ft_strchr(arr[i], '"') && !ft_strchr(arr[i], '$'))
 		return (0);
 	return (1);
+}
+
+static char	*pull_first(char *str, char *second, char *third)
+{
+	char	*tmp;
+	char	*new;
+
+	if (*str == '\\')
+	{
+		new = ft_strjoin("\\", second);
+		tmp = ft_strjoin(new, "\\");
+		free(new);
+		new = ft_strjoin(tmp, third);
+	}
+	else
+	{
+		tmp = ft_strjoin(second, "\\");
+		new = ft_strjoin(tmp, third);
+	}
+	free(tmp);
+	return (new);
 }
 
 static char	*cut_mirr_dq(char *str)
@@ -111,9 +141,10 @@ static char	*cut_mirr_dq(char *str)
 			}
 			else
 			{
-				tmp = ft_strjoin(splitted[i - 1], "\\");
-				new = ft_strjoin(tmp, splitted[i]);
-				free(tmp);
+				new = pull_first(str, splitted[i - 1], splitted[i]);
+				// tmp = ft_strjoin(splitted[i - 1], "\\");
+				// new = ft_strjoin(tmp, splitted[i]);
+				// free(tmp);
 			}
 		}
 		else
@@ -190,7 +221,7 @@ char	*cutting_mirr_station(char *str, t_tk_type type)
 		return (str);
 	if (type == DQUOTS)
 		str = cut_mirr_dq(str);
-	else if (type == APOFS)
+	else if (type == APOF)
 		str = cut_mirr_q(str);
 	else
 		str = cut_mirr(str);

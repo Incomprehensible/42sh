@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/12 23:53:49 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 11:12:26 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,9 @@ char*   parse_lambda(char *str, t_dlist **tok, t_stx **tree, short i)
     char *reg2;
 
     reg2 = "{z}";
+	str = parse_empty(str, 0x0, tok);
+	if (*str != '{')
+		str = parse_comm(str, tok, tree, 0);
     if (!(layer_parse_two(reg2, str)))
         return (NULL);
     make_token(tok, NULL, TK_LAMBDA);
