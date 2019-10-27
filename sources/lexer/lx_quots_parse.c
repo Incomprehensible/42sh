@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 14:31:17 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 17:59:08 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char*   parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
             str++;
             j++;
         }
-		new = cutting_mirr_station(pull_token(str - j, j), APOF);
+		new = markup_station(pull_token(str - j, j), APOF);
 		make_token(tok, new, TK_EXPR);
         //make_token(tok, cutting_mirr_station(pull_token(str - j, j), APOFS), TK_EXPR);
     }
@@ -58,12 +58,12 @@ size_t   can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
     {
         if (t == IN)
 		{
-			new = cutting_mirr_station(pull_token(str - j, j), TK_VAR);
+			new = markup_station(pull_token(str - j, j), TK_VAR);
 			make_token(tok, new, TK_VAR);
 		}
         else
 		{
-			new = cutting_mirr_station(pull_token(str - j, j), type);
+			new = markup_station(pull_token(str - j, j), type);
 			make_token(tok, new, TK_EXPR);
 		}
     }
@@ -110,7 +110,7 @@ char    *parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br)
     while (*str && !(!i && special_case(br, str)))
     {
         if (*str == '\\' && (++j) && (++str))
-            i = 1;
+            i = i ? 0 : 1;
         else if (!i && *str == '$')
         {
             j = can_pull_tk(j, str, tok, br);

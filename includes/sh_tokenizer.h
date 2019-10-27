@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 05:39:55 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 15:47:14 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ char        get_code(void);
 char		*into_envar(char *str, t_dlist **tok, t_stx **tree);
 size_t		skip_field(char *str, char skip);
 char		*skip_comment(char *str);
-char		*cutting_mirr_station(char *str, t_tk_type type);
+char		*markup_station(char *str, t_tk_type type);
 void		*ft_arrmemdel(void **ap);
 
 

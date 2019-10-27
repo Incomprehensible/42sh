@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/22 23:46:53 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/10/27 15:48:38 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char    *pull_word(char *str, t_dlist **tok, short i)
     }
     if (!i)
         return (NULL);
-    make_token(tok, cutting_mirr_station(pull_token(str - i, i), TK_HERED), TK_WORD);
+    make_token(tok, markup_station(pull_token(str - i, i), TK_HERED), TK_WORD);
     return (str);
 }
 
