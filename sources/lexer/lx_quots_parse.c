@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 17:59:08 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/02 19:53:58 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ size_t   can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
 {
 	t_tk_type	type;
 	char		*new;
+	char *tmp;
 
 	if (t == '"')
 		type = DQUOTS;
@@ -58,12 +59,20 @@ size_t   can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
     {
         if (t == IN)
 		{
-			new = markup_station(pull_token(str - j, j), TK_VAR);
+			tmp = pull_token(str - j, j);
+			new = markup_station(tmp, TK_VAR);
+			//new = markup_station(pull_token(str - j, j), TK_VAR);
 			make_token(tok, new, TK_VAR);
+			if (tmp)
+				free(tmp);
 		}
         else
 		{
-			new = markup_station(pull_token(str - j, j), type);
+			tmp = pull_token(str - j, j);
+			new = markup_station(tmp, type);
+			//new = markup_station(pull_token(str - j, j), type);
+			if (tmp)
+				free(tmp);
 			make_token(tok, new, TK_EXPR);
 		}
     }

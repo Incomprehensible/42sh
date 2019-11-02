@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/13 00:26:57 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/02 18:29:01 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ static char    *get_envar_name(char *str, t_dlist **tok, short i)
         free(new);
         return (NULL);
     }
-    make_token(tok, pull_token(str - i, i), TK_VAR);
+	make_token(tok, new, TK_VAR);
     return (str);
 }
 
@@ -209,9 +209,5 @@ char*   parse_envar(char *str, t_dlist **tok, t_stx **tree, short i)
 	}
     else
         return (parse_comm(str, tok, tree, i));
-    // str = parse_empty(str, 0x0, tok);
-    // str = parse_sep(str, tok, i);
-    // if (following_pipe(tok[1]))
-    //     return (NULL);
     return (str);
 }

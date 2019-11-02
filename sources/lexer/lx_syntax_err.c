@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/25 16:29:53 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/02 20:26:15 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,21 +62,24 @@ short	unexpected_token(t_dlist **tok)
 	char	*tmp;
 
 	token_list = tok[1];
-	while (token_list && TOK_TYPE == TK_EMPTY)
-		token_list = token_list->prev;
-	if (!token_list)
-		str = "syntax error or unexpected token in the beginning of a command";
-	if (!TOK_VALUE)
-		str = get_err_messg(TOK_TYPE);
+	if (!token_list || !token_list->content)
+		str = ft_strdup("syntax error or unexpected token in the beginning of a command");
 	else
 	{
-		if (*TOK_VALUE == '\n')
-			str = ft_strdup("syntax error or unexpected token near new line");
+		while (token_list && TOK_TYPE == TK_EMPTY)
+			token_list = token_list->prev;
+		if (!TOK_VALUE)
+			str = get_err_messg(TOK_TYPE);
 		else
 		{
-			tmp = ft_strjoin("syntax error or unexpected token near '", TOK_VALUE);
-			str = ft_strjoin(tmp, "'");
-			free(tmp);
+			if (*TOK_VALUE == '\n')
+				str = ft_strdup("syntax error or unexpected token near new line");
+			else
+			{
+				tmp = ft_strjoin("syntax error or unexpected token near '", TOK_VALUE);
+				str = ft_strjoin(tmp, "'");
+				free(tmp);
+			}
 		}
 	}
 	sys_perror(str, 0, NULL);

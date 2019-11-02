@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 19:07:40 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/02 20:19:08 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,8 +220,15 @@ static char	*cut_mirr_q(char *str)
 
 char	*cutting_mirr_station(char *str, t_tk_type type)
 {
+	char *tmp;
+
 	if (!ft_strchr(str, '\\'))
-		return (str);
+	{
+		tmp = ft_strdup(str);
+		free(str);
+		return (tmp);
+	}
+	//	return (ft_strdup(str));
 	if (type == DQUOTS)
 		str = cut_mirr_dq(str);
 	else if (type == APOF)
@@ -286,12 +293,13 @@ char	*markup_station(char *str, t_tk_type type)
 	char	*start;
 	char	*fin;
 	char	*tmp;
+	char	*tmp2;
 	char	*new;
 
 	fin = NULL;
 	tmp = NULL;
 	if (!ft_strchr(str, '\\'))
-		return (str);
+		return (ft_strdup(str));
 	while (*str)
 	{
 		start = str;
@@ -306,8 +314,10 @@ char	*markup_station(char *str, t_tk_type type)
 			tmp = get_copy(start, fin, type);
 		else
 		{
-			new = ft_strjoin(tmp, get_copy(start, fin, type));
+			tmp2 = get_copy(start, fin, type);
+			new = ft_strjoin(tmp, tmp2);
 			free(tmp);
+			free(tmp2);
 			tmp = new;
 		}
 		fin = NULL;
