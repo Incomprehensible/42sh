@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 17:54:50 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 16:15:41 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/02 09:14:58 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ t_dlist			*prs_and(t_dlist *tks, ENV *envr, int *status)
 			return (tks);
 	}
 	*status = EXIT_FAILURE;
-	return (prs_skip_flows(tks->next, TK_OR));
+	if (tks->next)
+		return (prs_skip_flows(tks->next, TK_OR));
+	else
+		return (tks);
 }
 
 t_dlist			*prs_or(t_dlist *tks, ENV *envr, int *status)
@@ -56,5 +59,8 @@ t_dlist			*prs_or(t_dlist *tks, ENV *envr, int *status)
 			return (tks);
 	}
 	*status = EXIT_SUCCESS;
-	return (prs_skip_flows(tks->next, TK_AND));
+	if (tks->next)
+		return (prs_skip_flows(tks->next, TK_AND));
+	else
+		return (tks);
 }

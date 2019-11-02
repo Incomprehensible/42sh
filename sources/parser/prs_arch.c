@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/26 06:07:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/02 09:10:58 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ t_dlist			*sh_tparse(t_dlist *tks, ENV *envs, t_tk_type end_tk, int *status)
 		tks = tok->type == TK_SUBSH ? prs_subsh(&etab, tks, envs) : tks;
 		if (tks == INTERRUPT_CALL)
 			return (INTERRUPT_CALL);
-		tks = tks->next && tok->type & (TK_EMPTY | TK_SEPS1 | TK_ARSHLOCH | \
+		tks = tks && tks->next && tok->type & (TK_EMPTY | TK_SEPS1 | TK_ARSHLOCH | \
 		(TK_FLOWS & ~(TK_IF | TK_WHILE))) & ~TK_EOF ? tks->next : tks;
 	}
 	return (tks);

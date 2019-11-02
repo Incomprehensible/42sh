@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:01:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 09:29:53 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/02 08:54:04 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int				exe_execute_pi(EXPRESSION *cmd, ENV *envr)
 		return (-2);  // ERROR: exec: Fork failed
 	envp ? et_rm_warr(envp) : 0;
 	path ? free(path) : 0;
-	cmd->opipe_fds ? close(cmd->opipe_fds[1]) : 0;
 	cmd->ipipe_fds ? close(cmd->ipipe_fds[0]) : 0;
 	cmd->ipipe_fds ? close(cmd->ipipe_fds[1]) : 0;
 	return ((int)pid);
