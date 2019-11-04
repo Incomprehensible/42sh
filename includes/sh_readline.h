@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/12 08:53:30 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/04 17:00:23 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,12 @@ typedef struct	s_concat
 
 }				t_concat;
 
-/* to save strings sh_tab */
-typedef struct	s_name_ind
-{
-	int			ind;
-	int			ind_name;
-}				t_name_ind;
-
 /* 
 ** ch - user entered character
 ** ind - where to insert the character
+** fl - 0 вызываем гетчар. 1 не вызываем
+** reg = 1 если регулярное выражение
+** tab = 1 если нажат таб
 */
 typedef struct	s_indch
 {
@@ -53,7 +49,18 @@ typedef struct	s_indch
 	int			ind;
 	char		fl;
 	int			his;
+	int			reg;
+	int			tab;
+	DSTRING		*prompt;
 }				t_indch;
+
+/* to save strings sh_tab */
+typedef struct	s_name_ind
+{
+	int			ind;
+	int			ind_name;
+	t_indch		indch;
+}				t_name_ind;
 
 /* array of strings with a counter */
 typedef struct	s_astr
@@ -75,14 +82,28 @@ typedef struct	s_fl
 	char		reg;
 }				t_fl;
 
-DSTRING			*sh_readline(ENV *env);
+size_t			prebuf;
+int				preind;
+t_darr			g_histr;
+
+void			init_histr(ENV *envr);
+t_indch			show_new_history(DSTRING **buf, t_indch indc, ENV *envr);
+
+DSTRING			*sh_new_redline(const DSTRING *prompt, ENV *env);
+
+
+t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr);
+char			is_reg(DSTRING *buf);
+void			fill_buf(DSTRING **buf, const t_astr rez);
+int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
+
 
 DSTRING			*dstr_nerr(char *src);
 DSTRING			*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei);
 DSTRING			*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei);
 DSTRING			*check_null(DSTRING *line);
 
-char		is_ctrl(const t_indch indch);
+char			is_ctrl(const t_indch indch);
 
 /* 
 ** Command line editing
@@ -97,13 +118,16 @@ char		is_ctrl(const t_indch indch);
 */
 t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr);
 void			clear_screen(void);
-int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
+int				sh_t_insertion_point(const DSTRING *str, int ind, const char ch);
 
 /*	GET ALL CMDS FROM $PATH */
 t_darr			get_list_cmds(ENV *envp);
 
 /* overwrites the buffer string in the console and sets the cursor at the index */
 void			sh_rewrite(const DSTRING *buf, const size_t index);
+
+void			sh_new_rewrite(const DSTRING *prompt, const DSTRING *buf,\
+						 const size_t index);
 
 /* deletes a character by index. flag == BAKSP moves carriage one character back */
 ssize_t			sh_del_char(DSTRING **buf, size_t index, const char flag);
@@ -149,20 +173,22 @@ t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf, ENV *env);
 int				ft_getch(void);
 
 /* prints an array in the form of columns. does not move the carriage */
-void			put_col(t_darr overlap, const DSTRING *buf);
+void			put_col(t_darr overlap, const DSTRING *buf, t_indch indch);
 ushort			get_col(const int lencol);
+DSTRING			*sh_get_col(t_darr dar, const ushort col, ushort iter);
 void			free_lines_down(void);
 
 /* auto completion */
 t_indch			sh_tab(DSTRING **buf, ENV *env, t_indch indch);
-t_darr			sh_tab_help(DSTRING **buf, ENV *env);
+t_darr			sh_tab_help(DSTRING **buf, ENV *env, t_indch indch);
 int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
 					int fl, t_name_ind n_ind);
 t_darr			sh_add_cmd(DSTRING **buf, ENV *env);
 t_darr			sh_add_path(DSTRING **buf, size_t start_dir);
 char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
 int				ind_begin_cmd(DSTRING *buf);
-void			subst_name(DSTRING **buf, t_darr overlap, int ind, int ind_nam);
+void			subst_name(DSTRING **buf, t_darr overlap,\
+					int ind, t_name_ind n_ind);
 char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
 
 /* appends directory name */
@@ -226,7 +252,8 @@ void			write_history(DSTRING *line);
 /* history management */
 t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr);
 
-t_indch			search_history(DSTRING **buf, ENV *envr);
+t_indch			sh_new_search_h(DSTRING **buf, ENV *envr, t_indch indch);
+
 void			direction_help(t_darr o, t_darr his, t_indch *ich,\
 					DSTRING **strd);
 
@@ -241,5 +268,9 @@ char			get_histr(t_darr *histr, ENV *envr);
 /* reads pressed keys */
 char			ispers_arws(char ch, t_indch *indch, \
 				t_darr *his, const DSTRING *buf);
+
+void			sys_term_init(void);
+void			sys_term_restore(void);
+void			sys_term_noecho(void);
 
 #endif

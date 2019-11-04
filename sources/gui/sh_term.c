@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_term.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:14:42 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/27 19:57:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/16 18:54:26 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,26 +74,6 @@ size_t			clear_long_line(const DSTRING *buf, struct winsize term,\
 	sh_move_cursor(buf->strlen + len_n, LEFT, term.ws_col);
 	sh_move_cursor(index + len_n, RIGHT, term.ws_col);
 	return (lines * term.ws_col);
-}
-
-void			sh_rewrite(const DSTRING *buf, const size_t index)
-{
-	struct winsize		term;
-	int					len_n;
-
-	len_n = ft_strlen(NAME);
-	ioctl(0, TIOCGWINSZ, &term);
-	if (buf->strlen + len_n >= term.ws_col)
-		clear_long_line(buf, term, index, len_n);
-	else
-	{
-		ft_putstr(MOVEBGN);
-		ft_putstr(CLEARL);
-		ft_putstr(NAME);
-		ft_putstr(buf->txt);
-		sh_move_cursor(buf->strlen, LEFT, term.ws_col);
-		sh_move_cursor(index, RIGHT, term.ws_col);
-	}
 }
 
 ssize_t			sh_del_char(DSTRING **buf, size_t index, const char flag)

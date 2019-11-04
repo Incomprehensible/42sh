@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/23 09:47:24 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/04 15:43:14 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,39 +127,97 @@ char			*tmp_readline(char *prompt)
 	return (line);
 }
 
+void			add_buf_history(DSTRING *buf)
+{
+	int			ind;
+
+	ind = S_DARR_STRINGS - (g_histr.count + 1);
+	if (ind > 0)
+	{
+		if (buf->strlen && !(ft_strequ(buf->txt, "exit")))
+		{
+			g_histr.strings[ind] = dstr_nerr(buf->txt);
+			g_histr.count++;
+			g_histr.allsize += buf->strlen;
+		}
+	}
+}
+
+void			save_histr(ENV *envr)
+{
+	int		fd;
+	int		ind;
+	size_t	count;
+
+	if (!g_histr.count || ((fd = get_history_fd \
+	(O_WRONLY | O_TRUNC, "REWRITE_HISTORY: File error", envr)) < 0))
+		return ;
+	if (g_histr.count > 1000)
+		ind = S_DARR_STRINGS - (g_histr.count - 1000);
+	else
+		ind = S_DARR_STRINGS - 1;
+	count = 0;
+	while (count <= 1001 && g_histr.strings[ind])
+	{
+		write(fd, g_histr.strings[ind]->txt, g_histr.strings[ind]->strlen);
+		write(fd, "\n", 1);
+		ind--;
+		count++;
+	}
+	close(fd);
+	// free_darr_re(g_histr.strings, g_histr.count);
+}
+
+void			del_history_buf(t_darr *histr)
+{
+	int		i;
+	size_t	count;	
+
+	count = 0;
+	i = S_DARR_STRINGS - histr->count - 1;
+	while (count < histr->count)
+	{
+		++count;
+		dstr_del(&(histr->strings[i--]));
+	}
+}
+
 // !! TEMPORARY FUNCTIONS ===================================================================== !!
 // !! Soon will be changed! =================================================================== !!
 
 void			sh_loop(ENV *env)
 {
-	char		*line;
+	DSTRING		*line;
 	DSTRING		*prompt;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
 	int			status;
 	char        code;
 
+	init_histr(env);
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	code = 0;
 	while (1)
 	{
 		if (!(prompt = sys_get_prompt_num(env, code)))
 			sys_fatal_memerr("PROMPT FAILED");
-		if (!(line = tmp_readline(prompt->txt)))
+		if (!(line = sh_new_redline(prompt, env)))
 		{
 			ft_putendl("== Input failed or ENDED ==");
 			break ;
 		}
-		if (sh_tokenizer(line, token_list) <= 0)
+		add_buf_history(line);
+		save_histr(env);
+		if (sh_tokenizer(line->txt, token_list) <= 0)
 		{
 			dstr_del(&prompt);
-		    free(line);
+		    dstr_del(&line);
 		    code = get_code();
 		    INPUT_NOT_OVER = -1;
             continue ;
         }
 		code = 0;
 		dstr_del(&prompt);
-		free(line);
+		dstr_del(&line);
 		if (dbg_tok_pr_flag)
 			DBG_PRINT_TOKENS(token_list[0]);
 		g_intr = 0;
@@ -196,3 +254,25 @@ int				main(const int argc, char **argv, char **envp)
 		free(flags);
 	return (0);
 }
+
+
+// #include <fcntl.h>
+
+// int main()
+// {
+// 	char	name[] = "/Users/gdaemoni/Desktop/test_histr.txt";
+// 	int		fd;
+// 	int		num = 0;
+
+// 	fd = open(name, O_RDWR | O_CREAT);
+
+// 	while (num < 2500)
+// 	{
+// 		char *tmp = ft_itoa(num);
+// 		write(fd, tmp, ft_strlen(tmp));
+// 		write(fd, "\n", 1);
+// 		free(tmp);
+// 		num++;
+// 	}
+// 	return (1);
+// }

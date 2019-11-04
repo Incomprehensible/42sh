@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tab_help.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:43:03 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 01:36:56 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:40:15 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
 #include "sh_termcomand.h"
 
-void			subst_name(DSTRING **buf, t_darr overlap, int ind, int ind_nam)
+void			subst_name(DSTRING **buf, t_darr overlap,\
+				 int ind, t_name_ind n_ind)
 {
-	dstr_cutins_dstr(buf, overlap.strings[ind], ind_nam);
-	sh_rewrite((*buf), (*buf)->strlen);
+	dstr_cutins_dstr(buf, overlap.strings[ind], n_ind.ind_name);
+	sh_new_rewrite(n_ind.indch.prompt, (*buf), (*buf)->strlen);
 }
 
 int				ind_begin_cmd(DSTRING *buf)
@@ -61,15 +62,15 @@ int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
 					int fl, t_name_ind n_ind)
 {
 	if (fl == 0 && overlap.count > 1)
-		put_col(overlap, (*buf));
+		put_col(overlap, (*buf), n_ind.indch);
 	if (overlap.count > 1 && fl != 0)
-		subst_name(buf, overlap, n_ind.ind++, n_ind.ind_name);
+		subst_name(buf, overlap, n_ind.ind++, n_ind);
 	if ((size_t)n_ind.ind == overlap.count)
 		n_ind.ind = 0;
 	return (n_ind.ind);
 }
 
-t_darr			sh_tab_help(DSTRING **buf, ENV *env)
+t_darr			sh_tab_help(DSTRING **buf, ENV *env, t_indch indch)
 {
 	ssize_t		start_dir;
 	t_darr		overlap;
@@ -79,6 +80,6 @@ t_darr			sh_tab_help(DSTRING **buf, ENV *env)
 		overlap = sh_add_cmd(buf, env);
 	else if (sh_check_back_slash(buf, start_dir))
 		overlap = sh_add_path(buf, start_dir);
-	sh_rewrite((*buf), (*buf)->strlen);
+	sh_new_rewrite(indch.prompt, (*buf), (*buf)->strlen);
 	return (overlap);
 }

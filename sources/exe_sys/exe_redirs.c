@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:02:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 19:51:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/04 14:56:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,31 +48,34 @@ void			exe_rdr_heredoc_pipes(DSTRING *buff, int *fd)
 	close(fd[0]);
 }
 
-int			exe_rdr_heredocument(REDIRECT *rdr)
+int			exe_rdr_heredocument(REDIRECT *rdr, ENV *env)
 {
-	char	*line;
-	DSTRING	*buff;
-	int		fd[2];
+	DSTRING			*line;
+	DSTRING			*buff;
+	DSTRING	const	*prompt = dstr_new("heredoc> ");
+	int				fd[2];
 
 	buff = dstr_new("");
-	while ((line = tmp_readline("heredoc> ")) || 1)
+	while ((line = sh_new_redline(prompt, env)) || 1)
 	{
 		if (!line)
 		{
 			dstr_del(&buff);
+			dstr_del((DSTRING **)&prompt);
 			return (-1);
 		}
-		if (ft_strequ(line, rdr->file))
+		if (ft_strequ(line->txt, rdr->file))
 		{
-			free(line);
+			dstr_del(&line);
 			break ;
 		}
-		dstr_insert_str(buff, line, buff->strlen);
+		dstr_insert_dstr(buff, line, buff->strlen);
 		dstr_insert_ch(buff, '\n', buff->strlen);
-		free(line);
+		dstr_del(&line);
 	}
 	exe_rdr_heredoc_pipes(buff, fd);
 	dstr_del(&buff);
+	dstr_del((DSTRING **)&prompt);
 	return (0);
 }
 
@@ -84,7 +87,7 @@ int				exe_redir_ex(REDIRECT *rdr, ENV *envr)
 
 	if (rdr->type == herd)
 	{
-		if (exe_rdr_heredocument(rdr) < 0)
+		if (exe_rdr_heredocument(rdr, envr) < 0)
 			return (sys_perror("Heredocument io failed!", -1, 0));
 	}
 	else if ((fd = rdr->fdr) >= 0)

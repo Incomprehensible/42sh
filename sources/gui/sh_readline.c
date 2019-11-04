@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/23 15:44:11 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/10/18 12:43:08 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_indch					management_line(t_indch indch, DSTRING **buf, ENV *envr)
 	else if (indch.ch == 0x0e)
 		clear_screen();
 	else if (indch.ch == 0x12)
-		indch = search_history(buf, envr);
+		indch = sh_new_search_h(buf, envr, indch);
 	return (indch);
 }
 
@@ -53,7 +53,7 @@ static DSTRING			*return_line(DSTRING **buf, t_indch indch, t_fl fl)
 		dstr_del(buf);
 		free_lines_down();
 		ft_putstr("\n");
-		return (dstr_nerr("exit()"));
+		return (dstr_nerr("exit"));
 	}
 	free_lines_down();
 	sh_rewrite(*buf, indch.ind);
@@ -63,7 +63,7 @@ static DSTRING			*return_line(DSTRING **buf, t_indch indch, t_fl fl)
 	return (*buf);
 }
 
-static char				is_reg(DSTRING *buf)
+char				is_reg(DSTRING *buf)
 {
 	int		i;
 
@@ -78,49 +78,49 @@ static char				is_reg(DSTRING *buf)
 	return (0);
 }
 
-static t_indch			auto_correction(DSTRING **buf, t_indch indch, \
-							t_fl *fl, ENV *env)
-{
-	if (is_reg(*buf))
-		fl->reg = 1;
-	if ((indch.ch == BAKSP || indch.ch == DEL) && (fl->tab = 0) == 0)
-		indch.ind = sh_del_char(buf, indch.ind, indch.ch);
-	if (indch.ch == TAB && fl->reg)
-		indch.ind = reg_expr(buf, fl);
-	else if (indch.ch == TAB && fl->reg == 0 && fl->tab++ == 0)
-		indch = sh_tab(buf, env, indch);
-	if (ft_isprint(indch.ch) && fl->tab)
-		dstr_insert_ch(*buf, indch.ch, indch.ind++);
-	if (is_ctrl(indch))
-		indch = management_line(indch, buf, env);
-	if (((indch.ch == ESC) || indch.fl) && (fl->tab = 0) == 0)
-		indch = sh_esc(indch, (*buf)->strlen, buf, env);
-	return (indch);
-}
+// static t_indch			auto_correction(DSTRING **buf, t_indch indch, \
+// 							t_fl *fl, ENV *env)
+// {
+// 	if (is_reg(*buf))
+// 		fl->reg = 1;
+// 	if ((indch.ch == BAKSP || indch.ch == DEL) && (fl->tab = 0) == 0)
+// 		indch.ind = sh_del_char(buf, indch.ind, indch.ch);
+// 	if (indch.ch == TAB && fl->reg)
+// 		indch.ind = reg_expr(buf, fl);
+// 	else if (indch.ch == TAB && fl->reg == 0 && fl->tab++ == 0)
+// 		indch = sh_tab(buf, env, indch);
+// 	if (ft_isprint(indch.ch) && fl->tab)
+// 		dstr_insert_ch(*buf, indch.ch, indch.ind++);
+// 	if (is_ctrl(indch))
+// 		indch = management_line(indch, buf, env);
+// 	if (((indch.ch == ESC) || indch.fl) && (fl->tab = 0) == 0)
+// 		indch = sh_esc(indch, (*buf)->strlen, buf, env);
+// 	return (indch);
+// }
 
-DSTRING					*sh_readline(ENV *env)
-{
-	DSTRING		*buf;
-	t_indch		indch;
-	t_fl		fl;
+// DSTRING					*sh_readline(ENV *env)
+// {
+// 	DSTRING		*buf;
+// 	t_indch		indch;
+// 	t_fl		fl;
 
-	buf = dstr_nerr("");
-	ft_bzero(&indch, sizeof(t_indch));
-	ft_bzero(&fl, sizeof(t_fl));
-	ft_putstr(NAME);
-	while (1 && !(fl.tab = 0))
-	{
-		if (!fl.tab && !indch.fl && (indch.ch != (char)0x04 && (indch.ch != '\n')))
-			indch.ch = ft_getch();
-		if (indch.ch == (char)0x04 || (indch.ch == '\n'))
-			return (return_line(&buf, indch, fl));
-		if (is_ctrl(indch))
-			indch = management_line(indch, &buf, env);
-		if (ft_isprint(indch.ch) && indch.ch != DEL \
-			&& (!indch.fl || indch.fl == 2) && (fl.tab = 0) == 0)
-			dstr_insert_ch(buf, indch.ch, indch.ind++);
-		indch = auto_correction(&buf, indch, &fl, env);
-		sh_rewrite(buf, indch.ind);
-	}
-	return (dstr_nerr(""));
-}
+// 	buf = dstr_nerr("");
+// 	ft_bzero(&indch, sizeof(t_indch));
+// 	ft_bzero(&fl, sizeof(t_fl));
+// 	ft_putstr(NAME);
+// 	while (1 && !(fl.tab = 0))
+// 	{
+// 		if (!fl.tab && !indch.fl && (indch.ch != (char)0x04 && (indch.ch != '\n')))
+// 			indch.ch = ft_getch();
+// 		if (indch.ch == (char)0x04 || (indch.ch == '\n'))
+// 			return (return_line(&buf, indch, fl));
+// 		if (is_ctrl(indch))
+// 			indch = management_line(indch, &buf, env);
+// 		if (ft_isprint(indch.ch) && indch.ch != DEL \
+// 			&& (!indch.fl || indch.fl == 2) && (fl.tab = 0) == 0)
+// 			dstr_insert_ch(buf, indch.ch, indch.ind++);
+// 		indch = auto_correction(&buf, indch, &fl, env);
+// 		sh_rewrite(buf, indch.ind);
+// 	}
+// 	return (dstr_nerr(""));
+// }

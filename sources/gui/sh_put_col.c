@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_put_col.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 20:46:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/10/18 12:45:22 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static DSTRING		*sh_get_space(int max, int len)
 	return (dstr_nerr(""));
 }
 
-static DSTRING		*sh_get_col(t_darr dar, const ushort col, ushort iter)
+DSTRING		*sh_get_col(t_darr dar, const ushort col, ushort iter)
 {
 	DSTRING		*colstr;
 	DSTRING		*space;
@@ -89,7 +89,7 @@ void				free_lines_down(void)
 	ft_putstr(LOADCAR);
 }
 
-void				put_col(t_darr overlap, const DSTRING *buf)
+void			put_col(t_darr overlap, const DSTRING *buf, t_indch indch)
 {
 	ushort		col;
 	int			iter;
@@ -104,6 +104,6 @@ void				put_col(t_darr overlap, const DSTRING *buf)
 	dstr_cutins_ch(&colstr, '\0', colstr->strlen - 1);
 	ft_putstr(colstr->txt);
 	ft_putstr("\n");
-	sh_rewrite(buf, buf->strlen);
+	sh_new_rewrite(indch.prompt, buf, buf->strlen);
 	dstr_del(&colstr);
 }
