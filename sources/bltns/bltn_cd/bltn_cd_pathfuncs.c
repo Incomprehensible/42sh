@@ -1,21 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   bltn_cd_pathfuncs.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/28 07:14:50 by fnancy            #+#    #+#             */
-/*   Updated: 2019/10/16 02:41:35 by hgranule         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "bltn.h"
 
 void		et_rm_str(void *s, size_t l)
 {
 	l = 0;
-	free(s);
+	if (s)
+		free(s);
 }
 
 DSTRING		*bltn_cd_pathtostr(t_dlist *path)
@@ -44,5 +33,9 @@ DSTRING		*bltn_cd_pathtostr(t_dlist *path)
 
 void		bltn_cd_destroy_path(t_dlist **path)
 {
-	ft_dlst_delf(&(*path), sizeof((*path)) / sizeof(t_dlist *), et_rm_str);
+	if ((*path))
+	{
+		ft_dlst_delf(&(*path), 0, et_rm_str);
+		(*path) = NULL;
+	}
 }
