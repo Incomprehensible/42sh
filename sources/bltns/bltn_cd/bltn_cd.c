@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 04:21:28 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/04 17:58:03 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/04 18:56:11 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,22 @@ static int	bltn_cd_rmlast(t_dlist **path)
 {
 	t_dlist *last;
 	char	*str;
+	int		counter;
 
+	counter = 0;
 	str = (char *)(*path)->content;
 	if (ft_strequ(str, "\0"))
 		return (1);
 	last = (*path);
 	while (last->next != NULL)
+	{	
 		last = last->next;
-	ft_dlst_delcut(&last, et_rm_str);
+		counter++;
+	}
+	if (counter == 0)
+		ft_dlst_delcut(path, et_rm_str);
+	else
+		ft_dlst_delcut(&last, et_rm_str);
 	return (1);
 }
 

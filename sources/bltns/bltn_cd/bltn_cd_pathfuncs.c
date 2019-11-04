@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bltn_cd_pathfuncs.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/11/04 18:53:17 by fnancy            #+#    #+#             */
+/*   Updated: 2019/11/04 18:57:04 by fnancy           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "bltn.h"
 
 void		et_rm_str(void *s, size_t l)
@@ -12,7 +24,8 @@ DSTRING		*bltn_cd_pathtostr(t_dlist *path)
 	DSTRING	*res;
 	char	*val;
 
-	val = (char *)path->content;
+	if (path)
+		val = (char *)path->content;
 	if (val[0] != '/')
 		res = dstr_new("/");
 	else
