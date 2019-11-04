@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 14:47:35 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/15 19:21:56 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/04 13:03:16 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,17 @@ int		write_history_buf(char side, int ind, DSTRING **buf, t_indch indc)
 	return (ind);
 }
 
-void		get_oldbuf(DSTRING **buf, DSTRING *oldbuf, t_indch indch)
+int		get_oldbuf(DSTRING **buf, DSTRING *oldbuf, t_indch indch)
 {
 	if (ft_strequ((*buf)->txt, oldbuf->txt))
 	{
 		sh_new_rewrite(indch.prompt, (*buf), (*buf)->strlen);
-		return ;
+		return (S_DARR_STRINGS - g_histr.count - 1);
 	}
 	dstr_del(buf);
 	(*buf) = dstr_nerr(oldbuf->txt);
 	sh_new_rewrite(indch.prompt, (*buf), (*buf)->strlen);
+	return (S_DARR_STRINGS - g_histr.count - 1);
 }
 
 t_indch		skip_esc(t_indch indch)
@@ -106,7 +107,7 @@ t_indch		show_new_history(DSTRING **buf, t_indch indc, ENV *envr)
 	int		ind;
 	DSTRING	*oldbuf;
 
-	ind = S_DARR_STRINGS - (g_histr.count + 1);
+	ind = S_DARR_STRINGS - g_histr.count - 1;
 	oldbuf = dstr_nerr((*buf)->txt);
 	while (1)
 	{
@@ -116,7 +117,7 @@ t_indch		show_new_history(DSTRING **buf, t_indch indc, ENV *envr)
 			(ind - 1) > (S_DARR_STRINGS - (g_histr.count + 1)))
 			ind = write_history_buf(DOWN[0], ind, buf, indc);
 		else if ((ind - 1) == (S_DARR_STRINGS - (g_histr.count + 1)))
-			get_oldbuf(buf, oldbuf, indc);
+			ind = get_oldbuf(buf, oldbuf, indc);
 		if ((indc = skip_esc(indc)).ch != UP[0] && indc.ch != DOWN[0])
 			break ;
 	}

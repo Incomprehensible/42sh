@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/22 15:10:06 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/04 12:45:33 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,8 +146,9 @@ void			save_histr(ENV *envr)
 	else
 		ind = S_DARR_STRINGS - 1;
 	count = 0;
-	while (count <= 1000 && count < g_histr.count)
+	while (count <= 1001 && g_histr.strings[ind])
 	{
+		printf("i = %d\n", ind);
 		write(fd, g_histr.strings[ind]->txt, g_histr.strings[ind]->strlen);
 		write(fd, "\n", 1);
 		ind--;
@@ -157,12 +158,26 @@ void			save_histr(ENV *envr)
 	// free_darr_re(g_histr.strings, g_histr.count);
 }
 
+void			del_history_buf(t_darr *histr)
+{
+	int		i;
+	size_t	count;	
+
+	count = 0;
+	i = S_DARR_STRINGS - histr->count - 1;
+	while (count < histr->count)
+	{
+		++count;
+		dstr_del(&(histr->strings[i--]));
+	}
+}
+
 static void		sh_loop(ENV *env)
 {
 	DSTRING		*line;
 	t_dlist		*token_list[2]; // [0] - begining of a tlist, [1] - end;
 	int			status;
-	DSTRING		*prompt = dstr_new("prompt ");
+	DSTRING		*prompt = dstr_new("\033[31;42;1;4mprompt\033[0m ");
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
 	{
@@ -172,6 +187,7 @@ static void		sh_loop(ENV *env)
 		printf("%s", line->txt);
 		save_histr(env);
 		dstr_del(&prebuf);
+		del_history_buf(&g_histr);
 		if (sh_tokenizer(line->txt, token_list) <= 0)
 		{
 		    dstr_del(&line);
@@ -201,3 +217,25 @@ int				main(const int argc, char **argv, char **envp)
 	et_rm_clear_env(&env);
 	return (0);
 }
+
+
+// #include <fcntl.h>
+
+// int main()
+// {
+// 	char	name[] = "/Users/gdaemoni/Desktop/test_histr.txt";
+// 	int		fd;
+// 	int		num = 0;
+
+// 	fd = open(name, O_RDWR | O_CREAT);
+
+// 	while (num < 2500)
+// 	{
+// 		char *tmp = ft_itoa(num);
+// 		write(fd, tmp, ft_strlen(tmp));
+// 		write(fd, "\n", 1);
+// 		free(tmp);
+// 		num++;
+// 	}
+// 	return (1);
+// }

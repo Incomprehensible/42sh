@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/14 20:46:06 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/01 17:30:40 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,13 +118,50 @@ void			sh_new_move_cors(const DSTRING *buf, struct winsize term, int len_p, int 
 	}
 }
 
+int		skip_num(char *str)
+{
+	int num;
+	
+	if (!str)
+		return (0);
+	num = ft_atoi(str);
+	if (num > 100)
+		return (3);
+	if (num > 10)
+		return (2);
+	return (1);
+}
+
+int		ft_color_strlen(char *str)
+{
+	int		rez = 0;
+	int		i = -1;
+
+	while (str[++i])
+	{
+		if (str[i] == '\033')
+			while (str[i] && !ft_isalpha(str[i]) && \
+					!ft_isdigit(str[i]) && str[i] != ' ')
+			{
+				if ((str[i] == ';' || str[++i] == '[') && ++i)
+					i += skip_num(str + i);
+				if (str[i] != ';')
+					++i;
+			}
+		if (!str[i])
+			break ;
+		++rez;
+	}
+	return (rez);
+}
+
 void			sh_new_rewrite(const DSTRING *prompt, const DSTRING *buf,\
 						const size_t index)
 {
 	struct winsize		term;
 	int					len_p;
 
-	len_p = ft_strlen(prompt->txt);
+	len_p = ft_color_strlen(prompt->txt);
 	ioctl(0, TIOCGWINSZ, &term);
 	sh_clear_buf(term, len_p, index);
 	ft_putstr(prompt->txt);
