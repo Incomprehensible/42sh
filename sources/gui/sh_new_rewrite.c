@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_new_rewrite.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/04 16:59:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/04 20:51:30 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,24 @@
 #include <unistd.h>
 #include "sys_tools/sys_errors.h"
 
-#include "dbg_tools.h"
+void			clear_screen(void)
+{
+	ft_putstr(CLRSCR);
+	ft_putstr("\x001b[100A");
+}
 
-void			sh_putstr_term(const DSTRING *buf, struct winsize term, int len_p)
+char				is_ctrl(const t_indch indch)
+{
+	if (indch.ch == 0x1 || indch.ch == 0x5 \
+		|| indch.ch == 0x15 || indch.ch == 0x14 \
+		|| indch.ch == 0x18 || indch.ch == 0x06 \
+		|| indch.ch == 0x0e || indch.ch == 0x12)
+		return (1);
+	return (0);
+}
+
+void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
+					int len_p)
 {
 	int			ind;
 	size_t		lines;
@@ -28,12 +43,6 @@ void			sh_putstr_term(const DSTRING *buf, struct winsize term, int len_p)
 	char		*b_ptr;
 
 	ind = 0;
-	// while (buf->txt[++ind])
-	// {
-	// 	ft_putchar(buf->txt[ind]);
-	// 	if (!((ind + len_p + 1) % term.ws_col))
-	// 		ft_putchar('\n');
-	// }
 	lines = (buf->strlen + (len_p % term.ws_col)) / term.ws_col;
 	b_ptr = buf->txt;
 	while (ind < lines)
@@ -50,14 +59,14 @@ void			sh_putstr_term(const DSTRING *buf, struct winsize term, int len_p)
 	ft_putstr_fd(b_ptr, STDOUT_FILENO);
 }
 
-void			sh_movec_front(struct winsize term, int mov_front, int len_all, int index)
+void			sh_movec_front(struct winsize term, int mov_front, \
+					int len_all, int index)
 {
-	int 	lines;
+	int		lines;
 	int		segment;
-
 	char	*n;
 	char	*cmd_str;
-	
+
 	lines = 0;
 	segment = len_all % term.ws_col;
 	if ((len_all - segment) > index)
@@ -90,7 +99,7 @@ void			sh_clear_buf(struct winsize term, int len_p, int index)
 {
 	int len_all;
 	int mov_front;
-	
+
 	len_all = prebuf + len_p;
 	mov_front = len_all - (index + len_p);
 	if (len_all >= term.ws_col)
@@ -98,19 +107,43 @@ void			sh_clear_buf(struct winsize term, int len_p, int index)
 	sh_clear_line(term, len_all, index + len_p);
 }
 
-void			sh_new_move_cors(const DSTRING *buf, struct winsize term, int len_p, int index)
+void			sh_move_up_lines(int lines)
 {
-	int 	move_back;
-	int		len_all;
-	int		segment;
-	int 	lines;
 	char	*n;
 	char	*cmd_str;
 
+	n = ft_itoa(lines);
+	cmd_str = ft_concat(3, "00", "\x001b[", n, "A");
+	ft_putstr(cmd_str);
+	free(n);
+	free(cmd_str);
+}
+
+void			sh_move_back(int move_back)
+{
+	char	*n;
+	char	*cmd_str;
+
+	n = ft_itoa(move_back);
+	cmd_str = ft_concat(3, "00", "\x001b[", n, "D");
+	ft_putstr(cmd_str);
+	free(n);
+	free(cmd_str);
+}
+
+void			sh_new_move_cors(const DSTRING *buf, struct winsize term, \
+					int len_p, int index)
+{
+	int		move_back;
+	int		len_all;
+	int		segment;
+	int		lines;
+
+	lines = 0;
 	len_all = buf->strlen + len_p;
 	segment = len_all % term.ws_col;
 	move_back = len_all - (index + len_p);
-	if (!(lines = 0) && move_back > segment)
+	if (move_back > segment)
 	{
 		move_back -= segment;
 		lines = (move_back / term.ws_col) + 1;
@@ -119,27 +152,15 @@ void			sh_new_move_cors(const DSTRING *buf, struct winsize term, int len_p, int 
 		ft_putstr("\x001b[1000C");
 	}
 	if (lines)
-	{
-		n = ft_itoa(lines);
-		cmd_str = ft_concat(3, "00", "\x001b[", n, "A");
-		ft_putstr(cmd_str);
-		free(n);
-		free(cmd_str);
-	}
+		sh_move_up_lines(lines);
 	if (move_back)
-	{
-		n = ft_itoa(move_back);
-		cmd_str = ft_concat(3, "00", "\x001b[", n, "D");
-		ft_putstr(cmd_str);
-		free(n);
-		free(cmd_str);
-	}
+		sh_move_back(move_back);
 }
 
-int		skip_num(char *str)
+int				skip_num(char *str)
 {
 	int num;
-	
+
 	if (!str)
 		return (0);
 	num = ft_atoi(str);
@@ -150,11 +171,13 @@ int		skip_num(char *str)
 	return (1);
 }
 
-int		ft_color_strlen(char *str)
+int				ft_color_strlen(char *str)
 {
-	int		rez = 0;
-	int		i = -1;
+	int		rez;
+	int		i;
 
+	rez = 0;
+	i = -1;
 	while (str[++i])
 	{
 		if (str[i] == '\033')

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 08:07:20 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/19 14:58:27 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/04 21:50:39 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ size_t				sh_count_file(const char *path)
 	return (rez);
 }
 
-void		free_t_darr(t_darr *darr)
+void				free_t_darr(t_darr *darr)
 {
 	size_t	i;
 

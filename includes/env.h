@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/27 20:51:34 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/05 13:25:35 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,7 @@ t_darr	env_get_bins(ENV *envp);
 
 int		env_get_bins_unq(t_darr *res, char *str);
 void	env_get_bins_cmp_name(t_darr *res, int namelen);
+t_darr	env_get_keys(ENV *envp);
 
 #endif
+

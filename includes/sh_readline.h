@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/04 17:00:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/05 16:38:07 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ typedef struct	s_indch
 	char		fl;
 	int			his;
 	int			reg;
+	int			var;
+	int			is_var;
 	int			tab;
 	DSTRING		*prompt;
 }				t_indch;
@@ -130,7 +132,7 @@ void			sh_new_rewrite(const DSTRING *prompt, const DSTRING *buf,\
 						 const size_t index);
 
 /* deletes a character by index. flag == BAKSP moves carriage one character back */
-ssize_t			sh_del_char(DSTRING **buf, size_t index, const char flag);
+int				sh_del_char(DSTRING **buf, int ind, const char cmd);
 
 /* checks if the user enters a command or directory */
 ssize_t			sh_dstr_iscmd(const DSTRING *str);
@@ -180,7 +182,7 @@ void			free_lines_down(void);
 
 /* auto completion */
 t_indch			sh_tab(DSTRING **buf, ENV *env, t_indch indch);
-t_darr			sh_tab_help(DSTRING **buf, ENV *env, t_indch indch);
+t_darr			sh_tab_help(DSTRING **buf, ENV *env, t_indch *indch);
 int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
 					int fl, t_name_ind n_ind);
 t_darr			sh_add_cmd(DSTRING **buf, ENV *env);
@@ -233,7 +235,6 @@ DSTRING			*cut_reg_expr(DSTRING *buf);
 */
 t_regpath		get_regpath(DSTRING *reg);
 
-
 /*
 ** To enable history management, click the up or down arrow
 **
@@ -268,6 +269,8 @@ char			get_histr(t_darr *histr, ENV *envr);
 /* reads pressed keys */
 char			ispers_arws(char ch, t_indch *indch, \
 				t_darr *his, const DSTRING *buf);
+
+char			is_get_variable(DSTRING *buf);
 
 void			sys_term_init(void);
 void			sys_term_restore(void);

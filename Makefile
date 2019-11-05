@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/04 14:07:08 by hgranule         ###   ########.fr        #
+#    Updated: 2019/11/05 13:22:28 by gdaemoni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			ft_basename.c exe_sys/exe_binaries.c exe_sys/exe_builtns.c \
 			exe_sys/exe_redirs.c parser/prs_arch.c parser/prs_args.c exe_sys/exe_subshell.c \
 			parser/prs_instructions.c parser/prs_rdrs.c parser/prs_types.c \
-			env/env_init.c env/env_get_variable.c env/env_set_variable.c env/env_unset_variable.c \
+			env/env_init.c env/env_get_variable.c env/env_set_variable.c env/env_unset_variable.c env/env_get_keys.c \
 			bltns/bltn_init.c bltns/bltn_setenv.c bltns/bltn_env.c bltns/bltn_getenv.c bltns/bltn_unsetenv.c \
 			bltns/bltn_exit.c bltns/bltn_alias.c bltns/bltn_unalias.c bltns/bltn_pwd.c \
 			bltns/bltn_type/bltn_type.c bltns/bltn_type/bltn_type_free.c bltns/bltn_type/bltn_type_alias_check.c bltns/bltn_type/bltn_type_bins_check.c\
@@ -103,9 +103,9 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer printf)
 
-GUI_FILES = sh_control_term.c sh_dir_content.c sh_readline.c sh_readline_help.c\
-	sh_term.c dstr.c ft_concat.c sh_put_col.c sh_tab.c sh_darr.c sh_path.c reg_expr.c\
-	reg_expr_loop.c reg_expr_help.c sh_histrory.c sh_tab_help.c dstr_help.c match.c\
+GUI_FILES = sh_control_term.c sh_dir_content.c \
+	dstr.c ft_concat.c sh_put_col.c sh_tab.c sh_darr.c sh_path.c reg_expr.c\
+	reg_expr_loop.c reg_expr_help.c sh_tab_help.c dstr_help.c match.c\
 	sh_darr_help.c sh_dir_content_help.c sh_put_col_help.c sh_move_insertion_point.c\
 	gui_errors.c sh_new_readline.c sh_new_rewrite.c\
 	sh_new_histr.c sh_new_search_h.c

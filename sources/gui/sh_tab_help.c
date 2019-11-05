@@ -6,15 +6,15 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:43:03 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/15 17:40:15 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/05 16:37:44 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
 #include "sh_termcomand.h"
 
-void			subst_name(DSTRING **buf, t_darr overlap,\
-				 int ind, t_name_ind n_ind)
+void			subst_name(DSTRING **buf, t_darr overlap, \
+				int ind, t_name_ind n_ind)
 {
 	dstr_cutins_dstr(buf, overlap.strings[ind], n_ind.ind_name);
 	sh_new_rewrite(n_ind.indch.prompt, (*buf), (*buf)->strlen);
@@ -70,16 +70,67 @@ int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
 	return (n_ind.ind);
 }
 
-t_darr			sh_tab_help(DSTRING **buf, ENV *env, t_indch indch)
+char			is_tab_space(DSTRING *buf)
+{
+	int		i;
+
+	i = -1;
+	while (buf->txt[++i])
+		if (buf->txt[i] != ' ')
+			return (0);
+	return (1);
+}
+
+char			is_get_variable(DSTRING *buf)
+{
+	int		i;
+
+	i = buf->strlen;
+	while (--i > -1)
+	{
+		if (buf->txt[i] == '$')
+			return (i);
+		if (buf->txt[i] == ' ')
+			return (-1);
+	}
+	return (-1);
+}
+
+t_darr			sh_add_variables(DSTRING **buf, ENV *env, int ind_var)
+{
+	DSTRING		*var;
+	t_darr		all_var;
+	t_darr		overlap;
+	
+	var = dstr_slice((*buf), ind_var, (*buf)->strlen);
+	all_var = env_get_keys(env);
+	overlap = sh_cmp_darr(all_var, var);
+	dstr_del(&var);
+	free_t_darr(&all_var);
+	return (overlap);
+}
+
+t_darr			sh_tab_help(DSTRING **buf, ENV *env, t_indch *indch)
 {
 	ssize_t		start_dir;
 	t_darr		overlap;
+	int			ind_var;
 
 	overlap.count = 0;
-	if ((start_dir = sh_dstr_iscmd((*buf))) == -1)
+	if (is_tab_space((*buf)))
+	{
+		overlap.count = -1;
+		return (overlap);
+	}
+	if ((ind_var = is_get_variable((*buf))) > -1)
+	{
+		indch->is_var = 1;
+		overlap = sh_add_variables(buf, env, ind_var);
+	}
+	else if ((start_dir = sh_dstr_iscmd((*buf))) == -1)
 		overlap = sh_add_cmd(buf, env);
 	else if (sh_check_back_slash(buf, start_dir))
 		overlap = sh_add_path(buf, start_dir);
-	sh_new_rewrite(indch.prompt, (*buf), (*buf)->strlen);
+	sh_new_rewrite(indch->prompt, (*buf), (*buf)->strlen);
 	return (overlap);
 }

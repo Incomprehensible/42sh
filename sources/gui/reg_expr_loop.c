@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:51:57 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 17:59:00 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/04 21:50:25 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int			cmp(t_astr *rez, int i, t_regpath pth, DSTRING *reg)
 static void			addreg(t_astr *rez, DSTRING *r, DSTRING *reg, int j)
 {
 	size_t		i;
-	DSTRING	*slice;
+	DSTRING		*slice;
 
 	i = j;
 	slice = dstr_serr(reg, r->strlen, reg->strlen + 1);

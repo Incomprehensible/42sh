@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/18 12:45:22 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/04 20:51:09 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void			ft_strset(char **str, char c, size_t n)
 	i = 0;
 	(*str) = (char*)malloc(sizeof(char) * n + 1);
 	if ((*str) == NULL)
-		sys_fatal_memerr(sys_get_std_message(8));		
+		sys_fatal_memerr(sys_get_std_message(8));
 	while (i < n)
 		(*str)[i++] = c;
 	(*str)[i] = '\0';

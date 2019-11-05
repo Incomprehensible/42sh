@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 11:29:17 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/23 15:47:12 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/04 20:33:09 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
-void		skip_escp()
+void		skip_escp(void)
 {
 	ft_getch();
 	ft_getch();
@@ -79,14 +79,14 @@ void		print_his_col(DSTRING *str_srch)
 	t_darr				rez;
 	struct winsize		te;
 
-	i = S_DARR_STRINGS - 1;
+	i = S_DARR_STRINGS;
 	c = -1;
 	j = 0;
 	ft_bzero(&rez, sizeof(t_darr));
 	ioctl(0, TIOCGWINSZ, &te);
 	while (++c < g_histr.count)
 	{
-		if (ft_strncmp(str_srch->txt, g_histr.strings[i]->txt,\
+		if (ft_strncmp(str_srch->txt, g_histr.strings[--i]->txt,\
 		str_srch->strlen) == 0 && g_histr.strings[i]->strlen < (te.ws_col - 3))
 		{
 			rez.strings[j++] = g_histr.strings[i];
@@ -94,7 +94,6 @@ void		print_his_col(DSTRING *str_srch)
 				rez.maxlen = g_histr.strings[i]->strlen;
 			rez.allsize += g_histr.strings[i]->strlen;
 		}
-		--i;
 	}
 	rez.count = j;
 	if (j)
@@ -106,15 +105,15 @@ void		get_overlap(t_darr *overlap, DSTRING *str_srch)
 	int		i;
 	int		c;
 	int		j;
-	
+
 	c = -1;
 	i = S_DARR_STRINGS;
 	j = -1;
 	ft_bzero(overlap, sizeof(t_darr));
 	while (++c < g_histr.count)
 	{
-		if (g_histr.strings[--i]->txt && \
-		ft_strncmp(str_srch->txt, g_histr.strings[i]->txt, str_srch->strlen) == 0)
+		if (g_histr.strings[--i]->txt && ft_strncmp(str_srch->txt, \
+							g_histr.strings[i]->txt, str_srch->strlen) == 0)
 		{
 			overlap->strings[++j] = g_histr.strings[i];
 			if (overlap->maxlen < g_histr.strings[i]->strlen)
@@ -125,11 +124,12 @@ void		get_overlap(t_darr *overlap, DSTRING *str_srch)
 	}
 }
 
-t_indch		supplement_srch(DSTRING *str_srch, DSTRING **str_over, t_indch indch)
+t_indch		supplement_srch(DSTRING *str_srch, DSTRING **str_over, \
+							t_indch indch)
 {
 	t_darr			overlap;
 	int				i;
-	
+
 	i = 0;
 	if ((*str_over) != NULL)
 		ft_bzero((*str_over), sizeof(DSTRING));
@@ -150,13 +150,11 @@ t_indch		supplement_srch(DSTRING *str_srch, DSTRING **str_over, t_indch indch)
 
 t_indch		control_histr(DSTRING **str_srch, DSTRING **str_over, t_indch indch)
 {
-		indch.ch = ft_getch();
+	indch.ch = ft_getch();
 	if (ft_isalpha(indch.ch) || indch.ch == ' ' || ft_isalnum(indch.ch))
 		dstr_insert_ch((*str_srch), indch.ch, (*str_srch)->strlen);
 	else if (indch.ch == BAKSP)
 		bakspace_dstr(str_srch);
-	// добавить удаление истории и вывод колонок
-	// найти баг с записью в файл
 	if (indch.ch == ESC)
 		skip_escp();
 	if ((indch.ch != ' ' && !ft_isalpha(indch.ch) && indch.ch != 11 && \
@@ -169,9 +167,9 @@ t_indch		control_histr(DSTRING **str_srch, DSTRING **str_over, t_indch indch)
 
 t_indch		sh_new_search_h(DSTRING **buf, ENV *envr, t_indch indch)
 {
-	DSTRING 		*str_srch;
+	DSTRING			*str_srch;
 	DSTRING			*str_over;
-		
+
 	str_srch = dstr_nerr("");
 	str_over = NULL;
 	indch.ch = 1;
@@ -181,9 +179,9 @@ t_indch		sh_new_search_h(DSTRING **buf, ENV *envr, t_indch indch)
 		print_his_line(str_srch, str_over);
 		indch = control_histr(&str_srch, &str_over, indch);
 		if ((indch.ch != ' ' && !ft_isalpha(indch.ch) && indch.ch != 11 && \
-		indch.ch != 12) && indch.ch != TAB && indch.ch != BAKSP && \
-		!(indch.fl = 0) && !ft_isalnum(indch.ch))
-		indch.ch = 0;
+			indch.ch != 12) && indch.ch != TAB && indch.ch != BAKSP && \
+			!(indch.fl = 0) && !ft_isalnum(indch.ch))
+			indch.ch = 0;
 	}
 	if (str_over && str_over->strlen)
 	{
