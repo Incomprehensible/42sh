@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/02 18:29:01 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/06 20:02:36 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ static char    *get_value(char *str, t_stx **tr, t_dlist **tok)
     if ((new = parse_assig_block(str, tok, tr)) != str && new)
         substitute_value(tok[1]);
     if (new == str)
-        make_token(tok, ft_strdup(""), TK_VALUE);
+        make_token(tok, NULL, TK_VALUE);
     if (!new)
         return (NULL);
     return (new);

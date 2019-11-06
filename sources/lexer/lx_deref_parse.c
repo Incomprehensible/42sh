@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 15:48:44 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/06 20:40:40 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static short    special_reg(char c, short tk)
 
 char    *parse_nametk(char *str, t_dlist **tok, short tk)
 {
-    size_t i;
+    size_t	i;
+	char	*new;
 
     i = 0;
     if (str[i] >= 48 && str[i] <= 57)
@@ -47,7 +48,9 @@ char    *parse_nametk(char *str, t_dlist **tok, short tk)
 		if (tk == CURLY && is_separator(str[i]))
 			return (NULL);
     }
-    make_token(tok, markup_station(pull_token(str, i), TK_NAME), TK_NAME);
+	new = pull_token(str, i);
+    make_token(tok, markup_station(new, TK_NAME), TK_NAME);
+	free(new);
     return (str + i);
 }
 
