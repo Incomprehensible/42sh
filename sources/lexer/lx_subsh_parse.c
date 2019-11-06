@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/23 10:21:08 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/05 23:50:27 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char   *parse_subsh(char *str, t_dlist **tok, t_stx **tree, short ind)
 
     patt = "(z)";
     if (*str == '\\' || *str != '(')
-        return (parse_comm(str, tok, tree, ind));
+        return (parse_comm(str, tok, tree, '('));
     if ((tmp = reg_process(patt, TK_SUBSH, str, tok, tree)) == str)
         return (NULL);
     str = tmp;

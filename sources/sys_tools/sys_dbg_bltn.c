@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_dbg_bltn.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 15:39:29 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/06 04:48:22 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,56 @@ void			DBG_PRINT_TOKENS(t_dlist *toklst)
 		msg = token->type == TK_PROF_IN ? "PFIN" : msg;
 		msg = token->type == TK_PROF_OUT ? "PFOU" : msg;
 		msg = token->type == TK_ARSHLOCH ? "AHLH" : msg;
+		value = token->value ? token->value : "<->";
+		dprintf(2, "%5s: %s\n", msg, value);
+		toklst = toklst->next;
+	}
+}
+
+void			DBG_PRINT_MATH(t_dlist *toklst)
+{
+	t_tok		*token;
+	char		*msg;
+	char		*value;
+
+	msg = 0;
+	while (toklst)
+	{
+		token = toklst->content;
+		msg = token->type == OPRND ? "OPERAND" : msg;
+		msg = token->type == HEX ? "HEX" : msg;
+		msg = token->type == BIN ? "BINARY" : msg;
+		msg = token->type == SEV ? "SEVEN" : msg;
+		msg = token->type == DEC ? "DECIMAL" : msg;
+		msg = token->type == INCRM ? "++" : msg;
+		msg = token->type == DECRM ? "--" : msg;
+		msg = token->type == NOT ? "~" : msg;
+		msg = token->type == POSIT ? "POSITIVE" : msg;
+		msg = token->type == NEGAT ? "NEGATIVE" : msg;
+		msg = token->type == REJECT ? "!" : msg;
+		msg = token->type == BIT_L ? "<<" : msg;
+		msg = token->type == BIT_R ? ">>" : msg;
+		msg = token->type == AND ? "&" : msg;
+		msg = token->type == OR ? "|" : msg;
+		msg = token->type == XOR ? "^" : msg;
+		msg = token->type == MULT ? "*" : msg;
+		msg = token->type == DEVID ? "/" : msg;
+		msg = token->type == DEVREM ? "%" : msg;
+		msg = token->type == PLUS ? "+" : msg;
+		msg = token->type == MINUS ? "-" : msg;
+		msg = token->type == EQU ? "=" : msg;
+		msg = token->type == IS_EQU ? "==" : msg;
+		msg = token->type == PLUS_EQ ? "+=" : msg;
+		msg = token->type == MIN_EQ ? "-=" : msg;
+		msg = token->type == NO_EQU ? "!=" : msg;
+		msg = token->type == MORE_EQ ? ">=" : msg;
+		msg = token->type == LESS_EQ ? "<=" : msg;
+		msg = token->type == MORE ? ">" : msg;
+		msg = token->type == LESS ? "<" : msg;
+		msg = token->type == LOG_AND ? "&&" : msg;
+		msg = token->type == LOG_OR ? "||" : msg;
+		msg = token->type == INTO_BR ? "(" : msg;
+		msg = token->type == OUT_BR ? ")" : msg;
 		value = token->value ? token->value : "<->";
 		dprintf(2, "%5s: %s\n", msg, value);
 		toklst = toklst->next;

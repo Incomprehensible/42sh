@@ -101,6 +101,14 @@ FIN:
 a b c d + ! || &&
 
 EVAL:
+!(c + d) || a && b 
+FIN: c d + ! a b && || 
+
+EVAL:
+! a && b
+FIN: a ! b &&
+
+EVAL:
 1 + 2 - 4 * (4 + 3 / 4) >> 5
 FIN:
 1 2 4 4 3 4 / + 5 >> * - +

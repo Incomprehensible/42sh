@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/23 05:39:42 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/06 04:57:06 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int special_meta(char meta)
 {
     if (meta == '@' || meta == '^' || meta == '~' || meta == '_' || meta == '!' || meta == '%' || meta == '.'
-    || meta == '?' || meta == 'z' || meta == 'x')
+    || meta == '?' || meta == 'z' || meta == 'w')
         return (1);
     return (0);
 }
@@ -220,7 +220,7 @@ char *process_reg(char *str, char *meta)
         str = ft_process_limits(str);
     else if (*meta == 'z')
         str = ft_process_all(str, meta);
-    else if (*meta == 'x')
+    else if (*meta == 'w')
         str = ft_process_trash(str, meta);
     else
         str = ft_process_seq(str, meta);
@@ -263,9 +263,6 @@ char    *reg_process(char *patt, t_tk_type type, char *str, t_dlist **tok, t_stx
 		return (pull_subsh(str, tok, type));
     if ((i = layer_parse_two(patt, str)))
     {
-        // if (type == TK_SUBSH || type == TK_PROF_IN || type == TK_PROF_OUT ||
-		// type == TK_PROC_OUT || type == TK_PROC_IN)
-        //     new = pull_token(str + 1, --i - 2);
         if (type == TK_FUNCTION)
             new = NULL;
         else

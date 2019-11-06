@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/24 12:04:51 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/06 04:59:00 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ t_stx    *init_math(t_stx *tree)
 t_stx    *init_dquotes(t_stx *tree)
 {
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = ft_strdup("\"x\"");
+    tree->meta = ft_strdup("\"w\"");
     tree->prev = NULL;
     tree->next = NULL;
     return (tree);
@@ -110,7 +110,7 @@ t_stx    *init_dquotes(t_stx *tree)
 t_stx    *init_apofs(t_stx *tree)
 {
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = ft_strdup("'x'");
+    tree->meta = ft_strdup("'w'");
     tree->prev = NULL;
     tree->next = NULL;
     return (tree);
@@ -172,33 +172,6 @@ t_stx    *init_redir(t_stx *tree)
     return (start);
 }
 
-// t_stx    *init_redir(t_stx *tree)
-// {
-//     char *red;
-//     char **reds;
-//     short i;
-//     t_stx *tmp;
-//     t_stx *start;
-
-//     i = 0;
-//     red = "@123456789@> >& &> @123456789@>& > < >> <>";
-//     reds = ft_strsplit(red, ' ');
-//     tree = (t_stx *)malloc(sizeof(t_stx));
-//     tree->meta = reds[i];
-//     tree->prev = NULL;
-//     start = tree;
-//     while (reds[++i])
-//     {
-//         tmp = tree;
-//         tree->next = (t_stx *)malloc(sizeof(t_stx));
-//         tree = tree->next;
-//         tree->meta = reds[i];
-//         tree->next = NULL;
-//         tree->prev = tmp;
-//     }
-//     return (start);
-// }
-
 t_stx    *init_func(t_stx *tree)
 {
     char *fun;
@@ -230,7 +203,7 @@ t_stx    *init_func(t_stx *tree)
 t_stx    *init_lambda(t_stx *tree)
 {
     tree = (t_stx *)malloc(sizeof(t_stx));
-    tree->meta = ft_strdup("{x}");
+    tree->meta = ft_strdup("{w}");
     tree->prev = NULL;
     tree->next = NULL;
     return (tree);
@@ -245,7 +218,7 @@ t_stx    *init_proc(t_stx *tree)
     t_stx *start;
 
     i = 0;
-    proc = "<~(z) >~(z)";
+    proc = "<~(w) >~(w)";
     procs = ft_strsplit(proc, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
     tree->meta = ft_strdup(procs[i]);
@@ -273,7 +246,7 @@ t_stx    *init_subsh(t_stx *tree)
     t_stx *start;
 
     i = 0;
-    sub = "(x) $(x)";
+    sub = "(w) $(w)";
     subs = ft_strsplit(sub, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
     tree->meta = ft_strdup(subs[i]);

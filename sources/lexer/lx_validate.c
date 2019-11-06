@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/28 12:44:53 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/05 23:39:47 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,8 +221,8 @@ short	closed_br(char *str)
                 counter++;
                 size++;
             }
-            if (size < 2)
-                return (0);
+            // if (size < 2)
+            //     return (0);
         }
         if (*str == ')')
         {
@@ -232,8 +232,8 @@ short	closed_br(char *str)
                 counter--;
                 size++;
             }
-            if (size < 2)
-                return (0);
+            // if (size < 2)
+            //     return (0);
         }
         else if (*str == '\'' || *str == '"')
             if (!(str = get_last_qu(str, *str)))

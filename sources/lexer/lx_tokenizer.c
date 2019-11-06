@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/25 15:52:48 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/05 23:16:13 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,11 +147,12 @@ short     find_token(t_stx **tree, char *str)
 
 extern void			DBG_PRINT_TOKENS(t_dlist *toklst);
 
-short   clear_tokens(t_dlist **tokens)
+short   clear_tokens(t_dlist **tokens, short id)
 {
     t_dlist *token_list;
 
-    unexpected_token(tokens);
+	if (id)
+    	unexpected_token(tokens);
 	// DBG_PRINT_TOKENS(*tokens);
     while (*tokens)
     {
@@ -190,12 +191,12 @@ short    get_tokens(char *str, t_dlist **token_list)
     {
         choice = find_token(tree, str);
         if (!(str = block_pass(choice, str, token_list, tree)))
-            return (clear_tokens(token_list));
+            return (clear_tokens(token_list, 1));
     }
     if (token_list[0]->content && !back_ps_check(token_list[0]))
-        return (clear_tokens(token_list));
+        return (clear_tokens(token_list, 1));
     if (token_list[0]->content && !(list_ready_to_go(token_list)))
-        return (clear_tokens(token_list));
+        return (clear_tokens(token_list, 1));
     make_token(token_list, NULL, TK_EOF);
     return (1);
 }
@@ -228,7 +229,7 @@ void    concatenate_str(char **last_input, char *str)
 short				sh_tokenizer(char *str, t_dlist **token_list)
 {
     static char *last_input;
-   char        *tmp;
+	char        *tmp;
     short       i;
 
     token_list = toklst_init(token_list);

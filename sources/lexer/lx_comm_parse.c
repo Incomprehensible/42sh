@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 15:48:52 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/05 23:52:45 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static short   redir_detected(char *str, t_stx **tree, short stop)
 	if (stop == '<')
 		return (0);
     str = (*str == '\\') ? str + 2 : str;
-    while (*str && !(is_sep_no_space(*str)))
+    while (*str && *str != stop && !(is_sep_no_space(*str)))
     {
         if (check_branch(str, tree[REDIR]))
             return (1);

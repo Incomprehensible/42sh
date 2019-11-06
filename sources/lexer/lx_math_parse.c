@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_math_parse.c                                    :+:      :+:    :+:   */
+/*   lx_math_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/07 03:54:27 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/06 18:48:40 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,9 @@ size_t   cut_brackets(char *str)
         len = (str[len] == '\\') ? len + 2 : ++len;
     while (str[len++] == '(')
         counter++;
-    br = counter;
-    while (counter && str[len] && !is_sep_no_space(str[len]))
+	br = 2;
+    //br = counter;
+    while (counter && str[len] && str[len] != '\n' && str[len] != ';')
     {
         if (str[len] == '(')
             ++counter;
@@ -177,7 +178,8 @@ char    *pull_in_brackets(char br, char *str, t_dlist **tok)
     size_t len;
 
     len = (br == '(') ? cut_brackets(str) : cut_quots(str);
-    str = skip_brackets(str, br);
+	str += 2;
+    //str = skip_brackets(str, br);
     make_token(tok, pull_token(str, len), TK_MATH);
     br = (br == '(') ? ')' : br;
     return (skip_brackets(str + len, br));
@@ -197,8 +199,8 @@ char   *parse_math(char *str, t_dlist **tok, t_stx **tree, short ind)
     str = parse_empty(str, 0x0, tok);
     if (*str == '\\')
         return (block_pass(EXPRS, str, tok, tree));
-    if (!(closed_dels(str)) || !(ind = tmp_validate_math(str, 0)))
-        return (NULL);
+    // if (!(closed_dels(str)) || !(ind = tmp_validate_math(str, 0)))
+    //     return (NULL);
     if (is_token_here(str, "let"))
         str = ft_process_ignore(str, ".let%");
     str = skip_spaces(str);
