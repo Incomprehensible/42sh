@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 16:03:08 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/06 19:02:13 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/06 19:10:37 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		bltn_cd_error(DSTRING **oldpath, DSTRING **newpath, t_dlist	**path)
 		sys_error_handler("cd", E_NOFND, 0);
 	else if ((perms & SYS_TCH_TYP) != SYS_TCH_DIR)
 		sys_error_handler("cd", E_NODIR, 0);
-	else if (!(perms & SYS_TCH_R))
+	else if (!(perms & SYS_TCH_X))
 		sys_error_handler("cd", E_PERMF, 0);
 	return (1);
 }
