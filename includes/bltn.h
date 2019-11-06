@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/10/16 05:48:47 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/06 16:59:21 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int			bltn_cd(char **args, ENV *env);
 int			bltn_cd_parser(ENV *env, t_dlist **path);
 DSTRING		*bltn_cd_pathtostr(t_dlist *path);
 void		bltn_cd_destroy_path(t_dlist **path);
+void		bltn_cd_freepaths(DSTRING **oldpath, DSTRING **newpath, t_dlist	**path);
+int			bltn_cd_error(DSTRING **oldpath, DSTRING **newpath, t_dlist	**path);
 
 int	bltn_pwd(char **args, ENV *env);
 

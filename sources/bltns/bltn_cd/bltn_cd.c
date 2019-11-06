@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 04:21:28 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/04 18:56:11 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/06 19:01:10 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,20 +71,19 @@ static int			bltn_cd_loop(char *args, ENV *env)
 		}
 		newpath = bltn_cd_pathtostr(path);
 		if (chdir((char *)newpath->txt) == -1)
-			return (0);// ОБРАБОТКА ОШИБКИ
+			return bltn_cd_error(&oldpath, &newpath, &path);
 		bltn_cd_setglobals(env, newpath, oldpath);
-		dstr_del(&oldpath);
-		dstr_del(&newpath);
-		bltn_cd_destroy_path(&path);
-		return (1);
+		bltn_cd_freepaths(&oldpath, &newpath, &path);
+		return (0);
 	}
-	return (0);	
+	return (1);
 }
 
 int			bltn_cd(char **args, ENV *env)
 {
 	char	**path;
 	char	*tmp;
+	int		status;
 	int		i;
 
 	i = -1;
@@ -102,10 +101,12 @@ int			bltn_cd(char **args, ENV *env)
 		}
 		while (path[++i])
 		{
-			bltn_cd_loop(path[i], env);
+			status = bltn_cd_loop(path[i], env);
 			free(path[i]);
+			if (status != 0)
+				break ;
 		}
 		free(path);
 	}
-	return (0);
+	return (status);
 }

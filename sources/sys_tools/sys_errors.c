@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_errors.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:37:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 08:26:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/06 18:58:11 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ char		*errmess[ERR_CNT] =
 	"File creation failed",
 	"File open failed, doesn't exist",
 	"File open failed, permissions denied",
-	"File open failed"
+	"File open failed",
+	"Is not a directory",
+	"no such file or directory"
 	
 };
 
