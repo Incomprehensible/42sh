@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/02 19:53:58 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/07 19:04:15 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 char*   parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
 {
-    size_t j;
+    size_t	j;
 	char	*new;
 
     j = 0;
