@@ -6,13 +6,14 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 20:11:13 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/07 10:35:42 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SYS_SH_CONFIGS_H
 # define SYS_SH_CONFIGS_H
 
+// %C1S%C3H%C2E%C6L%C4L %C5\$> %B
 # define SHELL_NAME_STD "42sh"
 # define SH_VAR_SHNAME "SHELL_NAME"
 # define SH_VAR_HIST_RC_PATH "HOME"

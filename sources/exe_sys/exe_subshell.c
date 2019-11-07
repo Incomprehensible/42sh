@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 09:32:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/07 08:54:24 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,11 @@ int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st)
 	if (xp->ipipe_fds || xp->opipe_fds || \
 	!(ft_avl_search(envr->builtns, xp->args[0]) || \
 	ft_avl_search(envr->funcs, xp->args[0])))
-		return (exe_execute_expr(xp, envr, st));
+	{
+		cpid = exe_execute_expr(xp, envr, st);
+		ft_dlst_delf((t_dlist **)&etab, 0, et_rm_ett);
+		return (cpid);
+	}
 	else if ((cpid = fork()) < 0)
 		return (-E_FRKFL);
 	else if (cpid == 0)
