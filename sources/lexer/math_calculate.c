@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/08 02:56:01 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/08 23:44:37 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ size_t	count_dlist(t_dlist *list)
 }
 
 //the fuck you don't have a func that only counts this shitty list
-long	check_result(t_dlist *opd_stack, ERR *err)
+long	check_result(t_dlist *opd_stack, ENV *env, ERR *err)
 {
 	char	*value;
+	DSTRING	*tmp;
 	long	res;
 
 	res = 0;
@@ -50,7 +51,14 @@ long	check_result(t_dlist *opd_stack, ERR *err)
 			set_error(value, OPERAND_EXP, err);
 			return (0);
 		}
-		res = ft_atoi(value);
+		if (((t_tok *)opd_stack->content)->type == OPRND)
+		{
+			tmp = env_get_variable(value, env);
+			res = ft_atoi(tmp->txt);
+			dstr_del(&tmp);
+		}
+		else
+			res = ft_atoi(value);
 	}
 	del_tokens(opd_stack);
 	return (res);
@@ -68,7 +76,7 @@ t_tk_type	is_number(char *value)
 		type = SEV;
 	else if (layer_parse_two("0o@01234567@", value))
 		type = SEV;
-	else if (*value != '0' && layer_parse_two("@0123456789@", value))
+	else if (!(*value == '0' && *(value + 1)) && layer_parse_two("@0123456789@", value))
 		type = DEC;
 	else
 		return (0);
@@ -165,29 +173,46 @@ static t_tk_type	get_ind(t_tk_type op)
 	return (type);
 }
 
-t_dlist	*substitute_single_value(t_dlist *opd_stack, ENV *env, long res)
+// t_dlist	*substitute_single(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
+// {
+// 	char	*value;
+// 	t_dlist	*tmp;
+
+// 	value = ft_itoa(res);
+// 	if (((t_tok *)opd_stack->content)->type == OPRND && (op == INCRM || op == DECRM))
+// 	{
+// 		env_unset_variable(((t_tok *)tmp->content)->value, env);
+// 		env_set_variable(((t_tok *)opd_stack->content)->value, dstr_new(value), env);
+// 		free(value);
+// 	}
+// 	else
+// 	{
+// 		free(((t_tok *)opd_stack->content)->value);
+// 		((t_tok *)opd_stack->content)->value = value;
+// 		((t_tok *)opd_stack->content)->type = DEC;
+// 	}
+// 	while (opd_stack && opd_stack->prev)
+// 		opd_stack = opd_stack->prev;
+// 	return (opd_stack);
+// }
+
+t_dlist	*substitute_single(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
 {
 	char	*value;
 	t_dlist	*tmp;
 
 	value = ft_itoa(res);
-	if (((t_tok *)opd_stack->content)->type == OPRND)
-	{
+	if (((t_tok *)opd_stack->content)->type == OPRND && (op == INCRM || op == DECRM))
 		env_set_variable(((t_tok *)opd_stack->content)->value, dstr_new(value), env);
-		free(value);
-	}
-	else
-	{
-		free(((t_tok *)opd_stack->content)->value);
-		((t_tok *)opd_stack->content)->value = value;
-		((t_tok *)opd_stack->content)->type = DEC;
-	}
+	free(((t_tok *)opd_stack->content)->value);
+	((t_tok *)opd_stack->content)->value = value;
+	((t_tok *)opd_stack->content)->type = DEC;
 	while (opd_stack && opd_stack->prev)
 		opd_stack = opd_stack->prev;
 	return (opd_stack);
 }
 
-t_dlist	*substitute_both_value(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
+t_dlist	*substitute_both(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
 {
 	char	*value;
 	t_dlist	*tmp;
@@ -197,10 +222,7 @@ t_dlist	*substitute_both_value(t_dlist *opd_stack, ENV *env, long res, t_tk_type
 	del_tokens(opd_stack);
 	tmp->next = NULL;
 	if (((t_tok *)tmp->content)->type == OPRND && (op == PLUS_EQ || op == MIN_EQ))
-	{
-		env_unset_variable(((t_tok *)tmp->content)->value, env);
 		env_set_variable(((t_tok *)tmp->content)->value, dstr_new(value), env);
-	}
 	free(((t_tok *)tmp->content)->value);
 	((t_tok *)tmp->content)->value = value;
 	((t_tok *)tmp->content)->type = DEC;
@@ -249,7 +271,7 @@ t_dlist	*get_single_opd(t_dlist *opd_stack, t_tk_type op, ENV *env, ERR *err)
 	if (err->err_code)
 		return (opd_stack);
 	res = apply_to_single(a, op);
-	return (substitute_single_value(opd_stack, env, res));
+	return (substitute_single(opd_stack, env, res, op));
 }
 
 t_dlist	*get_both_opd(t_dlist *opd_stack, t_tk_type op, ENV *env, ERR *err)
@@ -284,7 +306,7 @@ t_dlist	*get_both_opd(t_dlist *opd_stack, t_tk_type op, ENV *env, ERR *err)
 	res = ptr[get_ind(op)](a, b, op, err);
 	if (err->err_code)
 		return (opd_stack);
-	return (substitute_both_value(opd_stack, env, res, op));
+	return (substitute_both(opd_stack, env, res, op));
 }
 
 char *pull_env_val(t_dlist *opd_stack, ENV *env, ERR *err)
@@ -376,15 +398,6 @@ t_dlist	*equate_opd(t_dlist *opd_stack, ENV *env, ERR *err)
 		set_error(value, INVALID_ASSIG, err);
 		return (opd_stack);
 	}
-	// new = ((t_tok *)opd_stack->content)->value;
-	// if (((t_tok *)opd_stack->content)->type == OPRND)
-	// {
-	// 	if (!validate_assig(new, env))
-	// 	{
-	// 		set_error(new, STR_OPERAND, err);
-	// 		return (opd_stack);
-	// 	}
-	// }
 	return (set_new_var(opd_stack, env, err));
 }
 
@@ -440,14 +453,13 @@ long	polish_calculate(t_dlist **polish_not, ENV *env, ERR *err)
 	{
 		if (is_operand(type))
 			opd_stack = push_to_stack(opd_stack, start);
-			// opd_stack = push_operand(opd_stack, start, env, err);
 		else if (type != TK_EOF)
 			opd_stack = calculate_res(opd_stack, type, env, err); // we check whether we have operator type 1 or type 2 inside 
 		start = start->next;
 		type = start ? ((t_tok *)start->content)->type : 0;
 	}
 	clear_tokens(polish_not, 0);
-	return (check_result(opd_stack, err));
+	return (check_result(opd_stack, env, err));
 }
 
 

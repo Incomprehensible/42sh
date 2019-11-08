@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/02 20:19:08 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/08 21:08:41 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,6 @@ char	*cutting_mirr_station(char *str, t_tk_type type)
 		free(str);
 		return (tmp);
 	}
-	//	return (ft_strdup(str));
 	if (type == DQUOTS)
 		str = cut_mirr_dq(str);
 	else if (type == APOF)
