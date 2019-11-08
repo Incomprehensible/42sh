@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 04:21:28 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/06 19:01:10 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/08 17:49:43 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ static void	bltn_cd_setglobals(ENV *env, DSTRING *newpath, DSTRING *oldpath)
 {
 	ft_avl_set(env->globals, ft_avl_node("OLDPWD", oldpath->txt, oldpath->strlen + 1));
 	ft_avl_set(env->globals, ft_avl_node("PWD", newpath->txt, newpath->strlen + 1));
+	ft_avl_set(env->locals, ft_avl_node("OPW", oldpath->txt, oldpath->strlen + 1));
+	ft_avl_set(env->locals, ft_avl_node("PW", newpath->txt, newpath->strlen + 1));
 }
 
 static int			bltn_cd_loop(char *args, ENV *env)
@@ -56,7 +58,7 @@ static int			bltn_cd_loop(char *args, ENV *env)
 	
 	path = NULL;
 	if (ft_strequ(args, "."))
-		return (1);
+		return (0);
 	if (bltn_cd_parser(env, &path))
 	{
 		oldpath = bltn_cd_pathtostr(path);

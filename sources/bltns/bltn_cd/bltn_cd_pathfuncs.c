@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 18:53:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/04 18:57:04 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/08 16:57:25 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ DSTRING		*bltn_cd_pathtostr(t_dlist *path)
 	{
 		if (ft_strlen((char *)path->content) != 0)
 			dstr_insert_str(res, (char *)path->content, res->strlen);
-		if (path->next != NULL)
+		if (path->next != NULL && ft_strlen((char *)path->content) != 0)
 			dstr_insert_ch(res, '/', res->strlen);
 		path = path->next;
 	}

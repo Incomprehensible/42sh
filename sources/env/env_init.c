@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 14:43:29 by fnancy            #+#    #+#             */
-/*   Updated: 2019/10/15 17:02:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/08 17:47:04 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int			env_init(int argc, char **argv, char **envp, ENV *env)
 		free_spl(&spl);
 		envp++;
 	}
+	ft_avl_set(env->locals, ft_avl_node("PW", (char *)ft_avl_search(env->globals, "PWD")->content, ft_strlen((char *)ft_avl_search(env->globals, "PWD")->content) + 1));
+	ft_avl_set(env->locals, ft_avl_node("OPW", (char *)ft_avl_search(env->globals, "OLDPWD")->content, ft_strlen((char *)ft_avl_search(env->globals, "OLDPWD")->content) + 1));
 	if (bltn_init(env) == -1 /*|| alias_init(env) == -1*/)
 		return (env_init_error(env, 12));
 	return (1);

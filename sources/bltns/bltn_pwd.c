@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_pwd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/11 22:08:20 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/25 16:58:35 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/08 17:49:02 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ int			bltn_pwd(char **args, ENV *env)
 	flgs = ft_parse_flags(args);
 	if (flgs && ft_strrchr(flgs, 'P') != NULL)
 	{
-		if ((i = readlink((char *)ft_avl_search(env->globals, "PWD")->content, buf,\
+		if ((i = readlink((char *)ft_avl_search(env->locals, "PW")->content, buf,\
 						sizeof(buf))) < 0)
 		{
-			ft_putendl((char *)ft_avl_search(env->globals, "PWD")->content);
+			ft_putendl((char *)ft_avl_search(env->locals, "PW")->content);
 			return (1);
 		}
 		buf[i] = '\0';
 		ft_putendl(buf);
 	}
 	else
-		ft_putendl((char *)ft_avl_search(env->globals, "PWD")->content);
+		ft_putendl((char *)ft_avl_search(env->locals, "PW")->content);
 	return (1);
 }
