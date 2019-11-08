@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/06 02:39:09 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/08 00:33:08 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ typedef struct      s_mtx
 #define POSIT (t_tk_type)6 //+a
 #define REJECT (t_tk_type)8 //!
 
-#define BIT_R (t_tk_type)10 //>>
+#define BIT_R (t_tk_type)9 //>>
 #define BIT_L (t_tk_type)11 //<<
 
 #define AND (t_tk_type)12 //&
@@ -250,7 +250,7 @@ typedef struct      s_mtx
 
 #define BIN (t_tk_type)2
 #define SEV (t_tk_type)7
-#define DEC (t_tk_type)9
+#define DEC (t_tk_type)10
 #define HEX (t_tk_type)16
 #define OPRND (t_tk_type)34 
 
@@ -268,20 +268,27 @@ typedef struct      s_err
 #define DOUBLE_NEGATION (int)1488 //double or multiple negation 
 #define INVALID_INFIX (int)2007
 #define DOUBLE_COMPARE (int)1337
+#define OPERAND_EXP (int)2012 //syntax error: operand expected
+#define INVALID_ASSIG (int)272 //attempted assignment to non-variable
+#define STR_OPERAND (int)47
+#define DIVISION_ZERO (int)282
 
 //TMP
 long		ariphmetic_eval(char *expr, ENV *env, ERR *err);
 void		*set_error(char *err_token, int code, ERR *err);
 void		init_num_bases(t_mtx **bases);
-char		*ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err);
+long		ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err);
 void		ops_init(t_tk_type **ops);
-// t_tk_type *seventh_level_in(t_tk_type *arr);
-// t_tk_type *sixth_level_in(t_tk_type *arr);
-// t_tk_type *fivth_level_in(t_tk_type *arr);
-// t_tk_type *forth_level_in(t_tk_type *arr);
-// t_tk_type *third_level_in(t_tk_type *arr);
-// t_tk_type *second_level_in(t_tk_type *arr);
-// t_tk_type *first_level_in(t_tk_type *arr);
+void		del_tokens(t_dlist *token);
+t_dlist		*lst_to_end(t_dlist *stack);
+t_dlist		*push_to_stack(t_dlist *stack, t_dlist *new_elem);
+long		polish_calculate(t_dlist **polish_not, ENV *env, ERR *err);
+long		apply_to_single(long var, t_tk_type op);
+long		logic_ops(long a, long b, t_tk_type op, ERR *err);
+long		compare_ops(long a, long b, t_tk_type op, ERR *err);
+long		bit_ops(long a, long b, t_tk_type op, ERR *err);
+long		normal_ops(long a, long b, t_tk_type op, ERR *err);
+long		assign_ops(long a, long b, t_tk_type op, ERR *err);
 
 //DEBUGGING
 void			DBG_PRINT_TOKENS(t_dlist *toklst);

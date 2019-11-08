@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/07 19:07:22 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/08 21:01:52 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,11 @@ static short    following_pipe(t_dlist *token_list)
 
 static short validate_var(char *varname)
 {
-    static char *reserved;
+    char *reserved;
     short i;
 
     i = 0;
-    if (!reserved)
-        reserved = "0123456789_!?#$";
+    reserved = "0123456789_!?#$*";
     if (ft_strlen(varname) == 1)
     {
         while (reserved[i])
@@ -144,8 +143,6 @@ static char    *get_value(char *str, t_stx **tr, t_dlist **tok)
 		new = parse_assig_block(str, tok, tr);
 	if (new != str && new)
         substitute_value(tok[1]);
-    // if ((new = parse_assig_block(str, tok, tr)) != str && new)
-    //     substitute_value(tok[1]);
     if (new == str)
         make_token(tok, NULL, TK_VALUE);
     if (!new)

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/06 19:31:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/08 02:56:01 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,232 +15,554 @@
 #include "sh_tokenizer.h"
 #include "bltn_math/math_hidden.h"
 
-short	is_operand_tok(t_tk_type type)
+static short	is_operand(t_tk_type type)
 {
-	if (type == OPRND || type == HEX || type == BIN || type == DEC || type == SEV)
+	if (type == OPRND || type == DEC || type == HEX || type == BIN || type == SEV)
 		return (1);
 	return (0);
 }
 
-short	get_operator_tok(t_tk_type **ops, t_tk_type type)
+size_t	count_dlist(t_dlist *list)
 {
-	short i;
-	short j;
+	size_t	len;
 
-	i = 0;
-	j = 0;
-	while (ops[i])
+	len = 0;
+	while (list)
 	{
-		while (ops[i][j])
+		len++;
+		list = list->next;
+	}
+	return (len);
+}
+
+//the fuck you don't have a func that only counts this shitty list
+long	check_result(t_dlist *opd_stack, ERR *err)
+{
+	char	*value;
+	long	res;
+
+	res = 0;
+	if (!err->err_code)
+	{
+		value = opd_stack ? ((t_tok *)opd_stack->content)->value : NULL;
+		if (!value || (count_dlist(opd_stack)) != 1)
 		{
-			if (type == ops[i][j])
-				return (i);
-			j++;
+			set_error(value, OPERAND_EXP, err);
+			return (0);
 		}
-		i++;
-		j = 0;
+		res = ft_atoi(value);
 	}
-	return (0);
+	del_tokens(opd_stack);
+	return (res);
 }
 
-t_dlist	*lst_to_end(t_dlist *stack)
+t_tk_type	is_number(char *value)
 {
-	while (stack && stack->next)
-		stack = stack->next;
-	return (stack);
-}
+	t_tk_type type;
 
-t_dlist	*push_to_stack(t_dlist *stack, t_dlist *new_elem)
-{
-	t_dlist		*start;
-	t_dlist		*tmp;
-	char		*value;
-	t_tok		token_data;
-	
-	value = ((t_tok *)new_elem->content)->value;
-	token_data.value = (value) ? ft_strdup(value) : NULL;
-	token_data.type = ((t_tok *)new_elem->content)->type;
-	start = stack;
-	stack = lst_to_end(stack);
-	tmp = stack;
-	if (!start)
-	{
-		stack = ft_dlstnew(NULL, 0);
-		start = stack;
-	}
+	if (layer_parse_two("0x@01@", value))
+		type = BIN;
+	else if (layer_parse_two("0x@0123456789abcdefABCDEF@", value))
+		type = HEX;
+	else if (layer_parse_two("0@01234567@", value))
+		type = SEV;
+	else if (layer_parse_two("0o@01234567@", value))
+		type = SEV;
+	else if (*value != '0' && layer_parse_two("@0123456789@", value))
+		type = DEC;
 	else
-	{
-		stack->next = ft_dlstnew(NULL, 0);
-		stack = stack->next;
-	}
-	stack->content = (t_tok *)malloc(sizeof(t_tok));
-	*((t_tok *)(stack->content)) = token_data;
-	stack->next = NULL;
-	stack->prev = tmp;
-	return (start);
+		return (0);
+	return (type);
 }
 
-//compares indexes of ops - last from stack and preceding one - inside
-short	pop_operator(t_dlist *op_stack, t_tk_type new_tok)
+static short	get_op_type(t_tk_type op)
 {
-	static t_tk_type	*ops[7];
-	short				id1;
-	short				id2;
+	if (op == INCRM || op == DECRM || op == POSIT || op == NEGAT || op == REJECT || op == NOT)
+		return (1);
+	// else if (op == MORE || op == LESS || op == IS_EQU || op == NO_EQU || op == LESS_EQ || op == MORE_EQ)
+	// 	return (3);
+	else if (op == EQU)
+		return (3);
+	return (2);
+}
 
-	if (!op_stack)
-		return (0);
+void	compare_level_in(t_tk_type *arr)
+{
+	arr[0] = IS_EQU;
+	arr[1] = NO_EQU;
+	arr[2] = LESS_EQ;
+	arr[3] = MORE_EQ;
+	arr[4] = LESS;
+	arr[5] = MORE;
+	arr[2] = 0;
+}
+
+void	normal_level_in(t_tk_type *arr)
+{
+	arr[0] = PLUS;
+	arr[1] = MINUS;
+	arr[2] = MULT;
+	arr[3] = DEVID;
+	arr[4] = DEVREM;
+	arr[5] = 0;
+}
+
+void	bit_level_in(t_tk_type *arr)
+{
+	arr[0] = BIT_R;
+	arr[1] = BIT_L;
+	arr[2] = AND;
+	arr[3] = OR;
+	arr[4] = XOR;
+	arr[5] = 0;
+}
+
+void	logic_level_in(t_tk_type *arr)
+{
+	arr[0] = LOG_AND;
+	arr[1] = LOG_OR;
+	arr[2] = 0;
+}
+
+void	assign_level_in(t_tk_type *arr)
+{
+	arr[0] = EQU;
+	arr[1] = PLUS_EQ;
+	arr[2] = MIN_EQ;
+	arr[3] = 0;
+}
+
+static t_tk_type	get_ind(t_tk_type op)
+{
+	static t_tk_type	*ops[5];
+	t_tk_type			type;
+	t_tk_type			i;
+
 	if (!ops[0])
 	{
-		ops[0] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 7);
-		ops[1] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 3);
+		ops[0] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 6);
+		ops[1] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 6);
 		ops[2] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 4);
-		ops[3] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 4);
-		ops[4] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 3);
-		ops[5] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 10);
-		ops[6] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 3);
-		ops_init(ops);
+		ops[3] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 3);
+		ops[4] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 4);
+		bit_level_in(ops[0]);
+		normal_level_in(ops[1]);
+		compare_level_in(ops[2]);
+		logic_level_in(ops[3]);
+		assign_level_in(ops[4]);
 	}
-	if (new_tok == OUT_BR)
-		return (1);
-	op_stack = lst_to_end(op_stack);
-	if (new_tok == INTO_BR || ((t_tok *)op_stack->content)->type == INTO_BR)
-		return (0);
-	id1 = get_operator_tok(ops, ((t_tok *)op_stack->content)->type);
-	id2 = get_operator_tok(ops, new_tok);
-	if (id1 < id2)
-		return (1);
-	return (0);
-}
-
-void	del_tokens(t_dlist *token)
-{
-	t_dlist *token_list;
-
-	while (token)
-    {
-		token_list = token;
-        token = token->next;
-        if (token_list->content && TOK_VALUE)
-            free(TOK_VALUE);
-        free(token_list->content);
-        free(token_list);
-    }
-}
-
-static short	is_bracket(t_tk_type type)
-{
-	if (type == INTO_BR || type == OUT_BR)
-		return (1);
-	return (0);
-}
-
-static short	stop_token(t_tk_type stop, t_tk_type current)
-{
-	if (stop != TK_EOF)
-		if (current == INTO_BR)
-			return (1);
-	return (0);
-}
-
-//it clears two stacks inside 
-//if we got closing bracket or operand lower value appeared we make or update final linked list
-t_dlist	*update_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops, t_tk_type op)
-{
-	t_dlist		*start_ops;
-	t_dlist		*start_opds;
-	t_dlist		*tmp;
-
-	start_opds = opds;
-	start_ops = ops;
-	while (opds)
+	type = 0;
+	i = 0;
+	while (ops[type])
 	{
-		fin_list[0] = push_to_stack(fin_list[0], opds);
-		opds = opds->next;
+		while (ops[type][i] && ops[type][i] != op)
+			i++;
+		if (ops[type][i] == op)
+			return (type);
+		type++;
+		i = 0;
 	}
-	ops = lst_to_end(ops);
-	while (ops && !stop_token(op, ((t_tok *)ops->content)->type))
+	return (type);
+}
+
+t_dlist	*substitute_single_value(t_dlist *opd_stack, ENV *env, long res)
+{
+	char	*value;
+	t_dlist	*tmp;
+
+	value = ft_itoa(res);
+	if (((t_tok *)opd_stack->content)->type == OPRND)
 	{
-		if (!is_bracket(((t_tok *)ops->content)->type))
-			fin_list[0] = push_to_stack(fin_list[0], ops);
-		ops = ops->prev;
-	}
-	tmp = fin_list[0];
-	tmp = lst_to_end(tmp);
-	fin_list[1] = tmp;
-	del_tokens(start_opds);
-	if (op != OUT_BR)
-	{
-		tmp = ops;
-		ops = (ops && ops->next) ? ops->next : ops;
+		env_set_variable(((t_tok *)opd_stack->content)->value, dstr_new(value), env);
+		free(value);
 	}
 	else
-		tmp = ops ? ops->prev : NULL;
-	if (tmp)
 	{
-		tmp->next = NULL;
-		while (tmp->prev)
-			tmp = tmp->prev;
+		free(((t_tok *)opd_stack->content)->value);
+		((t_tok *)opd_stack->content)->value = value;
+		((t_tok *)opd_stack->content)->type = DEC;
 	}
-	del_tokens(ops);
-	return (tmp);
+	while (opd_stack && opd_stack->prev)
+		opd_stack = opd_stack->prev;
+	return (opd_stack);
 }
 
-//add brackets to stack if its into; remove brackets from stack if its out and check whether we closed all brackets
-void	into_reverse_notation(t_dlist *dimon_loh, ERR *err, t_dlist **fin)
+t_dlist	*substitute_both_value(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
 {
-	t_tk_type		type;
-	t_dlist			*op_stack;
-	t_dlist			*opd_stack;
-	int				br;
+	char	*value;
+	t_dlist	*tmp;
 
-	br = 0;
-	op_stack = NULL;
-	opd_stack = NULL;
-	while (dimon_loh)
+	value = ft_itoa(res);
+	tmp = opd_stack->prev;
+	del_tokens(opd_stack);
+	tmp->next = NULL;
+	if (((t_tok *)tmp->content)->type == OPRND && (op == PLUS_EQ || op == MIN_EQ))
 	{
-		type = ((t_tok *)dimon_loh->content)->type;
-		if (type == INTO_BR || type == OUT_BR)
-			br = (type == INTO_BR) ? ++br : --br;
-		if (is_operand_tok(type))
-			opd_stack = push_to_stack(opd_stack, dimon_loh); //add new operand to stack
-		else if (type == TK_EOF || pop_operator(op_stack, type))
+		env_unset_variable(((t_tok *)tmp->content)->value, env);
+		env_set_variable(((t_tok *)tmp->content)->value, dstr_new(value), env);
+	}
+	free(((t_tok *)tmp->content)->value);
+	((t_tok *)tmp->content)->value = value;
+	((t_tok *)tmp->content)->type = DEC;
+	opd_stack = tmp;
+	while (opd_stack && opd_stack->prev)
+		opd_stack = opd_stack->prev;
+	return (opd_stack);
+}
+
+long	fetch_operand(t_tok *operand,  ENV *env, ERR *err)
+{
+	char		*value;
+	t_tk_type	type;
+	long		res;
+
+	if (operand->type == OPRND)
+	{
+		value = (env_get_variable(operand->value, env))->txt;
+		if (!value || !(*value))
 		{
-			op_stack = update_fin_list(fin, opd_stack, op_stack, type);
-			opd_stack = NULL;
-			while (dimon_loh && (type == OUT_BR || type == TK_EOF))
-			{
-				dimon_loh = dimon_loh->next;
-				type = dimon_loh ? ((t_tok *)dimon_loh->content)->type : 0;
-			}
-			continue ;
+			if (value)
+				free(value);
+			value = ft_strdup("0");
+			type = 10;
+		}
+		else if (!(type = is_number(value)))
+		{
+			set_error(value, STR_OPERAND, err);
+			return (0);
+		}
+		res = ft_atoi_base(value, type);
+		free(value);
+		return (res);
+	}
+	return (ft_atoi_base(operand->value, operand->type));
+}
+
+t_dlist	*get_single_opd(t_dlist *opd_stack, t_tk_type op, ENV *env, ERR *err)
+{
+	long	res;
+	long	a;
+
+	if (!opd_stack)
+		return (set_error(NULL, OPERAND_EXP, err));
+	a = fetch_operand((t_tok *)opd_stack->content, env, err);
+	if (err->err_code)
+		return (opd_stack);
+	res = apply_to_single(a, op);
+	return (substitute_single_value(opd_stack, env, res));
+}
+
+t_dlist	*get_both_opd(t_dlist *opd_stack, t_tk_type op, ENV *env, ERR *err)
+{
+	static long			(*ptr[5])(long, long, t_tk_type, ERR *);
+	long 				res;
+	long				a;
+	long				b;
+
+	if (!ptr[0])
+	{
+		ptr[0] = bit_ops;
+		ptr[1] = normal_ops;
+		ptr[2] = compare_ops;
+		ptr[3] = logic_ops;
+		ptr[4] = assign_ops;
+	}
+	if (!opd_stack || !opd_stack->prev)
+	{
+		if (opd_stack)
+		{
+			set_error(((t_tok *)opd_stack->content)->value, OPERAND_EXP, err);
+			return (opd_stack);
 		}
 		else
-			op_stack = push_to_stack(op_stack, dimon_loh); //add new operator or bracket to stack
-		dimon_loh = dimon_loh->next;
+			return (set_error(NULL, OPERAND_EXP, err));
 	}
-	if (op_stack)
-		update_fin_list(fin, opd_stack, op_stack, TK_EOF);
-	if (br)
-	{
-		set_error(NULL, PARSE_ERR, err);
-		clear_tokens(fin, 0);
-	}
-}
-
-char	*ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err)
-{
-	t_dlist				*polish_not[2];
-	long 				res;
-
-	ft_bzero(polish_not, sizeof(t_dlist *) * 2);
-	//DBG_PRINT_MATH(dimon_loh[0]);
-	into_reverse_notation(dimon_loh[0], err, polish_not);
+	a = fetch_operand((t_tok *)opd_stack->prev->content, env, err);
+	b = fetch_operand((t_tok *)opd_stack->content, env, err);
 	if (err->err_code)
-		return (NULL);
-	clear_tokens(dimon_loh, 0);
-	if (!polish_not[0])
-		return (NULL);
-	DBG_PRINT_MATH(polish_not[0]);
-	res = 2;
-	return ("kek");
+		return (opd_stack);
+	res = ptr[get_ind(op)](a, b, op, err);
+	if (err->err_code)
+		return (opd_stack);
+	return (substitute_both_value(opd_stack, env, res, op));
 }
+
+char *pull_env_val(t_dlist *opd_stack, ENV *env, ERR *err)
+{
+	char		*new;
+	char		*value;
+	t_tk_type	type;
+	long		res;
+	
+	new = ((t_tok *)opd_stack->content)->value;
+	value = env_get_variable(((t_tok *)opd_stack->content)->value, env)->txt;
+	if (!value)
+		value = ft_strdup("0");
+	if (!(type = is_number(value)))
+	{
+		set_error(new, STR_OPERAND, err);
+		free(value);
+		return (NULL);
+	}
+	res = ft_atoi_base(value, type);
+	new = ((t_tok *)opd_stack->prev->content)->value;
+	env_unset_variable(new, env);
+	free(value);
+	value = ft_itoa(res);
+	env_set_variable(new, dstr_new(value), env);
+	return (value);
+}
+
+char *set_var(t_dlist *opd_stack, ENV *env, ERR *err)
+{
+	char		*value;
+	char		*new;
+	t_tk_type	type;
+	long		res;
+	
+	value = ((t_tok *)opd_stack->content)->value;
+	type = ((t_tok *)opd_stack->content)->type;
+	res = ft_atoi_base(value, type);
+	new = ft_itoa(res);
+	value = ((t_tok *)opd_stack->prev->content)->value;
+	env_unset_variable(value, env);
+	env_set_variable(value, dstr_new(new), env);
+	return (new);
+}
+
+//if we equal something, we like normal substitute opd to new assigned value
+t_dlist	*set_new_var(t_dlist *opd_stack, ENV *env, ERR *err)
+{
+	char		*new;
+	t_dlist		*new_elem;
+	char		*value;
+	//t_tok		*token;
+
+	if (((t_tok *)opd_stack->content)->type == OPRND)
+		value = pull_env_val(opd_stack, env, err);
+	else
+		value = set_var(opd_stack, env, err);
+	opd_stack = opd_stack->prev;
+	del_tokens(opd_stack->next);
+	free(((t_tok *)opd_stack->content)->value);
+	((t_tok *)opd_stack->content)->value = value;
+	((t_tok *)opd_stack->content)->type = DEC;
+	opd_stack->next = NULL;
+	while (opd_stack->prev)
+		opd_stack = opd_stack->prev;
+	return (opd_stack);
+}
+
+t_dlist	*equate_opd(t_dlist *opd_stack, ENV *env, ERR *err)
+{
+	t_tk_type	opd;
+	char		*value;
+	char		*tmp;
+
+	if (!opd_stack || !opd_stack->prev)
+	{
+		if (opd_stack)
+		{
+			set_error(((t_tok *)opd_stack->content)->value, OPERAND_EXP, err);
+			return (opd_stack);
+		}
+		else
+			return (set_error(NULL, OPERAND_EXP, err));
+	}
+	opd = ((t_tok *)opd_stack->prev->content)->type;
+	value = ((t_tok *)opd_stack->prev->content)->value;
+	if (opd != OPRND)
+	{
+		set_error(value, INVALID_ASSIG, err);
+		return (opd_stack);
+	}
+	// new = ((t_tok *)opd_stack->content)->value;
+	// if (((t_tok *)opd_stack->content)->type == OPRND)
+	// {
+	// 	if (!validate_assig(new, env))
+	// 	{
+	// 		set_error(new, STR_OPERAND, err);
+	// 		return (opd_stack);
+	// 	}
+	// }
+	return (set_new_var(opd_stack, env, err));
+}
+
+t_dlist	*calculate_res(t_dlist *opd_stack, t_tk_type op, ENV *env, ERR *err)
+{
+	short	id;
+	t_dlist	*start;
+
+	start = opd_stack;
+	id = get_op_type(op);
+	opd_stack = lst_to_end(opd_stack);
+	if (id == 1)
+		opd_stack = get_single_opd(opd_stack, op, env, err);
+	else if (id == 2)
+		opd_stack = get_both_opd(opd_stack, op, env, err);
+	else
+		opd_stack = equate_opd(opd_stack, env, err);
+	return (opd_stack);
+}
+
+t_dlist	*push_operand(t_dlist *opd_stack, t_dlist *current, ENV *env, ERR *err)
+{
+	t_tk_type	type;
+	char		*value;
+
+	type = ((t_tok *)current->content)->type;
+	if (type == OPRND)
+	{
+		value = env_get_variable(((t_tok *)current->content)->value, env)->txt;
+		if (!value)
+			value = ft_strdup("0");
+		else if (!is_number(value))
+		{
+			set_error(value, STR_OPERAND, err);
+			return (opd_stack);
+		}
+		free(((t_tok *)current->content)->value);
+		((t_tok *)current->content)->value = value;
+	}
+	return (push_to_stack(opd_stack, current));
+}
+
+long	polish_calculate(t_dlist **polish_not, ENV *env, ERR *err)
+{
+	t_dlist		*start;
+	t_dlist		*opd_stack;
+	t_tk_type	type;
+
+	start = polish_not[0];
+	opd_stack = NULL;
+	type = ((t_tok *)start->content)->type;
+	while (!err->err_code && start && type != TK_EOF)
+	{
+		if (is_operand(type))
+			opd_stack = push_to_stack(opd_stack, start);
+			// opd_stack = push_operand(opd_stack, start, env, err);
+		else if (type != TK_EOF)
+			opd_stack = calculate_res(opd_stack, type, env, err); // we check whether we have operator type 1 or type 2 inside 
+		start = start->next;
+		type = start ? ((t_tok *)start->content)->type : 0;
+	}
+	clear_tokens(polish_not, 0);
+	return (check_result(opd_stack, err));
+}
+
+
+// t_dlist	*get_single_opd(t_dlist *opd_stack, t_tk_type op, ERR *err)
+// {
+// 	static long			(*ptr[6])(long);
+// 	long 				res;
+// 	long				a;
+
+// 	if (!ptr[0])
+// 	{
+// 		ptr[0] = increment_opd();
+// 		ptr[1] = decrement_opd();
+// 		ptr[2] = reject_opd();
+// 		ptr[3] = positive_opd();
+// 		ptr[4] = negative_opd();
+// 		ptr[5] = make_none_opd();
+// 	}
+// 	if (!opd_stack)
+// 		return (set_error(NULL, OPERAND_EXP, err));
+// 	a = ft_atoi_base(((t_tok *)opd_stack->content)->value, (int)((t_tok *)opd_stack->content)->type);
+// 	res = ptr[get_ind(op)](a);
+// 	return (substitute_value(opd_stack, res, 1));
+// }
+
+// t_dlist	*get_both_opd(t_dlist *opd_stack, t_tk_type op, ERR *err)
+// {
+// 	static long			(*ptr[6])(long, long);
+// 	long 				res;
+// 	long				a;
+// 	long				b;
+
+// 	if (!ptr[0])
+// 	{
+// 		ptr[0] = add_opd();
+// 		ptr[1] = subst_opd();
+// 		ptr[2] = mult_opd();
+// 		ptr[3] = devid_opd();
+// 		ptr[4] = devidrem_opd();
+// 		ptr[5] = compare_opd();
+// 	}
+// 	if (!opd_stack || !opd_stack->prev)
+// 	{
+// 		if (opd_stack)
+// 		{
+// 			set_error(((t_tok *)opd_stack->content)->value, OPERAND_EXP, err);
+// 			return (opd_stack);
+// 		}
+// 		else
+// 			return (set_error(NULL, OPERAND_EXP, err));
+// 	}
+// 	a = ft_atoi_base(((t_tok *)opd_stack->prev->content)->value, (int)((t_tok *)opd_stack->prev->content)->type);
+// 	b = ft_atoi_base(((t_tok *)opd_stack->content)->value, (int)((t_tok *)opd_stack->content)->type);
+// 	res = ptr[get_ind(op)](a, b);
+// 	return (substitute_value(opd_stack, res, 2));
+// }
+
+// static t_tk_type	get_ind(t_tk_type op)
+// {
+// 	static t_tk_type	ops[] = {
+// 	INCRM, DECRM, NEGAT,
+// 	REJECT, NOT, POSIT, NULL
+// 	};
+// 	t_tk_type			type;
+
+// 	type = 0;
+// 	while (ops[type] != op)
+// 		type++;
+// 	return (type);
+// }
+
+// t_dlist	*push_operand(t_dlist *opd_stack, t_dlist *current, ENV *env, ERR *err)
+// {
+// 	t_tk_type	type;
+// 	char		*value;
+
+// 	type = ((t_tok *)current->content)->type;
+// 	if (type == OPRND)
+// 	{
+// 		value = env_get_variable(((t_tok *)current->content)->value, env);
+// 		if (!value)
+// 			value = ft_strdup("0");
+// 		else if (!is_number(value, current))
+// 		{
+// 			set_error(value, STR_OPERAND, err);
+// 			return (opd_stack);
+// 		}
+// 		free(((t_tok *)current->content)->value);
+// 		((t_tok *)current->content)->value = value;
+// 	}
+// 	return (push_to_stack(opd_stack, current));
+// }
+
+// t_dlist	*substitute_both_value(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
+// {
+// 	char	*value;
+// 	t_dlist	*tmp;
+
+// 	value = ft_itoa(res);
+// 	tmp = opd_stack->prev;
+// 	del_tokens(opd_stack);
+// 	tmp->next = NULL;
+// 	if (((t_tok *)tmp->content)->type == OPRND)
+// 	{
+// 		env_set_variable(((t_tok *)tmp->content)->value, dstr_new(value), env);
+// 		free(value);
+// 	}
+// 	else
+// 	{
+// 		free(((t_tok *)tmp->content)->value);
+// 		((t_tok *)tmp->content)->value = value;
+// 		((t_tok *)tmp->content)->type = DEC;
+// 		opd_stack = tmp;
+// 	}
+// 	while (opd_stack)
+// 		opd_stack = opd_stack->prev;
+// 	return (opd_stack);
+// }

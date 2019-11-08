@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/05 23:16:13 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/08 00:05:35 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,6 @@ short				sh_tokenizer(char *str, t_dlist **token_list)
     {
         if (i < 0 && last_input)
             free(last_input);
-		// last_input = get_last_input(i, last_input)
         last_input = i ? NULL : ft_strdup(tmp);
         return (i ? -1 : 0);
     }

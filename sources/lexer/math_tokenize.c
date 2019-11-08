@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/06 19:44:34 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/08 00:32:31 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,12 +140,12 @@ static t_tk_type	get_hex_or_bin(t_dlist **math, t_mtx **bases, char *operand)
 {
 	if (layer_parse_two(bases[0]->fin_meta, operand))
 	{
-		make_token(math, operand, HEX);
+		make_token(math, operand, bases[0]->base);
 		return (HEX);
 	}
 	else if (layer_parse_two(bases[1]->fin_meta, operand))
 	{
-		make_token(math, operand, BIN);
+		make_token(math, operand, bases[1]->base);
 		return (BIN);
 	}
 	return (0);
@@ -195,7 +195,6 @@ static char	*pull_number(char *expr, t_dlist **math, ERR *err)
 {
 	static t_mtx	*bases[5];
 	char			*operand;
-	// t_tk_type		type;
 
 	if (!bases[0])
 		init_num_bases(bases);
@@ -204,15 +203,11 @@ static char	*pull_number(char *expr, t_dlist **math, ERR *err)
 	if (layer_parse_two(bases[0]->strt_meta, operand))
 	{
 		if (get_hex_or_bin(math, bases, operand))
-		{
-			// make_token(math, operand, type);
 			return (expr);
-		}
 		return (set_error(operand, VALUE_TOO_GREAT ,err));
 	}
 	if (!get_base(operand, bases, math))
 		return (set_error(operand, VALUE_TOO_GREAT,err));
-	//make_token(math, operand, type);
 	return (expr);
 }
 
@@ -243,7 +238,7 @@ static char	*pull_bracket(char *expr, t_dlist **math)
 }
 
 //double bracket and single bracket to differentiate tokens
-static char	*parse_math_type(char *expr, ENV *env, t_dlist **math, ERR *err)
+static char	*ariphmetic_tokenize(char *expr, ENV *env, t_dlist **math, ERR *err)
 {
 	t_tk_type	type;
 	short		flag;
@@ -269,7 +264,6 @@ static char	*parse_math_type(char *expr, ENV *env, t_dlist **math, ERR *err)
 			expr = pull_predessor(expr, math, err);
 			flag = 0;
 		}
-		//*expr == '!' || *expr == '=' || *expr == '+' || *expr == '-' || *expr == '*' || *expr == '%' || *expr == '/' || *expr == '&'
 		else if (is_op(*expr))
 		{
 			expr = pull_operator(expr, math);
@@ -288,7 +282,8 @@ static char	*parse_math_type(char *expr, ENV *env, t_dlist **math, ERR *err)
 //make token list
 //send it to calculator
 //get str back
-static char	*ariphmetic_tokenize(char *expr, ENV *env, ERR *err)
+//was ariphmetic_tokenize
+static long get_math_result(char *expr, ENV *env, ERR *err)
 {
 	t_dlist		*polish_notation[2];
 	t_dlist		*current;
@@ -300,27 +295,27 @@ static char	*ariphmetic_tokenize(char *expr, ENV *env, ERR *err)
 	current->next = NULL;
 	while (*expr)
 	{
-		if (!(expr = parse_math_type(expr, env, polish_notation, err)))
+		if (!(expr = ariphmetic_tokenize(expr, env, polish_notation, err)))
 		{
 			if (polish_notation[0])
 				clear_tokens(polish_notation, 0);
-			return (NULL);
+			return (0);
 		}
 	}
 	make_token(polish_notation, NULL, TK_EOF);
 	return (ariphmetic_calc(polish_notation, env, err));
 }
 
-static long	get_math_result(char *expr, ENV *env, ERR *err)
-{
-	char	*output;
-	long	res;
+// static long	get_math_result(char *expr, ENV *env, ERR *err)
+// {
+// 	char	*output;
+// 	long	res;
 
-	if (!(output = ariphmetic_tokenize(expr, env, err)))
-		return (0);
-	res = ft_atoi(output);
-	return (res);
-}
+// 	if (!(output = ariphmetic_tokenize(expr, env, err)))
+// 		return (0);
+// 	res = ft_atoi(output);
+// 	return (res);
+// }
 
 long		ariphmetic_eval(char *expr, ENV *env, ERR *err)
 {

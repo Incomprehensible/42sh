@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/05 19:33:36 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/08 00:07:33 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,6 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 #include "bltn_math/math_hidden.h"
-
-t_mtx    *init_hex(void)
-{
-	t_mtx *base;
-
-    base = (t_mtx *)malloc(sizeof(t_mtx));
-	base->strt_meta = ft_strdup("0x~");
-    base->fin_meta = ft_strdup("0x@0123456789abcdefABCDEF@");
-    base->base = HEX;
-	base->next = NULL;
-    return (base);
-}
 
 t_mtx    *init_binary(void)
 {
@@ -35,6 +23,18 @@ t_mtx    *init_binary(void)
 	base->strt_meta = ft_strdup("0x~");
     base->fin_meta = ft_strdup("0x@01@");
     base->base = BIN;
+	base->next = NULL;
+    return (base);
+}
+
+t_mtx    *init_hex(void)
+{
+	t_mtx *base;
+
+    base = (t_mtx *)malloc(sizeof(t_mtx));
+	base->strt_meta = ft_strdup("0x~");
+    base->fin_meta = ft_strdup("0x@0123456789abcdefABCDEF@");
+    base->base = HEX;
 	base->next = NULL;
     return (base);
 }
@@ -63,8 +63,8 @@ t_mtx    *init_decimal(void)
 	t_mtx *base;
 
     base = (t_mtx *)malloc(sizeof(t_mtx));
-	base->strt_meta = ft_strdup("@123456789@");
-    base->fin_meta = ft_strdup("@0123456789@");
+	base->strt_meta = ft_strdup("@0123456789@");
+    base->fin_meta = base->strt_meta;
     base->base = DEC;
 	base->next = NULL;
     return (base);
@@ -72,8 +72,8 @@ t_mtx    *init_decimal(void)
 
 void	init_num_bases(t_mtx **bases)
 {
-	bases[0] = init_hex();
-	bases[1] = init_binary();
+	bases[0] = init_binary();
+	bases[1] = init_hex();
 	bases[2] = init_seven();
 	bases[3] = init_decimal();
 	bases[4] = NULL;
