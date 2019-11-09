@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/10 21:01:10 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/09 01:27:54 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,6 +296,18 @@ char        *redir_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
     }
     return (tmp);
 }
+
+static short	is_fd(char *str)
+{
+	if (!(*str >= 48 && *str <= 57))
+		return (0);
+	while (*str && ft_isdigit(*str))
+		str++;
+	if (*str == '<' || *str == '>')
+		return (1);
+	return (0);
+}
+
 char*   parse_redir(char *str, t_dlist **tok, t_stx **tree, short i)
 {
     t_graph *redir;
@@ -308,7 +320,7 @@ char*   parse_redir(char *str, t_dlist **tok, t_stx **tree, short i)
         redir = redir->left;
     else if (*str == '<' || *str == '>')
         redir = redir->right;
-    else if ((*str >= 48 && *str <= 57))
+    else if (is_fd(str))
         redir = redir->forward;
     if ((str = redir_traverse(redir, str, tok, tree)) == tmp)
         return (block_pass(EXPRS, str, tok, tree));

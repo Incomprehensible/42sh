@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/22 20:16:31 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/09 04:40:09 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ size_t    layer_parse_two(char *meta, char *str)
             {
                 if (*meta == '@')
                 {
-                    i = get_seq(str);
+                    i += get_seq(str);
                     str += i;
                 }
                 while (tmp != str)

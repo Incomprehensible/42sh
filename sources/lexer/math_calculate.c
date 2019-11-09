@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/08 23:44:37 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/09 05:18:52 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ long	check_result(t_dlist *opd_stack, ENV *env, ERR *err)
 			dstr_del(&tmp);
 		}
 		else
-			res = ft_atoi(value);
+			res = ft_atoi_base(value, ((t_tok *)opd_stack->content)->type);
+			// res = ft_atoi(value);
 	}
 	del_tokens(opd_stack);
 	return (res);
@@ -232,6 +233,18 @@ t_dlist	*substitute_both(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
 	return (opd_stack);
 }
 
+static long	pull_from_base(char *value, t_tk_type type)
+{
+	long res;
+
+	if (type == HEX || type == BIN)
+		value += 2;
+	else if (type == SEV)
+		value += (*(value + 1) == 'o') ? 2 : 1;
+	res = ft_atoi_base(value, type);
+	return (res);
+}
+
 long	fetch_operand(t_tok *operand,  ENV *env, ERR *err)
 {
 	char		*value;
@@ -253,11 +266,11 @@ long	fetch_operand(t_tok *operand,  ENV *env, ERR *err)
 			set_error(value, STR_OPERAND, err);
 			return (0);
 		}
-		res = ft_atoi_base(value, type);
+		res = pull_from_base(value, type);
 		free(value);
 		return (res);
 	}
-	return (ft_atoi_base(operand->value, operand->type));
+	return (ft_atoi_base(operand->value, (int)operand->type));
 }
 
 t_dlist	*get_single_opd(t_dlist *opd_stack, t_tk_type op, ENV *env, ERR *err)

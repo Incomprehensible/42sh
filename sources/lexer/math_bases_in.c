@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/08 00:07:33 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/09 05:28:03 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ t_mtx    *init_seven(void)
 
     base = (t_mtx *)malloc(sizeof(t_mtx));
 	strt = base;
-	base->strt_meta = ft_strdup("0~");
-    base->fin_meta = ft_strdup("0@01234567@");
+	base->strt_meta = ft_strdup("0o~");
+	base->fin_meta = ft_strdup("0o@01234567@");
     base->base = SEV;
 	base->next = (t_mtx *)malloc(sizeof(t_mtx));
 	base = base->next;
-	base->strt_meta = ft_strdup("0o~");
-	base->fin_meta = ft_strdup("0o@01234567@");
+	base->strt_meta = ft_strdup("0~");
+    base->fin_meta = ft_strdup("0@01234567@");
 	base->base = SEV;
 	base->next = NULL;
     return (strt);

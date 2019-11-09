@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/08 00:32:31 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/09 05:28:11 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,13 +140,16 @@ static t_tk_type	get_hex_or_bin(t_dlist **math, t_mtx **bases, char *operand)
 {
 	if (layer_parse_two(bases[0]->fin_meta, operand))
 	{
-		make_token(math, operand, bases[0]->base);
-		return (HEX);
+
+		make_token(math, ft_strdup(operand + 2), bases[0]->base);
+		free(operand);
+		return (BIN);
 	}
 	else if (layer_parse_two(bases[1]->fin_meta, operand))
 	{
-		make_token(math, operand, bases[1]->base);
-		return (BIN);
+		make_token(math, ft_strdup(operand + 2), bases[1]->base);
+		free(operand);
+		return (HEX);
 	}
 	return (0);
 }
@@ -155,11 +158,9 @@ static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
 {
 	t_mtx			*base;
 	size_t			i;
-	t_tk_type		choice;
 
 	i = 2;
-	choice = 0;
-	while (bases[i] && !choice)
+	while (bases[i])
 	{
 		base = bases[i];
 		while (base)
@@ -168,16 +169,58 @@ static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
 			{
 				if (!(layer_parse_two(base->fin_meta, op)))
 					return (0);
-				choice |= base->base;
-				make_token(math, op, base->base);
-				break ;
+				if (base->base == SEV)
+				{
+					if (base->next)
+						make_token(math, ft_strdup(op + 2), base->base);
+					else
+						make_token(math, ft_strdup(op + 1), base->base);
+					free(op);
+				}
+				else
+					make_token(math, op, base->base);
+				return (base->base);
 			}
 			base = base->next;
 		}
 		i++;
 	}
-	return (choice);
+	return (0);
 }
+
+// static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
+// {
+// 	t_mtx			*base;
+// 	size_t			i;
+// 	t_tk_type		choice;
+
+// 	i = 2;
+// 	choice = 0;
+// 	while (bases[i] && !choice)
+// 	{
+// 		base = bases[i];
+// 		while (base)
+// 		{
+// 			if (layer_parse_two(base->strt_meta, op))
+// 			{
+// 				if (!(layer_parse_two(base->fin_meta, op)))
+// 					return (0);
+// 				choice |= base->base;
+// 				if (choice == SEV && !base->next)
+// 				{
+// 					make_token(math, ft_strdup(op + 2), base->base);
+// 					free(op);
+// 				}
+// 				else
+// 					make_token(math, op, base->base);
+// 				break ;
+// 			}
+// 			base = base->next;
+// 		}
+// 		i++;
+// 	}
+// 	return (choice);
+// }
 
 static char	*get_operand(char *expr)
 {
