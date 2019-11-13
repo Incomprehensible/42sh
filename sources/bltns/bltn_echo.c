@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 12:40:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/25 15:53:41 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/11 13:08:47 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void		echo_put_och(char *arg, size_t *i)
 
 	num = (arg[*i] - '0') * 64 + \
 	(arg[*i + 1] - '0') * 8 + (arg[*i + 2] - '0');
-	if (num <= 0177 && num >= 0 )
+	if (num <= 0177 && num >= 0)
 	{
 		ft_putchar((char)num);
 		*i += 2;

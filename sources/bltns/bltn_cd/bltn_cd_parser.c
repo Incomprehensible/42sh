@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 04:21:07 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/11 12:54:57 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/13 13:13:09 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int					bltn_cd_parser(ENV *env, t_dlist **path)
 	t_dyn_string	*str;
 	t_dyn_string	*tmp;
 
-	str = dstr_new((char *)ft_avl_search(env->locals, "PW")->content);
+	str = dstr_new(pwd->txt);
 	while (str->strlen != 0)
 	{
 		if (ft_strrchr(str->txt, '/'))

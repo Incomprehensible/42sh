@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:29:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/06 19:06:17 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/13 13:22:37 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@
 # define E_FOPFF 14 /* OPEN OF FILE FAILED */
 # define E_NODIR 15 /* IS NOT A DIR */
 # define E_NOFND 16 /* NOT FOUND*/
+# define E_TMARG 17 /* TOO MANY ARGUMENTS*/
 
-# define ERR_CNT (E_NOFND + 1)
+# define ERR_CNT (E_TMARG + 1)
 
 /*
 ** Returns a standart error message string with code {ECODE}

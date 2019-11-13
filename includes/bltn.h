@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/11 13:00:33 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/13 16:01:28 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 
 static char	*bltns_str[] = {"setenv", "env", "getenv", "unsetenv", "exit",\
 	"alias", "unalias", "cd", "pwd", "type", "((", "echo"};
+
+DSTRING		*pwd;
+DSTRING		*oldpwd;
 
 char		*ft_parse_flags(char **argc);
 
@@ -76,6 +79,7 @@ void		bltn_cd_destroy_path(t_dlist **path);
 void		bltn_cd_freepaths(DSTRING **oldpath, DSTRING **newpath, t_dlist	**path);
 int			bltn_cd_error(DSTRING **oldpath, DSTRING **newpath, t_dlist	**path);
 void		bltn_cd_concat(char **path);
+int			bltn_cd_countargs(char **args);
 
 int	bltn_pwd(char **args, ENV *env);
 

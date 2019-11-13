@@ -6,12 +6,14 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 04:21:28 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/11 13:06:13 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/13 16:16:55 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn.h"
 #include <dirent.h>
+#include "sys_tools/sys_tools.h"
+#include "sys_tools/sys_errors.h"
 
 static int	bltn_cd_rmlast(t_dlist **path)
 {
@@ -49,10 +51,10 @@ static int	bltn_cd_setglobals(ENV *env, DSTRING **newpath,\
 				ft_avl_node("OLDPWD", (*oldpath)->txt, (*oldpath)->strlen + 1));
 	ft_avl_set(env->globals,\
 				ft_avl_node("PWD", (*newpath)->txt, (*newpath)->strlen + 1));
-	ft_avl_set(env->locals,\
-				ft_avl_node("OPW", (*oldpath)->txt, (*oldpath)->strlen + 1));
-	ft_avl_set(env->locals,\
-				ft_avl_node("PW", (*newpath)->txt, (*newpath)->strlen + 1));
+	dstr_del(&pwd);
+	dstr_del(&oldpwd);
+	pwd = dstr_new((*newpath)->txt);
+	oldpwd = dstr_new((*oldpath)->txt);
 	bltn_cd_freepaths(oldpath, newpath, path);
 	return (0);
 }
@@ -93,7 +95,8 @@ int			bltn_cd(char **args, ENV *env)
 	int		i;
 
 	i = -1;
-	if (!args[2])
+	status = 0;
+	if (bltn_cd_countargs(args) < 3)
 	{
 		if (ft_strequ(args[1], "/"))
 			return (bltn_cd_loop(args[1], env));
@@ -109,5 +112,7 @@ int			bltn_cd(char **args, ENV *env)
 		}
 		free(path);
 	}
+	else
+		sys_error_handler("cd", E_TMARG, 0);
 	return (status);
 }

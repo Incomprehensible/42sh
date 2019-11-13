@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_type.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 16:14:37 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/27 20:30:19 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/11 13:07:33 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,6 @@
 
 static int	bltn_type_check_bltn(char *str, ENV *env)
 {
-	// int		i;
-
-	// i = -1;
-	// while (bltns_str[++i])
-	// 	if (ft_strequ(bltns_str[i], str))
-	// 		return (1);
-	// return (0);
 	if (!ft_avl_search(env->builtns, str))
 		return (0);
 	return (1);

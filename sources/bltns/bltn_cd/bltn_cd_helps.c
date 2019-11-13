@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 16:03:08 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/11 13:06:27 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/13 16:19:06 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,16 @@ int			bltn_cd_error(DSTRING **oldpath, DSTRING **newpath,\
 	else if (!(perms & SYS_TCH_X))
 		sys_error_handler("cd", E_PERMF, 0);
 	return (1);
+}
+
+int			bltn_cd_countargs(char **args)
+{
+	int		i;
+
+	i = 0;
+	while (args[i])
+		i++;
+	return (i);
 }
 
 void		bltn_cd_concat(char **path)

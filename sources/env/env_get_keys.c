@@ -6,13 +6,13 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 19:56:03 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/04 20:03:28 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/11 13:11:05 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env.h"
 
-static void	env_get_keys_treetrav(t_darr *res, t_avln *root)
+static void		env_get_keys_treetrav(t_darr *res, t_avln *root)
 {
 	if (root)
 	{
@@ -28,8 +28,7 @@ static void	env_get_keys_treetrav(t_darr *res, t_avln *root)
 	}
 }
 
-
-t_darr	env_get_keys(ENV *envp)
+t_darr			env_get_keys(ENV *envp)
 {
 	t_darr	res;
 	t_avln	*root;

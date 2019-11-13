@@ -6,20 +6,21 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 18:10:52 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/28 19:53:28 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/13 13:25:04 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn.h"
 
-int		bltn_cnt_builtins(void)
+int			bltn_cnt_builtins(void)
 {
 	return (sizeof(bltns_str) / sizeof(char *));
 }
 
-int		bltn_init(ENV *env)
+int			bltn_init(ENV *env)
 {
-	int i;
+	int		i;
+	char	path[256];
 
 	i = -1;
 	while (++i < bltn_cnt_builtins())
@@ -28,5 +29,9 @@ int		bltn_init(ENV *env)
 		bltns_func[i], sizeof(bltns_func[i])))) == -1)
 			return (-1);
 	}
+	if (getcwd(path, sizeof(path)) == NULL)
+		return(-1);
+	pwd = dstr_new(path);
+	oldpwd = dstr_new(path);
 	return (1);
 }

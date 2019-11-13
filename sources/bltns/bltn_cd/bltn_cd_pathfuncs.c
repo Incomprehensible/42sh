@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 18:53:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/11 12:55:16 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/13 16:40:07 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ DSTRING		*bltn_cd_pathtostr(t_dlist *path)
 
 	if (path)
 		val = (char *)path->content;
-	if (val[0] != '/')
+	else
+		val = NULL;
+	if (!val || val[0] != '/')
 		res = dstr_new("/");
 	else
 	{
