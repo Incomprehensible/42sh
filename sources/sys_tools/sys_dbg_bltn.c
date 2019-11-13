@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_dbg_bltn.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/06 04:48:22 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:37:35 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,15 +185,15 @@ int			DBG_SYS_SNAP(void)
 	while (i > 0)
 	{
 		--i;
-		if (!p_table[i])
+		if (!g_ptab[i])
 			continue;
-		pg = p_table[i];
+		pg = g_ptab[i];
 		printf(
 			"\n\033[31;7mSBSH_INFO: %d / %p\n\033[0m"
 			"    [%ld] %d %-11s \t%s\n"
 			"        %s\t\ts=%d\n"
 			"     ----------------------------------------------- \n"
-			, hot_sbsh, &hot_sbsh, i, pg->pgid, states[pg->state], pg->input_line, mode[pg->mode], pg->signal);
+			, g_hsh, &g_hsh, i, pg->pgid, states[pg->state], pg->input_line, mode[pg->mode], pg->signal);
 		pids = pg->members;
 		while (pids)
 		{
@@ -217,7 +217,7 @@ int			DBG_SYS_GLB(void)
 		"\tJID: %d\n"
 		"\tPPID: %d\n"
 		"\tPID: %d\n"
-		"\tADR: &sys_pipes=%p / &hot_gid=%p\n\n"
-		, hot_sbsh, &hot_sbsh, g_jid, getppid(), getpid(), &sys_pipes, &hot_gid);
+		"\tADR: &g_pipes=%p / &hot_gid=%p\n\n"
+		, g_hsh, &g_hsh, g_jid, getppid(), getpid(), &g_pipes, &hot_gid);
 	return (0);
 }

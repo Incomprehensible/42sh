@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 12:40:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/25 15:53:41 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:40:10 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ static void		echo_put_och(char *arg, size_t *i)
 
 static void		echo_put_ch(char *arg, size_t *i)
 {
-	int		num;
-
 	if (arg[*i] == '\\')
 		ft_putchar('\\');
 	else if (arg[*i] == 'a')
@@ -65,7 +63,6 @@ static void		echo_put_ch(char *arg, size_t *i)
 static void		echo_put_estr(char **args)
 {
 	size_t		i;
-	char		ch;
 	size_t		j;
 	int			fle;
 
@@ -112,7 +109,6 @@ int				echo_put_str(char **args)
 int				bltn_echo(char **args, ENV *envr)
 {
 	char		*flags;
-	char		ch;
 
 	if (write(STDOUT_FILENO, 0, 0) < 0)
 	{

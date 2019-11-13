@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 15:37:47 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:35:57 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct	s_proc_grp
 	int				mode;
 	int				state;
 	int				signal;
+	int				flag;
 }					t_pgrp;
 
 typedef struct		s_proc_ds
@@ -74,12 +75,15 @@ typedef struct		s_proc_ds
 	char			signal;
 }					t_ps_d;
 
-t_pgrp				*p_table[SYS_PRGS_SIZE];
-char				sys_pipes[SYS_PIPES_SIZE];
+t_pgrp				*g_ptab[SYS_PRGS_SIZE];
+char				g_pipes[SYS_PIPES_SIZE];
 pid_t				hot_gid;
-pid_t				hot_sbsh;
-char				*hot_bkgr;
+pid_t				g_hsh;
+char				*g_hbg;
 int					g_jid;
 int					g_intr;
+
+int			sys_wait_prg(t_pgrp **ps_grp, int *status, pid_t lpid, int mode);
+int			sys_del_if_done(ssize_t i, int state_code);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 17:56:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/07 11:57:52 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:34:10 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	put_prompt_color(DSTRING **pr_src, size_t ind, size_t *ofs)
 	char		*ptr;
 	char		buff[8];
 	DSTRING		*tmp;
-	static char	*var = 0;
 
 	ft_bzero(buff, sizeof(buff));
 	len = 2;
@@ -65,7 +64,8 @@ DSTRING	*parse_promt(DSTRING *pr_src, ENV *envr)
 	offset = 0;
 	while ((ind = dstr_search_ch(pr_src, '%', offset)) != SIZE_T_MAX)
 	{
-		if (pr_src->txt[ind + 1] == 'c' || pr_src->txt[ind + 1] == 'b' || pr_src->txt[ind + 1] == 'C' || pr_src->txt[ind + 1] == 'B')
+		if (pr_src->txt[ind + 1] == 'c' || pr_src->txt[ind + 1] == \
+		'b' || pr_src->txt[ind + 1] == 'C' || pr_src->txt[ind + 1] == 'B')
 			put_prompt_color(&pr_src, ind, &offset);
 		else
 			offset = ind + 2;
@@ -111,7 +111,8 @@ char	*sys_get_conf_path(char *file, ENV *envr)
 		sys_fatal_memerr(sys_get_std_message(E_ALOCF));
 	dstr_insert_ch(path, '/', MAX_LL);
 	dstr_insert_str(path, file, MAX_LL);
-	if (!path || !(result = ft_strdup(path->txt)))
+	result = ft_strdup(path->txt);
+	if (!path || !(result))
 		sys_fatal_memerr(sys_get_std_message(E_ALOCF));
 	dstr_del(&path);
 	return (result);

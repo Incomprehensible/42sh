@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_histrory.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:05:05 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/16 18:56:51 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:42:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,14 @@ void			rewrite_histr(t_darr *histr, ENV *envr)
 	free_darr_re(histr->strings, histr->count);
 }
 
-static void		write_cmd_to_buf(int ind, t_darr histr, DSTRING **buf)
-{
-	if ((size_t)ind == S_DARR_STRINGS - (histr.count + 1))
-	{
-		dstr_del(buf);
-		(*buf) = dstr_nerr("");
-		return ;
-	}
-	dstr_del(buf);
-	(*buf) = dstr_nerr(histr.strings[ind]->txt);
-}
+// static void		write_cmd_to_buf(int ind, t_darr histr, DSTRING **buf)
+// {
+// 	if ((size_t)ind == S_DARR_STRINGS - (histr.count + 1))
+// 	{
+// 		dstr_del(buf);
+// 		(*buf) = dstr_nerr("");
+// 		return ;
+// 	}
+// 	dstr_del(buf);
+// 	(*buf) = dstr_nerr(histr.strings[ind]->txt);
+// }

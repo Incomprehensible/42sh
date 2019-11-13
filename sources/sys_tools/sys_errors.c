@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:37:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 08:26:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:32:52 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "dstring.h"
 #include "env.h"
 
-char		*errmess[ERR_CNT] =
+char	*g_errmess[ERR_CNT] =
 {
 	"",
 	"Command not found",
@@ -36,17 +36,16 @@ char		*errmess[ERR_CNT] =
 	"File open failed, doesn't exist",
 	"File open failed, permissions denied",
 	"File open failed"
-	
 };
 
-char			*sys_get_std_message(int ecode)
+char	*sys_get_std_message(int ecode)
 {
 	if (ecode > ERR_CNT)
 		ecode = 0;
-	return (errmess[ecode]);
+	return (g_errmess[ecode]);
 }
 
-void			sys_fatal_memerr(char *mess)
+void	sys_fatal_memerr(char *mess)
 {
 	char	buff[FATAL_BUFF_MSG_LEN];
 
@@ -63,7 +62,7 @@ void			sys_fatal_memerr(char *mess)
 
 int		sys_error_handler(char *descr, int ecode, ENV *envr)
 {
-	DSTRING		*message;
+	t_dyn_string	*message;
 
 	if (!(message = dstr_new("")))
 		sys_fatal_memerr("ERR_MESG_FAILED");

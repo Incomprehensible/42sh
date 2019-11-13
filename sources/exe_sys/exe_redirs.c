@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:02:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/04 14:56:54 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:39:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 
 int				exe_redir_do(int fdl, int fdr, char *file, int flags)
 {
-	const mode_t	mode = 0644;
-
 	if (file && (fdr = sys_file_op(file, 0, flags, (char *)1)) < 0)
 		return (fdr);
 	if (fdr != fdl)
@@ -83,7 +81,6 @@ int				exe_redir_ex(REDIRECT *rdr, ENV *envr)
 {
 	int				fd;
 	int				file_flag;
-	const mode_t	mode = 0644;
 
 	if (rdr->type == herd)
 	{

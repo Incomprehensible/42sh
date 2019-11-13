@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:19:59 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/07 01:18:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:41:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ size_t	op_search(DSTRING *expr, char *op, size_t op_len)
 {
 	size_t		ind;
 	char		*stri;
-	int			i;
 
 	ind = 0;
 	stri = expr->txt;

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 17:59:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/29 01:17:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:40:26 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ t_dlist			*prs_func(t_dlist *tks, ENV *envr)
 	FUNC		*func;
 	t_avln		*node;
 	t_tok		*tok;
-	t_tok		*ntok;
 
 	tks = tks->next;
 	tok = tks->content;

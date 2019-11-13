@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:26:19 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/10 11:36:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:39:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ t_dlist			*prs_pipe(ETAB **tab, t_dlist *tk)
 {
 	ETAB		*curt;
 	EXPRESSION	*expr;
-	MATH		*math;
 	PIPE		*pipee;
 
 	curt = (ETAB *)ft_dlstnew_cc(0, 0);

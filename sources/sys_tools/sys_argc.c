@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 03:41:31 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/12 04:30:01 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:39:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,9 @@ static int		parse_fs(char **argv, size_t size, char **flags)
 ** and SETS *FLAGS as string of -fl-ag -s ("flags\0")
 ** RETURN 0 if everything ok, or 1 if ERROR
 */
-int				sys_argv_parse(char **argv, char ***long_flags, char **flags)
+
+int				sys_argv_parse(char **argv, \
+char ***long_flags, char **flags)
 {
 	size_t	lf;
 	size_t	f;

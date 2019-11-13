@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/02 09:10:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:31:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,18 @@
 #include "stdio.h"
 
 extern pid_t	hot_gid;
-extern pid_t	hot_sbsh;
-extern char		*hot_bkgr;
+extern pid_t	g_hsh;
+extern char		*g_hbg;
 
-int				pex_p_table_pgid(pid_t cpid, char *i_line)
+int				pex_g_ptab_pgid(pid_t cpid, char *i_line)
 {
 	int			mode;
 	char		*str;
 
-	mode = hot_bkgr ? PS_M_BG : PS_M_FG;
+	mode = g_hbg ? PS_M_BG : PS_M_FG;
 	str = i_line;
-	if (hot_sbsh)
-		hot_gid = hot_sbsh;
+	if (g_hsh)
+		hot_gid = g_hsh;
 	sys_hot_charge(cpid, mode, str);
 	setpgid(cpid, hot_gid);
 	return (0);
@@ -80,17 +80,17 @@ int				prs_execute_expr(ETAB **etab ,ENV *envs)
 		etab_row = (ETAB *)ft_dlstshift((t_dlist **)etab);
 		cpid = prs_etab_handlers(&etab_row, &pipe_free, &status, envs);
 		if (cpid > 0)
-			pex_p_table_pgid(cpid, i_line);
+			pex_g_ptab_pgid(cpid, i_line);
 		else if (i_line)
 			free(i_line);
 	}
 	ft_dlst_delf((t_dlist **)&pipe_free, (size_t)-1, et_rm_ett);
 	if (cpid > 0)
 	{
-		if (!hot_bkgr && !hot_sbsh)
+		if (!g_hbg && !g_hsh)
 			tcsetpgrp(0, hot_gid);
 		else
-			hot_bkgr = 0;
+			g_hbg = 0;
 	}
 	sys_wait_ptable(&status, cpid);
 	sys_hot_off(2);
@@ -120,9 +120,7 @@ int				math_to_expr_maker(ETAB **etab)
 int				prs_executor(ETAB **etab, ENV *envs) // TODO: ERROR CHECKING NEED
 {
 	ETAB		*etab_row;
-	ETAB		*trash;
 	int			status;
-	pid_t		cpid;
 
 	while ((etab_row = *etab) != 0)
 	{

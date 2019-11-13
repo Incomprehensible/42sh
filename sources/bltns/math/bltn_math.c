@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 17:42:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/17 23:29:19 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:40:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 long	math_eval(DSTRING *expr, ENV *envr)
 {
 	size_t		ind;
-	long		res;
 
 	if ((ind = op_search(expr, "||", 2)) != SIZE_T_MAX)
 		return (mop_or(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
@@ -93,8 +92,6 @@ long	do_math_bltn(char *str_xp, ENV *envr)
 int		bltn_math(char **args, ENV *env)
 {
 	char		**exprs;
-	DSTRING		*expr;
-	size_t		ind;
 	int			i;
 	long		res;
 

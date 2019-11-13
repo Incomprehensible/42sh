@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:03:04 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 10:38:29 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:30:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #include "stdio.h"
 
-extern pid_t	hot_sbsh;
+extern pid_t	g_hsh;
 
 int				io_subsh_ex(char *code, ENV *envr)
 {
@@ -27,7 +27,7 @@ int				io_subsh_ex(char *code, ENV *envr)
 	int			status;
 
 	sys_init(1);
-	hot_sbsh = getppid();
+	g_hsh = getppid();
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
 	// SYNTAX ERROR
 	if (sh_tokenizer(code, toks) <= 0)
@@ -35,7 +35,7 @@ int				io_subsh_ex(char *code, ENV *envr)
 		sys_error_message("smt", 0);
 		exit(255);
 	}
-	pg = sys_prg_create(hot_sbsh, 0, code, PS_M_FG);
+	pg = sys_prg_create(g_hsh, 0, code, PS_M_FG);
 	sh_tparse(toks[0], envr, TK_EOF, &status);
 	sys_delete_prg(&pg);
 	exit(status);

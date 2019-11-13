@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:33:01 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 08:02:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:19:04 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <termios.h>
 
-int		sys_error_message(char *message, size_t len)
+int				sys_error_message(char *message, size_t len)
 {
 	if (len == 0)
 		len = ft_strlen(message);
@@ -28,7 +28,7 @@ int		sys_error_message(char *message, size_t len)
 
 int				sys_perror(char *contex, int ret_code, ENV *envr)
 {
-	DSTRING		*message;
+	t_dyn_string	*message;
 
 	if (!envr)
 	{
@@ -54,7 +54,7 @@ int				sys_perror(char *contex, int ret_code, ENV *envr)
 
 int				sys_put_prompt(ENV *envr, char type)
 {
-	DSTRING		*prmt;
+	t_dyn_string	*prmt;
 
 	prmt = sys_get_prompt_num(envr, type);
 	write(1, prmt->txt, prmt->strlen);

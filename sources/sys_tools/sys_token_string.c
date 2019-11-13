@@ -6,34 +6,32 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 09:49:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/20 05:19:54 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:10:21 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sys_tools/sys_token_to_str.h"
 #include "sys_tools/sys_errors.h"
-// #include "parser.h"
 
-char		*string_toks[] = {
+char		*g_string_toks[] = {
 	"<<", " ", 0, "; ", "|| ", "&& ", " ", ">", "<", ">>", "<>", 0, 0, 0, "| ",
-	"=", 0, 0, "((   ))", "(  )", "$", "if ", "then ", "else ", "fi ", "while ",
-	"do ", "done ", "for ", "in ", "break ", "continue ", "exec ", "function ",
-	"{ ", "return ", "\n", "} ", 0, "until ", ">(  ) ", "<(  ) ", ">(  ) ", "<(  ) ",
-	"& ", "... "
+	"=", 0, 0, "((   ))", "(  )", "$", "if ", "then ", "else ", "fi ",
+	"while ", "do ", "done ", "for ", "in ", "break ", "continue ", "exec ",
+	"function ", "{ ", "return ", "\n", "} ", 0, "until ", ">(  ) ", "<(  ) ",
+	">(  ) ", "<(  ) ", "& ", "... "
 };
 
-DSTRING 	*token_get_dstring(t_tok *tok)
+DSTRING		*token_get_dstring(t_tok *tok)
 {
 	int			num;
 	size_t		tp;
 	char		*res;
-	DSTRING		*dstr;
 
 	num = 0;
 	tp = tok->type;
 	while ((tp >>= 1) && num < 45)
 		++num;
-	if ((res = string_toks[num]) == NULL)
+	if ((res = g_string_toks[num]) == NULL)
 		return (NULL);
 	return (dstr_new(res));
 }
@@ -45,13 +43,15 @@ DSTRING		*token_get_dvalue(t_tok *tok, int rd_fl)
 	val = NULL;
 	if ((val = token_get_dstring(tok)))
 	{
-		if (tok->type & (TK_MATH | TK_PROC_IN | TK_PROC_OUT | TK_PROF_IN | TK_PROF_OUT))
+		if (tok->type & (TK_MATH | TK_PROC_IN | TK_PROC_OUT |
+		TK_PROF_IN | TK_PROF_OUT))
 			dstr_insert_str(val, tok->value, 3);
 		else if (tok->type == TK_SUBSH)
 			dstr_insert_str(val, tok->value, 2);
 		else if (tok->type == TK_ASSIGM && tok->value[0] == '+')
 			dstr_insert_ch(val, '+', 0);
-		else if ((tok->type & (TK_RD_A | TK_RD_R | TK_RD_RW | TK_RD_W)) && !rd_fl)
+		else if ((tok->type & (TK_RD_A | TK_RD_R |
+		TK_RD_RW | TK_RD_W)) && !rd_fl)
 			dstr_insert_ch(val, '&', val->strlen);
 	}
 	else if (tok->value && !(val = dstr_new(tok->value)))
@@ -70,7 +70,7 @@ t_dlist *end_tk, t_tk_type endtk)
 	int		rd_fl;
 
 	rd_fl = 0;
-	if (!tls || !(tok = tls->content) || (end_tk == tls) || (tok->type & endtk))
+	if (!tls || !(tok = tls->content) || end_tk == tls || (tok->type & endtk))
 		return (1);
 	if (tok->type & (TK_RD_A | TK_RD_R | TK_RD_RW | TK_RD_W))
 	{

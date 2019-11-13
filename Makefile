@@ -6,7 +6,7 @@
 #    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/04 14:07:08 by hgranule         ###   ########.fr        #
+#    Updated: 2019/11/13 21:34:57 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ ESCN = \033[0m
 #                           Configuration                                    #
 # ************************************************************************** #
 NAME = 42sh
-FLAGS = -g
+FLAGS = -g -Wall
 
 WS_PATH = $(shell pwd)
 SRC_PATH = $(WS_PATH)/sources/
@@ -63,6 +63,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			bltns/math/bltn_math.c bltns/math/math_ret_var.c bltns/math/math_skipers.c \
 			bltns/math/math_ops_dec_inc.c bltns/math/math_ops_log_eq.c \
 			bltns/math/math_ops_lw_bg.c bltns/math/math_ops_primary.c \
+			bltns/bltn_jobs/bltn_fg.c bltns/bltn_jobs/bltn_jobs.c \
 			\
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
@@ -101,7 +102,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			printf/ft_insert_spec.c printf/ft_printf.c \
 			printf/ft_putll_base_spec.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer printf)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer printf bltns/bltn_jobs)
 
 GUI_FILES = sh_control_term.c sh_dir_content.c sh_readline.c sh_readline_help.c\
 	sh_term.c dstr.c ft_concat.c sh_put_col.c sh_tab.c sh_darr.c sh_path.c reg_expr.c\

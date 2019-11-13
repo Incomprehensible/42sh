@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:52:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/18 12:43:08 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:41:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,22 +46,22 @@ t_indch					management_line(t_indch indch, DSTRING **buf, ENV *envr)
 	return (indch);
 }
 
-static DSTRING			*return_line(DSTRING **buf, t_indch indch, t_fl fl)
-{
-	if (indch.ch == (char)0x04)
-	{
-		dstr_del(buf);
-		free_lines_down();
-		ft_putstr("\n");
-		return (dstr_nerr("exit"));
-	}
-	free_lines_down();
-	sh_rewrite(*buf, indch.ind);
-	ft_putstr("\n");
-	if (fl.reg)
-		reg_expr(buf, &fl);
-	return (*buf);
-}
+// static DSTRING			*return_line(DSTRING **buf, t_indch indch, t_fl fl)
+// {
+// 	if (indch.ch == (char)0x04)
+// 	{
+// 		dstr_del(buf);
+// 		free_lines_down();
+// 		ft_putstr("\n");
+// 		return (dstr_nerr("exit"));
+// 	}
+// 	free_lines_down();
+// 	sh_rewrite(*buf, indch.ind);
+// 	ft_putstr("\n");
+// 	if (fl.reg)
+// 		reg_expr(buf, &fl);
+// 	return (*buf);
+// }
 
 char				is_reg(DSTRING *buf)
 {

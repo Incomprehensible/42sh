@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 13:46:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/20 05:51:17 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:31:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@
 
 int		exe_bkgr_alg(BCKGR *bkgr, ENV *envr, int *status)
 {
-	extern pid_t	hot_sbsh;
+	extern pid_t	g_hsh;
 	t_pgrp			*pg;
 	int				err;
 
 	err = 0;
 	sys_init(1);
-	hot_sbsh = getpid();
-	pg = sys_prg_create(hot_sbsh, 0, 0, PS_M_FG);
+	g_hsh = getpid();
+	pg = sys_prg_create(g_hsh, 0, 0, PS_M_FG);
 	sh_tparse(bkgr->tls, envr, TK_ARSHLOCH | TK_EOF, status);
 	sys_delete_prg(&pg);
 	exit(*status);
@@ -38,8 +38,8 @@ int		exe_bkgr_alg(BCKGR *bkgr, ENV *envr, int *status)
 int		exe_bkgr_expr(BCKGR *bkgr, ENV *envr, int *status)
 {
 	pid_t			cpid;
-	extern pid_t	hot_sbsh;
-	extern char		*hot_bkgr;
+	extern pid_t	g_hsh;
+	extern char		*g_hbg;
 	SUBSH			f_subsh;
 
 	if (sbsh_is_fork_n_need(bkgr->tls))
@@ -58,7 +58,7 @@ int		exe_bkgr_expr(BCKGR *bkgr, ENV *envr, int *status)
 	}
 	if (cpid < 0)
 		return ((int)cpid);
-	hot_bkgr = "OK";
-	hot_sbsh = 0;
+	g_hbg = "OK";
+	g_hsh = 0;
 	return ((int)cpid);
 }

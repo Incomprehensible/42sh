@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 20:45:07 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 08:24:54 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:46:25 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ char		*sh_checkpathes(const char *cmd, char **pathes, pid_t *pid)
 	int			i;
 	size_t		len[2];
 	char		*str;
-	int			perms;
 
 	i = -1;
 	len[0] = ft_strlen(cmd);
@@ -75,12 +74,11 @@ char		*sh_checkbins(const char *cmd, ENV *envr, pid_t *pid)
 	DSTRING		*dstr;
 	char		**pathes;
 	char		*str;
-	int			perms;
 
 	if (((*cmd == '.' && *(cmd + 1) == '/') \
 	|| *cmd == '/'))
 	{
-		*pid = set_pid_err(*pid, str);
+		*pid = set_pid_err(*pid, (char *)cmd);
 		if (!(*pid))
 			return (ft_strdup(cmd));
 		else

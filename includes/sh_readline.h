@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/04 17:00:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:43:24 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
 
 DSTRING			*dstr_nerr(char *src);
 DSTRING			*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei);
-DSTRING			*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei);
+// DSTRING			*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei);
 DSTRING			*check_null(DSTRING *line);
 
 char			is_ctrl(const t_indch indch);

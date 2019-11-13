@@ -5,24 +5,24 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/18 08:50:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/18 09:52:32 by hgranule         ###   ########.fr       */
+/*   Created: 2019/11/13 22:36:40 by hgranule          #+#    #+#             */
+/*   Updated: 2019/11/13 22:38:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sys_tools/sys_tools.h"
 #include "sys_tools/sys_hidden.h"
 
-static int	sys_pipe_find_actual()
+static int	sys_pipe_find_actual(void)
 {
 	size_t	i;
 
 	i = SYS_FDS_USR_LIMIT;
 	while (i < SYS_PIPES_SIZE)
 	{
-		if (sys_pipes[i] == 0)
+		if (g_pipes[i] == 0)
 		{
-			sys_pipes[i] = 1;
+			g_pipes[i] = 1;
 			return (i);
 		}
 		++i;
@@ -42,12 +42,13 @@ static int	return_code_err_pip(int *a, int code)
 /*
 ** Creates a pipe after USER_LIMIT_BORDER
 */
-int			sys_create_pipe(int	*a)
+
+int			sys_create_pipe(int *a)
 {
 	int		b[2];
 
 	if (pipe(b) < 0)
-		return (-1); // PIPES LOOSES
+		return (-1);
 	if (b[0] > SYS_PIPES_SIZE || b[1] > SYS_PIPES_SIZE)
 		return (return_code_err_pip(b, -2));
 	a[0] = dup2(b[0], sys_pipe_find_actual());
@@ -59,15 +60,15 @@ int			sys_create_pipe(int	*a)
 	}
 	close(b[0]);
 	close(b[1]);
-	sys_pipes[a[0]] = 1;
-	sys_pipes[a[1]] = 1;
+	g_pipes[a[0]] = 1;
+	g_pipes[a[1]] = 1;
 	return (0);
 }
 
 int			sys_destroy_pipe(int p)
 {
-	if (sys_pipes[p])
-		sys_pipes[p] = 0;
+	if (g_pipes[p])
+		g_pipes[p] = 0;
 	return (close(p));
 }
 
@@ -78,9 +79,9 @@ int			sys_kill_pipes(void)
 	i = SYS_FDS_USR_LIMIT;
 	while (i < SYS_PIPES_SIZE)
 	{
-		if (sys_pipes[i])
+		if (g_pipes[i])
 		{
-			sys_pipes[i] = 0;
+			g_pipes[i] = 0;
 			if (close(i) < 0)
 				return (-1);
 		}

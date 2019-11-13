@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:03:53 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 16:11:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:40:32 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,6 @@ t_dlist 		*prs_forin(t_dlist *tks, ENV *envs, int *status)
 {
 	t_dlist			*loop_d[3];
 	char			**vals;
-	char			*key;
 	char			*tmp;
 	t_tok			*tok;
 

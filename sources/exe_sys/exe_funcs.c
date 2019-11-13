@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/13 17:19:55 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 18:12:28 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 21:40:24 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ t_avl_tree	*func_core_create(EXPRESSION *expr)
 	t_avl_tree		*cores;
 	ssize_t			i;
 	char			*key;
-	char			*value;
 
 	i = 0;
 	if (!(cores = ft_avl_tree_create(free)))

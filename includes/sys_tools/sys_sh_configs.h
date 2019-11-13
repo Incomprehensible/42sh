@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/07 10:35:42 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:31:25 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@
 
 int			history_file_status;
 int			rc_file_status;
-int			prompt_ofd;
+int			g_prompt_fd;
 
 #endif

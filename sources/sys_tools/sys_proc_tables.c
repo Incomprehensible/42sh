@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 09:13:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/20 11:26:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:31:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "dstring.h"
 #include "rms.h"
 
-extern t_pgrp	*p_table[SYS_PRGS_SIZE];
+extern t_pgrp	*g_ptab[SYS_PRGS_SIZE];
 
 /*
 ** GRPOUP DESCRIPTOR содержит адресс на двусвязнный список
@@ -50,16 +50,17 @@ t_pgrp		*sys_prg_create(pid_t prg, t_dlist *prcs, char *str, int mode)
 
 	if (!prg)
 		return (0);
-	if (!(p_table[g_jid] = ft_memalloc(sizeof(t_pgrp))))
+	if (!(g_ptab[g_jid] = ft_memalloc(sizeof(t_pgrp))))
 		sys_fatal_memerr("PROC_GROUP_FAILED");
-	p_table[g_jid]->pgid = prg;
-	p_table[g_jid]->members = prcs;
-	p_table[g_jid]->mode = mode;
-	p_table[g_jid]->input_line = str;
-	p_table[g_jid]->state = PS_S_RUN;
-	p_table[g_jid]->signal = -1;
+	g_ptab[g_jid]->pgid = prg;
+	g_ptab[g_jid]->members = prcs;
+	g_ptab[g_jid]->mode = mode;
+	g_ptab[g_jid]->input_line = str;
+	g_ptab[g_jid]->state = PS_S_RUN;
+	g_ptab[g_jid]->signal = -1;
+	g_ptab[g_jid]->flag = 0;
 	++g_jid;
-	return (p_table[g_jid - 1]);
+	return (g_ptab[g_jid - 1]);
 }
 
 t_pgrp		*sys_prg_get(pid_t prg)
@@ -69,8 +70,8 @@ t_pgrp		*sys_prg_get(pid_t prg)
 	i = g_jid;
 	while (--i > 0)
 	{
-		if (p_table[i] && p_table[i]->pgid == prg)
-			return (p_table[i]);
+		if (g_ptab[i] && g_ptab[i]->pgid == prg)
+			return (g_ptab[i]);
 	}
 	return (0);
 }
@@ -88,8 +89,8 @@ int			sys_delete_prg(t_pgrp **prg)
 
 char		*sys_get_prg_iline(char *old_il, char *new_cm)
 {
-	DSTRING		*buff;
-	char		*res;
+	char			*res;
+	t_dyn_string	*buff;
 
 	if (!new_cm)
 		return (old_il);
@@ -110,8 +111,7 @@ int			sys_hot_charge(pid_t pid, int mode, char *str)
 {
 	extern pid_t	hot_gid;
 	t_pgrp			*prg;
-	DSTRING			*d_buff;
-	char			*tmp;	
+	char			*tmp;
 
 	if (pid == 0)
 		return (-1);
@@ -133,9 +133,9 @@ int			sys_hot_charge(pid_t pid, int mode, char *str)
 int			sys_hot_off(int ret_status)
 {
 	extern pid_t	hot_gid;
-	extern char		*hot_bkgr;
+	extern char		*g_hbg;
 
 	hot_gid = 0;
-	hot_bkgr = 0;
+	g_hbg = 0;
 	return (ret_status);
 }

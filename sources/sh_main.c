@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/04 15:43:14 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:31:25 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,40 +43,6 @@
 #define UT_TOK_END()		ft_dlst_delf(&tokens, (size_t)-1, free_token)
 #define UT_TOK				tokens
 
-int				bltn_fg(char **args, ENV *envr)
-{
-	if (!args[1])
-	{
-		ssize_t		a = g_jid;
-
-		while (--a > 0)
-		{
-			if (p_table[a] && p_table[a]->mode == PS_M_BG)
-			{
-				t_dlist		*pd_lst = p_table[a]->members;
-				t_ps_d		*psd;
-
-				while (pd_lst)
-				{
-					psd = (t_ps_d *)&pd_lst->size;
-					if (psd->state == PS_S_STP)
-						psd->state = PS_S_RUN;
-					pd_lst = pd_lst->next;
-				}
-				p_table[a]->state = PS_S_RUN;
-				p_table[a]->mode = PS_M_FG;
-				break ;
-			}
-		}
-		if (a <= 0)
-			return (sys_perror("no jobs left!", 2, envr));
-		tcsetpgrp(0, p_table[a]->pgid);
-		killpg(p_table[a]->pgid, SIGCONT);
-		return (0);
-	}
-	return (1);
-}
-
 int				bltn_source(char **args, ENV *envr)
 {
 	t_avl_tree	*tmp;
@@ -107,9 +73,9 @@ char			*tmp_readline(char *prompt)
 	DSTRING		*dstr;
 	char		*line;
 	int			status;
-	extern int	prompt_ofd;
+	extern int	g_prompt_fd;
 
-	ft_putstr_fd(prompt, prompt_ofd);
+	ft_putstr_fd(prompt, g_prompt_fd);
 	dstr = 0;
 	status = get_next_line(0, &dstr);
 	if (status == 0)
@@ -182,6 +148,18 @@ void			del_history_buf(t_darr *histr)
 	}
 }
 
+size_t			args_len(char **argv)
+{
+	size_t		i;
+
+	i = 0;
+	while (argv && argv[i])
+	{
+		++i;
+	}
+	return (i);
+}
+
 // !! TEMPORARY FUNCTIONS ===================================================================== !!
 // !! Soon will be changed! =================================================================== !!
 
@@ -241,7 +219,6 @@ int				main(const int argc, char **argv, char **envp)
 
 	// temp bltns
 	ft_avl_set(env.builtns, ft_avl_node_cc("dbg_42", &bltn_dbg_snap, 8));
-	ft_avl_set(env.builtns, ft_avl_node_cc("fg", &bltn_fg, 8));
 	ft_avl_set(env.builtns, ft_avl_node_cc("source", &bltn_source, 8));
 
 	// CHOOSE A TYPE OF LAUNCH WITH lflags n flags

@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 09:01:08 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:34:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,13 @@ const int flags, char *ercx)
 	return (fd);
 }
 
-int			sys_write_history(DSTRING *line, ENV *envr)
+int		sys_write_history(DSTRING *line, ENV *envr)
 {
 	int			fd;
 	char		*hist_path;
 
-	if (line->strlen == 0 || ft_strequ(line->txt, "\n") || history_file_status-- > 0)
+	if (line->strlen == 0 || ft_strequ(line->txt, "\n") || \
+	history_file_status-- > 0)
 		return (0);
 	history_file_status = history_file_status < 0 ? 0 : history_file_status;
 	hist_path = sys_get_conf_path(SH_HIST_FILE, envr);

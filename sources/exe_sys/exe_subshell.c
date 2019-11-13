@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/07 08:54:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:30:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int			sbsh_is_fork_n_need(t_dlist *tl)
 ** 2) If syntax error status set too 255 and leave
 ** 3) fork and save child's pid
 **		0pf) pipes inits, rdrs inits
-** 		1f) set hot_sbsh to getpid()
+** 		1f) set g_hsh to getpid()
 **		2f) shtparse tokens
 **		3f) exit with code at *status
 ** 4) pipes init
@@ -63,7 +63,7 @@ int			sbsh_is_fork_n_need(t_dlist *tl)
 int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
 {
 	t_dlist			*redirs;
-	extern pid_t	hot_sbsh;
+	extern pid_t	g_hsh;
 	t_pgrp			*pg;
 	int				err;
 
@@ -88,10 +88,10 @@ int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
 	if (err)
 		exit(2);
 	sys_init(1);
-	hot_sbsh = getpid();
-	pg = sys_prg_create(hot_sbsh, 0, 0, PS_M_FG);
+	g_hsh = getpid();
+	pg = sys_prg_create(g_hsh, 0, 0, PS_M_FG);
 	sh_tparse(toks, envr, TK_EOF, status);
-	sys_delete_prg(&pg);
+	// sys_delete_prg(&pg);
 	exit(*status);
 }
 
@@ -99,7 +99,6 @@ int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st)
 {
 	ETAB		*etab;
 	EXPRESSION	*xp;
-	char		*arg;
 	pid_t		cpid;
 
 	etab = 0;
@@ -130,7 +129,7 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 {
 	t_dlist			*toks[2];
 	pid_t			cpid;
-	extern pid_t	hot_sbsh;
+	extern pid_t	g_hsh;
 
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
 	if (sh_tokenizer(subsh->commands, toks) <= 0)
@@ -154,6 +153,6 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 	if (cpid < 0)
 		return ((int)cpid);
 	ft_dlst_delf(toks, 0, free_token);
-	hot_sbsh = 0;
+	g_hsh = 0;
 	return ((int)cpid);
 }

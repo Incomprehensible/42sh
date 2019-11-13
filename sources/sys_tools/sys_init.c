@@ -6,7 +6,7 @@
 /*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/21 16:27:01 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 22:36:19 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@
 
 #include <stdio.h>
 
-extern pid_t	hot_sbsh;
-extern char		*hot_bkgr;
-extern int		prompt_ofd;
+extern pid_t	g_hsh;
+extern char		*g_hbg;
+extern int		g_prompt_fd;
 extern int		g_jid;
 extern int		g_intr;
 
 int				sys_var_stdname_pr(ENV *env)
 {
-	DSTRING		*val;
+	t_dyn_string	*val;
 
 	val = dstr_new(SHELL_NAME_STD);
 	if ((env_set_variable(SH_VAR_SHNAME, val, env)) <= 0)
@@ -50,7 +50,7 @@ int				sys_var_init(ENV *env, char **argv, int argc)
 
 void			sighand(int s)
 {
-	printf("SIGNAL input: %d (%d)\n", s, hot_sbsh);
+	printf("SIGNAL input: %d (%d)\n", s, g_hsh);
 	g_intr = s;
 }
 
@@ -74,18 +74,17 @@ void			sys_sig_init(void)
 
 int				sys_init(int sbh_on)
 {
-	extern t_pgrp	*p_table[SYS_PRGS_SIZE];
-	extern char		sys_pipes[SYS_PIPES_SIZE];
-	
-	// Здесь будет идти установка стандартных обработчиков сигналов!
+	extern t_pgrp	*g_ptab[SYS_PRGS_SIZE];
+	extern char		g_pipes[SYS_PIPES_SIZE];
+
 	sys_sig_init();
-	hot_sbsh = 0;
+	g_hsh = 0;
 	g_jid = 1;
 	g_intr = 0;
-	prompt_ofd = dup2(2, PROMPT_OUT_FD);
-	if (prompt_ofd < 0)
-		prompt_ofd = STDERR_FILENO;
-	ft_bzero(p_table, SYS_PRGS_SIZE * sizeof(t_pgrp *));
-	ft_bzero(sys_pipes, SYS_PIPES_SIZE * sizeof(char));
+	g_prompt_fd = dup2(2, PROMPT_OUT_FD);
+	if (g_prompt_fd < 0)
+		g_prompt_fd = STDERR_FILENO;
+	ft_bzero(g_ptab, SYS_PRGS_SIZE * sizeof(t_pgrp *));
+	ft_bzero(g_pipes, SYS_PIPES_SIZE * sizeof(char));
 	return (sbh_on);
 }
