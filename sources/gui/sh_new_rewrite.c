@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/04 20:51:30 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/13 18:58:36 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void			clear_screen(void)
 	ft_putstr("\x001b[100A");
 }
 
-char				is_ctrl(const t_indch indch)
+char				is_ctrl(const char ch)
 {
-	if (indch.ch == 0x1 || indch.ch == 0x5 \
-		|| indch.ch == 0x15 || indch.ch == 0x14 \
-		|| indch.ch == 0x18 || indch.ch == 0x06 \
-		|| indch.ch == 0x0e || indch.ch == 0x12)
+	if (ch == 0x1 || ch == 0x5 \
+		|| ch == 0x15 || ch == 0x14 \
+		|| ch == 0x18 || ch == 0x06 \
+		|| ch == 0x0e || ch == 0x12)
 		return (1);
 	return (0);
 }
@@ -48,7 +48,7 @@ void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
 	while (ind < lines)
 	{
 		if (ind == 0)
-			to_print = term.ws_col - len_p;
+			to_print = term.ws_col - (len_p % term.ws_col);
 		else
 			to_print = term.ws_col;
 		write(STDOUT_FILENO, b_ptr, to_print);
@@ -100,10 +100,10 @@ void			sh_clear_buf(struct winsize term, int len_p, int index)
 	int len_all;
 	int mov_front;
 
-	len_all = prebuf + len_p;
+	len_all = g_prebuf + len_p;
 	mov_front = len_all - (index + len_p);
 	if (len_all >= term.ws_col)
-		sh_movec_front(term, mov_front, len_all, preind + len_p);
+		sh_movec_front(term, mov_front, len_all, g_preind + len_p);
 	sh_clear_line(term, len_all, index + len_p);
 }
 
@@ -171,13 +171,16 @@ int				skip_num(char *str)
 	return (1);
 }
 
-int				ft_color_strlen(char *str)
+int				ft_color_strlen(char *str, struct winsize term)
 {
 	int		rez;
+	int		tmp;
 	int		i;
+	int 	fl;
 
-	rez = 0;
 	i = -1;
+	fl = 0;
+	rez = 0;
 	while (str[++i])
 	{
 		if (str[i] == '\033')
@@ -189,6 +192,11 @@ int				ft_color_strlen(char *str)
 				if (str[i] != ';')
 					++i;
 			}
+		if (str[i] == '\n')
+		{
+			rez += term.ws_col - (rez % term.ws_col);
+			continue ;
+		}
 		if (!str[i])
 			break ;
 		++rez;
@@ -202,13 +210,13 @@ void			sh_new_rewrite(const DSTRING *prompt, const DSTRING *buf,\
 	struct winsize		term;
 	int					len_p;
 
-	len_p = ft_color_strlen(prompt->txt);
 	ioctl(0, TIOCGWINSZ, &term);
+	len_p = ft_color_strlen(prompt->txt, term);
 	sh_clear_buf(term, len_p, index);
 	ft_putstr_fd(prompt->txt, STDOUT_FILENO);
 	sh_putstr_term(buf, term, len_p);
 	if (buf->strlen != index)
 		sh_new_move_cors(buf, term, len_p, index);
-	prebuf = buf->strlen;
-	preind = index;
+	g_prebuf = buf->strlen;
+	g_preind = index;
 }

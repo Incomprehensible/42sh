@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/04 20:51:09 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/14 19:23:45 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,12 @@ void			put_col(t_darr overlap, const DSTRING *buf, t_indch indch)
 	iter = 0;
 	col = get_col(overlap.maxlen + 2);
 	ft_putstr("\n");
-	ft_putstr(MOVEBGN);
 	free_lines_down();
 	colstr = sh_get_col(overlap, col, iter);
 	dstr_cutins_ch(&colstr, '\0', colstr->strlen - 1);
 	ft_putstr(colstr->txt);
 	ft_putstr("\n");
-	sh_new_rewrite(indch.prompt, buf, buf->strlen);
+	ft_putstr(indch.prompt->txt);
+	sh_new_rewrite(indch.prompt, buf, indch.ind);
 	dstr_del(&colstr);
 }

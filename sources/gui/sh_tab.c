@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:36:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/05 16:37:14 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/14 14:39:05 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_darr			sh_add_cmd(DSTRING **buf, ENV *env)
 	return (overlap);
 }
 
-int				get_ind_name(DSTRING *buf)
+int				get_ind_name(DSTRING *buf, t_indch indch)
 {
 	int			rez;
 	int			i;
@@ -72,9 +72,9 @@ int				get_ind_name(DSTRING *buf)
 	return (0);
 }
 
-int				insert_space(DSTRING **buf)
+int				insert_old_space(DSTRING **buf, t_indch indch)
 {
-	if (!sh_isdir(*buf, get_ind_name(*buf)))
+	if (!sh_isdir(*buf, get_ind_name(*buf, indch)))
 		dstr_insert_ch(*buf, ' ', (*buf)->strlen);
 	return (1);
 }
@@ -98,13 +98,13 @@ t_indch			sh_tab(DSTRING **buf, ENV *env, t_indch indch)
 	overlap = sh_tab_help(buf, env, &indch);
 	if (overlap.count == -1)
 		return (insert_space_empty(buf, indch));
-	n_ind.ind_name = get_ind_name((*buf));
+	n_ind.ind_name = get_ind_name((*buf), indch);
 	sort_darr(&overlap);
 	indch.fl = 0;
 	while (1)
 	{
 		n_ind.ind = sh_tab_loop_help(overlap, buf, fl++, n_ind);
-		if (overlap.count <= 1 && insert_space(buf))
+		if (overlap.count <= 1 && insert_old_space(buf, indch))
 			break ;
 		indch.ch = ft_getch();
 		if (indch.ch != TAB && (indch.fl = 1))

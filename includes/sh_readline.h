@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/05 16:38:07 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/14 20:01:22 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,10 @@ typedef struct	s_indch
 	int			var;
 	int			is_var;
 	int			tab;
+	int			fl_t;
+	int			type_inp;
+	int			ind_inp;
+	int			ind_slash;
 	DSTRING		*prompt;
 }				t_indch;
 
@@ -61,6 +65,7 @@ typedef struct	s_name_ind
 {
 	int			ind;
 	int			ind_name;
+	int			end_name;
 	t_indch		indch;
 }				t_name_ind;
 
@@ -84,9 +89,18 @@ typedef struct	s_fl
 	char		reg;
 }				t_fl;
 
-size_t			prebuf;
-int				preind;
+size_t			g_prebuf;
+int				g_preind;
 t_darr			g_histr;
+
+
+void			fl_input(const DSTRING *buf, t_indch *indch);
+DSTRING			*new_return_line(DSTRING **buf, t_indch indch);
+DSTRING			*sh_readline(const DSTRING *prompt, ENV *env);
+void			new_reg_expr(DSTRING **buf, t_indch *indch);
+void			sh_type_input(const DSTRING *buf, t_indch *indch);
+void			sh_new_tab(DSTRING **buf, t_indch *indch, ENV *env);
+
 
 void			init_histr(ENV *envr);
 t_indch			show_new_history(DSTRING **buf, t_indch indc, ENV *envr);
@@ -105,7 +119,7 @@ DSTRING			*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei);
 DSTRING			*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei);
 DSTRING			*check_null(DSTRING *line);
 
-char			is_ctrl(const t_indch indch);
+char			is_ctrl(const char ch);
 
 /* 
 ** Command line editing

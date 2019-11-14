@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 16:41:47 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/05 16:51:13 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/13 19:02:26 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_indch					management_line(t_indch indch, DSTRING **buf, ENV *envr)
 	return (indch);
 }
 
-int				new_reg_expr(DSTRING **buf, t_indch *indch)
+void					new_reg_expr(DSTRING **buf, t_indch *indch)
 {
 	DSTRING		*reg;
 	t_astr		rez;
@@ -61,7 +61,7 @@ int				new_reg_expr(DSTRING **buf, t_indch *indch)
 	indch->tab = 0;
 	indch->reg = 0;
 	indch->fl = 0;
-	return ((*buf)->strlen);
+	indch->ind = (*buf)->strlen;
 }
 
 DSTRING			*new_return_line(DSTRING **buf, t_indch indch)
@@ -72,7 +72,8 @@ DSTRING			*new_return_line(DSTRING **buf, t_indch indch)
 		free_lines_down();
 		ft_putstr("\n");
 		sys_term_restore();
-		return (dstr_nerr("exit"));
+		(*buf) = dstr_nerr("exit");
+		return ((*buf));
 	}
 	free_lines_down();
 	sh_new_rewrite(indch.prompt, *buf, indch.ind);
@@ -80,7 +81,7 @@ DSTRING			*new_return_line(DSTRING **buf, t_indch indch)
 	if (indch.reg)
 		new_reg_expr(buf, &indch);
 	sys_term_restore();
-	return (*buf);
+	return ((*buf));
 }
 
 char				is_reg(DSTRING *buf)
@@ -113,7 +114,7 @@ int				sh_del_char(DSTRING **buf, int ind, const char cmd)
 	return (ind);
 }
 
-int			is_variable(DSTRING *buf, t_indch *indch)
+int			get_ind_var(DSTRING *buf, t_indch *indch)
 {
 	int		i;
 
@@ -135,6 +136,25 @@ int			is_variable(DSTRING *buf, t_indch *indch)
 	return (-1);
 }
 
+void			insert_val(DSTRING **buf, DSTRING *val, int i_var)
+{
+	int			i;
+	DSTRING		*tmp;
+
+	i = i_var;
+	while ((*buf)->txt[i] && (*buf)->txt[i] != ' ')
+		++i;
+	if (i == (*buf)->strlen)
+		dstr_cutins_dstr(buf, val, i_var);
+	else
+	{
+		tmp = dstr_slice((*buf), i, (*buf)->strlen);
+		dstr_cutins_dstr(buf, val, i_var);
+		dstr_insert_dstr((*buf), tmp, (*buf)->strlen);
+		dstr_del(&tmp);
+	}
+}
+
 t_indch			auto_cor_var(DSTRING **buf, t_indch indch, ENV *env, int i_var)
 {
 	DSTRING		*value;
@@ -147,12 +167,13 @@ t_indch			auto_cor_var(DSTRING **buf, t_indch indch, ENV *env, int i_var)
 	}
 	variable = dstr_slice((*buf), i_var, indch.ind);
 	value = env_get_variable(variable->txt + 1, env);
-	if (value->strlen > 1)
-	dstr_cutins_dstr(buf, value, i_var);
+	if (value->strlen > 0)
+		insert_val(buf, value, i_var);
 	dstr_del(&variable);
 	dstr_del(&value);
 	indch.is_var = 0;
 	indch.var = 0;
+	indch.fl_t = 1;
 	indch.ind = (*buf)->strlen;
 	return (indch);
 }
@@ -164,26 +185,27 @@ DSTRING			*sh_readline_loop(DSTRING **buf, t_indch indch, \
 	{
 		if (!indch.fl && (indch.ch != (char)0x04 && (indch.ch != '\n')))
 			indch.ch = ft_getch();
-		indch.fl = 0;
 		if (indch.ch == (char)0x04 || (indch.ch == '\n') || indch.ch == -1)
 			return (new_return_line(buf, indch));
 		if (ft_isprint(indch.ch) && indch.ch != ESC)
 			dstr_insert_ch((*buf), indch.ch, indch.ind++);
-		if (is_reg((*buf)))
+		if (!(indch.fl = 0) &&is_reg((*buf)))
 			indch.reg = 1;
-		if (indch.ch == BAKSP)
+		if (!(indch.fl_t = 0) && indch.ch == BAKSP)
 			indch.ind = sh_del_char(buf, indch.ind, indch.ch);
-		else if (is_ctrl(indch))
+		// indch.type_inp = fl_input((*buf), &indch);
+		if (is_ctrl(indch.ch))
 			indch = management_line(indch, buf, env);
 		else if (indch.ch == TAB && indch.reg)
-			indch.ind = new_reg_expr(buf, &indch);
+			new_reg_expr(buf, &indch);
 		else if (indch.ch == TAB && indch.is_var)
-			indch = auto_cor_var(buf, indch, env, is_variable((*buf), &indch));
-		if (indch.ch == TAB && !indch.reg && !indch.var)
+			indch = auto_cor_var(buf, indch, env, get_ind_var((*buf), &indch));
+		if (indch.ch == TAB && !indch.reg && !indch.var && !indch.fl_t)
 			indch = sh_tab(buf, env, indch);
 		else if (indch.ch == ESC)
 			indch = sh_esc(indch, (*buf)->strlen, buf, env);
 		sh_new_rewrite(indch.prompt, (*buf), indch.ind);
+		printf("-------------------->%d\n", indch.type_inp);
 	}
 	return (dstr_nerr(""));
 }
@@ -194,8 +216,8 @@ DSTRING			*sh_new_redline(const DSTRING *prompt, ENV *env)
 	t_indch		indch;
 
 	buf = dstr_nerr("");
-	prebuf = 0;
-	preind = 0;
+	g_prebuf = 0;
+	g_preind = 0;
 	sys_term_init();
 	sys_term_noecho();
 	ft_bzero(&indch, sizeof(t_indch));

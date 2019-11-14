@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/04 15:43:14 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 16:19:10 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ void			sh_loop(ENV *env)
 	{
 		if (!(prompt = sys_get_prompt_num(env, code)))
 			sys_fatal_memerr("PROMPT FAILED");
-		if (!(line = sh_new_redline(prompt, env)))
+		if (!(line = sh_readline(dstr_nerr("pr\nhui\npizd\np>"), env)))
 		{
 			ft_putendl("== Input failed or ENDED ==");
 			break ;

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 11:29:17 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/04 20:33:09 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/14 14:27:03 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void		print_his_col(DSTRING *str_srch)
 		print_his_help_col(rez.count ? rez : g_histr);
 }
 
-void		get_overlap(t_darr *overlap, DSTRING *str_srch)
+void		get_overlap_histr(t_darr *overlap, DSTRING *str_srch)
 {
 	int		i;
 	int		c;
@@ -134,7 +134,7 @@ t_indch		supplement_srch(DSTRING *str_srch, DSTRING **str_over, \
 	if ((*str_over) != NULL)
 		ft_bzero((*str_over), sizeof(DSTRING));
 	if (indch.ch == TAB)
-		get_overlap(&overlap, str_srch);
+		get_overlap_histr(&overlap, str_srch);
 	while (indch.ch == TAB && overlap.count)
 	{
 		if (++i == overlap.count)
