@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 12:40:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 21:40:10 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/15 13:54:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,22 +60,16 @@ static void		echo_put_ch(char *arg, size_t *i)
 		*i -= 1;
 }
 
-static void		echo_put_estr(char **args)
+static void		echo_put_estr(char **args, char fl_space)
 {
 	size_t		i;
 	size_t		j;
-	int			fle;
 
-	i = 0;
-	fle = 0;
+	i = -1;
 	while (args[++i])
 	{
 		j = -1;
-		fle != 0 ? ft_putstr(" ") : 0;
-		if (!fle && args[i][0] == '-')
-			continue ;
-		else
-			fle = 1;
+		!fl_space ? fl_space = 1 : ft_putstr(" ");
 		while (args[i][++j])
 			if (args[i][j] == '\\')
 			{
@@ -87,41 +81,56 @@ static void		echo_put_estr(char **args)
 	}
 }
 
-int				echo_put_str(char **args)
+int			echo_flag_check(char **argc, char *flags)
 {
-	size_t		j;
-	size_t		i;
+	int		i;
+	int		j;
 
-	i = 0;
-	j = 0;
-	while (args[++i])
+	i = 1;
+	flags[0] = 0;
+	flags[1] = 1;
+	flags[2] = 0;
+	flags[3] = 0;
+	while (argc[i] && argc[i][0] == '-')
 	{
-		j != 0 ? ft_putstr(" ") : 0;
-		if (!j && args[i][0] == '-')
-			continue ;
-		else
-			j = 1;
-		ft_putstr(args[i]);
+		j = 0;
+		while (argc[i][++j])
+		{
+			if (argc[i][j] == 'e')
+				flags[0] = 1;
+			else if (argc[i][j] == 'n')
+				flags[1] = 0;
+			else
+				return (i);
+		}
+		++i;
+		flags[3] = 1;
 	}
-	return (0);
+	return (i);
 }
 
 int				bltn_echo(char **args, ENV *envr)
 {
-	char		*flags;
+	char		flags_e_n_0[4];
+	int			i;
 
 	if (write(STDOUT_FILENO, 0, 0) < 0)
 	{
 		sys_error_handler("echo: write error", E_BADFD, envr);
 		return (1);
 	}
-	flags = ft_parse_flags(args);
-	if (flags && ft_strchr(flags, 'e'))
-		echo_put_estr(args);
+	i = echo_flag_check(args, flags_e_n_0);
+	if (flags_e_n_0[0] && flags_e_n_0[3])
+		echo_put_estr(&(args[i]), flags_e_n_0[2]);
 	else
-		echo_put_str(args);
-	if (!flags || !ft_strchr(flags, 'n'))
+	{
+		while (args[i])
+		{
+			!flags_e_n_0[2] ? flags_e_n_0[2] = 1 : ft_putstr(" ");
+			ft_putstr(args[i++]);
+		}
+	}
+	if (flags_e_n_0[1] || !flags_e_n_0[3])
 		ft_putstr("\n");
-	free(flags);
 	return (0);
 }
