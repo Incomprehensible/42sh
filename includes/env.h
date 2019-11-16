@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/04 20:02:09 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/16 14:04:19 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int		env_set_variable(const char *key, DSTRING *value, ENV *enviroment);
 
 /* Удаляет переменную и очищает её память.*/
 int		env_unset_variable(const char *key, ENV *enviroment);
+int		env_unset_func(const char *key, ENV *enviroment);
 
 /*Функция для обработки ошибок инициализации */
 int		env_init_error(ENV *env, int errcode);

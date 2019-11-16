@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:37:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 13:22:53 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/15 15:24:50 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ char		*errmess[ERR_CNT] =
 	"File open failed",
 	"Is not a directory",
 	"no such file or directory",
-	"too many arguments"
+	"too many arguments",
+	"invalid options", 
+	"cannot simultaneously unset a function and a variable"
 };
 
 char			*sys_get_std_message(int ecode)

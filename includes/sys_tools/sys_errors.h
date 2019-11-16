@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:29:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 13:22:37 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/15 15:25:42 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@
 # define E_NODIR 15 /* IS NOT A DIR */
 # define E_NOFND 16 /* NOT FOUND*/
 # define E_TMARG 17 /* TOO MANY ARGUMENTS*/
+# define E_FLGER 18 /* BAD  OPTIONS */
+# define E_UNFLG 19 /* 2 FLAGS */
 
-# define ERR_CNT (E_TMARG + 1)
+# define ERR_CNT (E_UNFLG + 1)
 
 /*
 ** Returns a standart error message string with code {ECODE}
