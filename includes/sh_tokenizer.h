@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/08 00:33:08 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/16 01:28:22 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define MATHS (short)0x0000000002
 # define SUBSHS (short)0x0000000003
 # define FLOWS (short)0x0000000004
+# define ENVAR (short)0x0000000005
 # define REDIR (short)0x0000000008
 # define FUNCS (short)0x0000000009
 # define EXPRS (short)0xB
@@ -172,7 +173,7 @@ size_t		skip_field(char *str, char skip);
 char		*skip_comment(char *str);
 char		*markup_station(char *str, t_tk_type type);
 void		*ft_arrmemdel(void **ap);
-
+short		valid_deref(char *str);
 
 //more comfortable form of type cast
 # define TOK_TYPE ((t_tok *)(token_list->content))->type
@@ -272,6 +273,7 @@ typedef struct      s_err
 #define INVALID_ASSIG (int)272 //attempted assignment to non-variable
 #define STR_OPERAND (int)47
 #define DIVISION_ZERO (int)282
+#define WEIRD_ERR (int)401
 
 //TMP
 long		ariphmetic_eval(char *expr, ENV *env, ERR *err);
