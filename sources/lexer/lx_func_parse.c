@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 11:12:26 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 11:56:40 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ static char *func_args(char *str, t_dlist **tok, t_stx **tr)
     {
         if (check_branch(str, tr[FLOWS]))
             str = block_pass(FLOWS, str, tok, tr);
+		else if (check_branch(str, tr[ENVAR]))
+            str = block_pass(ENVAR, str, tok, tr);
         else if (is_token_here(str, "return"))
             str = pull_return(str, tok, tr);
         else

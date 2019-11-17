@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/17 05:28:34 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 11:42:09 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void    make_token(t_dlist **list, char *value, t_tk_type type)
 
 int     layer_parse_one(char *meta, char *str)
 {
-    while (*str && *meta && !(is_sep_no_space(*str) && *meta != 'x') && (*str == *meta || special_meta(*meta)))
+    while (*str && *meta && !(is_sep_no_space(*str) && *meta != 'w') && (*str == *meta || special_meta(*meta)))
     {
         if (*meta && special_meta(*meta))
         {
