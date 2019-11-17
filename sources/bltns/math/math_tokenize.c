@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/17 04:59:57 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 09:53:21 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 
 void	*set_error(char *err_token, int code, ERR *err)
 {
-	//error value too great for base
 	err->err_code = code;
 	err->error_msg = err_token;
 	return (NULL);
@@ -97,10 +96,6 @@ static char	*pull_predessor(char *expr, t_dlist **math, ERR *err)
 		expr++;
 		n++;
 	}
-	// if (op == '!' && n > 1)
-	// 	return (set_error(NULL, DOUBLE_NEGATION, err));
-	// else if ((op == '+' || op == '-') && n > 2)
-	// 	return (set_error(NULL, INVALID_INFIX, err));
 	type = (op == '!') ? REJECT : 0;
 	type = (op == '+' && n == 1) ? POSIT : type;
 	type = (op == '+' && n == 2) ? INCRM : type;
@@ -163,15 +158,40 @@ static char	*pull_operator(char *expr, t_dlist **math)
 	return (swap == type ? expr + 1 : expr + 2);
 }
 
+size_t get_base_seq(char *str, char *meta)
+{
+    while (*str)
+    {
+		if (!got_in_seq(*str, meta + 1))
+			return (0);
+        str++;
+    }
+    return (1);
+}
+
+size_t parse_base(char *meta, char *str)
+{
+    while (*str && *meta && *str == *meta && *meta != '@')
+    {
+        str++;
+        meta++;
+    }
+	if (*meta != '@')
+		return (0);
+	if (!get_base_seq(str, meta))
+		return (0);
+	return (1);
+}
+
 static t_tk_type	get_hex_or_bin(t_dlist **math, t_mtx **bases, char *operand)
 {
-	if (layer_parse_two(bases[0]->fin_meta, operand))
+	if (parse_base(bases[0]->fin_meta, operand))
 	{
 		make_token(math, ft_strdup(operand + 2), bases[0]->base);
 		free(operand);
 		return (BIN);
 	}
-	else if (layer_parse_two(bases[1]->fin_meta, operand))
+	else if (parse_base(bases[1]->fin_meta, operand))
 	{
 		make_token(math, ft_strdup(operand + 2), bases[1]->base);
 		free(operand);
@@ -179,6 +199,23 @@ static t_tk_type	get_hex_or_bin(t_dlist **math, t_mtx **bases, char *operand)
 	}
 	return (0);
 }
+
+// static t_tk_type	get_hex_or_bin(t_dlist **math, t_mtx **bases, char *operand)
+// {
+// 	if (layer_parse_two(bases[0]->fin_meta, operand))
+// 	{
+// 		make_token(math, ft_strdup(operand + 2), bases[0]->base);
+// 		free(operand);
+// 		return (BIN);
+// 	}
+// 	else if (layer_parse_two(bases[1]->fin_meta, operand))
+// 	{
+// 		make_token(math, ft_strdup(operand + 2), bases[1]->base);
+// 		free(operand);
+// 		return (HEX);
+// 	}
+// 	return (0);
+// }
 
 static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
 {
@@ -193,7 +230,7 @@ static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
 		{
 			if (layer_parse_two(base->strt_meta, op))
 			{
-				if (!(layer_parse_two(base->fin_meta, op)))
+				if (!(parse_base(base->fin_meta, op)))
 					return (0);
 				if (base->base == SEV)
 				{
@@ -213,40 +250,6 @@ static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
 	}
 	return (0);
 }
-
-// static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
-// {
-// 	t_mtx			*base;
-// 	size_t			i;
-// 	t_tk_type		choice;
-
-// 	i = 2;
-// 	choice = 0;
-// 	while (bases[i] && !choice)
-// 	{
-// 		base = bases[i];
-// 		while (base)
-// 		{
-// 			if (layer_parse_two(base->strt_meta, op))
-// 			{
-// 				if (!(layer_parse_two(base->fin_meta, op)))
-// 					return (0);
-// 				choice |= base->base;
-// 				if (choice == SEV && !base->next)
-// 				{
-// 					make_token(math, ft_strdup(op + 2), base->base);
-// 					free(op);
-// 				}
-// 				else
-// 					make_token(math, op, base->base);
-// 				break ;
-// 			}
-// 			base = base->next;
-// 		}
-// 		i++;
-// 	}
-// 	return (choice);
-// }
 
 static char	*get_operand(char *expr)
 {
@@ -273,10 +276,10 @@ static char	*pull_number(char *expr, t_dlist **math, ERR *err)
 	{
 		if (get_hex_or_bin(math, bases, operand))
 			return (expr);
-		return (set_error(operand, VALUE_TOO_GREAT ,err));
+		return (set_error(operand, VALUE_TOO_GREAT,err));
 	}
 	if (!get_base(operand, bases, math))
-		return (set_error(operand, VALUE_TOO_GREAT,err));
+		return (set_error(operand, VALUE_TOO_GREAT, err));
 	return (expr);
 }
 
@@ -373,33 +376,6 @@ static long get_math_result(char *expr, ENV *env, ERR *err)
 	return (ariphmetic_calc(polish_notation, env, err));
 }
 
-//make token list
-//send it to calculator
-//get str back
-//was ariphmetic_tokenize
-// static long get_math_result(char *expr, ENV *env, ERR *err)
-// {
-// 	t_dlist		*polish_notation[2];
-// 	t_dlist		*current;
-
-// 	current = ft_dlstnew(NULL, 0);
-// 	polish_notation[0] = current;
-// 	polish_notation[1] = current;
-// 	current->content = NULL;
-// 	current->next = NULL;
-// 	while (*expr)
-// 	{
-// 		if (!(expr = ariphmetic_tokenize(expr, env, polish_notation, err)))
-// 		{
-// 			if (polish_notation[0])
-// 				clear_tokens(polish_notation, 0);
-// 			return (0);
-// 		}
-// 	}
-// 	make_token(polish_notation, NULL, TK_EOF);
-// 	return (ariphmetic_calc(polish_notation, env, err));
-// }
-
 long		ariphmetic_eval(char *expr, ENV *env, ERR *err)
 {
 	char	**exprs;
@@ -427,3 +403,36 @@ long		ariphmetic_eval(char *expr, ENV *env, ERR *err)
 	return (res);
 }
 
+// static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
+// {
+// 	t_mtx			*base;
+// 	size_t			i;
+// 	t_tk_type		choice;
+
+// 	i = 2;
+// 	choice = 0;
+// 	while (bases[i] && !choice)
+// 	{
+// 		base = bases[i];
+// 		while (base)
+// 		{
+// 			if (layer_parse_two(base->strt_meta, op))
+// 			{
+// 				if (!(layer_parse_two(base->fin_meta, op)))
+// 					return (0);
+// 				choice |= base->base;
+// 				if (choice == SEV && !base->next)
+// 				{
+// 					make_token(math, ft_strdup(op + 2), base->base);
+// 					free(op);
+// 				}
+// 				else
+// 					make_token(math, op, base->base);
+// 				break ;
+// 			}
+// 			base = base->next;
+// 		}
+// 		i++;
+// 	}
+// 	return (choice);
+// }

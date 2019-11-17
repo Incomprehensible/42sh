@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/17 05:16:11 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 07:14:28 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,41 +51,6 @@ t_dlist	*lst_to_end(t_dlist *stack)
 	return (stack);
 }
 
-//t_dlist	*push_to_stack(t_dlist *stack, t_dlist *new_elem)
-//{
-//	t_dlist		*start;
-//	t_dlist		*tmp;
-//	char		*value;
-//	t_tok		token_data;
-//
-//	value = ((t_tok *)new_elem->content)->value;
-//	//token_data.value = (value) ? ft_strdup(value) : NULL;
-//	//token_data.type = ((t_tok *)new_elem->content)->type;
-//	start = stack;
-//	stack = lst_to_end(stack);
-//	tmp = stack;
-//	if (!start)
-//	{
-//		stack = ft_dlstnew(NULL, 0);
-//		start = stack;
-//	}
-//	else
-//	{
-//		stack->next = ft_dlstnew(NULL, 0);
-//		stack = stack->next;
-//	}
-//	stack->content = (t_tok *)malloc(sizeof(t_tok));
-//	printf("address of stack->content before assign: %p\n", stack->content);
-//	((t_tok *)stack->content)->type = ((t_tok *)new_elem->content)->type;
-//	((t_tok *)stack->content)->value = (value) ? ft_strdup(value) : NULL;
-//	printf("address of stack->content after assign: %p\n", stack->content);
-//	stack->next = NULL;
-//	stack->prev = tmp;
-//	// if (tmp)
-//	//     tmp->next = stack;
-//	return (start);
-//}
-
  t_dlist	*push_to_stack(t_dlist *stack, t_dlist *new_elem)
  {
  	t_dlist		*start;
@@ -110,9 +75,7 @@ t_dlist	*lst_to_end(t_dlist *stack)
  		stack = stack->next;
  	}
  	stack->content = (t_tok *)malloc(sizeof(t_tok));
- 	//printf("address of stack->content before assign: %p\n", stack->content);
  	*((t_tok *)(stack->content)) = token_data;
- 	//printf("address of stack->content after assign: %p\n", stack->content);
  	stack->next = NULL;
  	stack->prev = tmp;
  	return (start);
@@ -355,3 +318,38 @@ long	ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err)
 // 	}
 // 	return (1);
 // }
+
+//t_dlist	*push_to_stack(t_dlist *stack, t_dlist *new_elem)
+//{
+//	t_dlist		*start;
+//	t_dlist		*tmp;
+//	char		*value;
+//	t_tok		token_data;
+//
+//	value = ((t_tok *)new_elem->content)->value;
+//	//token_data.value = (value) ? ft_strdup(value) : NULL;
+//	//token_data.type = ((t_tok *)new_elem->content)->type;
+//	start = stack;
+//	stack = lst_to_end(stack);
+//	tmp = stack;
+//	if (!start)
+//	{
+//		stack = ft_dlstnew(NULL, 0);
+//		start = stack;
+//	}
+//	else
+//	{
+//		stack->next = ft_dlstnew(NULL, 0);
+//		stack = stack->next;
+//	}
+//	stack->content = (t_tok *)malloc(sizeof(t_tok));
+//	printf("address of stack->content before assign: %p\n", stack->content);
+//	((t_tok *)stack->content)->type = ((t_tok *)new_elem->content)->type;
+//	((t_tok *)stack->content)->value = (value) ? ft_strdup(value) : NULL;
+//	printf("address of stack->content after assign: %p\n", stack->content);
+//	stack->next = NULL;
+//	stack->prev = tmp;
+//	// if (tmp)
+//	//     tmp->next = stack;
+//	return (start);
+//}

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/09 01:27:54 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 09:16:34 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static size_t decimals_proceed(char *str, char *meta)
     if (*meta == '@')
     {
         if ((str = ft_process_seq(str, meta)))
-            i = get_seq(str);
-        if (!str)
+            i = get_seq(str, meta);
+        if (!str || !i)
             return (0);
         str += i;
     }
@@ -45,6 +45,31 @@ static size_t decimals_proceed(char *str, char *meta)
         return (i);
     return (0);
 }
+
+// static size_t decimals_proceed(char *str, char *meta)
+// {
+//     size_t  i;
+
+//     i = 0;
+//     if (*meta == '@')
+//     {
+//         if ((str = ft_process_seq(str, meta)))
+//             i = get_seq(str);
+//         if (!str)
+//             return (0);
+//         str += i;
+//     }
+//     meta = (*meta == '@') ? get_point(meta) + 1 : ++meta;
+//     while (*meta && *str && *meta == *str)
+//     {
+//         str++;
+//         meta++;
+//         i++;
+//     }
+//     if (!(*meta) && *str != '-')
+//         return (i);
+//     return (0);
+// }
 
 static size_t parse_fd(char *meta, char *str)
 {

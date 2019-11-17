@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/12 21:31:18 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 10:00:30 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,15 +90,39 @@ short   graph_forward_only(t_graph *g)
     return (0);
 }
 
-size_t get_seq(char *str)
+short	got_in_seq(char sym, char *seq)
+{
+	while (*seq && *seq != '@')
+	{
+		if (*seq == sym)
+			return (1);
+		seq++;
+	}
+	return (0);
+}
+
+size_t get_seq(char *str, char *meta)
 {
     size_t i;
 
     i = 0;
-    while (*str >= 48 && *str <= 57)
+    while (got_in_seq(*str, meta + 1))
     {
         str++;
         i++;
     }
     return (i);
 }
+
+// size_t get_seq(char *str, char *meta)
+// {
+//     size_t i;
+
+//     i = 0;
+//     while (*str >= 48 && *str <= 57)
+//     {
+//         str++;
+//         i++;
+//     }
+//     return (i);
+// }

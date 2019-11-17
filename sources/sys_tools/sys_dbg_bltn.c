@@ -6,12 +6,13 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/06 04:48:22 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 08:21:23 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sys_tools/sys_dbg.h"
 #include "sh_tokenizer.h"
+#include "bltn_math/math_hidden.h"
 #include "fcntl.h"
 #include "libft.h"
 #include "stdio.h"

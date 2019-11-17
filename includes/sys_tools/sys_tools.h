@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_tools.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 23:09:30 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/17 08:29:06 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # include "sys_tools/sys_sh_configs.h"
 # include "sys_tools/sys_hidden.h"
+# include "sys_tools/sys_errors.h"
 
 int			sys_create_pipe(int	*a);
 int			sys_destroy_pipe(int p);
@@ -107,6 +108,8 @@ int			sys_wait_ptable(int *status, pid_t lpid);
 int			sys_argv_parse(char **argv, char ***long_flags, char **flags);
 void		sys_sig_init(void);
 void		sys_sig_dfl(void);
+
+int		math_error_handler(ERR *err, int ret, ENV *env);
 
 
 #endif

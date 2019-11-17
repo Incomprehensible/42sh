@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/17 03:22:20 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 09:55:16 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,20 +54,41 @@ t_tk_type	is_number(char *value)
 
 	if (value && (*value == '-' || *value == '+'))
 		value++;
-	if (layer_parse_two("0x@01@", value))
+	if (parse_base("0x@01@", value))
 		type = BIN;
-	else if (layer_parse_two("0x@0123456789abcdefABCDEF@", value))
+	else if (parse_base("0x@0123456789abcdefABCDEF@", value))
 		type = HEX;
-	else if (layer_parse_two("0@01234567@", value))
+	else if (parse_base("0@01234567@", value))
 		type = SEV;
-	else if (layer_parse_two("0o@01234567@", value))
+	else if (parse_base("0o@01234567@", value))
 		type = SEV;
-	else if (!(*value == '0' && *(value + 1)) && layer_parse_two("@0123456789@", value))
+	else if (!(*value == '0' && *(value + 1)) && parse_base("@0123456789@", value))
 		type = DEC;
 	else
 		return (0);
 	return (type);
 }
+
+// t_tk_type	is_number(char *value)
+// {
+// 	t_tk_type type;
+
+// 	if (value && (*value == '-' || *value == '+'))
+// 		value++;
+// 	if (layer_parse_two("0x@01@", value))
+// 		type = BIN;
+// 	else if (layer_parse_two("0x@0123456789abcdefABCDEF@", value))
+// 		type = HEX;
+// 	else if (layer_parse_two("0@01234567@", value))
+// 		type = SEV;
+// 	else if (layer_parse_two("0o@01234567@", value))
+// 		type = SEV;
+// 	else if (!(*value == '0' && *(value + 1)) && layer_parse_two("@0123456789@", value))
+// 		type = DEC;
+// 	else
+// 		return (0);
+// 	return (type);
+// }
 
 long	fetch_operand(t_tok *operand, ENV *env, ERR *err)
 {
@@ -383,7 +404,8 @@ t_dlist	*equate_opd(t_dlist *opd_stack, ENV *env, ERR *err)
 	{
 		if (opd_stack)
 		{
-			set_error(ft_strdup(((t_tok *)opd_stack->content)->value), OPERAND_EXP, err);
+			set_error(ft_strdup("="), OPERAND_EXP, err);
+			// set_error(ft_strdup(((t_tok *)opd_stack->content)->value), OPERAND_EXP, err);
 			return (opd_stack);
 		}
 		else

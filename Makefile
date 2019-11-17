@@ -6,7 +6,7 @@
 #    By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/07 23:50:47 by bomanyte         ###   ########.fr        #
+#    Updated: 2019/11/17 07:27:18 by bomanyte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,9 +60,9 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			parser/prs_funcs.c parser/prs_if_while.c parser/prs_skipers.c \
 			parser/prs_error.c parser/prs_core_setter.c parser/prs_background.c \
 			\
-			bltns/math/bltn_math.c bltns/math/math_ret_var.c bltns/math/math_skipers.c \
-			bltns/math/math_ops_dec_inc.c bltns/math/math_ops_log_eq.c \
-			bltns/math/math_ops_lw_bg.c bltns/math/math_ops_primary.c \
+			bltns/math/bltn_math.c bltns/math/math_bases_in.c bltns/math/math_tokenize.c \
+			bltns/math/math_polish_reverse.c bltns/math/math_operations.c \
+			bltns/math/math_hierarchy_in.c bltns/math/math_calculate.c \
 			\
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
@@ -87,10 +87,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			lexer/lx_tokenizer.c lexer/lx_usefull_func.c \
 			lexer/lx_validate.c lexer/lx_input_codes.c \
 			lexer/lx_parse_func.c lexer/lx_deref_parse.c \
-			lexer/lx_syntax_err.c lexer/math_bases_in.c \
-			lexer/math_tokenize.c lexer/math_polish_reverse.c \
-			lexer/math_operations.c lexer/math_hierarchy_in.c \
-			lexer/math_calculate.c \
+			lexer/lx_syntax_err.c \
 			\
 			sys_tools/sys_dbg_bltn.c \
 			\
