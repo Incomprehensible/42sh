@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/08 23:08:38 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 05:16:11 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 #include "bltn_math/math_hidden.h"
+#include "stdio.h"
 
 short	is_operand_tok(t_tk_type type)
 {
@@ -22,18 +23,18 @@ short	is_operand_tok(t_tk_type type)
 	return (0);
 }
 
-short	get_operator_tok(t_tk_type **ops, t_tk_type type)
+short	get_operator_tok(t_tk_type *ops, t_tk_type type)
 {
 	short i;
 	short j;
 
 	i = 0;
 	j = 0;
-	while (ops[i])
+	while (ops[i * 16])
 	{
-		while (ops[i][j])
+		while (ops[i * 16 + j])
 		{
-			if (type == ops[i][j])
+			if (type == ops[i * 16 + j])
 				return (i);
 			j++;
 		}
@@ -50,64 +51,96 @@ t_dlist	*lst_to_end(t_dlist *stack)
 	return (stack);
 }
 
-t_dlist	*push_to_stack(t_dlist *stack, t_dlist *new_elem)
-{
-	t_dlist		*start;
-	t_dlist		*tmp;
-	char		*value;
-	t_tok		token_data;
+//t_dlist	*push_to_stack(t_dlist *stack, t_dlist *new_elem)
+//{
+//	t_dlist		*start;
+//	t_dlist		*tmp;
+//	char		*value;
+//	t_tok		token_data;
+//
+//	value = ((t_tok *)new_elem->content)->value;
+//	//token_data.value = (value) ? ft_strdup(value) : NULL;
+//	//token_data.type = ((t_tok *)new_elem->content)->type;
+//	start = stack;
+//	stack = lst_to_end(stack);
+//	tmp = stack;
+//	if (!start)
+//	{
+//		stack = ft_dlstnew(NULL, 0);
+//		start = stack;
+//	}
+//	else
+//	{
+//		stack->next = ft_dlstnew(NULL, 0);
+//		stack = stack->next;
+//	}
+//	stack->content = (t_tok *)malloc(sizeof(t_tok));
+//	printf("address of stack->content before assign: %p\n", stack->content);
+//	((t_tok *)stack->content)->type = ((t_tok *)new_elem->content)->type;
+//	((t_tok *)stack->content)->value = (value) ? ft_strdup(value) : NULL;
+//	printf("address of stack->content after assign: %p\n", stack->content);
+//	stack->next = NULL;
+//	stack->prev = tmp;
+//	// if (tmp)
+//	//     tmp->next = stack;
+//	return (start);
+//}
+
+ t_dlist	*push_to_stack(t_dlist *stack, t_dlist *new_elem)
+ {
+ 	t_dlist		*start;
+ 	t_dlist		*tmp;
+ 	char		*value;
+ 	t_tok		token_data;
 	
-	value = ((t_tok *)new_elem->content)->value;
-	token_data.value = (value) ? ft_strdup(value) : NULL;
-	token_data.type = ((t_tok *)new_elem->content)->type;
-	start = stack;
-	stack = lst_to_end(stack);
-	tmp = stack;
-	if (!start)
-	{
-		stack = ft_dlstnew(NULL, 0);
-		start = stack;
-	}
-	else
-	{
-		stack->next = ft_dlstnew(NULL, 0);
-		stack = stack->next;
-	}
-	stack->content = (t_tok *)malloc(sizeof(t_tok));
-	*((t_tok *)(stack->content)) = token_data;
-	stack->next = NULL;
-	stack->prev = tmp;
-	return (start);
-}
+ 	value = ((t_tok *)new_elem->content)->value;
+ 	token_data.value = (value) ? ft_strdup(value) : NULL;
+ 	token_data.type = ((t_tok *)new_elem->content)->type;
+ 	start = stack;
+ 	stack = lst_to_end(stack);
+ 	tmp = stack;
+ 	if (!start)
+ 	{
+ 		stack = ft_dlstnew(NULL, 0);
+ 		start = stack;
+ 	}
+ 	else
+ 	{
+ 		stack->next = ft_dlstnew(NULL, 0);
+ 		stack = stack->next;
+ 	}
+ 	stack->content = (t_tok *)malloc(sizeof(t_tok));
+ 	//printf("address of stack->content before assign: %p\n", stack->content);
+ 	*((t_tok *)(stack->content)) = token_data;
+ 	//printf("address of stack->content after assign: %p\n", stack->content);
+ 	stack->next = NULL;
+ 	stack->prev = tmp;
+ 	return (start);
+ }
 
 //compares indexes of ops - last from stack and preceding one - inside
 short	pop_operator(t_dlist *op_stack, t_tk_type new_tok)
 {
-	static t_tk_type	*ops[7];
+	static t_tk_type	ops[7][16];
 	short				id1;
 	short				id2;
 
 	if (!op_stack)
 		return (0);
-	if (!ops[0])
-	{
-		ops[0] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 7);
-		ops[1] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 3);
-		ops[2] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 4);
-		ops[3] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 4);
-		ops[4] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 3);
-		ops[5] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 10);
-		ops[6] = (t_tk_type *)ft_memalloc(sizeof(t_tk_type) * 3);
-		ops_init(ops);
-	}
+	if (!ops[0][0])
+		ops_init((t_tk_type *)ops);
 	if (new_tok == OUT_BR)
 		return (1);
 	op_stack = lst_to_end(op_stack);
 	if (new_tok == INTO_BR || ((t_tok *)op_stack->content)->type == INTO_BR)
 		return (0);
-	id1 = get_operator_tok(ops, ((t_tok *)op_stack->content)->type);
-	id2 = get_operator_tok(ops, new_tok);
+	// if (new_tok == ((t_tok *)op_stack->content)->type && (new_tok == NOT || new_tok == REJECT))
+	// 	return (0);
+	id1 = get_operator_tok((t_tk_type *)ops, ((t_tok *)op_stack->content)->type);
+	id2 = get_operator_tok((t_tk_type *)ops, new_tok);
 	//was if (id1 < id2)
+	if (!id1 && id1 == id2)
+		return (0);
 	if (id1 < id2 || id1 == id2)
 		return (id1 < id2 ? 1 : 2);
 	return (0);
@@ -123,7 +156,7 @@ void	del_tokens(t_dlist *token)
         token = token->next;
         if (token_list->content && TOK_VALUE)
             free(TOK_VALUE);
-        free(token_list->content);
+		free(token_list->content);
         free(token_list);
     }
 }
@@ -147,12 +180,10 @@ static short	stop_token(t_tk_type stop, t_tk_type current)
 //if we got closing bracket or operand lower value appeared we make or update final linked list
 t_dlist	*update_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops, t_tk_type op)
 {
-	t_dlist		*start_ops;
 	t_dlist		*start_opds;
 	t_dlist		*tmp;
 
 	start_opds = opds;
-	start_ops = ops;
 	while (opds)
 	{
 		fin_list[0] = push_to_stack(fin_list[0], opds);
@@ -188,12 +219,10 @@ t_dlist	*update_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops, t_tk_t
 
 t_dlist	*into_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops)
 {
-	t_dlist		*start_ops;
 	t_dlist		*start_opds;
 	t_dlist		*tmp;
 
 	start_opds = opds;
-	start_ops = ops;
 	while (opds)
 	{
 		fin_list[0] = push_to_stack(fin_list[0], opds);
@@ -215,17 +244,6 @@ t_dlist	*into_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops)
 	del_tokens(ops);
 	return (tmp);
 }
-
-// short	check_sequence(t_dlist **fin, int br, ERR *err)
-// {
-// 	if (br)
-// 	{
-// 		set_error(NULL, PARSE_ERR, err);
-// 		clear_tokens(fin, 0);
-// 		return (0);
-// 	}
-// 	return (1);
-// }
 
 t_dlist	*go_through_brackets(t_dlist *dimon_loh, t_tk_type type)
 {
@@ -266,6 +284,24 @@ void	into_reverse_notation(t_dlist *dimon_loh, ERR *err, t_dlist **fin)
 	}
 	if (op_stack)
 		update_fin_list(fin, opd_stack, op_stack, TK_EOF);
+}
+
+long	ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err)
+{
+	t_dlist				*polish_not[2];
+	long 				pshe_pshe_res;
+
+	ft_bzero(polish_not, sizeof(t_dlist *) * 2);
+	//DBG_PRINT_MATH(dimon_loh[0]);
+	into_reverse_notation(dimon_loh[0], err, polish_not);
+	clear_tokens(dimon_loh, 0);
+	if (err->err_code)
+		return (0);
+	if (!polish_not[0])
+		return (0);
+	//DBG_PRINT_MATH(polish_not[0]);
+	pshe_pshe_res = polish_calculate(polish_not, env, err);
+	return (pshe_pshe_res);
 }
 
 // void	into_reverse_notation(t_dlist *dimon_loh, ERR *err, t_dlist **fin)
@@ -309,20 +345,13 @@ void	into_reverse_notation(t_dlist *dimon_loh, ERR *err, t_dlist **fin)
 // 	}
 // }
 
-long	ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err)
-{
-	t_dlist				*polish_not[2];
-	long 				pshe_pshe_res;
-
-	ft_bzero(polish_not, sizeof(t_dlist *) * 2);
-	//DBG_PRINT_MATH(dimon_loh[0]);
-	into_reverse_notation(dimon_loh[0], err, polish_not);
-	clear_tokens(dimon_loh, 0);
-	if (err->err_code)
-		return (0);
-	if (!polish_not[0])
-		return (0);
-	DBG_PRINT_MATH(polish_not[0]);
-	pshe_pshe_res = polish_calculate(polish_not, env, err);
-	return (pshe_pshe_res);
-}
+// short	check_sequence(t_dlist **fin, int br, ERR *err)
+// {
+// 	if (br)
+// 	{
+// 		set_error(NULL, PARSE_ERR, err);
+// 		clear_tokens(fin, 0);
+// 		return (0);
+// 	}
+// 	return (1);
+// }

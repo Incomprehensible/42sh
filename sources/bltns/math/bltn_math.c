@@ -3,66 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_math.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 17:42:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/17 23:29:19 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/17 03:03:15 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn_math/math_hidden.h"
-
-// static const char	*ops[] = {
-// 	"><", "&&", "||",
-// 	">", "<", ">=", "<=",
-// 	"+", "-",
-// 	"%", "/", "*",
-// 	"++", "--", NULL
-// };
+#include "sh_tokenizer.h"
+#include "printf/libftprintf.h"
+#include "printf/longnumber.h"
+#include <stdio.h>
 
 
-
-
-// TODO: Norms must be done
-long	math_eval(DSTRING *expr, ENV *envr)
+void	skip_alnums_n_space(char *str, size_t *ind)
 {
-	size_t		ind;
-	long		res;
-
-	if ((ind = op_search(expr, "||", 2)) != SIZE_T_MAX)
-		return (mop_or(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "&&", 2)) != SIZE_T_MAX)
-		return (mop_and(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "==", 2)) != SIZE_T_MAX)
-		return (mop_eq(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "!=", 2)) != SIZE_T_MAX)
-		return (mop_neq(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "<=", 2)) != SIZE_T_MAX)
-		return (mop_lweq(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, ">=", 2)) != SIZE_T_MAX)
-		return (mop_bgeq(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "<", 1)) != SIZE_T_MAX)
-		return (mop_lw(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 1, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, ">", 1)) != SIZE_T_MAX)
-		return (mop_bg(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 1, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "+", 1)) != SIZE_T_MAX && !ft_isalnum(expr->txt[ind + 1]) && expr->txt[ind + 1] != '+')
-		return (mop_add(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 1, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "-", 1)) != SIZE_T_MAX && !ft_isalnum(expr->txt[ind + 1]) && expr->txt[ind + 1] != '-')
-		return (mop_suj(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 1, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "/", 1)) != SIZE_T_MAX)
-		return (mop_div(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 1, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "%", 1)) != SIZE_T_MAX)
-		return (mop_mod(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 1, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "*", 1)) != SIZE_T_MAX)
-		return (mop_mlt(dstr_slice(expr, 0, ind), dstr_slice(expr, ind + 1, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "++", 2)) != SIZE_T_MAX)
-		return (mop_inc(dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
-	if ((ind = op_search(expr, "--", 2)) != SIZE_T_MAX)
-		return (mop_dec(dstr_slice(expr, ind + 2, SSIZE_T_MAX), envr));
-	return (expr_ret(expr, envr));
+	while (ft_isalnum(str[*ind]) || ft_isspace(str[*ind]))
+		++(*ind);
 }
 
-long	do_math_bltn(char *str_xp, ENV *envr)
+long	do_math_bltn(char *str_xp, ENV *envr, ERR *err)
 {
 	size_t		ind;
 	char		*str;
@@ -71,39 +32,27 @@ long	do_math_bltn(char *str_xp, ENV *envr)
 
 	ind = 0;
 	skip_alnums_n_space(str_xp, &ind);
-	if (str_xp[ind] == '=' && str_xp[ind + 1] != '=')
-	{
-		str = &str_xp[ind + 1];
-		expr = dstr_new(str);
-		res = math_eval(expr, envr);
-		dstr_del(&expr);
-		str = get_name_var(str_xp);
-		expr = get_res_var(res);
-		env_set_variable(str, expr, envr);
-		dstr_del(&expr);
-		free(str);
-		return (res);
-	}
 	expr = dstr_new(str_xp);
-	res = math_eval(expr, envr);
+	res = ariphmetic_eval(expr->txt, envr, err);
+	//replace it - we print err in blt_math and do_math_blt
+	if (err->err_code)
+		ft_printf("ERROR OCCURED! code: %d || token : %s\n", (int)err->err_code, err->error_msg);
 	dstr_del(&expr);
 	return (res);
 }
 
 int		bltn_math(char **args, ENV *env)
 {
-	char		**exprs;
 	DSTRING		*expr;
-	size_t		ind;
-	int			i;
+	ERR			err;
 	long		res;
 
-	exprs = ft_strsplits(args[1], ",");
 	// TODO: Need to do malloc safer.
-	i = 0;
-	while (exprs[i])
-		res = do_math_bltn(exprs[i++], env);
-	et_rm_warr(exprs);
+	err.err_code = 0;
+	err.error_msg = NULL;
+	res = do_math_bltn(args[1], env, &err);
+	if (err.error_msg)
+		free(err.error_msg);
 	res = res == 0 ? EXIT_FAILURE : EXIT_SUCCESS;
 	return ((int)res);
 }

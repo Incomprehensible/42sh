@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/08 00:05:35 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 05:28:34 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,10 +217,18 @@ t_dlist    **toklst_init(t_dlist **token_list)
 void    concatenate_str(char **last_input, char *str)
 {
     char        *tmp;
+	char		last;
 
-    tmp = *last_input;
-    *last_input = ft_strjoin(*last_input, "\n");
-    free(tmp);
+    // tmp = *last_input;
+	last = *(*last_input + (ft_strlen(*last_input) - 1));
+	if (last != '(' && last != ')')
+	{
+		tmp = *last_input;
+		*last_input = ft_strjoin(*last_input, "\n");
+    	free(tmp);
+	}
+    // *last_input = ft_strjoin(*last_input, "\n");
+    // free(tmp);
     tmp = *last_input;
     *last_input = ft_strjoin(*last_input, str);
     free(tmp);

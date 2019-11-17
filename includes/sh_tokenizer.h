@@ -6,15 +6,17 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/16 01:28:22 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 03:43:02 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef INC_42SH_SH_TOKENIZER_H
-#define INC_42SH_SH_TOKENIZER_H
+# define INC_42SH_SH_TOKENIZER_H
 
-#include "sh_req.h"
-#include "sh_token.h"
+# include "sh_req.h"
+# include "sh_token.h"
+# include "sys_tools/sys_errors.h"
+
 
 //tree indexes
 # define SEPS (short)0x0000000015
@@ -33,6 +35,7 @@
 # define PROC (short)0x0000000065
 # define PROF (short)0x0000000067
 # define CURLY (short)0x0000000068
+# define LOL (size_t)123
 //TEMPORARY
 # define RETURN TK_RETURN
 
@@ -212,75 +215,68 @@ typedef struct      s_mtx
 	char			*fin_meta;
 }                   t_mtx;
 
-#define INCRM (t_tk_type)1 //++
-#define DECRM (t_tk_type)3 //--
-#define NOT (t_tk_type)4 //~
-#define NEGAT (t_tk_type)5 //-a
-#define POSIT (t_tk_type)6 //+a
-#define REJECT (t_tk_type)8 //!
+# define INCRM (t_tk_type)1 //++
+# define DECRM (t_tk_type)3 //--
+# define NOT (t_tk_type)4 //~
+# define NEGAT (t_tk_type)5 //-a
+# define POSIT (t_tk_type)6 //+a
+# define REJECT (t_tk_type)8 //!
 
-#define BIT_R (t_tk_type)9 //>>
-#define BIT_L (t_tk_type)11 //<<
+# define BIT_R (t_tk_type)9 //>>
+# define BIT_L (t_tk_type)11 //<<
 
-#define AND (t_tk_type)12 //&
-#define OR (t_tk_type)13 //|
-#define XOR (t_tk_type)14 //^
+# define AND (t_tk_type)12 //&
+# define OR (t_tk_type)13 //|
+# define XOR (t_tk_type)14 //^
 
-#define MULT (t_tk_type)15 //*
-#define DEVID (t_tk_type)17 // /
-#define DEVREM (t_tk_type)18 //%
+# define MULT (t_tk_type)15 //*
+# define DEVID (t_tk_type)17 // /
+# define DEVREM (t_tk_type)18 //%
 
-#define PLUS (t_tk_type)19 //+
-#define MINUS (t_tk_type)20 //-
+# define PLUS (t_tk_type)19 //+
+# define MINUS (t_tk_type)20 //-
 
-#define EQU (t_tk_type)21 //=
-#define PLUS_EQ (t_tk_type)22 //+=
-#define MIN_EQ (t_tk_type)23 //-=
-#define IS_EQU (t_tk_type)24 //==
-#define NO_EQU (t_tk_type)25 //!=
-#define MORE_EQ (t_tk_type)26 //>=
-#define LESS_EQ (t_tk_type)27 //<=
-#define MORE (t_tk_type)28 //>
-#define LESS (t_tk_type)29 //<
+# define EQU (t_tk_type)21 //=
+# define PLUS_EQ (t_tk_type)22 //+=
+# define MIN_EQ (t_tk_type)23 //-=
+# define IS_EQU (t_tk_type)24 //==
+# define NO_EQU (t_tk_type)25 //!=
+# define MORE_EQ (t_tk_type)26 //>=
+# define LESS_EQ (t_tk_type)27 //<=
+# define MORE (t_tk_type)28 //>
+# define LESS (t_tk_type)29 //<
 
-#define LOG_AND (t_tk_type)30 // &&
-#define LOG_OR (t_tk_type)31 // ||
+# define LOG_AND (t_tk_type)30 // &&
+# define LOG_OR (t_tk_type)31 // ||
 
-#define INTO_BR (t_tk_type)32 // (
-#define OUT_BR (t_tk_type)33 // )
+# define INTO_BR (t_tk_type)32 // (
+# define OUT_BR (t_tk_type)33 // )
 
-#define BIN (t_tk_type)2
-#define SEV (t_tk_type)7
-#define DEC (t_tk_type)10
-#define HEX (t_tk_type)16
-#define OPRND (t_tk_type)34 
+# define BIN (t_tk_type)2
+# define SEV (t_tk_type)7
+# define DEC (t_tk_type)10
+# define HEX (t_tk_type)16
+# define OPRND (t_tk_type)34 
 
 //MATH ERRORS
-#define ERR t_err
 
-typedef struct      s_err
-{
-    int				err_code;
-    char			*error_msg;
-}                   t_err;
-
-#define VALUE_TOO_GREAT (int)666
-#define INVALID_OP (int)228
-#define DOUBLE_NEGATION (int)1488 //double or multiple negation 
-#define INVALID_INFIX (int)2007
-#define DOUBLE_COMPARE (int)1337
-#define OPERAND_EXP (int)2012 //syntax error: operand expected
-#define INVALID_ASSIG (int)272 //attempted assignment to non-variable
-#define STR_OPERAND (int)47
-#define DIVISION_ZERO (int)282
-#define WEIRD_ERR (int)401
+# define VALUE_TOO_GREAT (int)666
+# define INVALID_OP (int)228
+# define DOUBLE_NEGATION (int)1488 //double or multiple negation 
+# define INVALID_INFIX (int)2007
+# define DOUBLE_COMPARE (int)1337
+# define OPERAND_EXP (int)2012 //syntax error: operand expected
+# define INVALID_ASSIG (int)272 //attempted assignment to non-variable
+# define STR_OPERAND (int)47
+# define DIVISION_ZERO (int)282
+# define WEIRD_ERR (int)401
 
 //TMP
 long		ariphmetic_eval(char *expr, ENV *env, ERR *err);
 void		*set_error(char *err_token, int code, ERR *err);
 void		init_num_bases(t_mtx **bases);
 long		ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err);
-void		ops_init(t_tk_type **ops);
+void		ops_init(t_tk_type *ops);
 void		del_tokens(t_dlist *token);
 t_dlist		*lst_to_end(t_dlist *stack);
 t_dlist		*push_to_stack(t_dlist *stack, t_dlist *new_elem);
@@ -293,7 +289,7 @@ long		normal_ops(long a, long b, t_tk_type op, ERR *err);
 long		assign_ops(long a, long b, t_tk_type op, ERR *err);
 
 //DEBUGGING
-void			DBG_PRINT_TOKENS(t_dlist *toklst);
-void			DBG_PRINT_MATH(t_dlist *toklst);
+void		DBG_PRINT_TOKENS(t_dlist *toklst);
+void		DBG_PRINT_MATH(t_dlist *toklst);
 
 #endif

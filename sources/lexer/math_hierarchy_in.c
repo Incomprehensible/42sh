@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/07 03:38:44 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 01:57:10 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,13 @@ void	seventh_level_in(t_tk_type *arr)
 	arr[2] = 0;
 }
 
-void	ops_init(t_tk_type **ops)
+void	ops_init(t_tk_type *ops)
 {
-	first_level_in(ops[0]);
-	second_level_in(ops[1]);
-	third_level_in(ops[2]);
-	forth_level_in(ops[3]);
-	fivth_level_in(ops[4]);
-	sixth_level_in(ops[5]);
-	seventh_level_in(ops[6]);
+	first_level_in(ops);
+	second_level_in(&ops[1 * 16]);
+	third_level_in(&ops[2 * 16]);
+	forth_level_in(&ops[3 * 16]);
+	fivth_level_in(&ops[4 * 16]);
+	sixth_level_in(&ops[5 * 16]);
+	seventh_level_in(&ops[6 * 16]);
 }
