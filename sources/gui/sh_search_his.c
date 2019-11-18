@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_search_his.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 11:29:17 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 20:21:33 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:28:45 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,13 @@ void		print_his_help_col(t_darr overlap)
 void		print_his_col(DSTRING *str_srch)
 {
 	int					i;
-	int					c;
+	size_t				c;
 	int					j;
 	t_darr				rez;
 	struct winsize		te;
 
 	i = S_DARR_STRINGS;
-	c = -1;
+	c = (size_t)-1;
 	j = 0;
 	ft_bzero(&rez, sizeof(t_darr));
 	ioctl(0, TIOCGWINSZ, &te);
@@ -90,7 +90,7 @@ void		print_his_col(DSTRING *str_srch)
 		str_srch->strlen) == 0 && g_histr.strings[i]->strlen < (te.ws_col - 3))
 		{
 			rez.strings[j++] = g_histr.strings[i];
-			if (rez.maxlen < g_histr.strings[i]->strlen)
+			if ((ssize_t)rez.maxlen < g_histr.strings[i]->strlen)
 				rez.maxlen = g_histr.strings[i]->strlen;
 			rez.allsize += g_histr.strings[i]->strlen;
 		}
@@ -102,13 +102,13 @@ void		print_his_col(DSTRING *str_srch)
 
 void		get_overlap_histr(t_darr *overlap, DSTRING *str_srch)
 {
-	int		i;
-	int		c;
-	int		j;
+	size_t	i;
+	size_t	c;
+	size_t	j;
 
-	c = -1;
+	c = (size_t)-1;
 	i = S_DARR_STRINGS;
-	j = -1;
+	j = (size_t)-1;
 	ft_bzero(overlap, sizeof(t_darr));
 	while (++c < g_histr.count)
 	{
@@ -116,7 +116,7 @@ void		get_overlap_histr(t_darr *overlap, DSTRING *str_srch)
 							g_histr.strings[i]->txt, str_srch->strlen) == 0)
 		{
 			overlap->strings[++j] = g_histr.strings[i];
-			if (overlap->maxlen < g_histr.strings[i]->strlen)
+			if ((ssize_t)overlap->maxlen < g_histr.strings[i]->strlen)
 				overlap->maxlen = g_histr.strings[i]->strlen;
 			overlap->allsize += g_histr.strings[i]->strlen;
 			overlap->count++;
@@ -127,8 +127,8 @@ void		get_overlap_histr(t_darr *overlap, DSTRING *str_srch)
 t_indch		supplement_srch(DSTRING *str_srch, DSTRING **str_over, \
 							t_indch indch)
 {
-	t_darr			overlap;
-	int				i;
+	t_darr		overlap;
+	size_t		i;
 
 	i = 0;
 	if ((*str_over) != NULL)
@@ -165,7 +165,7 @@ t_indch		control_histr(DSTRING **str_srch, DSTRING **str_over, t_indch indch)
 	return (indch);
 }
 
-t_indch		sh_search_his(DSTRING **buf, ENV *envr, t_indch indch)
+t_indch		sh_search_his(DSTRING **buf, t_indch indch)
 {
 	DSTRING			*str_srch;
 	DSTRING			*str_over;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_histr.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 14:47:35 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 22:00:11 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:20:30 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ t_indch			skip_esc(t_indch indch)
 	return (indch);
 }
 
-t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr)
+t_indch			show_history(DSTRING **buf, t_indch indc)
 {
-	int		ind;
-	DSTRING	*oldbuf;
+	size_t		ind;
+	DSTRING		*oldbuf;
 
 	ind = S_DARR_STRINGS - g_histr.count - 1;
 	oldbuf = dstr_nerr((*buf)->txt);

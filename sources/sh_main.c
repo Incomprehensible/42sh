@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 22:45:37 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:33:08 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,17 +206,18 @@ void			sh_loop(ENV *env)
 
 #define _TEST_PS "%B%c1%?%c%B%%%c4%P %c3$ %c"
 
-int				main(const int argc, char **argv, char **envp)
+int				main(int argc, char **argv, char **envp)
 {
 	ENV				env;
 	char			**lflags = 0;
 	char			*flags = 0;
 
+	argc = 0;
 	if (sys_argv_parse(argv, &lflags, &flags))
 		sys_fatal_memerr("ARGV_PRS_FAILED");
 
-	env_init(argc, argv, envp, &env);
-	sys_var_init(&env, argv, argc);
+	env_init(envp, &env);
+	sys_var_init(&env);
 	sys_init(0);
 
 	// temp bltns
@@ -227,7 +228,7 @@ int				main(const int argc, char **argv, char **envp)
 	ft_avl_set(env.globals, ft_avl_node_cc("GREP_OPTIONS", "--color=auto", 14));
 
 	// CHOOSE A TYPE OF LAUNCH WITH lflags n flags
-	sh_launch_system(&env, lflags, flags, argv);
+	sh_launch_system(&env, flags, argv);
 
 	et_rm_clear_env(&env);
 	if (lflags)

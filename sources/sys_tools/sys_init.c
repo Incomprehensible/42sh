@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 22:36:19 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:19:09 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int				sys_var_stdname_pr(ENV *env)
 	return (0);
 }
 
-int				sys_var_init(ENV *env, char **argv, int argc)
+int				sys_var_init(ENV *env)
 {
 	sys_var_stdname_pr(env);
 	prs_set_pid(env);

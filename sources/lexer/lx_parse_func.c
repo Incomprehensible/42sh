@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_parse_func.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/08 21:08:41 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 01:48:11 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,6 +241,7 @@ char	*add_slashes(char *strt, short flag, t_tk_type type)
 {
 	char	*tmp;
 
+	type = 0;
 	if (flag)
 	{
 		if (flag == 1 || flag == 3)

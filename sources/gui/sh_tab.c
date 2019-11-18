@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tab.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 13:51:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 20:22:10 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:25:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_darr			get_executable_files(char *path)
 		rez.strings[++i] = dstr_nerr(entry->d_name);
 		if (ex == -2)
 			dstr_insert_ch(rez.strings[i], '/', rez.strings[i]->strlen);
-		if (rez.maxlen < rez.strings[i]->strlen)
+		if ((ssize_t)rez.maxlen < rez.strings[i]->strlen)
 			rez.maxlen = rez.strings[i]->strlen;
 		rez.allsize += rez.strings[i]->strlen;
 		rez.count++;
@@ -153,6 +153,8 @@ t_darr			sh_get_file(DSTRING *dir, DSTRING **sub, int ind_inp, ENV *env)
 	t_darr		overlap;
 	DSTRING		*path;
 
+	ind_inp = 0;
+	env = 0;
 	if (!dir)
 		path = get_path(*sub, 0);
 	else
@@ -299,7 +301,7 @@ t_buf			slicer(DSTRING **buf, int cut, int slash)
 	return (new);	
 }
 
-void			write_in_buf(DSTRING **buf, t_buf *buffer, int ind_inp)
+void			write_in_buf(DSTRING **buf, t_buf *buffer)
 {
 	dstr_del(buf);
 	if (buffer->val)
@@ -343,7 +345,7 @@ void			sh_tab(DSTRING **buf, t_indch *indch, ENV *env)
 	overlap = get_overlap(&buffer, indch, env);
 	if (overlap.count == (size_t)-1 && overlap.count)
 	{
-		write_in_buf(buf, &buffer, indch->ind_inp);
+		write_in_buf(buf, &buffer);
 		return ;
 	}
 	sort_darr(&overlap);
@@ -357,6 +359,6 @@ void			sh_tab(DSTRING **buf, t_indch *indch, ENV *env)
 			break ;
 	}
 	indch->ind = move_carret(indch->ind_inp, indch->ind, buffer);
-	write_in_buf(buf, &buffer, indch->ind_inp);
+	write_in_buf(buf, &buffer);
 	free_t_darr(&overlap);
 }

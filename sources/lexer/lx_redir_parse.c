@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_redir_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/17 09:16:34 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 01:49:35 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,6 +338,7 @@ char*   parse_redir(char *str, t_dlist **tok, t_stx **tree, short i)
     t_graph *redir;
     char *tmp;
 
+	i = 0;
     str = parse_empty(str, 0x0, tok);
     tmp = str;
     redir = redir_in();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_rewrite.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 22:18:44 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:23:12 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
 					int len_p)
 {
-	int			ind;
+	size_t		ind;
 	size_t		lines;
 	size_t		to_print;
 	char		*b_ptr;
@@ -43,8 +43,7 @@ void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
 	ft_putstr_fd(b_ptr, STDOUT_FILENO);
 }
 
-void			sh_movec_front(struct winsize term, int mov_front, \
-					int len_all, int index)
+void			sh_movec_front(struct winsize term, int len_all, int index)
 {
 	int		lines;
 	int		segment;
@@ -65,7 +64,7 @@ void			sh_movec_front(struct winsize term, int mov_front, \
 	}
 }
 
-void			sh_clear_line(struct winsize term, int len_all, int index)
+void			sh_clear_line(struct winsize term, int len_all)
 {
 	int		lines;
 
@@ -87,8 +86,8 @@ void			sh_clear_buf(struct winsize term, int len_p, int index)
 	len_all = g_prebuf + len_p;
 	mov_front = len_all - (index + len_p);
 	if (len_all >= term.ws_col)
-		sh_movec_front(term, mov_front, len_all, g_preind + len_p);
-	sh_clear_line(term, len_all, index + len_p);
+		sh_movec_front(term, len_all, g_preind + len_p);
+	sh_clear_line(term, len_all);
 }
 
 void			sh_move_up_lines(int lines)
@@ -198,7 +197,7 @@ void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
 	sh_clear_buf(term, len_p, index);
 	ft_putstr_fd(prompt->txt, STDOUT_FILENO);
 	sh_putstr_term(buf, term, len_p);
-	if (buf->strlen != index)
+	if (buf->strlen != (ssize_t)index)
 		sh_new_move_cors(buf, term, len_p, index);
 	g_prebuf = buf->strlen;
 	g_preind = index;

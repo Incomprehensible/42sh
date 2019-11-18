@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_validate.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/05 23:39:47 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:39:07 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,6 @@ short	check_sep_cond(t_dlist *token_list, t_tk_type type)
 
 short   seps_check(t_dlist *token_list)
 {
-    t_tk_type		type;
-	char			sep;
 	short			flag;
 
 	flag = 0;

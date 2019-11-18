@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_launch.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/13 04:05:06 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 01:58:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,7 @@ char		*get_file_from_arg(char **argv, char ***afile)
 }
 
 // TEMP: TODO BETTER
-int			sh_launch_system(ENV *env, char **lflags, \
-char *flags, char **argv)
+int			sh_launch_system(ENV *env, char *flags, char **argv)
 {
 	char	*file;
 	char	**afile;

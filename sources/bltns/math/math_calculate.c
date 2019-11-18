@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_calculate.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/18 21:55:19 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:18:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,6 +365,7 @@ char *set_var(t_dlist *opd_stack, ENV *env, ERR *err)
 	t_tk_type	type;
 	long		res;
 	
+	err = 0;
 	value = ((t_tok *)opd_stack->content)->value;
 	type = ((t_tok *)opd_stack->content)->type;
 	res = ft_atoi_base(value, type);

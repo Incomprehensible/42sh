@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_get_bins.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 15:22:08 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/27 20:51:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:29:07 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void		env_get_bins_cmp_name(t_darr *res, int namelen)
 
 int			env_get_bins_unq(t_darr *res, char *str)
 {
-	int		i;
+	size_t	i;
 
-	i = -1;
+	i = (size_t)-1;
 	while (++i < res->count)
 		if (ft_strcmp(res->strings[i]->txt, str) == 0)
 			return (0);

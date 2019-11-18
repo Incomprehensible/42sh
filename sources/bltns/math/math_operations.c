@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_operations.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/07 05:01:32 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:18:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ long	bit_ops(long a, long b, t_tk_type op, ERR *err)
 {
 	long res;
 
+	err = 0;
 	res = op == BIT_R ? a >> b : 0;
 	res = op == BIT_L ? a << b : res;
 	res = op == AND ? a & b : res;
@@ -51,6 +52,7 @@ long	compare_ops(long a, long b, t_tk_type op, ERR *err)
 {
 	long res;
 
+	err = 0;
 	res = op == IS_EQU ? a == b : 0;
 	res = op == NO_EQU ? a != b : res;
 	res = op == MORE ? a > b : res;
@@ -64,6 +66,7 @@ long	logic_ops(long a, long b, t_tk_type op, ERR *err)
 {
 	long res;
 
+	err = 0;
 	res = op == LOG_AND ? a && b : 0;
 	res = op == LOG_OR ? a || b : res;
 	return (res);
@@ -73,6 +76,7 @@ long	assign_ops(long a, long b, t_tk_type op, ERR *err)
 {
 	long res;
 
+	err = 0;
 	res = op == PLUS_EQ ? a += b : 0;
 	res = op == MIN_EQ ? a -= b : res;
 	return (res);

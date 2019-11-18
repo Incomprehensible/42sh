@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_quots_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/16 00:52:55 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 01:49:45 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ char    *parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br)
 
 char*   parse_dquotes(char *str, t_dlist **tok, t_stx **tree, short i)
 {
+	i = 0;
     str = parse_empty(str, 0x0, tok);
     if (*str != '"')
         str = parse_comm(str, tok, tree, '"');

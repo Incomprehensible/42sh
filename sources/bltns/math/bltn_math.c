@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_math.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 17:42:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 21:16:30 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:08:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	skip_alnums_n_space(char *str, size_t *ind)
 long	do_math_bltn(char *str_xp, ENV *envr, ERR *err)
 {
 	size_t		ind;
-	char		*str;
 	DSTRING		*expr;
 	long		res;
 
@@ -39,7 +38,6 @@ long	do_math_bltn(char *str_xp, ENV *envr, ERR *err)
 
 int		bltn_math(char **args, ENV *env)
 {
-	DSTRING		*expr;
 	ERR			err;
 	long		res;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 23:02:31 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:34:22 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ int				ft_isdir(DSTRING *buf);
 
 void			init_histr(ENV *envr);
 
-t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr);
 void			fill_buf(DSTRING **buf, const t_astr rez);
 int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
 
@@ -142,7 +141,7 @@ char			is_ctrl(const char ch);
 ** ctrl+f move insertion point one word ahead
 ** ctrl+n clear all screen
 */
-t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr);
+t_indch			management_line(t_indch indch, DSTRING **buf);
 void			clear_screen(void);
 int				sh_t_insertion_point(const DSTRING *str, int ind, const char ch);
 
@@ -191,7 +190,7 @@ void			free_darr_re(DSTRING **darr, const int size);
 int				sort_darr(t_darr *darr);
 
 /* handles arrow clicks */
-t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf, ENV *env);
+t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf);
 
 /* intercepts all keystrokes on the keyboard */
 int				ft_getch(void);
@@ -261,9 +260,9 @@ int				get_history_fd(int flags, char *er_context, ENV *envr);
 void			write_history(DSTRING *line);
 
 /* history management */
-t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr);
+t_indch			show_history(DSTRING **buf, t_indch indc);
 
-t_indch			sh_search_his(DSTRING **buf, ENV *envr, t_indch indch);
+t_indch			sh_search_his(DSTRING **buf, t_indch indch);
 
 char			get_new_histr(t_darr *histr, ENV *envr);
 

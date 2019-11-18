@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_polish_reverse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/18 21:43:25 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:09:25 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ t_dlist	*go_through_brackets(t_dlist *dimon_loh, t_tk_type type)
 }
 
 //add brackets to stack if its into; remove brackets from stack if its out and check whether we closed all brackets
-void	into_reverse_notation(t_dlist *dimon_loh, ERR *err, t_dlist **fin)
+void	into_reverse_notation(t_dlist *dimon_loh, t_dlist **fin)
 {
 	t_tk_type		type;
 	t_dlist			*op_stack;
@@ -255,7 +255,7 @@ long	ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err)
 
 	ft_bzero(polish_not, sizeof(t_dlist *) * 2);
 	//DBG_PRINT_MATH(dimon_loh[0]);
-	into_reverse_notation(dimon_loh[0], err, polish_not);
+	into_reverse_notation(dimon_loh[0], polish_not);
 	clear_tokens(dimon_loh, 0);
 	if (err->err_code)
 		return (0);

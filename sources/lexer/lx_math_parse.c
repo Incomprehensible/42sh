@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_math_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/06 18:48:40 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:38:58 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,11 +183,6 @@ char    *pull_in_brackets(char br, char *str, t_dlist **tok)
     make_token(tok, pull_token(str, len), TK_MATH);
     br = (br == '(') ? ')' : br;
     return (skip_brackets(str + len, br));
-}
-
-static short tmp_validate_math(char *str, short i)
-{
-    return (1);
 }
 
 char   *parse_math(char *str, t_dlist **tok, t_stx **tree, short ind)

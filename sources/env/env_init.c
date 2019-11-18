@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 14:43:29 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/13 13:05:35 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 01:59:58 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void		free_spl(char ***spl)
 		free((*spl));
 }
 
-int			env_init(int argc, char **argv, char **envp, ENV *env)
+int			env_init(char **envp, ENV *env)
 {
 	char	**spl;
 

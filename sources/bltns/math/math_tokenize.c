@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_tokenize.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/17 09:53:21 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:04:09 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ static char	*pull_predessor(char *expr, t_dlist **math, ERR *err)
 	int			n;
 
 	op = *expr++;
+	err = 0;
 	n = 1;
 	while (op != '!' && *expr == op && n <= 1)
 	{
@@ -311,9 +312,8 @@ static char	*pull_bracket(char *expr, t_dlist **math)
 }
 
 //double bracket and single bracket to differentiate tokens
-static char	*ariphmetic_tokenize(char *expr, ENV *env, t_dlist **math, ERR *err)
+static char	*ariphmetic_tokenize(char *expr, t_dlist **math, ERR *err)
 {
-	t_tk_type	type;
 	short		flag;
 
 	flag = 0; //if flag is switched to 1 then we just had an operand
@@ -365,7 +365,7 @@ static long get_math_result(char *expr, ENV *env, ERR *err)
 	current->next = NULL;
 	while (*expr)
 	{
-		if (!(expr = ariphmetic_tokenize(expr, env, polish_notation, err)))
+		if (!(expr = ariphmetic_tokenize(expr, polish_notation, err)))
 		{
 			if (polish_notation[0])
 				clear_tokens(polish_notation, 0);

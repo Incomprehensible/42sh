@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 15:48:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 22:47:20 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:34:30 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "dstring.h"
 #include <dirent.h>
 
-t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr)
+t_indch			management_line(t_indch indch, DSTRING **buf)
 {
 	DSTRING		*str;
 
@@ -42,7 +42,7 @@ t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr)
 	else if (indch.ch == 0x0e)
 		clear_screen();
 	else if (indch.ch == 0x12)
-		indch = sh_search_his(buf, envr, indch);
+		indch = sh_search_his(buf, indch);
 	return (indch);
 }
 
@@ -95,13 +95,13 @@ DSTRING			*readlie_loop(DSTRING **buf, t_indch indch, ENV *env)
 			dstr_insert_ch((*buf), indch.ch, indch.ind++);
 		sh_type_input((*buf), &indch);
 		if (is_ctrl(indch.ch))
-			indch = management_line(indch, buf, env);
+			indch = management_line(indch, buf);
 		else if (indch.ch == TAB && indch.reg)
 			new_reg_expr(buf, &indch);
 		if (indch.ch == TAB)
 			sh_tab(buf, &indch, env);
 		else if (indch.ch == ESC)
-			indch = sh_esc(indch, (*buf)->strlen, buf, env);
+			indch = sh_esc(indch, (*buf)->strlen, buf);
 		sh_rewrite(indch.prompt, (*buf), indch.ind);
 	}
 	return (dstr_nerr(""));

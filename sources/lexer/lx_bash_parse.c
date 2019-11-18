@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_bash_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 05:56:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:35:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,10 +221,11 @@ static char *normal_token(char *patt, t_tk_type tp, char *s, t_dlist **tok)
     return (s);
 }
 
-static char	*pull_break_cont(char *s, t_tk_type tp, t_stx **tr, t_dlist **tok)
+static char	*pull_break_cont(char *s, t_tk_type tp, t_dlist **tok)
 {
-	char *tmp;
+	char	*tmp;
 
+	tmp = NULL;
 	if (tp == TK_BREAK)
 		tmp = normal_token("break_", TK_BREAK, s, tok);
 	else if (tp == TK_CONTIN)
@@ -251,9 +252,9 @@ char    *script_pull(char *patt, t_tk_type tp, char *s, t_stx **tr, t_dlist **to
     if (tp == TK_EXPR || tp == TK_VAR || tp == EX)
     {
         if (tp != TK_VAR && is_token_here(skip_spaces(s), "break"))
-            return (pull_break_cont(s, TK_BREAK, tr, tok));
+            return (pull_break_cont(s, TK_BREAK, tok));
         else if (tp != TK_VAR && is_token_here(skip_spaces(s), "continue"))
-            return (pull_break_cont(s, TK_CONTIN, tr, tok));
+            return (pull_break_cont(s, TK_CONTIN, tok));
         else
             return (((special_condition(patt)) ? pull_expr1(patt, s, tr, tok) : pull_expr2(s, tr, tok)));
     }
@@ -277,7 +278,7 @@ static char    *new_graph(char *s, t_dlist **tok, t_stx **tr)
     return (s);
 }
 
-static char *into_the_portal(t_graph *g, char *s, t_dlist **tok, t_stx **tr, short i)
+static char *into_the_portal(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
 {
     if (!g || !(*s))
         return (s);
@@ -286,11 +287,11 @@ static char *into_the_portal(t_graph *g, char *s, t_dlist **tok, t_stx **tr, sho
     return (s);
 }
 
-char    *get_script(t_graph *g, char *s, t_dlist **tok, t_stx **tr, short i)
+char    *get_script(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
 {
     char *tmp;
 
-    if ((tmp = into_the_portal(g, s, tok, tr, i)) != s && tmp)
+    if ((tmp = into_the_portal(g, s, tok, tr)) != s && tmp)
         return (tmp);
     return (script_pull(g->patt, g->type, s, tr, tok));
 }
@@ -310,11 +311,11 @@ char        *scripts_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
     char *tmp;
 
     s = g ? pull_empty(g, s, tok) : s;
-    if (!s || !g || ((tmp = get_script(g, s, tok, tr, sig)) && tmp == s) || !tmp)
+    if (!s || !g || ((tmp = get_script(g, s, tok, tr)) && tmp == s) || !tmp)
         return ((sig && tmp) ? s : NULL);
     s = pull_empty(g, tmp, tok);
     sig = 1;
-	while (*s && (g->type == TK_EXPR || g->type == EX) && ((tmp = get_script(g, s, tok, tr, sig)) != s) && tmp)
+	while (*s && (g->type == TK_EXPR || g->type == EX) && ((tmp = get_script(g, s, tok, tr)) != s) && tmp)
         s = parse_empty(tmp, g->patt, tok);
     if (!tmp)
         return (NULL);

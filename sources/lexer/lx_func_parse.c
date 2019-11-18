@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_func_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/17 11:56:40 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:38:31 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,13 @@ static char *get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)
     return (NULL);
 }
 
-char*   parse_func(char *str, t_dlist **tok, t_stx **tree, short ind)
+char   *parse_func(char *str, t_dlist **tok, t_stx **tree, short ind)
 {
-    char *patt0;
-    char *patt2;
-    char *tmp;
+    char *const	patt0 = "function_";
+    char *const	patt2 = "?()_";
+    char		*tmp;
 
-    patt0 = "function_";
-    patt2 = "?()_";
+	ind = 0;
     if ((tmp = reg_process(patt0, TK_FUNCTION, str, tok, tree)) != str && tmp)
         return (get_function(str + 8, "? ", tok, tree));
     else if ((layer_parse_two(patt2, str)))

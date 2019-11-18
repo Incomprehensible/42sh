@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_comm_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/16 01:52:52 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 01:52:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ char    *parse_exec(char *str, t_dlist **tok)
     return (parse_sep(str, tok, 0));
 }
 
-static short    is_and_or(char *str)
-{
-    if ((*str && *str == '&' && *(str + 1) == '&') || (*str && *str == '|' && *(str + 1) == '|'))
-        return (1);
-    return (0);
-}
+// static short    is_and_or(char *str)
+// {
+//     if ((*str && *str == '&' && *(str + 1) == '&') || (*str && *str == '|' && *(str + 1) == '|'))
+//         return (1);
+//     return (0);
+// }
 
 static short   redir_detected(char *str, t_stx **tree, short stop)
 {

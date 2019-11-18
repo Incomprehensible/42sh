@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_dbg_bltn.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 21:17:16 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 01:48:29 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ extern int		g_jid;
 
 int				bltn_dbg_snap(char **args, ENV *envr)
 {
+	envr = 0;
 	if (args[1])
 	{
 		if (ft_strequ(args[1], "ps"))

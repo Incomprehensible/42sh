@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 22:58:42 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:00:23 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct	s_darr
  -else (errcode)
  */
 	
-int		env_init(int argc, char **argv, char **envp, ENV *env);
+int		env_init(char **envp, ENV *env);
 
 /* Возвращает дубликат значения перменной среды */
 DSTRING	*env_get_variable(const char *key, ENV *enviroment);

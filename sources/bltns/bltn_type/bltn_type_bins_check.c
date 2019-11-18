@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_type_bins_check.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 10:34:05 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/27 18:19:03 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 02:02:09 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,10 @@ static DSTRING		*bltn_type_chbins_parse(char *str, ENV *envp)
 int					bltn_type_check_bins(char *str, ENV *env, DSTRING **val)
 {
 	t_darr	res;
-	int		i;
+	size_t	i;
 
-	i = -1;
+	i = (size_t)-1;
 	res.allsize = 0;
-	res.maxlen = 0;
 	res.maxlen = 0;
 	res.count = 0;
 	env_get_bins_parsepath(&res, env);
