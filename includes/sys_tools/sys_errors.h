@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_errors.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:29:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/09/22 17:42:41 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/17 02:15:32 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,13 @@ char		*sys_get_std_message(int ecode);
 ** Exiting from a programm and puts a standart error output
 */
 void		sys_fatal_memerr(char *mess);
+
+#define ERR t_err
+
+typedef struct      s_err
+{
+    int				err_code;
+    char			*error_msg;
+}                   t_err;
 
 #endif

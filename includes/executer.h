@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:09:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 23:08:42 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/17 02:15:54 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct		s_extab			// RELOADING OF T_DLIST
 	struct s_extab	*prev_e;
 }					t_extab;
 
+# include "sys_tools/sys_errors.h"
 # include "parser.h"
 
 /*
@@ -56,7 +57,7 @@ int			exe_execute_b(EXPRESSION *expr, ENV *envr, \
 int (*bltn)(char **, ENV *), int *status);
 int			exe_execute_pi_b(EXPRESSION *expr, ENV *envr, \
 int (*bltn)(char **, ENV *));
-long		do_math_bltn(char *str_xp, ENV *envr);
+long		do_math_bltn(char *str_xp, ENV *envr, ERR *err);
 int			exe_execute_f(EXPRESSION *expr, ENV *envr, FUNC *func, int *status);
 int			exe_execute_pi_f(EXPRESSION *expr, ENV *envr, FUNC *func);
 

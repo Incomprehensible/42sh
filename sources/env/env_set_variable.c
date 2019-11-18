@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_set_variable.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 16:12:50 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/22 11:06:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/18 21:58:18 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		env_set_variable(const char *key, DSTRING *value, ENV *enviroment)
 	if (!value)
 		return (0);
 	if (!(node = ft_avl_node((char *)key, (char *)value->txt,\
-		ft_strlen((char *)value->txt) + 1)))
+		value->strlen + 1)))
 		return (-1);
 	if (ft_avl_search(enviroment->globals, key) != 0)
 	{

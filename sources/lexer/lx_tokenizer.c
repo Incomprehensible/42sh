@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/05 23:16:13 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:15:19 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void    make_token(t_dlist **list, char *value, t_tk_type type)
 
 int     layer_parse_one(char *meta, char *str)
 {
-    while (*str && *meta && !(is_sep_no_space(*str) && *meta != 'x') && (*str == *meta || special_meta(*meta)))
+    while (*str && *meta && !(is_sep_no_space(*str) && *meta != 'w') && (*str == *meta || special_meta(*meta)))
     {
         if (*meta && special_meta(*meta))
         {
@@ -217,10 +217,18 @@ t_dlist    **toklst_init(t_dlist **token_list)
 void    concatenate_str(char **last_input, char *str)
 {
     char        *tmp;
+	char		last;
 
-    tmp = *last_input;
-    *last_input = ft_strjoin(*last_input, "\n");
-    free(tmp);
+    // tmp = *last_input;
+	last = *(*last_input + (ft_strlen(*last_input) - 1));
+	if (last != '(' && last != ')')
+	{
+		tmp = *last_input;
+		*last_input = ft_strjoin(*last_input, "\n");
+    	free(tmp);
+	}
+    // *last_input = ft_strjoin(*last_input, "\n");
+    // free(tmp);
     tmp = *last_input;
     *last_input = ft_strjoin(*last_input, str);
     free(tmp);
@@ -232,6 +240,8 @@ short				sh_tokenizer(char *str, t_dlist **token_list)
 	char        *tmp;
     short       i;
 
+	if (!str || !(*str))
+		return (0);
     token_list = toklst_init(token_list);
     if (last_input)
     {
@@ -244,7 +254,6 @@ short				sh_tokenizer(char *str, t_dlist **token_list)
     {
         if (i < 0 && last_input)
             free(last_input);
-		// last_input = get_last_input(i, last_input)
         last_input = i ? NULL : ft_strdup(tmp);
         return (i ? -1 : 0);
     }

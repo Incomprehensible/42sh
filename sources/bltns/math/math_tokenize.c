@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/06 19:44:34 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 09:53:21 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 
 void	*set_error(char *err_token, int code, ERR *err)
 {
-	//error value too great for base
 	err->err_code = code;
 	err->error_msg = err_token;
 	return (NULL);
@@ -75,8 +74,8 @@ static char	*pull_math_compr(char *expr, t_dlist **math, ERR *err)
 
 	op = *expr++;
 	type = (op == '<') ? LESS : 0;
-	type = (op == '>') ? MORE : 0;
-	if (op == '<' || op == '>')
+	type = (op == '>') ? MORE : type;
+	if (*expr == '<' || *expr == '>')
 		return (set_error(NULL, DOUBLE_COMPARE, err));
 	type = (*expr == '=' && type == LESS) ? LESS_EQ : type;
 	type = (*expr == '=' && type == MORE) ? MORE_EQ : type;
@@ -92,15 +91,11 @@ static char	*pull_predessor(char *expr, t_dlist **math, ERR *err)
 
 	op = *expr++;
 	n = 1;
-	while (*expr == op)
+	while (op != '!' && *expr == op && n <= 1)
 	{
 		expr++;
 		n++;
 	}
-	if (op == '!' && n > 1)
-		return (set_error(NULL, DOUBLE_NEGATION, err));
-	else if ((op == '+' || op == '-') && n > 2)
-		return (set_error(NULL, INVALID_INFIX, err));
 	type = (op == '!') ? REJECT : 0;
 	type = (op == '+' && n == 1) ? POSIT : type;
 	type = (op == '+' && n == 2) ? INCRM : type;
@@ -109,6 +104,32 @@ static char	*pull_predessor(char *expr, t_dlist **math, ERR *err)
 	make_token(math, NULL, type);
 	return (expr);
 }
+
+// static char	*pull_predessor(char *expr, t_dlist **math, ERR *err)
+// {
+// 	t_tk_type	type;
+// 	char		op;
+// 	int			n;
+
+// 	op = *expr++;
+// 	n = 1;
+// 	while (*expr == op)
+// 	{
+// 		expr++;
+// 		n++;
+// 	}
+// 	if (op == '!' && n > 1)
+// 		return (set_error(NULL, DOUBLE_NEGATION, err));
+// 	else if ((op == '+' || op == '-') && n > 2)
+// 		return (set_error(NULL, INVALID_INFIX, err));
+// 	type = (op == '!') ? REJECT : 0;
+// 	type = (op == '+' && n == 1) ? POSIT : type;
+// 	type = (op == '+' && n == 2) ? INCRM : type;
+// 	type = (op == '-' && n == 1) ? NEGAT : type;
+// 	type = (op == '-' && n == 2) ? DECRM : type;
+// 	make_token(math, NULL, type);
+// 	return (expr);
+// }
 
 static char	*pull_operator(char *expr, t_dlist **math)
 {
@@ -125,6 +146,7 @@ static char	*pull_operator(char *expr, t_dlist **math)
 	type = (*expr == '&') ? AND : type;
 	type = (*expr == '|') ? OR : type;
 	type = (*expr == '^') ? XOR : type;
+	type = (*expr == '~') ? NOT : type;
 	swap = type;
 	type = (type == REJECT && *(expr + 1) == '=') ? MIN_EQ : type;
 	type = (type == EQU && *(expr + 1) == '=') ? IS_EQU : type;
@@ -136,47 +158,97 @@ static char	*pull_operator(char *expr, t_dlist **math)
 	return (swap == type ? expr + 1 : expr + 2);
 }
 
+size_t get_base_seq(char *str, char *meta)
+{
+    while (*str)
+    {
+		if (!got_in_seq(*str, meta + 1))
+			return (0);
+        str++;
+    }
+    return (1);
+}
+
+size_t parse_base(char *meta, char *str)
+{
+    while (*str && *meta && *str == *meta && *meta != '@')
+    {
+        str++;
+        meta++;
+    }
+	if (*meta != '@')
+		return (0);
+	if (!get_base_seq(str, meta))
+		return (0);
+	return (1);
+}
+
 static t_tk_type	get_hex_or_bin(t_dlist **math, t_mtx **bases, char *operand)
 {
-	if (layer_parse_two(bases[0]->fin_meta, operand))
+	if (parse_base(bases[0]->fin_meta, operand))
 	{
-		make_token(math, operand, HEX);
-		return (HEX);
-	}
-	else if (layer_parse_two(bases[1]->fin_meta, operand))
-	{
-		make_token(math, operand, BIN);
+		make_token(math, ft_strdup(operand + 2), bases[0]->base);
+		free(operand);
 		return (BIN);
+	}
+	else if (parse_base(bases[1]->fin_meta, operand))
+	{
+		make_token(math, ft_strdup(operand + 2), bases[1]->base);
+		free(operand);
+		return (HEX);
 	}
 	return (0);
 }
+
+// static t_tk_type	get_hex_or_bin(t_dlist **math, t_mtx **bases, char *operand)
+// {
+// 	if (layer_parse_two(bases[0]->fin_meta, operand))
+// 	{
+// 		make_token(math, ft_strdup(operand + 2), bases[0]->base);
+// 		free(operand);
+// 		return (BIN);
+// 	}
+// 	else if (layer_parse_two(bases[1]->fin_meta, operand))
+// 	{
+// 		make_token(math, ft_strdup(operand + 2), bases[1]->base);
+// 		free(operand);
+// 		return (HEX);
+// 	}
+// 	return (0);
+// }
 
 static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
 {
 	t_mtx			*base;
 	size_t			i;
-	t_tk_type		choice;
 
 	i = 2;
-	choice = 0;
-	while (bases[i] && !choice)
+	while (bases[i])
 	{
 		base = bases[i];
 		while (base)
 		{
 			if (layer_parse_two(base->strt_meta, op))
 			{
-				if (!(layer_parse_two(base->fin_meta, op)))
+				if (!(parse_base(base->fin_meta, op)))
 					return (0);
-				choice |= base->base;
-				make_token(math, op, base->base);
-				break ;
+				if (base->base == SEV)
+				{
+					if (base->next)
+						make_token(math, ft_strdup(op + 2), base->base);
+					else
+						make_token(math, ft_strdup(op + 1), base->base);
+					free(op);
+				}
+				else
+					make_token(math, op, base->base);
+				return (base->base);
 			}
 			base = base->next;
 		}
 		i++;
 	}
-	return (choice);
+	return (0);
 }
 
 static char	*get_operand(char *expr)
@@ -195,7 +267,6 @@ static char	*pull_number(char *expr, t_dlist **math, ERR *err)
 {
 	static t_mtx	*bases[5];
 	char			*operand;
-	// t_tk_type		type;
 
 	if (!bases[0])
 		init_num_bases(bases);
@@ -204,15 +275,11 @@ static char	*pull_number(char *expr, t_dlist **math, ERR *err)
 	if (layer_parse_two(bases[0]->strt_meta, operand))
 	{
 		if (get_hex_or_bin(math, bases, operand))
-		{
-			// make_token(math, operand, type);
 			return (expr);
-		}
-		return (set_error(operand, VALUE_TOO_GREAT ,err));
+		return (set_error(operand, VALUE_TOO_GREAT,err));
 	}
 	if (!get_base(operand, bases, math))
-		return (set_error(operand, VALUE_TOO_GREAT,err));
-	//make_token(math, operand, type);
+		return (set_error(operand, VALUE_TOO_GREAT, err));
 	return (expr);
 }
 
@@ -222,6 +289,7 @@ static char	*pull_operand(char *expr, t_dlist **math, ERR *err)
 
 	if (ft_isdigit(*expr))
 		return (pull_number(expr, math, err));
+	expr = (expr && *expr == '$') ? ++expr : expr;
 	operand = get_operand(expr);
 	make_token(math, operand, OPRND);
 	expr += ft_strlen(operand);
@@ -243,7 +311,7 @@ static char	*pull_bracket(char *expr, t_dlist **math)
 }
 
 //double bracket and single bracket to differentiate tokens
-static char	*parse_math_type(char *expr, ENV *env, t_dlist **math, ERR *err)
+static char	*ariphmetic_tokenize(char *expr, ENV *env, t_dlist **math, ERR *err)
 {
 	t_tk_type	type;
 	short		flag;
@@ -269,7 +337,6 @@ static char	*parse_math_type(char *expr, ENV *env, t_dlist **math, ERR *err)
 			expr = pull_predessor(expr, math, err);
 			flag = 0;
 		}
-		//*expr == '!' || *expr == '=' || *expr == '+' || *expr == '-' || *expr == '*' || *expr == '%' || *expr == '/' || *expr == '&'
 		else if (is_op(*expr))
 		{
 			expr = pull_operator(expr, math);
@@ -285,46 +352,32 @@ static char	*parse_math_type(char *expr, ENV *env, t_dlist **math, ERR *err)
 	return (expr);
 }
 
-//make token list
-//send it to calculator
-//get str back
-static char	*ariphmetic_tokenize(char *expr, ENV *env, ERR *err)
+static long get_math_result(char *expr, ENV *env, ERR *err)
 {
 	t_dlist		*polish_notation[2];
 	t_dlist		*current;
 
-	current = ft_dlstnew(NULL, 0);
-	polish_notation[0] = current;
-	polish_notation[1] = current;
+	ft_bzero(polish_notation, sizeof(t_dlist *) * 2);
+	polish_notation[0] = ft_dlstnew(NULL, 0);
+	polish_notation[1] = polish_notation[0];
+	current = polish_notation[0];
 	current->content = NULL;
 	current->next = NULL;
 	while (*expr)
 	{
-		if (!(expr = parse_math_type(expr, env, polish_notation, err)))
+		if (!(expr = ariphmetic_tokenize(expr, env, polish_notation, err)))
 		{
 			if (polish_notation[0])
 				clear_tokens(polish_notation, 0);
-			return (NULL);
+			return (0);
 		}
 	}
 	make_token(polish_notation, NULL, TK_EOF);
 	return (ariphmetic_calc(polish_notation, env, err));
 }
 
-static long	get_math_result(char *expr, ENV *env, ERR *err)
-{
-	char	*output;
-	long	res;
-
-	if (!(output = ariphmetic_tokenize(expr, env, err)))
-		return (0);
-	res = ft_atoi(output);
-	return (res);
-}
-
 long		ariphmetic_eval(char *expr, ENV *env, ERR *err)
 {
-	char	*output;
 	char	**exprs;
 	long	res;
 	int		i;
@@ -340,7 +393,7 @@ long		ariphmetic_eval(char *expr, ENV *env, ERR *err)
 		exprs = ft_strsplit(expr, ',');
 		while (exprs[i] && !err->err_code)
 		{
-			res += get_math_result(exprs[i], env, err);
+			res = get_math_result(exprs[i], env, err);
 			i++;
 		}
 		ft_arrmemdel((void **)exprs);
@@ -350,3 +403,36 @@ long		ariphmetic_eval(char *expr, ENV *env, ERR *err)
 	return (res);
 }
 
+// static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
+// {
+// 	t_mtx			*base;
+// 	size_t			i;
+// 	t_tk_type		choice;
+
+// 	i = 2;
+// 	choice = 0;
+// 	while (bases[i] && !choice)
+// 	{
+// 		base = bases[i];
+// 		while (base)
+// 		{
+// 			if (layer_parse_two(base->strt_meta, op))
+// 			{
+// 				if (!(layer_parse_two(base->fin_meta, op)))
+// 					return (0);
+// 				choice |= base->base;
+// 				if (choice == SEV && !base->next)
+// 				{
+// 					make_token(math, ft_strdup(op + 2), base->base);
+// 					free(op);
+// 				}
+// 				else
+// 					make_token(math, op, base->base);
+// 				break ;
+// 			}
+// 			base = base->next;
+// 		}
+// 		i++;
+// 	}
+// 	return (choice);
+// }

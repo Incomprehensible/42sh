@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/22 20:16:31 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/17 09:06:43 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ size_t    layer_parse_two(char *meta, char *str)
             {
                 if (*meta == '@')
                 {
-                    i = get_seq(str);
+                    i += get_seq(str, meta);
                     str += i;
                 }
                 while (tmp != str)
@@ -73,7 +73,7 @@ char    *pull_expr1(char *patt, char *str, t_stx **tr, t_dlist **tok)
 {
     char *new;
 
-    if (check_branch(str, tr[FLOWS]))
+    if (check_branch(skip_spaces(str), tr[FLOWS]))
         return (str);
     if (layer_parse_two(patt, str))
     {
@@ -92,6 +92,10 @@ char    *pull_expr2(char *str, t_stx **tr, t_dlist **tok)
 
     if (check_branch(skip_spaces(str), tr[FLOWS]))
         return (str);
+	if (check_branch(skip_spaces(str), tr[ENVAR]))
+		str = parse_envar(str, tok, tr, 0);
+	if (!str)
+		return (NULL);
     if ((new = parse_comm(str, tok, tr, '\n')) && new == str)
         return (NULL);
     if (!new)

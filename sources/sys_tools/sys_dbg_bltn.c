@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sys_dbg_bltn.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 22:37:35 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/18 21:17:16 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sys_tools/sys_dbg.h"
 #include "sh_tokenizer.h"
+#include "bltn_math/math_hidden.h"
 #include "fcntl.h"
 #include "libft.h"
 #include "stdio.h"

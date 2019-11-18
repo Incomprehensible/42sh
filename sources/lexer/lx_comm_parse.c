@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/05 23:52:45 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/16 01:52:52 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,21 +66,40 @@ static short   redir_detected(char *str, t_stx **tree, short stop)
     return (0);
 }
 
-static short valid_deref(char *str)
+short valid_deref(char *str)
 {
-    if (*str == '$' && *(str + 1) != '=' && !ft_isspace(*(str + 1)))
+	if (*str == '$' && *(str + 1) != '=' && (!is_separator(*(str + 1)) || (*(str + 1) == '"')))
         return (1);
+    // if (*str == '$' && *(str + 1) != '=' && !ft_isspace(*(str + 1)))
+    //     return (1);
     return (0);
 }
 
 short   time_for_portal(char *str, t_stx **tree, short stop)
 {
-    if (*str == '#' || (*str == '=' && !(ft_isspace(*(str + 1)))) || (*str == '+' && *(str + 1) == '=' && !(ft_isspace(*(str + 2)))) ||
-	redir_detected(str, tree, stop) || valid_deref(str) || *str == '(' || *str == '"' || *str == '\'' ||
-        is_sep_no_space(*str) || ft_isspace(*str) || is_token_here(str, "exec"))
+	if ((ft_isdigit(*str) || *str == '&') && redir_detected(str, tree, stop))
+		return (1);
+	else if (is_sep_no_space(*str) || ft_isspace(*str))
+		return (1);
+    else if (*str == '#' || *str == '(' || *str == '"' || *str == '\'')
+		return (1);
+	// else if (*str == '=' && !(ft_isspace(*(str + 1))))
+	// 	return (1);
+	// else if (*str == '+' && *(str + 1) == '=' && !(ft_isspace(*(str + 2))))
+	// 	return (1);
+	else if (is_redir(str) || valid_deref(str) || is_token_here(str, "exec"))
         return (1);
     return (0);
 }
+
+// short   time_for_portal(char *str, t_stx **tree, short stop)
+// {
+//     if (*str == '#' || (*str == '=' && !(ft_isspace(*(str + 1)))) || (*str == '+' && *(str + 1) == '=' && !(ft_isspace(*(str + 2)))) ||
+// 	redir_detected(str, tree, stop) || valid_deref(str) || *str == '(' || *str == '"' || *str == '\'' ||
+//         is_sep_no_space(*str) || ft_isspace(*str) || is_token_here(str, "exec"))
+//         return (1);
+//     return (0);
+// }
 
 char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
 {

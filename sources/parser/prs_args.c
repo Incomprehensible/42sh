@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/13 04:17:28 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/17 08:28:38 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,17 @@ char			*get_deref_math(char *expr, ENV *envr)
 {
 	long		num;
 	char		*res;
-	char		**exprs;
+	ERR			err;
 	int			i;
 
 	i = 0;
-	exprs = ft_strsplit(expr, ',');
-	if (!exprs)
-		return (0);
-	while (exprs[i])
-		num = do_math_bltn(exprs[i++], envr);
+	err.error_msg = NULL;
+	err.err_code = 0;
+	num = do_math_bltn(expr, envr, &err);
+	if (err.err_code)
+		math_error_handler(&err, 0, envr);
+	// ERROR IO
 	res = ft_lltoa_base(num, 10);
-	et_rm_warr(exprs);
-	if (!res)
-		return (0);
 	return (res);
 }
 

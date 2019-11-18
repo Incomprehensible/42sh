@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/06 04:59:00 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/16 01:25:48 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,8 @@ t_stx    *init_envar(t_stx *tree)
     t_stx *start;
 
     i = 0;
-    env = "= += -=";
+	env = "~= ~+= ~-=";
+    // env = "= += -=";
     envs = ft_strsplit(env, ' ');
     tree = (t_stx *)malloc(sizeof(t_stx));
     tree->meta = ft_strdup(envs[i]);

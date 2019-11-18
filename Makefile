@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgranule <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/13 21:34:57 by hgranule         ###   ########.fr        #
+#    Updated: 2019/11/18 21:19:17 by bomanyte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,15 +60,17 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			parser/prs_funcs.c parser/prs_if_while.c parser/prs_skipers.c \
 			parser/prs_error.c parser/prs_core_setter.c parser/prs_background.c \
 			\
-			bltns/math/bltn_math.c bltns/math/math_ret_var.c bltns/math/math_skipers.c \
-			bltns/math/math_ops_dec_inc.c bltns/math/math_ops_log_eq.c \
-			bltns/math/math_ops_lw_bg.c bltns/math/math_ops_primary.c \
-			bltns/bltn_jobs/bltn_fg.c bltns/bltn_jobs/bltn_jobs.c \
+			bltns/math/bltn_math.c bltns/math/math_bases_in.c bltns/math/math_tokenize.c \
+			bltns/math/math_polish_reverse.c bltns/math/math_operations.c \
+			bltns/math/math_hierarchy_in.c bltns/math/math_calculate.c \
 			\
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
 			sys_tools/sys_touch.c sys_tools/sys_argc.c sys_tools/sys_token_string.c \
 			sys_tools/sys_exprs_strings.c \
+			\
+			bltns/bltn_jobs/bltn_jobs.c bltns/bltn_jobs/bltn_fg.c\
+			\
 			$(addprefix gui/, $(GUI_FILES)) \
 			sys_tools/sys_config.c sys_tools/sys_files.c sys_tools/sys_proc_tables.c \
 			env/env_get_bins/env_get_bins_parsebltn.c env/env_get_bins/env_get_bins_parsefunc.c \

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/06 20:02:36 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/08 21:01:52 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,11 @@ static short    following_pipe(t_dlist *token_list)
 
 static short validate_var(char *varname)
 {
-    static char *reserved;
+    char *reserved;
     short i;
 
     i = 0;
-    if (!reserved)
-        reserved = "0123456789_!?#$";
+    reserved = "0123456789_!?#$*";
     if (ft_strlen(varname) == 1)
     {
         while (reserved[i])
@@ -94,6 +93,11 @@ char    *assig_into_portal(char *str, t_dlist **tok, t_stx **tree)
         if (!(str = parse_dquotes(str, tok, tree, 0)))
             return (NULL);
     }
+	// else if (*str == '\'')
+    // {
+    //     if (!(str = parse_apofs(str, tok, tree, 0)))
+    //         return (NULL);
+    // }
     return (str);
 }
 
@@ -133,7 +137,11 @@ static char    *get_value(char *str, t_stx **tr, t_dlist **tok)
 
     if (*str == '\\' && (*(str + 1) == ' ' || *(str + 1) == '\t'))
         str += 2;
-    if ((new = parse_assig_block(str, tok, tr)) != str && new)
+	if (*str == '\'')
+		new = parse_apofs(str, tok, tr, 0);
+	else
+		new = parse_assig_block(str, tok, tr);
+	if (new != str && new)
         substitute_value(tok[1]);
     if (new == str)
         make_token(tok, NULL, TK_VALUE);

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   prs_if_while.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:03:53 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 21:40:32 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/18 21:17:11 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "sys_tools/sys_tools.h"
 
 static t_dlist	*prs_skip_after_else(t_dlist *tks)
 {
@@ -153,6 +154,30 @@ t_dlist 		*prs_forin(t_dlist *tks, ENV *envs, int *status)
 	return (prs_forin_loop_exec(loop_d, envs, status, vals));
 }
 
+t_dlist			*prs_for_mt_conds(t_dlist *tks, ENV *envs, int *status, char **mt_conds)
+{
+	t_dlist		*loop_bg;
+	t_tok		*tok;
+	ERR			m_err;
+
+	loop_bg = prs_skip_until(tks, TK_DO);
+	m_err.err_code = 0;
+	m_err.error_msg = NULL;
+	do_math_bltn(mt_conds[0], envs, &m_err);
+	while (!m_err.err_code && do_math_bltn(mt_conds[1], envs, &m_err))
+	{
+		if ((tks = sh_tparse(loop_bg->next, envs, TK_DONE, status)) == INTERRUPT_CALL)
+			return (INTERRUPT_CALL);
+		if ((tok = tks->content)->type == TK_BREAK)
+			break ;
+		do_math_bltn(mt_conds[2], envs, &m_err);
+	}
+	if (m_err.err_code)
+		math_error_handler(&m_err, 0, envs); // NADYA PUT HERE
+	et_rm_warr(mt_conds);
+	return (prs_skip_paired(loop_bg, TK_DO, TK_DONE));
+}
+
 t_dlist			*prs_formt(t_dlist *tks, ENV *envs, int *status)
 {
 	char		**mt_conds;
@@ -167,18 +192,7 @@ t_dlist			*prs_formt(t_dlist *tks, ENV *envs, int *status)
 	if (!loop_bg || !(loop_bg->content) || \
 	!(((t_tok *)loop_bg->content)->type != TK_DO))
 		return (0);
-	loop_bg = prs_skip_until(tks, TK_DO);
-	do_math_bltn(mt_conds[0], envs);
-	while (do_math_bltn(mt_conds[1], envs))
-	{
-		if ((tks = sh_tparse(loop_bg->next, envs, TK_DONE, status)) == INTERRUPT_CALL)
-			return (INTERRUPT_CALL);
-		if ((tok = tks->content)->type == TK_BREAK)
-			break ;
-		do_math_bltn(mt_conds[2], envs);
-	}
-	et_rm_warr(mt_conds);
-	return (prs_skip_paired(loop_bg, TK_DO, TK_DONE));
+	return (prs_for_mt_conds(tks, envs, status, mt_conds));
 }
 
 t_dlist			*prs_for(t_dlist *tks, ENV *envs, int *status)

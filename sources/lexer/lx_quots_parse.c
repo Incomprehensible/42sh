@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/02 19:53:58 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/16 00:52:55 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 char*   parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
 {
-    size_t j;
+    size_t	j;
 	char	*new;
 
     j = 0;
@@ -109,6 +109,15 @@ short   special_case(char br, char *str)
     return (1);
 }
 
+// short	is_legit_deref(char *str)
+// {
+// 	if (!str || !(*str))
+// 		return (0);
+// 	else if (!is_sep_no_space(*str))
+// 		return (1);
+// 	return (0);
+// }
+
 char    *parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br)
 {
     size_t j;
@@ -120,7 +129,7 @@ char    *parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br)
     {
         if (*str == '\\' && (++j) && (++str))
             i = i ? 0 : 1;
-        else if (!i && *str == '$')
+        else if (!i && valid_deref(str))
         {
             j = can_pull_tk(j, str, tok, br);
             if (!(str = parse_deref(str, tok, tree, DQUOTS)))
