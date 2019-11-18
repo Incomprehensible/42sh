@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_background.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 13:24:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 13:45:44 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/18 23:04:35 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_dlist		*prs_bkgr(ETAB **tab, t_dlist *tokens, ENV *envr)
 	BCKGR	*bkgr;
 	ETAB	*nrow;
 
+	envr = 0;
 	if (!(nrow = (ETAB *)ft_dlstnew_cc(0, 0)))
 		sys_fatal_memerr("PARSING FAILED");
 	if (!(nrow->instruction = ft_memalloc(sizeof(bkgr))))

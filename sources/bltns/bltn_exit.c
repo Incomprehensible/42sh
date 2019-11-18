@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_exit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 13:55:49 by fnancy            #+#    #+#             */
-/*   Updated: 2019/10/07 07:26:04 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/18 23:19:25 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn.h"
+#include "sh_readline.h"
 #include "sys_tools/sys_tools.h"
 
 int	bltn_exit(char **args, ENV *env)
@@ -26,6 +27,7 @@ int	bltn_exit(char **args, ENV *env)
 			sys_error_handler("exit: argument is not numeric", 0, env);
 		else
 		{
+			free_darr_re(g_histr.strings, g_histr.count);
 			exit_status = ft_atoi(args[1]);
 			res = (unsigned char)exit_status;
 			exit(res);

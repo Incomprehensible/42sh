@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 22:45:26 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 23:02:31 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,10 @@ void			dstr_cutins_dstr(DSTRING **dst, DSTRING *src, size_t ind);
 void			dstr_cutins_str(DSTRING **dst, char *src, ssize_t ind);
 void			dstr_cutins_ch(DSTRING **dst, char ch, ssize_t ind);
 
+DSTRING			*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei);
+DSTRING			*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei);
+DSTRING			*dstr_nerr(char *src);
+
 /* puts the contents of the directory in t_darr */
 t_darr			sh_dir_content(char *path, DSTRING *sub);
 
@@ -216,6 +220,7 @@ char			*ft_concat(const size_t n, const char *spec, ...);
 
 /* handles a special asterisk character */
 int				reg_expr(DSTRING **buf, t_fl *fl);
+t_regpath		help_get_regpath(const int fl, DSTRING *path);
 DSTRING			*slice_reg(DSTRING *reg);
 
 
@@ -259,6 +264,8 @@ void			write_history(DSTRING *line);
 t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr);
 
 t_indch			sh_search_his(DSTRING **buf, ENV *envr, t_indch indch);
+
+char			get_new_histr(t_darr *histr, ENV *envr);
 
 
 /* overwrites the command history file to avoid buffer overflow */

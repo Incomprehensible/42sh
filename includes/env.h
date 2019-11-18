@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 22:45:18 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:58:42 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ typedef struct	s_env
 typedef struct	s_darr
 {
 	DSTRING		*strings[S_DARR_STRINGS];
-	size_t 		maxlen;
 	size_t 		count;
+	size_t 		maxlen;
 	size_t 		allsize;
 }				t_darr;
 
@@ -71,8 +71,7 @@ void	env_get_bins_parsepath(t_darr *res, ENV *envp);
 void	env_get_bins_parsebltn(t_darr *res, ENV *envp);
 void	env_get_bins_parefunc(t_darr *res, ENV *envp);
 
-t_darr	env_get_bins(ENV *envp);
-t_darr	env_get_keys(ENV *envp);
+t_darr	env_get_bins(ENV *env);
 
 int		env_get_bins_unq(t_darr *res, char *str);
 void	env_get_bins_cmp_name(t_darr *res, int namelen);

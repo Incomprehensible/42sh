@@ -6,7 +6,7 @@
 #    By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/18 22:45:12 by gdaemoni         ###   ########.fr        #
+#    Updated: 2019/11/18 23:03:26 by gdaemoni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ ESCN = \033[0m
 #                           Configuration                                    #
 # ************************************************************************** #
 NAME = 42sh
-FLAGS = -g -Wall
+FLAGS = -g -Wall -Wextra
 
 WS_PATH = $(shell pwd)
 SRC_PATH = $(WS_PATH)/sources/
@@ -114,7 +114,7 @@ GUI_FILES = sh_control_term.c sh_dir_content.c \
 			sh_put_col_help.c sh_dir_content_help.c\
 			sh_move_insertion_point.c\
 			gui_errors.c sh_rewrite.c sh_type_input.c sh_tab.c \
-			sh_search_his.c sh_readline.c
+			sh_search_his.c
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

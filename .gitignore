@@ -18,4 +18,4 @@ Cmake*
 .DS_Store
 _test*
 .env
-task.todo
+*.todo

@@ -6,13 +6,13 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:51:57 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 22:03:21 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:53:42 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
 
-static t_regpath	help_get_regpath(const int fl, DSTRING *path)
+t_regpath			help_get_regpath(const int fl, DSTRING *path)
 {
 	t_regpath	rez;
 
@@ -107,7 +107,7 @@ void				new_reg_expr(DSTRING **buf, t_indch *indch)
 	dstr_del(&reg);
 	if (rez.count > 0)
 		fill_buf(buf, rez);
-	free_t_darr(&rez);
+	free_t_darr((t_darr *)&rez);
 	indch->tab = 0;
 	indch->reg = 0;
 	indch->fl = 0;

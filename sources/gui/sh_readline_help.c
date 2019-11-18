@@ -6,11 +6,12 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 22:16:24 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 22:18:16 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:51:26 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sh_readline.h>
+#include "sh_readline.h"
+#include "sh_termcomand.h"
 
 void			clear_screen(void)
 {

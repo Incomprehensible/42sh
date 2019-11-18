@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_if_while.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:03:53 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 21:17:11 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/18 23:02:58 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,6 @@ t_dlist			*prs_formt(t_dlist *tks, ENV *envs, int *status)
 {
 	char		**mt_conds;
 	t_dlist		*loop_bg;
-	t_tok		*tok;
 
 	if (!(mt_conds = ft_strsplit(((t_tok *)tks->content)->value, ';')))
 		return (0);
