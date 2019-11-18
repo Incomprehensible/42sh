@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_errors.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:37:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 21:17:24 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:37:50 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,12 @@ char	*g_errmess[ERR_CNT] =
 	"File creation failed",
 	"File open failed, doesn't exist",
 	"File open failed, permissions denied",
-	"File open failed"
+	"File open failed",
+	"Is not a directory",
+	"no such file or directory",
+	"too many arguments",
+	"invalid options", 
+	"cannot simultaneously unset a function and a variable"
 };
 
 char	*sys_get_std_message(int ecode)

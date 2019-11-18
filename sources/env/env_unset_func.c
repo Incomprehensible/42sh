@@ -1,34 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bltn_env.c                                         :+:      :+:    :+:   */
+/*   env_unset_func.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/27 19:52:22 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/18 22:09:07 by fnancy           ###   ########.fr       */
+/*   Created: 2019/11/16 14:03:26 by fnancy            #+#    #+#             */
+/*   Updated: 2019/11/16 14:10:46 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bltn.h"
+#include "env.h"
 
-int			bltn_env(char **args, ENV *env)
+int		env_unset_func(const char *key, ENV *enviroment)
 {
-	char	**mas;
-	int		i;
-
-	if (!env->globals)
-		return (210);
-	if (bltn_cd_countargs(args) > 1)
-		bltn_setenv(args, env);
-	i = -1;
-	if (!(mas = ft_avl_tree_to_warr(env->globals, &avln_todstring_key_val)))
-		return (210);
-	while (mas[++i])
+	if (ft_avl_search(enviroment->funcs, key) != 0)
 	{
-		ft_putstr(mas[i]);
-		ft_putchar('\n');
+		if ((ft_avl_del(enviroment->funcs, key)) != -1)
+			return (1);
 	}
-	et_rm_warr(mas);
 	return (0);
 }

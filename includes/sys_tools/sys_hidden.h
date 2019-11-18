@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_hidden.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 22:35:57 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:37:08 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,33 @@
 
 # define CHECK_INTS_P 0x0000008000000080
 
+/* IS IT EXIST */
 # define SYS_TCH_F 0x8
+/* IS IT WRITEABLE */
 # define SYS_TCH_W 0x4
+/* IS IT READABLE */
 # define SYS_TCH_R 0x2
+/* IS IT EXECUTABLE */
 # define SYS_TCH_X 0x1
 
+/* MASK FOR GETTING FILE TYPE */
 # define SYS_TCH_TYP 0xF0
 
+/* IS IT FIFO */
 # define SYS_TCH_PIP 0x10
+/* IS IT CHAR SPECIAL */
 # define SYS_TCH_CHR 0x20
+/* IS IT DIRECTORY */
 # define SYS_TCH_DIR 0x40
+/* IS IT BLOCK SPECIAL */
 # define SYS_TCH_BLK 0x60
+/* IS IT REGULAR */
 # define SYS_TCH_REG 0x80
+/* IS IT SYMBOL LINK */
 # define SYS_TCH_LNK 0xA0
+/* IS IT SOCKET */
 # define SYS_TCH_SOC 0xC0
+/* IS IT WHITEOUT */
 # define SYS_TCH_WHT 0xE0
 
 # define PS_M_FG 1

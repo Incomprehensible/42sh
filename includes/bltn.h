@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/13 15:06:11 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:36:47 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,17 @@
 # include <unistd.h>
 
 static char	*bltns_str[] = {"setenv", "env", "getenv", "unsetenv", "exit",\
-	"alias", "unalias", "cd", "pwd", "type", "((", "echo", "fg", "bg", "jobs"};
+	"alias", "unalias", "cd", "pwd", "type", "((", "echo", "fg", "bg", "jobs",\
+	"export", "unset"};
+
+t_dyn_string		*pwd;
+t_dyn_string		*oldpwd;
+
+typedef struct		s_flags
+{
+	char			first;
+	char			second;
+}					t_flags;
 
 char		*ft_parse_flags(char **argc);
 
@@ -77,6 +87,10 @@ int			bltn_cd(char **args, ENV *env);
 int			bltn_cd_parser(ENV *env, t_dlist **path);
 DSTRING		*bltn_cd_pathtostr(t_dlist *path);
 void		bltn_cd_destroy_path(t_dlist **path);
+void		bltn_cd_freepaths(DSTRING **oldpath, DSTRING **newpath, t_dlist	**path);
+int			bltn_cd_error(DSTRING **oldpath, DSTRING **newpath, t_dlist	**path);
+void		bltn_cd_concat(char **path);
+int			bltn_cd_countargs(char **args);
 
 int	bltn_pwd(char **args, ENV *env);
 
@@ -87,11 +101,14 @@ int	bltn_echo(char **args, ENV *envr);
 int	bltn_fg(char **args, ENV *envr);
 int	bltn_bg(char **args, ENV *envr);
 int	bltn_jobs(char **args, ENV *envr);
+int	bltn_export(char **args, ENV *envr);
+int	bltn_unset(char **args, ENV *envr);
 
 void		et_rm_str(void *cont, size_t ske);
 
 static int	(*bltns_func[]) (char **, ENV *) = {&bltn_setenv,\
 	&bltn_env, &bltn_getenv, &bltn_unsetenv, &bltn_exit, &bltn_alias, &bltn_unalias,\
-	&bltn_cd, &bltn_pwd, &bltn_type, &bltn_math, &bltn_echo, &bltn_fg, &bltn_bg, &bltn_jobs};
+	&bltn_cd, &bltn_pwd, &bltn_type, &bltn_math, &bltn_echo, &bltn_fg, &bltn_bg, \
+	&bltn_jobs, &bltn_export, &bltn_unset};
 
 #endif

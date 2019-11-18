@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_errors.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:29:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/17 02:15:32 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:36:55 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,13 @@
 # define E_FOPEF 12 /* OPEN OF FILE FAILED, DSNT EXST */
 # define E_FOPPF 13 /* OPEN OF FILE FAILED, PERMS DENIED */
 # define E_FOPFF 14 /* OPEN OF FILE FAILED */
+# define E_NODIR 15 /* IS NOT A DIR */
+# define E_NOFND 16 /* NOT FOUND*/
+# define E_TMARG 17 /* TOO MANY ARGUMENTS*/
+# define E_FLGER 18 /* BAD  OPTIONS */
+# define E_UNFLG 19 /* 2 FLAGS */
 
-# define ERR_CNT (E_FOPFF + 1)
+# define ERR_CNT (E_UNFLG + 1)
 
 /*
 ** Returns a standart error message string with code {ECODE}

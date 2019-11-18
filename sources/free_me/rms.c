@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rms.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/20 11:26:59 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/13 13:18:39 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,4 +139,6 @@ void			et_rm_clear_env(ENV *env)
 		ft_avl_tree_free(env->aliases);
 	if (env->core)
 		ft_avl_tree_free(env->core);
+	dstr_del(&pwd);
+	dstr_del(&oldpwd);
 }

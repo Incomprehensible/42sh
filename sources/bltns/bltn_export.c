@@ -1,37 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bltn_init.c                                        :+:      :+:    :+:   */
+/*   bltn_export.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/28 18:10:52 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/18 22:10:42 by fnancy           ###   ########.fr       */
+/*   Created: 2019/11/15 14:51:48 by fnancy            #+#    #+#             */
+/*   Updated: 2019/11/18 22:10:17 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn.h"
 
-int			bltn_cnt_builtins(void)
-{
-	return (sizeof(bltns_str) / sizeof(char *));
-}
-
-int			bltn_init(ENV *env)
+int			bltn_export(char **args, ENV *envr)
 {
 	int		i;
-	char	path[256];
+	int		j;
+	char	*arg[256];
 
-	i = -1;
-	while (++i < bltn_cnt_builtins())
+	i = 0;
+	j = 0;
+	arg[0] = ft_strdup("export");
+	while (args[++i])
 	{
-		if ((ft_avl_set(env->builtns, ft_avl_node_cc(bltns_str[i],\
-		bltns_func[i], sizeof(bltns_func[i])))) == -1)
-			return (-1);
+		if (ft_strchr(args[i], '='))
+			arg[++j] = ft_strdup(args[i]);
+		else
+		{
+			if (ft_avl_search(envr->locals, args[i]) != 0)
+				ft_avl_set(envr->globals, ft_avl_cut(envr->locals, args[i]));
+		}
 	}
-	if (getcwd(path, sizeof(path)) == NULL)
-		return (-1);
-	pwd = dstr_new(path);
-	oldpwd = dstr_new(path);
-	return (1);
+	arg[++j] = NULL;
+	bltn_setenv(arg, envr);
+	j = -1;
+	while (arg[++j])
+		ft_strdel(&arg[j]);
+	return (0);
 }
