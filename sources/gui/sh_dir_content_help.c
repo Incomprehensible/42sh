@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 08:07:20 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/04 21:50:39 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 20:32:03 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,6 @@
 #include "libft.h"
 #include "sh_readline.h"
 #include <dirent.h>
-
-size_t				sh_count_file(const char *path)
-{
-	DIR				*dir;
-	struct dirent	*entry;
-	size_t			rez;
-
-	dir = opendir(path);
-	rez = 0;
-	while ((entry = readdir(dir)) != NULL)
-		++rez;
-	closedir(dir);
-	return (rez);
-}
 
 void				free_t_darr(t_darr *darr)
 {
@@ -39,15 +25,6 @@ void				free_t_darr(t_darr *darr)
 	darr->count = 0;
 	darr->allsize = 0;
 	darr->maxlen = 0;
-}
-
-void				free_darr_n(DSTRING **darr, const int size)
-{
-	int		i;
-
-	i = -1;
-	while (++i < size)
-		dstr_del(&(darr[i]));
 }
 
 void				free_darr_re(DSTRING **darr, const int size)

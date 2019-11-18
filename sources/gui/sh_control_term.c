@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:35:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/13 15:43:58 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 20:38:44 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,46 +17,6 @@
 #include <fcntl.h>
 
 struct termios	g_std_term;
-
-void			put_col_his(t_darr his, char fl, const DSTRING *buf)
-{
-	int			ind;
-	int			count;
-	t_darr		col;
-
-	ind = S_DARR_STRINGS - his.count;
-	count = -1;
-	while (++count < (int)his.count)
-		col.strings[count] = dstr_nerr(his.strings[ind++]->txt);
-	col.allsize = his.allsize;
-	col.maxlen = his.maxlen;
-	col.count = his.count;
-	if (fl)
-		sort_darr(&col);
-	//put_col(col, buf);
-	free_darr_n(col.strings, col.count);
-}
-
-char			ispers_arws(char ch, t_indch *indch, \
-					t_darr *his, const DSTRING *buf)
-{
-	if (ch == 0xB)
-		put_col_his(*his, 0, buf);
-	else if (ch == 0x10)
-		put_col_his(*his, 1, buf);
-	else if (ch == ESC)
-	{
-		ch = ft_getch();
-		if (ch == '[')
-		{
-			ch = ft_getch();
-			indch->fl = 1;
-			return (ch);
-		}
-	}
-	indch->fl = 2;
-	return (ch);
-}
 
 t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf, \
 					ENV *envr)
@@ -79,7 +39,7 @@ t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf, \
 			return (indch);
 		}
 		else if (indch.ch == UP[0] || indch.ch == DOWN[0])
-			return (show_new_history(buf, indch, envr));
+			return (show_history(buf, indch, envr));
 		else if (indch.ch == 51)
 			sh_del_char(buf, indch.ind, ft_getch());
 	}

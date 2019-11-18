@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_new_search_h.c                                  :+:      :+:    :+:   */
+/*   sh_search_his.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 11:29:17 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/14 14:27:03 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 20:21:33 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		print_his_line(DSTRING *str_srch, DSTRING *str_over)
 
 	prompt = dstr_nerr("search in history ");
 	if (!str_srch->strlen)
-		sh_new_rewrite(prompt, str_srch, 0);
+		sh_rewrite(prompt, str_srch, 0);
 	else
 	{
 		tmp = dstr_nerr(str_srch->txt);
@@ -39,7 +39,7 @@ void		print_his_line(DSTRING *str_srch, DSTRING *str_over)
 			dstr_insert_str(tmp, str_over->txt, tmp->strlen);
 		else
 			dstr_insert_str(tmp, "", tmp->strlen);
-		sh_new_rewrite(prompt, tmp, str_srch->strlen);
+		sh_rewrite(prompt, tmp, str_srch->strlen);
 		dstr_del(&tmp);
 	}
 	dstr_del(&prompt);
@@ -165,7 +165,7 @@ t_indch		control_histr(DSTRING **str_srch, DSTRING **str_over, t_indch indch)
 	return (indch);
 }
 
-t_indch		sh_new_search_h(DSTRING **buf, ENV *envr, t_indch indch)
+t_indch		sh_search_his(DSTRING **buf, ENV *envr, t_indch indch)
 {
 	DSTRING			*str_srch;
 	DSTRING			*str_over;

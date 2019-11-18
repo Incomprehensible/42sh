@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:43:13 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 13:56:13 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 20:37:19 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,6 @@ int				sort_darr(t_darr *darr)
 	return (1);
 }
 
-DSTRING			*dstr_new_fast(const char *txt, ssize_t strlen, ssize_t bks)
-{
-	DSTRING		*dstr;
-
-	if (!(dstr = ft_memalloc(sizeof(DSTRING))))
-		return (0);
-	if (!txt)
-		return (dstr);
-	dstr->strlen = strlen;
-	dstr->bks = bks;
-	if (!(dstr->txt = ft_memalloc(dstr->bks * DSTR_BLK_SZ)))
-	{
-		free(dstr);
-		return (0);
-	}
-	ft_memcpy(dstr->txt, txt, (size_t)dstr->strlen);
-	return (dstr);
-}
-
 t_darr			sh_cmp_darr(const t_darr darr, DSTRING *str)
 {
 	t_darr		rez;
@@ -81,33 +62,4 @@ t_darr			sh_cmp_darr(const t_darr darr, DSTRING *str)
 		}
 	dstr_del(&cmp);
 	return (rez);
-}
-
-void			correct_namedir_buf(t_darr darr, DSTRING **buf, size_t st_dir)
-{
-	ssize_t		start_name;
-	t_darr		darrcopy;
-	DSTRING		*n_f;
-	DSTRING		*name_dir;
-
-	name_dir = dstr_serr((*buf), st_dir, (*buf)->strlen);
-	start_name = dstrrchr(name_dir, '/');
-	n_f = dstr_serr(name_dir, ++start_name, name_dir->strlen);
-	darrcopy.count = 0;
-	while (darr.count)
-	{
-		dstr_cutins_ch(&n_f, darr.strings[0]->txt[n_f->strlen], n_f->strlen);
-		darrcopy = sh_cmp_darr(darr, n_f);
-		if (darrcopy.count != darr.count)
-		{
-			n_f->txt[--n_f->strlen] = '\0';
-			break ;
-		}
-		if (ft_strcmp(n_f->txt, darr.strings[0]->txt) == 0)
-			break ;
-		free_darr_n(darrcopy.strings, darrcopy.count);
-	}
-	dstr_cutins_dstr(&name_dir, n_f, start_name);
-	dstr_cutins_dstr(buf, name_dir, st_dir);
-	help_correct_namedir_buf(&darrcopy, &n_f, &name_dir);
 }

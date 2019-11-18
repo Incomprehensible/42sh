@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 14:47:35 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/05 16:16:46 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 20:23:01 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int				write_history_buf(char side, int ind, DSTRING **buf, \
 	ind = (side == UP[0]) ? ++ind : --ind;
 	dstr_del(buf);
 	(*buf) = dstr_nerr(g_histr.strings[ind]->txt);
-	sh_new_rewrite(indc.prompt, (*buf), (*buf)->strlen);
+	sh_rewrite(indc.prompt, (*buf), (*buf)->strlen);
 	return (ind);
 }
 
@@ -92,12 +92,12 @@ int				get_oldbuf(DSTRING **buf, DSTRING *oldbuf, t_indch indch)
 {
 	if (ft_strequ((*buf)->txt, oldbuf->txt))
 	{
-		sh_new_rewrite(indch.prompt, (*buf), (*buf)->strlen);
+		sh_rewrite(indch.prompt, (*buf), (*buf)->strlen);
 		return (S_DARR_STRINGS - g_histr.count - 1);
 	}
 	dstr_del(buf);
 	(*buf) = dstr_nerr(oldbuf->txt);
-	sh_new_rewrite(indch.prompt, (*buf), (*buf)->strlen);
+	sh_rewrite(indch.prompt, (*buf), (*buf)->strlen);
 	return (S_DARR_STRINGS - g_histr.count - 1);
 }
 
@@ -118,7 +118,7 @@ t_indch			skip_esc(t_indch indch)
 	return (indch);
 }
 
-t_indch			show_new_history(DSTRING **buf, t_indch indc, ENV *envr)
+t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr)
 {
 	int		ind;
 	DSTRING	*oldbuf;
@@ -139,7 +139,5 @@ t_indch			show_new_history(DSTRING **buf, t_indch indc, ENV *envr)
 	}
 	dstr_del(&oldbuf);
 	indc.ind = (*buf)->strlen;
-	if ((is_get_variable((*buf)) > -1))
-		indc.is_var = 1;
 	return (indc);
 }

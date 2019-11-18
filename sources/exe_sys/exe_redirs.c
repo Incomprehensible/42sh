@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_redirs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:02:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/04 14:56:54 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/18 19:57:22 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int			exe_rdr_heredocument(REDIRECT *rdr, ENV *env)
 	int				fd[2];
 
 	buff = dstr_new("");
-	while ((line = sh_new_redline(prompt, env)) || 1)
+	while ((line = sh_readline(prompt, env)) || 1)
 	{
 		if (!line)
 		{

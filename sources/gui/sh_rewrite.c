@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_new_rewrite.c                                   :+:      :+:    :+:   */
+/*   sh_rewrite.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/13 18:58:36 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 20:21:59 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ int				skip_num(char *str)
 int				ft_color_strlen(char *str, struct winsize term)
 {
 	int		rez;
-	int		tmp;
 	int		i;
 	int 	fl;
 
@@ -204,7 +203,7 @@ int				ft_color_strlen(char *str, struct winsize term)
 	return (rez);
 }
 
-void			sh_new_rewrite(const DSTRING *prompt, const DSTRING *buf,\
+void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
 						const size_t index)
 {
 	struct winsize		term;
