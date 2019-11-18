@@ -6,7 +6,7 @@
 #    By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/18 20:50:08 by gdaemoni         ###   ########.fr        #
+#    Updated: 2019/11/18 22:16:40 by gdaemoni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,11 +105,13 @@ ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltn
 
 GUI_FILES = sh_control_term.c sh_dir_content.c \
 			dstr.c ft_concat.c sh_put_col.c sh_darr.c \
-			reg_expr.c reg_expr_help.c match.c\
+			match.c sh_reg_expr.c sh_reg_expr_help.c sh_reg_help.c \
+			sh_histr.c sh_histr_help.c \
+			sh_readline.c sh_readline_help.c\
 			sh_put_col_help.c sh_dir_content_help.c\
 			sh_move_insertion_point.c\
 			gui_errors.c sh_rewrite.c sh_type_input.c sh_tab.c \
-			sh_histr.c sh_search_his.c sh_readline.c
+			sh_search_his.c sh_readline.c
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

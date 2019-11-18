@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:40:25 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/17 15:34:27 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 21:25:46 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,28 @@
 #include "libft.h"
 #include "sh_readline.h"
 #include <dirent.h>
+
+char				sh_isdir(DSTRING *buf, ssize_t start_dir)
+{
+	DIR			*dir;
+	DSTRING		*tmp;
+
+	tmp = dstr_serr(buf, start_dir, buf->strlen);
+	if (tmp->txt[0] != '.' && tmp->txt[0] != '/')
+	{
+		if (ft_strncmp(tmp->txt, "./", 2))
+			dstr_insert_str(tmp, "./", 0);
+	}
+	dir = opendir(tmp->txt);
+	if (!dir)
+	{
+		dstr_del(&tmp);
+		return (0);
+	}
+	dstr_del(&tmp);
+	closedir(dir);
+	return (1);
+}
 
 char				sh_check_dot(const DSTRING *path)
 {
@@ -48,7 +70,7 @@ char				is_sysdir(char *name, char *sub)
 	{
 		if (name[0] == '.' && name[1] == '\0')
 			return (1);
-		if (name[0] == '.' && name [1] == '.')
+		if (name[0] == '.' && name[1] == '.')
 			return (1);
 		return (0);
 	}

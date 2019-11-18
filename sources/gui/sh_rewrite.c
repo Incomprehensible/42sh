@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 20:21:59 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:18:44 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,6 @@
 #include "libft.h"
 #include <unistd.h>
 #include "sys_tools/sys_errors.h"
-
-void			clear_screen(void)
-{
-	ft_putstr(CLRSCR);
-	ft_putstr("\x001b[100A");
-}
-
-char				is_ctrl(const char ch)
-{
-	if (ch == 0x1 || ch == 0x5 \
-		|| ch == 0x15 || ch == 0x14 \
-		|| ch == 0x18 || ch == 0x06 \
-		|| ch == 0x0e || ch == 0x12)
-		return (1);
-	return (0);
-}
 
 void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
 					int len_p)

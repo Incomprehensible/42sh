@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 15:48:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 20:43:19 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:05:54 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "dstring.h"
 #include <dirent.h>
 
-t_indch					management_line(t_indch indch, DSTRING **buf, ENV *envr)
+t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr)
 {
 	DSTRING		*str;
 
@@ -44,27 +44,6 @@ t_indch					management_line(t_indch indch, DSTRING **buf, ENV *envr)
 	else if (indch.ch == 0x12)
 		indch = sh_search_his(buf, envr, indch);
 	return (indch);
-}
-
-void		fill_buf(DSTRING **buf, const t_astr rez)
-{
-	int		ind;
-	size_t	j;
-
-	ind = dstrrchr(*buf, ' ');
-	if (ind == -1)
-		ind = 0;
-	j = -1;
-	while (++j < rez.count)
-		if (dstrrchr(rez.strings[j], '*') == -1)
-			break ;
-	dstr_cutins_str(buf, "", ind);
-	while (j < rez.count)
-	{
-		if (ind != 0 || rez.count > 1)
-			dstr_insert_str((*buf), " ", (*buf)->strlen);
-		dstr_insert_dstr((*buf), rez.strings[j++], (*buf)->strlen);
-	}
 }
 
 DSTRING			*new_return_line(DSTRING **buf, t_indch indch)
@@ -102,7 +81,7 @@ int				sh_del_char(DSTRING **buf, int ind, const char cmd)
 	return (ind);
 }
 
-DSTRING				*readlie_loop(DSTRING **buf, t_indch indch, ENV *env)
+DSTRING			*readlie_loop(DSTRING **buf, t_indch indch, ENV *env)
 {
 	while (1)
 	{
@@ -128,10 +107,10 @@ DSTRING				*readlie_loop(DSTRING **buf, t_indch indch, ENV *env)
 	return (dstr_nerr(""));
 }
 
-DSTRING				*sh_readline(const DSTRING *prompt, ENV *env)
+DSTRING			*sh_readline(const DSTRING *prompt, ENV *env)
 {
-	DSTRING			*buf;
-	t_indch			indch;
+	DSTRING		*buf;
+	t_indch		indch;
 
 	buf = dstr_nerr("");
 	ft_bzero(&indch, sizeof(t_indch));

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 20:21:33 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 21:49:37 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <sys/ioctl.h>
 #include "sys_tools/sys_errors.h"
 
-static void			ft_strset(char **str, char c, size_t n)
+static void		ft_strset(char **str, char c, size_t n)
 {
 	size_t		i;
 
@@ -28,7 +28,7 @@ static void			ft_strset(char **str, char c, size_t n)
 	(*str)[i] = '\0';
 }
 
-static DSTRING		*sh_get_space(int max, int len)
+static DSTRING	*sh_get_space(int max, int len)
 {
 	char	*str;
 	int		n;
@@ -45,7 +45,7 @@ static DSTRING		*sh_get_space(int max, int len)
 	return (dstr_nerr(""));
 }
 
-DSTRING		*sh_get_col(t_darr dar, const ushort col, ushort iter)
+DSTRING			*sh_get_col(t_darr dar, const ushort col, ushort iter)
 {
 	DSTRING		*colstr;
 	DSTRING		*space;
@@ -73,7 +73,7 @@ DSTRING		*sh_get_col(t_darr dar, const ushort col, ushort iter)
 	return (colstr);
 }
 
-void				free_lines_down(void)
+void			free_lines_down(void)
 {
 	struct winsize		term;
 	int					lines;

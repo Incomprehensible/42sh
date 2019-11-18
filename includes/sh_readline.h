@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 20:48:18 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 21:45:44 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,8 @@ char			*ft_concat(const size_t n, const char *spec, ...);
 
 /* handles a special asterisk character */
 int				reg_expr(DSTRING **buf, t_fl *fl);
+DSTRING			*slice_reg(DSTRING *reg);
+
 
 /* auto-replace reg_expr */
 void			loop(DSTRING *reg, int i, t_astr *rez, const int itr);

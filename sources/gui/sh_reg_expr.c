@@ -1,42 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   reg_expr_loop.c                                    :+:      :+:    :+:   */
+/*   sh_reg_expr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:51:57 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 20:43:25 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:03:21 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
-
-
-DSTRING			*slice_reg(DSTRING *reg)
-{
-	int		i;
-	int		fl;
-	DSTRING	*rez;
-
-	i = -1;
-	fl = 0;
-	while (reg->txt[++i])
-	{
-		if (reg->txt[i] == '*' || reg->txt[i] == '?' || reg->txt[i] == '[')
-			fl = 1;
-		if (reg->txt[i] == '/' && fl)
-		{
-			rez = dstr_serr(reg, 0, i + 1);
-			break ;
-		}
-		if (reg->strlen == i + 1 && fl)
-			rez = dstr_nerr(reg->txt);
-	}
-	if (!rez)
-		rez = dstr_nerr("");
-	return (rez);
-}
 
 static t_regpath	help_get_regpath(const int fl, DSTRING *path)
 {
@@ -53,32 +27,6 @@ static t_regpath	help_get_regpath(const int fl, DSTRING *path)
 		rez.path = path;
 	}
 	return (rez);
-}
-
-t_regpath			get_regpath(DSTRING *reg)
-{
-	int			i;
-	int			fl;
-	int			fl2;
-	DSTRING		*path;
-
-	i = -1;
-	fl = 1;
-	fl2 = 1;
-	path = NULL;
-	while (++i < reg->strlen)
-	{
-		if (reg->txt[i] == '*' || reg->txt[i] == '?' || reg->txt[i] == '[')
-			fl = 0;
-		if (reg->txt[i] == '/' && fl)
-		{
-			if (path)
-				dstr_del(&path);
-			path = dstr_serr(reg, 0, i + 1);
-			fl2 = 2;
-		}
-	}
-	return (help_get_regpath(fl2, path));
 }
 
 static int			cmp(t_astr *rez, int i, t_regpath pth, DSTRING *reg)
@@ -148,15 +96,7 @@ void				loop(DSTRING *reg, int i, t_astr *rez, const int itr)
 		loop(rez->strings[itr], rez->count, &(*rez), itr + 1);
 }
 
-DSTRING			*cut_reg_expr(DSTRING *buf)
-{
-	ssize_t		ind;
-
-	ind = dstrrchr(buf, ' ');
-	return (dstr_serr(buf, ind + 1, buf->strlen));
-}
-
-void					new_reg_expr(DSTRING **buf, t_indch *indch)
+void				new_reg_expr(DSTRING **buf, t_indch *indch)
 {
 	DSTRING		*reg;
 	t_astr		rez;
