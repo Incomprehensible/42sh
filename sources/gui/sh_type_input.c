@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 13:46:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/14 20:06:32 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/17 18:17:15 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,23 +44,23 @@ void				ind_inp_correct(const DSTRING *buf, t_indch *indch)
 	}
 }
 
-void				sh_type_input(const DSTRING *buf, t_indch *indch)
+void				sh_type_input(DSTRING *buf, t_indch *indch)
 {
 	int			i;
-	i = 0;
 
 	indch->type_inp = 0;
-	i = skip_space(buf->txt, i, indch->ind);
+	i = skip_space(buf->txt, 0, indch->ind);
 	indch->ind_inp = i;
 	while (i < indch->ind)
 	{
 		i = skip_alpfha(buf->txt, i, indch->ind);
 		if (buf->txt[i] == '\\' && (i += 2))
 			continue ;
-		if (buf->txt[i] == ';' && !(indch->type_inp = 0))
+		if (ft_memchr(";|&(", buf->txt[i], 4) && !(indch->type_inp = 0))
 		{
 			i = skip_space(buf->txt, i + 1, indch->ind);
 			indch->ind_inp = i;
+			continue ;
 		}
 		if (buf->txt[i] == ' ' && (indch->type_inp = 1))
 			indch->ind_inp = i + 1;

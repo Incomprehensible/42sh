@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/05 13:25:35 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/16 19:43:12 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_darr	env_get_bins(ENV *envp);
 
 int		env_get_bins_unq(t_darr *res, char *str);
 void	env_get_bins_cmp_name(t_darr *res, int namelen);
-t_darr	env_get_keys(ENV *envp);
+t_darr	env_get_keys(ENV *envp, char *pref);
 
 #endif
 

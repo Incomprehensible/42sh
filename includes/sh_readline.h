@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/14 20:01:22 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 13:45:09 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "env.h"
 
 #define S_ASTR_STR 50000
+#define SPEC_SYMBOLS " $=&|)('\"><{}*~`\\"
 
 char			*tmp_readline(char *prompt);
 
@@ -60,12 +61,25 @@ typedef struct	s_indch
 	DSTRING		*prompt;
 }				t_indch;
 
+typedef struct	s_buf
+{
+	DSTRING		*begin;
+	DSTRING		*end;
+	DSTRING		*buf;
+	DSTRING		*val;
+	DSTRING		*sub;
+	DSTRING		*dir;
+	int			cut;
+	int			slash;
+}				t_buf;
+
 /* to save strings sh_tab */
 typedef struct	s_name_ind
 {
 	int			ind;
+	int			fl;
+	int			road;
 	int			ind_name;
-	int			end_name;
 	t_indch		indch;
 }				t_name_ind;
 
@@ -98,9 +112,10 @@ void			fl_input(const DSTRING *buf, t_indch *indch);
 DSTRING			*new_return_line(DSTRING **buf, t_indch indch);
 DSTRING			*sh_readline(const DSTRING *prompt, ENV *env);
 void			new_reg_expr(DSTRING **buf, t_indch *indch);
-void			sh_type_input(const DSTRING *buf, t_indch *indch);
+void			sh_type_input(DSTRING *buf, t_indch *indch);
 void			sh_new_tab(DSTRING **buf, t_indch *indch, ENV *env);
-
+char			is_sysdir(char *name, char *sub);
+int				ft_isdir(DSTRING *buf);
 
 void			init_histr(ENV *envr);
 t_indch			show_new_history(DSTRING **buf, t_indch indc, ENV *envr);
@@ -166,7 +181,7 @@ void			dstr_cutins_str(DSTRING **dst, char *src, ssize_t ind);
 void			dstr_cutins_ch(DSTRING **dst, char ch, ssize_t ind);
 
 /* puts the contents of the directory in t_darr */
-t_darr			sh_dir_content(char *path);
+t_darr			sh_dir_content(char *path, DSTRING *sub);
 
 /* checks the buffer slice from the index if the directory is written there return 1 */
 char			sh_isdir(DSTRING *buf, ssize_t start_dir);

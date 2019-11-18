@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:43:13 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/14 14:57:47 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 13:56:13 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int				sort_darr(t_darr *darr)
 	char		fl;
 
 	fl = 1;
-	if (!darr->count)
+	if (!darr->count || darr->count == 1)
 		return (-1);
 	while (fl--)
 	{

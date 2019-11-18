@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:40:25 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 16:30:43 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/17 15:34:27 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,22 @@ static	char		sh_insert_slash(const char *path, const DSTRING *name)
 	return (0);
 }
 
-char				is_sysdir(char *name)
+char				is_sysdir(char *name, char *sub)
 {
-	if (name[0] == '.' && name[1] == '\0')
-		return (1);
-	if (name[0] == '.' && name[1] == '.' && name[2] == '\0')
+	if (sub[0] == '.')
+	{
+		if (name[0] == '.' && name[1] == '\0')
+			return (1);
+		if (name[0] == '.' && name [1] == '.')
+			return (1);
+		return (0);
+	}
+	if (name[0] == '.')
 		return (1);
 	return (0);
 }
 
-t_darr				sh_dir_content(char *path)
+t_darr				sh_dir_content(char *path, DSTRING *sub)
 {
 	struct dirent	*entry;
 	DIR				*dir;
@@ -64,7 +70,7 @@ t_darr				sh_dir_content(char *path)
 	dir = opendir(path);
 	while ((entry = readdir(dir)) != NULL)
 	{
-		if (is_sysdir(entry->d_name))
+		if (is_sysdir(entry->d_name, sub->txt))
 			continue ;
 		rez.strings[i] = dstr_nerr(entry->d_name);
 		if (sh_insert_slash(path, rez.strings[i]))

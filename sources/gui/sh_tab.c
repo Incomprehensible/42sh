@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:36:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/14 14:39:05 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/17 15:32:05 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_darr			sh_add_path(DSTRING **buf, size_t start_dir)
 	t_darr		overlap;
 
 	path = sh_get_path((*buf), start_dir);
-	content = sh_dir_content(path->txt);
+	content = sh_dir_content(path->txt, str);
 	str = dstr_serr((*buf), start_dir, (*buf)->strlen);
 	overlap = sh_cmp_darr(content, str);
 	dstr_del(&str);

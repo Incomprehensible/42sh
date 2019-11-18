@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 06:51:22 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/07 17:09:41 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/17 13:56:24 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		fill_buf(DSTRING **buf, const t_astr rez)
 	dstr_cutins_str(buf, "", ind);
 	while (j < rez.count)
 	{
-		if (ind != 0)
+		if (ind != 0 || rez.count > 1)
 			dstr_insert_str((*buf), " ", (*buf)->strlen);
 		dstr_insert_dstr((*buf), rez.strings[j++], (*buf)->strlen);
 	}

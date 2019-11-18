@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 16:41:47 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/13 19:02:26 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/17 19:20:50 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int				sh_del_char(DSTRING **buf, int ind, const char cmd)
 		dstr_del_char(buf, (ssize_t)ind);
 		return (ind);
 	}
-	if (cmd == BAKSP && (*buf)->strlen > 0)
+	if (cmd == BAKSP && (*buf)->strlen > 0 && ind > 0)
 	{
 		dstr_del_char(buf, (ssize_t)--ind);
 		return (ind);

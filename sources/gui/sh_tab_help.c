@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 07:43:03 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/14 17:30:49 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/16 20:34:07 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,7 @@
 void			subst_name(DSTRING **buf, t_darr overlap, \
 				int ind, t_name_ind n_ind)
 {
-	DSTRING		*cop;
-
-	cop = dstr_scerr(buf, n_ind.ind_name, n_ind.end_name);
-	dstr_del(&cop);
-	dstr_cutins_dstr(buf, overlap.strings[ind], n_ind.ind_name);
-	sh_new_rewrite(n_ind.indch.prompt, (*buf), (*buf)->strlen);
+	return ;
 }
 
 int				ind_begin_cmd(DSTRING *buf)
@@ -104,15 +99,15 @@ char			is_get_variable(DSTRING *buf)
 
 t_darr			sh_add_variables(DSTRING **buf, ENV *env, int ind_var)
 {
-	DSTRING		*var;
-	t_darr		all_var;
+	// DSTRING		*var;
+	// t_darr		all_var;
 	t_darr		overlap;
 	
-	var = dstr_slice((*buf), ind_var, (*buf)->strlen);
-	all_var = env_get_keys(env);
-	overlap = sh_cmp_darr(all_var, var);
-	dstr_del(&var);
-	free_t_darr(&all_var);
+	// var = dstr_slice((*buf), ind_var, (*buf)->strlen);
+	// all_var = env_get_keys(env);
+	// overlap = sh_cmp_darr(all_var, var);
+	// dstr_del(&var);
+	// free_t_darr(&all_var);
 	return (overlap);
 }
 

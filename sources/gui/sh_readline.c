@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 15:48:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/14 20:46:55 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/17 19:21:33 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ DSTRING				*readlie_loop(DSTRING **buf, t_indch indch, ENV *env)
 		else if (indch.ch == ESC)
 			indch = sh_esc(indch, (*buf)->strlen, buf, env);
 		sh_new_rewrite(indch.prompt, (*buf), indch.ind);
-		// printf("--%d------------------>%d\n", indch.ind_inp, indch.type_inp);
 	}
 	return (dstr_nerr(""));
 }
