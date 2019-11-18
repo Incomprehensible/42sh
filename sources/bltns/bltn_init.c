@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 18:10:52 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/13 13:25:04 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/18 22:10:42 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int			bltn_init(ENV *env)
 			return (-1);
 	}
 	if (getcwd(path, sizeof(path)) == NULL)
-		return(-1);
+		return (-1);
 	pwd = dstr_new(path);
 	oldpwd = dstr_new(path);
 	return (1);

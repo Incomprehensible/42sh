@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 15:05:05 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/16 14:07:05 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/18 22:13:41 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	bltn_unset_parseflags(char **args, t_flags *flgs)
 			while (args[i][++j])
 			{
 				if (args[i][j] == 'f')
-					flgs->first = 1;	
+					flgs->first = 1;
 				else if (args[i][j] == 'v')
 					flgs->second = 1;
 				else
@@ -36,7 +36,7 @@ static int	bltn_unset_parseflags(char **args, t_flags *flgs)
 			}
 		}
 		else
-			break;
+			break ;
 	}
 	return (i);
 }
@@ -61,18 +61,23 @@ static int	bltn_unset_varfunc(char *args, ENV *env)
 	return (0);
 }
 
+static void	bltn_unset_init(int *a, t_flags *fl)
+{
+	(*a) = 0;
+	fl->first = 0;
+	fl->second = 0;
+}
+
 int			bltn_unset(char **args, ENV *envr)
 {
 	t_flags	flgs;
 	int		i;
 
-	i = 0;
-	flgs.first = 0;
-	flgs.second = 0;
+	bltn_unset_init(&i, &flgs);
 	if ((i = bltn_unset_parseflags(args, &flgs)) != -1)
 	{
 		if (flgs.first == 1 && flgs.second == 1)
-			sys_error_handler("unset", E_UNFLG, 0);	
+			sys_error_handler("unset", E_UNFLG, 0);
 		else
 		{
 			i--;

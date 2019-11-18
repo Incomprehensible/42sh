@@ -6,17 +6,17 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 14:51:48 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/16 15:24:11 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/18 22:10:17 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn.h"
 
-int				bltn_export(char **args, ENV *envr)
+int			bltn_export(char **args, ENV *envr)
 {
-	int	i;
-	int j;
-	char *arg[256];
+	int		i;
+	int		j;
+	char	*arg[256];
 
 	i = 0;
 	j = 0;
