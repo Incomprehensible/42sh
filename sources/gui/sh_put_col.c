@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/18 12:45:22 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 21:49:37 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 #include <sys/ioctl.h>
 #include "sys_tools/sys_errors.h"
 
-static void			ft_strset(char **str, char c, size_t n)
+static void		ft_strset(char **str, char c, size_t n)
 {
 	size_t		i;
 
 	i = 0;
 	(*str) = (char*)malloc(sizeof(char) * n + 1);
 	if ((*str) == NULL)
-		sys_fatal_memerr(sys_get_std_message(8));		
+		sys_fatal_memerr(sys_get_std_message(8));
 	while (i < n)
 		(*str)[i++] = c;
 	(*str)[i] = '\0';
 }
 
-static DSTRING		*sh_get_space(int max, int len)
+static DSTRING	*sh_get_space(int max, int len)
 {
 	char	*str;
 	int		n;
@@ -45,7 +45,7 @@ static DSTRING		*sh_get_space(int max, int len)
 	return (dstr_nerr(""));
 }
 
-DSTRING		*sh_get_col(t_darr dar, const ushort col, ushort iter)
+DSTRING			*sh_get_col(t_darr dar, const ushort col, ushort iter)
 {
 	DSTRING		*colstr;
 	DSTRING		*space;
@@ -73,7 +73,7 @@ DSTRING		*sh_get_col(t_darr dar, const ushort col, ushort iter)
 	return (colstr);
 }
 
-void				free_lines_down(void)
+void			free_lines_down(void)
 {
 	struct winsize		term;
 	int					lines;
@@ -98,12 +98,12 @@ void			put_col(t_darr overlap, const DSTRING *buf, t_indch indch)
 	iter = 0;
 	col = get_col(overlap.maxlen + 2);
 	ft_putstr("\n");
-	ft_putstr(MOVEBGN);
 	free_lines_down();
 	colstr = sh_get_col(overlap, col, iter);
 	dstr_cutins_ch(&colstr, '\0', colstr->strlen - 1);
 	ft_putstr(colstr->txt);
 	ft_putstr("\n");
-	sh_new_rewrite(indch.prompt, buf, buf->strlen);
+	ft_putstr(indch.prompt->txt);
+	sh_rewrite(indch.prompt, buf, indch.ind);
 	dstr_del(&colstr);
 }

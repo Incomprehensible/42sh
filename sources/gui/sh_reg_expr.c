@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   reg_expr_loop.c                                    :+:      :+:    :+:   */
+/*   sh_reg_expr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:51:57 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/22 17:59:00 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:03:21 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,6 @@ static t_regpath	help_get_regpath(const int fl, DSTRING *path)
 		rez.path = path;
 	}
 	return (rez);
-}
-
-t_regpath			get_regpath(DSTRING *reg)
-{
-	int			i;
-	int			fl;
-	int			fl2;
-	DSTRING		*path;
-
-	i = -1;
-	fl = 1;
-	fl2 = 1;
-	path = NULL;
-	while (++i < reg->strlen)
-	{
-		if (reg->txt[i] == '*' || reg->txt[i] == '?' || reg->txt[i] == '[')
-			fl = 0;
-		if (reg->txt[i] == '/' && fl)
-		{
-			if (path)
-				dstr_del(&path);
-			path = dstr_serr(reg, 0, i + 1);
-			fl2 = 2;
-		}
-	}
-	return (help_get_regpath(fl2, path));
 }
 
 static int			cmp(t_astr *rez, int i, t_regpath pth, DSTRING *reg)
@@ -86,7 +60,7 @@ static int			cmp(t_astr *rez, int i, t_regpath pth, DSTRING *reg)
 static void			addreg(t_astr *rez, DSTRING *r, DSTRING *reg, int j)
 {
 	size_t		i;
-	DSTRING	*slice;
+	DSTRING		*slice;
 
 	i = j;
 	slice = dstr_serr(reg, r->strlen, reg->strlen + 1);
@@ -120,4 +94,22 @@ void				loop(DSTRING *reg, int i, t_astr *rez, const int itr)
 	dstr_del(&r);
 	if (dstrrchr(rez->strings[itr], '*') != -1)
 		loop(rez->strings[itr], rez->count, &(*rez), itr + 1);
+}
+
+void				new_reg_expr(DSTRING **buf, t_indch *indch)
+{
+	DSTRING		*reg;
+	t_astr		rez;
+
+	reg = cut_reg_expr(*buf);
+	ft_bzero(&rez, sizeof(t_astr));
+	loop(reg, 0, &rez, 0);
+	dstr_del(&reg);
+	if (rez.count > 0)
+		fill_buf(buf, rez);
+	free_t_darr(&rez);
+	indch->tab = 0;
+	indch->reg = 0;
+	indch->fl = 0;
+	indch->ind = (*buf)->strlen;
 }

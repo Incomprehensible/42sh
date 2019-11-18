@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gui_errors.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 16:19:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/13 21:43:17 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:46:58 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ DSTRING		*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei)
 	return (new);
 }
 
-// DSTRING		*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei)
-// {
-// 	DSTRING	*new;
+DSTRING		*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei)
+{
+	DSTRING	*new;
 
-// 	new = dstr_scerr(src, bi, ei);
-// 	if (new == NULL)
-// 		sys_fatal_memerr(sys_get_std_message(8));
-// 	return (new);
-// }
+	new = dstr_slice_cut(src, bi, ei);
+	if (new == NULL)
+		sys_fatal_memerr(sys_get_std_message(8));
+	return (new);
+}
 
 DSTRING		*check_null(DSTRING *line)
 {

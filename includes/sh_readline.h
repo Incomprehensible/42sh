@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/13 21:43:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/18 22:45:26 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "env.h"
 
 #define S_ASTR_STR 50000
+#define SPEC_SYMBOLS " $=&|)('\"><{}*~`\\"
 
 char			*tmp_readline(char *prompt);
 
@@ -50,14 +51,34 @@ typedef struct	s_indch
 	char		fl;
 	int			his;
 	int			reg;
+	int			var;
+	int			is_var;
 	int			tab;
+	int			fl_t;
+	int			type_inp;
+	int			ind_inp;
+	int			ind_slash;
 	DSTRING		*prompt;
 }				t_indch;
+
+typedef struct	s_buf
+{
+	DSTRING		*begin;
+	DSTRING		*end;
+	DSTRING		*buf;
+	DSTRING		*val;
+	DSTRING		*sub;
+	DSTRING		*dir;
+	int			cut;
+	int			slash;
+}				t_buf;
 
 /* to save strings sh_tab */
 typedef struct	s_name_ind
 {
 	int			ind;
+	int			fl;
+	int			road;
 	int			ind_name;
 	t_indch		indch;
 }				t_name_ind;
@@ -82,18 +103,23 @@ typedef struct	s_fl
 	char		reg;
 }				t_fl;
 
-size_t			prebuf;
-int				preind;
+size_t			g_prebuf;
+int				g_preind;
 t_darr			g_histr;
 
+DSTRING			*sh_readline(const DSTRING *prompt, ENV *env);
+
+void			fl_input(const DSTRING *buf, t_indch *indch);
+DSTRING			*new_return_line(DSTRING **buf, t_indch indch);
+void			new_reg_expr(DSTRING **buf, t_indch *indch);
+void			sh_type_input(DSTRING *buf, t_indch *indch);
+void			sh_tab(DSTRING **buf, t_indch *indch, ENV *env);
+char			is_sysdir(char *name, char *sub);
+int				ft_isdir(DSTRING *buf);
+
 void			init_histr(ENV *envr);
-t_indch			show_new_history(DSTRING **buf, t_indch indc, ENV *envr);
-
-DSTRING			*sh_new_redline(const DSTRING *prompt, ENV *env);
-
 
 t_indch			management_line(t_indch indch, DSTRING **buf, ENV *envr);
-char			is_reg(DSTRING *buf);
 void			fill_buf(DSTRING **buf, const t_astr rez);
 int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
 
@@ -103,7 +129,7 @@ DSTRING			*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei);
 // DSTRING			*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei);
 DSTRING			*check_null(DSTRING *line);
 
-char			is_ctrl(const t_indch indch);
+char			is_ctrl(const char ch);
 
 /* 
 ** Command line editing
@@ -124,16 +150,11 @@ int				sh_t_insertion_point(const DSTRING *str, int ind, const char ch);
 t_darr			get_list_cmds(ENV *envp);
 
 /* overwrites the buffer string in the console and sets the cursor at the index */
-void			sh_rewrite(const DSTRING *buf, const size_t index);
-
-void			sh_new_rewrite(const DSTRING *prompt, const DSTRING *buf,\
+void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
 						 const size_t index);
 
 /* deletes a character by index. flag == BAKSP moves carriage one character back */
-ssize_t			sh_del_char(DSTRING **buf, size_t index, const char flag);
-
-/* checks if the user enters a command or directory */
-ssize_t			sh_dstr_iscmd(const DSTRING *str);
+int				sh_del_char(DSTRING **buf, int ind, const char cmd);
 
 /* search for a character from the end of a line. returns character index or -1 */
 ssize_t			dstrrchr(const DSTRING *src, const int ch);
@@ -150,7 +171,7 @@ void			dstr_cutins_str(DSTRING **dst, char *src, ssize_t ind);
 void			dstr_cutins_ch(DSTRING **dst, char ch, ssize_t ind);
 
 /* puts the contents of the directory in t_darr */
-t_darr			sh_dir_content(char *path);
+t_darr			sh_dir_content(char *path, DSTRING *sub);
 
 /* checks the buffer slice from the index if the directory is written there return 1 */
 char			sh_isdir(DSTRING *buf, ssize_t start_dir);
@@ -160,7 +181,6 @@ char			sh_check_dot(const DSTRING *path);
 
 /* clears an array DSTRING */
 void			free_t_darr(t_darr *darr);
-void			free_darr_n(DSTRING **darr, const int size);
 void			free_darr_re(DSTRING **darr, const int size);
 
 /* sorts lexicographically array DSTRING */
@@ -178,21 +198,7 @@ ushort			get_col(const int lencol);
 DSTRING			*sh_get_col(t_darr dar, const ushort col, ushort iter);
 void			free_lines_down(void);
 
-/* auto completion */
-t_indch			sh_tab(DSTRING **buf, ENV *env, t_indch indch);
-t_darr			sh_tab_help(DSTRING **buf, ENV *env, t_indch indch);
-int				sh_tab_loop_help(t_darr overlap, DSTRING **buf, \
-					int fl, t_name_ind n_ind);
-t_darr			sh_add_cmd(DSTRING **buf, ENV *env);
-t_darr			sh_add_path(DSTRING **buf, size_t start_dir);
-char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
-int				ind_begin_cmd(DSTRING *buf);
-void			subst_name(DSTRING **buf, t_darr overlap,\
-					int ind, t_name_ind n_ind);
-char			sh_check_back_slash(DSTRING **buf, const ssize_t start_dir);
-
 /* appends directory name */
-void			correct_namedir_buf(t_darr darr, DSTRING **buf, size_t start_dir);
 void			help_correct_namedir_buf(t_darr *darrcopy, DSTRING **name_fil,\
 					DSTRING **name_dir);
 
@@ -210,6 +216,8 @@ char			*ft_concat(const size_t n, const char *spec, ...);
 
 /* handles a special asterisk character */
 int				reg_expr(DSTRING **buf, t_fl *fl);
+DSTRING			*slice_reg(DSTRING *reg);
+
 
 /* auto-replace reg_expr */
 void			loop(DSTRING *reg, int i, t_astr *rez, const int itr);
@@ -221,7 +229,6 @@ char			is_strdot(const char *path);
 DSTRING			*join_reg(DSTRING *n_dir, DSTRING *cmp, const char fl);
 char			cmp_dirreg(DSTRING *n_dir, DSTRING *cmp,\
 						 DSTRING *reg, const char fl);
-DSTRING			*slice_reg(DSTRING *reg);
 int				nmatch(const char *s1, const char *s2);
 
 /* returns regular expression */
@@ -232,7 +239,6 @@ DSTRING			*cut_reg_expr(DSTRING *buf);
 ** returns the path, if there is no path, returns "."
 */
 t_regpath		get_regpath(DSTRING *reg);
-
 
 /*
 ** To enable history management, click the up or down arrow
@@ -252,12 +258,8 @@ void			write_history(DSTRING *line);
 /* history management */
 t_indch			show_history(DSTRING **buf, t_indch indc, ENV *envr);
 
-t_indch			sh_new_search_h(DSTRING **buf, ENV *envr, t_indch indch);
+t_indch			sh_search_his(DSTRING **buf, ENV *envr, t_indch indch);
 
-void			direction_help(t_darr o, t_darr his, t_indch *ich,\
-					DSTRING **strd);
-
-#define LENSERCH 20
 
 /* overwrites the command history file to avoid buffer overflow */
 void			rewrite_histr(t_darr *histr, ENV *envr);
@@ -265,9 +267,6 @@ void			rewrite_histr(t_darr *histr, ENV *envr);
 /* reads history file and fill struct t_darr */
 char			get_histr(t_darr *histr, ENV *envr);
 
-/* reads pressed keys */
-char			ispers_arws(char ch, t_indch *indch, \
-				t_darr *his, const DSTRING *buf);
 
 void			sys_term_init(void);
 void			sys_term_restore(void);

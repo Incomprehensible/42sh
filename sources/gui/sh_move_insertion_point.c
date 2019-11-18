@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 11:21:26 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/09/04 16:16:29 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/06 17:41:43 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ static int	skip_alpha(const char *str, int ind)
 
 static int	skip_r_space(const char *str, int ind)
 {
-	while (ind && (str[ind] == ' ' || str[ind] == '\0'))
+	while (ind > -1 && ind && (str[ind] == ' ' || str[ind] == '\0'))
 		--ind;
 	return (ind);
 }
 
 static int	skip_r_alpha(const char *str, int ind)
 {
-	while (ind && str[ind] != ' ')
+	while (ind > -1 && ind && str[ind] != ' ')
 		--ind;
 	return (ind);
 }

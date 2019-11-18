@@ -1,24 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   reg_expr.c                                         :+:      :+:    :+:   */
+/*   sh_reg_help.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/25 06:51:22 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/07 17:09:41 by gdaemoni         ###   ########.fr       */
+/*   Created: 2019/11/18 21:42:47 by gdaemoni          #+#    #+#             */
+/*   Updated: 2019/11/18 22:05:23 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
-
-DSTRING			*cut_reg_expr(DSTRING *buf)
-{
-	ssize_t		ind;
-
-	ind = dstrrchr(buf, ' ');
-	return (dstr_serr(buf, ind + 1, buf->strlen));
-}
 
 DSTRING			*slice_reg(DSTRING *reg)
 {
@@ -45,7 +37,15 @@ DSTRING			*slice_reg(DSTRING *reg)
 	return (rez);
 }
 
-void		fill_buf(DSTRING **buf, const t_astr rez)
+DSTRING			*cut_reg_expr(DSTRING *buf)
+{
+	ssize_t		ind;
+
+	ind = dstrrchr(buf, ' ');
+	return (dstr_serr(buf, ind + 1, buf->strlen));
+}
+
+void			fill_buf(DSTRING **buf, const t_astr rez)
 {
 	int		ind;
 	size_t	j;
@@ -60,25 +60,34 @@ void		fill_buf(DSTRING **buf, const t_astr rez)
 	dstr_cutins_str(buf, "", ind);
 	while (j < rez.count)
 	{
-		if (ind != 0)
+		if (ind != 0 || rez.count > 1)
 			dstr_insert_str((*buf), " ", (*buf)->strlen);
 		dstr_insert_dstr((*buf), rez.strings[j++], (*buf)->strlen);
 	}
 }
 
-int				reg_expr(DSTRING **buf, t_fl *fl)
+t_regpath		get_regpath(DSTRING *reg)
 {
-	DSTRING		*reg;
-	t_astr		rez;
+	int			i;
+	int			fl;
+	int			fl2;
+	DSTRING		*path;
 
-	reg = cut_reg_expr(*buf);
-	ft_bzero(&rez, sizeof(t_astr));
-	loop(reg, 0, &rez, 0);
-	dstr_del(&reg);
-	if (rez.count > 0)
-		fill_buf(buf, rez);
-	free_darr_n(rez.strings, rez.count);
-	fl->tab = 0;
-	fl->reg = 0;
-	return ((*buf)->strlen);
+	i = -1;
+	fl = 1;
+	fl2 = 1;
+	path = NULL;
+	while (++i < reg->strlen)
+	{
+		if (reg->txt[i] == '*' || reg->txt[i] == '?' || reg->txt[i] == '[')
+			fl = 0;
+		if (reg->txt[i] == '/' && fl)
+		{
+			if (path)
+				dstr_del(&path);
+			path = dstr_serr(reg, 0, i + 1);
+			fl2 = 2;
+		}
+	}
+	return (help_get_regpath(fl2, path));
 }
