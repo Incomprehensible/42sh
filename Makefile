@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+         #
+#    By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/18 23:03:26 by gdaemoni         ###   ########.fr        #
+#    Updated: 2019/11/19 04:39:01 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			sys_tools/sys_touch.c sys_tools/sys_argc.c sys_tools/sys_token_string.c \
 			sys_tools/sys_exprs_strings.c \
 			\
-			bltns/bltn_jobs/bltn_jobs.c bltns/bltn_jobs/bltn_fg.c\
+			bltns/bltn_jobs/bltn_jobs.c bltns/bltn_jobs/bltn_fg.c bltns/bltn_set.c\
 			\
 			$(addprefix gui/, $(GUI_FILES)) \
 			sys_tools/sys_config.c sys_tools/sys_files.c sys_tools/sys_proc_tables.c \

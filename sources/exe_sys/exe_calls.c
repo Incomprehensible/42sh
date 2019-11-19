@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_calls.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:03:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/15 08:27:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 03:36:58 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int			exe_execute_expr(EXPRESSION *expr, ENV *envr, int *status)
 	FUNC	*func;
 	t_avln	*f_node;
 
+	if (!expr->args[0] && !(*status = 0))
+		return (0);
 	if ((f_node = ft_avl_search(envr->builtns, expr->args[0])))
 	{
 		// *BUILTN

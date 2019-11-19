@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_exprs_strings.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 19:52:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 22:11:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 03:58:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,10 +157,15 @@ char		*ilget_subsh(SUBSH *sbh)
 char		*ilget_bkgr(BCKGR *bkgr)
 {
 	char		*res;
+	char		*tmp;
 
-	if (!(res = str_from_n_tkls(bkgr->tls, TOKSTR_LMT, 0, TK_ARSHLOCH)))
-		if (!(res = ft_strdup(TOKSTR_FAIL)))
+	if (!(tmp = str_from_n_tkls(bkgr->tls, TOKSTR_LMT, 0, TK_ARSHLOCH)))
+		if (!(tmp = ft_strdup(TOKSTR_FAIL)))
 			sys_fatal_memerr("ILGET_BKGR");
+	if (!(res = ft_strjoin(tmp, "&")))
+		res = tmp;
+	else
+		free(tmp);
 	return (res);
 }
 

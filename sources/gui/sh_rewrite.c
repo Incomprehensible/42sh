@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 02:23:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 05:08:12 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,15 +165,9 @@ int				ft_color_strlen(char *str, struct winsize term)
 	rez = 0;
 	while (str[++i])
 	{
-		if (str[i] == '\033')
-			while (str[i] && !ft_isalpha(str[i]) && \
-					!ft_isdigit(str[i]) && str[i] != ' ')
-			{
-				if ((str[i] == ';' || str[++i] == '[') && ++i)
-					i += skip_num(str + i);
-				if (str[i] != ';')
-					++i;
-			}
+		while (str[i] == '\033')
+			while (str[i++] != 'm')
+				;
 		if (str[i] == '\n')
 		{
 			rez += term.ws_col - (rez % term.ws_col);

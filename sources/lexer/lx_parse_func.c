@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 01:48:11 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 02:55:52 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,17 @@ void	*ft_arrmemdel(void **ap)
 
 char    *pull_token(char *str, size_t i)
 {
-    char *new;
-    size_t tmp;
+    char	*new;
+    // size_t tmp;
 
-    tmp = i;
-    new = (char *)ft_memalloc((i + 1));
-    while (*str && i--)
-        *new++ = *str++;
-    return (new - tmp);
+    // tmp = i;
+    // new = (char *)ft_memalloc((i + 1));
+    // while (*str && i--)
+    //     *new++ = *str++;
+    // return (new - tmp);
+	new = ft_memdup(str, i + 1);
+	new[i] = 0;
+	return (new); 
 }
 
 static char	*pull_single(char *str)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_proc_tables.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 09:13:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 22:31:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 04:06:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "sys_tools/sys_hidden.h"
 #include "sys_tools/sys_errors.h"
 #include "stdio.h"
+#include "libftprintf.h"
 #include "dstring.h"
 #include "rms.h"
 
@@ -59,6 +60,8 @@ t_pgrp		*sys_prg_create(pid_t prg, t_dlist *prcs, char *str, int mode)
 	g_ptab[g_jid]->state = PS_S_RUN;
 	g_ptab[g_jid]->signal = -1;
 	g_ptab[g_jid]->flag = 0;
+	if (mode == PS_M_BG)
+		ft_printf("[%d] %d\n", g_jid, prg);
 	++g_jid;
 	return (g_ptab[g_jid - 1]);
 }

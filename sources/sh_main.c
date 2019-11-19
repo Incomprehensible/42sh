@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 02:33:08 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 05:18:23 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,9 @@ void			sh_loop(ENV *env)
 	}
 }
 
-#define _TEST_PS "%B%c1%?%c%B%%%c4%P %c3$ %c"
+// %t %u@%h :: %p :: %n
+
+#define _TEST_PS "%B%c2%t %c1%u%c4@%c5%H%c4:%c6%P%n%c3$> %c"
 
 int				main(int argc, char **argv, char **envp)
 {

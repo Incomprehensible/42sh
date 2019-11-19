@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 19:52:22 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/18 22:09:07 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 04:32:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ int			bltn_env(char **args, ENV *env)
 	if (!(mas = ft_avl_tree_to_warr(env->globals, &avln_todstring_key_val)))
 		return (210);
 	while (mas[++i])
-	{
-		ft_putstr(mas[i]);
-		ft_putchar('\n');
-	}
+		ft_putendl(mas[i]);
 	et_rm_warr(mas);
 	return (0);
 }

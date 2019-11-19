@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_bckgr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 13:46:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 22:31:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 03:41:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int		exe_bkgr_expr(BCKGR *bkgr, ENV *envr, int *status)
 	extern char		*g_hbg;
 	SUBSH			f_subsh;
 
+	*status = 0;
 	if (sbsh_is_fork_n_need(bkgr->tls))
 	{
 		ft_bzero(&f_subsh, sizeof(SUBSH));
@@ -49,10 +50,9 @@ int		exe_bkgr_expr(BCKGR *bkgr, ENV *envr, int *status)
 	}
 	else
 	{
-		if ((cpid = fork()) < 0)
-		{
+		cpid = fork();
+		if (cpid < 0 && (*status = 2))
 			return (-E_FRKFL);
-		}
 		else if (cpid == 0)
 			exe_bkgr_alg(bkgr, envr, status);
 	}
