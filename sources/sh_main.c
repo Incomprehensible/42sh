@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 05:18:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 16:17:32 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,9 +225,9 @@ int				main(int argc, char **argv, char **envp)
 	// temp bltns
 	ft_avl_set(env.builtns, ft_avl_node_cc("dbg_42", &bltn_dbg_snap, 8));
 	ft_avl_set(env.builtns, ft_avl_node_cc("source", &bltn_source, 8));
-	ft_avl_set(env.globals, ft_avl_node_cc("CLICOLOR", "1", 2));
-	ft_avl_set(env.locals, ft_avl_node_cc("PS", _TEST_PS, ft_strlen(_TEST_PS) + 1));
-	ft_avl_set(env.globals, ft_avl_node_cc("GREP_OPTIONS", "--color=auto", 14));
+	ft_avl_set(env.globals, ft_avl_node("CLICOLOR", "1", 2));
+	ft_avl_set(env.locals, ft_avl_node("PS", _TEST_PS, ft_strlen(_TEST_PS) + 1));
+	ft_avl_set(env.globals, ft_avl_node("GREP_OPTIONS", "--color=auto", 14));
 
 	// CHOOSE A TYPE OF LAUNCH WITH lflags n flags
 	sh_launch_system(&env, flags, argv);

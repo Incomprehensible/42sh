@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 16:14:37 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/19 15:18:07 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 16:05:48 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ int			bltn_type(char **args, ENV *env)
 			bltn_type_output(args[i], 1, NULL);
 		else if (bltn_type_check_reserved(args[i]))
 			bltn_type_output(args[i], 2, NULL);
-		else if (bltn_type_check_alias(args[i], &val, env))
-			bltn_type_output(args[i], 3, val);
 		else if (bltn_type_check_bins(args[i], env, &val))
 			bltn_type_output(args[i], 4, val);
 		else
