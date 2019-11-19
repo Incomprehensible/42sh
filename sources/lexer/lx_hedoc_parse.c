@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/27 15:48:38 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 14:10:08 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 
 char    *pull_word(char *str, t_dlist **tok, short i)
 {
-    short flag;
+    short	flag;
+	char	*new;
 
     flag = 1;
     str = (*str == '\\' && !(flag = 0)) ? ++str : str;
@@ -34,7 +35,9 @@ char    *pull_word(char *str, t_dlist **tok, short i)
     }
     if (!i)
         return (NULL);
-    make_token(tok, markup_station(pull_token(str - i, i), TK_HERED), TK_WORD);
+	new = pull_token(str - i, i);
+    make_token(tok, markup_station(new, TK_HERED), TK_WORD);
+	free(new);
     return (str);
 }
 

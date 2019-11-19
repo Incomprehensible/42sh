@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_quots_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 02:57:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 12:25:21 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ size_t   can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
 		{
 			tmp = pull_token(str - j, j);
 			new = markup_station(tmp, TK_VAR);
-			//new = markup_station(pull_token(str - j, j), TK_VAR);
 			make_token(tok, new, TK_VAR);
 			if (tmp)
 				free(tmp);
@@ -70,7 +69,6 @@ size_t   can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
 		{
 			tmp = pull_token(str - j, j);
 			new = markup_station(tmp, type);
-			//new = markup_station(pull_token(str - j, j), type);
 			if (tmp)
 				free(tmp);
 			make_token(tok, new, TK_EXPR);

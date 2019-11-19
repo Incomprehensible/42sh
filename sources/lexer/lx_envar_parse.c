@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_envar_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 03:22:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 03:24:50 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 10:54:25 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 short   is_separator(char str)
 {
-	if (str != ' ' && str != '\t' && str != '\n' && str != ';' && str != '&' && str != '|' && str != '"')
+	if (str != ' ' && str != '\t' && str != '\n' && str != ';' && str != '&' && str != '|' && str != '"' && str)
 		return (0);
 	return (1);
 }

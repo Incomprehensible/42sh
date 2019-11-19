@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_parse_func.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 02:55:52 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 12:07:17 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,16 @@ static char	*cut_mirr(char *str)
 	return (new);
 }
 
-static short	mirrored(char **arr, size_t i)
+// static short	mirrored(char **arr, size_t i)
+// {
+// 	if (!ft_strchr(arr[i], '"') && !ft_strchr(arr[i], '$') && arr[i][0] != '\n')
+// 		return (0);
+// 	return (1);
+// }
+
+static short	mirrored(char *arr)
 {
-	if (!ft_strchr(arr[i], '"') && !ft_strchr(arr[i], '$') && arr[i][0] != '\n')
+	if (*arr != '"' && *arr != '$' && *arr != '\n')
 		return (0);
 	return (1);
 }
@@ -133,7 +140,7 @@ static char	*cut_mirr_dq(char *str)
 		new = pull_single(splitted[0]);
 	while (splitted[i])
 	{
-		if (!mirrored(splitted, i))
+		if (!mirrored(splitted[i]))
 		{
 			if (new)
 			{
@@ -280,7 +287,11 @@ char	*get_copy(char *strt, char *fin, t_tk_type type)
 		i++;
 	}
 	if (*fin && *fin == '\\' && *(fin + 1) == '\\')
-		flag = flag ? 3 : 2;
+		flag = 2;
+	if (*(strt - i) == '\\' && !(mirrored(strt - i + 1)))
+		flag = flag ? 3 : 1;
+	// if (*fin && *fin == '\\' && *(fin + 1) == '\\')
+	// 	flag = flag ? 3 : 2;
 	strt -= i;
 	str = ft_strnew(i + 1);
 	ft_strlcat(str, strt, i + 1);

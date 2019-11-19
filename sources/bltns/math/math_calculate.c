@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_calculate.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 02:18:51 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 14:15:30 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,27 +70,6 @@ t_tk_type	is_number(char *value)
 	return (type);
 }
 
-// t_tk_type	is_number(char *value)
-// {
-// 	t_tk_type type;
-
-// 	if (value && (*value == '-' || *value == '+'))
-// 		value++;
-// 	if (layer_parse_two("0x@01@", value))
-// 		type = BIN;
-// 	else if (layer_parse_two("0x@0123456789abcdefABCDEF@", value))
-// 		type = HEX;
-// 	else if (layer_parse_two("0@01234567@", value))
-// 		type = SEV;
-// 	else if (layer_parse_two("0o@01234567@", value))
-// 		type = SEV;
-// 	else if (!(*value == '0' && *(value + 1)) && layer_parse_two("@0123456789@", value))
-// 		type = DEC;
-// 	else
-// 		return (0);
-// 	return (type);
-// }
-
 long	fetch_operand(t_tok *operand, ENV *env, ERR *err)
 {
 	DSTRING		*value;
@@ -121,7 +100,6 @@ long	fetch_operand(t_tok *operand, ENV *env, ERR *err)
 	return (ft_atoi_base(operand->value, (int)operand->type));
 }
 
-//the fuck you don't have a func that only counts this shitty list
 long	check_result(t_dlist *opd_stack, ENV *env, ERR *err)
 {
 	char	*value;
@@ -377,7 +355,6 @@ char *set_var(t_dlist *opd_stack, ENV *env, ERR *err)
 	return (new);
 }
 
-//if we equal something, we like normal substitute opd to new assigned value
 t_dlist	*set_new_var(t_dlist *opd_stack, ENV *env, ERR *err)
 {
 	char		*value;
@@ -407,7 +384,6 @@ t_dlist	*equate_opd(t_dlist *opd_stack, ENV *env, ERR *err)
 		if (opd_stack)
 		{
 			set_error(ft_strdup("="), OPERAND_EXP, err);
-			// set_error(ft_strdup(((t_tok *)opd_stack->content)->value), OPERAND_EXP, err);
 			return (opd_stack);
 		}
 		else
@@ -459,258 +435,3 @@ long	polish_calculate(t_dlist **polish_not, ENV *env, ERR *err)
 	clear_tokens(polish_not, 0);
 	return (check_result(opd_stack, env, err));
 }
-
-
-// t_dlist	*get_single_opd(t_dlist *opd_stack, t_tk_type op, ERR *err)
-// {
-// 	static long			(*ptr[6])(long);
-// 	long 				res;
-// 	long				a;
-
-// 	if (!ptr[0])
-// 	{
-// 		ptr[0] = increment_opd();
-// 		ptr[1] = decrement_opd();
-// 		ptr[2] = reject_opd();
-// 		ptr[3] = positive_opd();
-// 		ptr[4] = negative_opd();
-// 		ptr[5] = make_none_opd();
-// 	}
-// 	if (!opd_stack)
-// 		return (set_error(NULL, OPERAND_EXP, err));
-// 	a = ft_atoi_base(((t_tok *)opd_stack->content)->value, (int)((t_tok *)opd_stack->content)->type);
-// 	res = ptr[get_ind(op)](a);
-// 	return (substitute_value(opd_stack, res, 1));
-// }
-
-// t_dlist	*get_both_opd(t_dlist *opd_stack, t_tk_type op, ERR *err)
-// {
-// 	static long			(*ptr[6])(long, long);
-// 	long 				res;
-// 	long				a;
-// 	long				b;
-
-// 	if (!ptr[0])
-// 	{
-// 		ptr[0] = add_opd();
-// 		ptr[1] = subst_opd();
-// 		ptr[2] = mult_opd();
-// 		ptr[3] = devid_opd();
-// 		ptr[4] = devidrem_opd();
-// 		ptr[5] = compare_opd();
-// 	}
-// 	if (!opd_stack || !opd_stack->prev)
-// 	{
-// 		if (opd_stack)
-// 		{
-// 			set_error(((t_tok *)opd_stack->content)->value, OPERAND_EXP, err);
-// 			return (opd_stack);
-// 		}
-// 		else
-// 			return (set_error(NULL, OPERAND_EXP, err));
-// 	}
-// 	a = ft_atoi_base(((t_tok *)opd_stack->prev->content)->value, (int)((t_tok *)opd_stack->prev->content)->type);
-// 	b = ft_atoi_base(((t_tok *)opd_stack->content)->value, (int)((t_tok *)opd_stack->content)->type);
-// 	res = ptr[get_ind(op)](a, b);
-// 	return (substitute_value(opd_stack, res, 2));
-// }
-
-// static t_tk_type	get_ind(t_tk_type op)
-// {
-// 	static t_tk_type	ops[] = {
-// 	INCRM, DECRM, NEGAT,
-// 	REJECT, NOT, POSIT, NULL
-// 	};
-// 	t_tk_type			type;
-
-// 	type = 0;
-// 	while (ops[type] != op)
-// 		type++;
-// 	return (type);
-// }
-
-// t_dlist	*push_operand(t_dlist *opd_stack, t_dlist *current, ENV *env, ERR *err)
-// {
-// 	t_tk_type	type;
-// 	char		*value;
-
-// 	type = ((t_tok *)current->content)->type;
-// 	if (type == OPRND)
-// 	{
-// 		value = env_get_variable(((t_tok *)current->content)->value, env);
-// 		if (!value)
-// 			value = ft_strdup("0");
-// 		else if (!is_number(value, current))
-// 		{
-// 			set_error(value, STR_OPERAND, err);
-// 			return (opd_stack);
-// 		}
-// 		free(((t_tok *)current->content)->value);
-// 		((t_tok *)current->content)->value = value;
-// 	}
-// 	return (push_to_stack(opd_stack, current));
-// }
-
-// t_dlist	*substitute_both_value(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
-// {
-// 	char	*value;
-// 	t_dlist	*tmp;
-
-// 	value = ft_itoa(res);
-// 	tmp = opd_stack->prev;
-// 	del_tokens(opd_stack);
-// 	tmp->next = NULL;
-// 	if (((t_tok *)tmp->content)->type == OPRND)
-// 	{
-// 		env_set_variable(((t_tok *)tmp->content)->value, dstr_new(value), env);
-// 		free(value);
-// 	}
-// 	else
-// 	{
-// 		free(((t_tok *)tmp->content)->value);
-// 		((t_tok *)tmp->content)->value = value;
-// 		((t_tok *)tmp->content)->type = DEC;
-// 		opd_stack = tmp;
-// 	}
-// 	while (opd_stack)
-// 		opd_stack = opd_stack->prev;
-// 	return (opd_stack);
-// }
-
-// t_dlist	*push_operand(t_dlist *opd_stack, t_dlist *current, ENV *env, ERR *err)
-// {
-// 	t_tk_type	type;
-// 	char		*value;
-
-// 	type = ((t_tok *)current->content)->type;
-// 	if (type == OPRND)
-// 	{
-// 		value = env_get_variable(((t_tok *)current->content)->value, env)->txt;
-// 		if (!value)
-// 			value = ft_strdup("0");
-// 		else if (!is_number(value))
-// 		{
-// 			set_error(value, STR_OPERAND, err);
-// 			return (opd_stack);
-// 		}
-// 		free(((t_tok *)current->content)->value);
-// 		((t_tok *)current->content)->value = value;
-// 	}
-// 	return (push_to_stack(opd_stack, current));
-// }
-
-// long	fetch_operand(t_tok *operand, ENV *env, ERR *err)
-// {
-// 	char		*value;
-// 	t_tk_type	type;
-// 	long		res;
-
-// 	if (operand->type == OPRND)
-// 	{
-// 		value = (env_get_variable(operand->value, env))->txt;
-// 		if (!value || !(*value))
-// 		{
-// 			if (value)
-// 				free(value);
-// 			value = ft_strdup("0");
-// 			type = 10;
-// 		}
-// 		else if (!(type = is_number(value)))
-// 		{
-// 			set_error(value, STR_OPERAND, err);
-// 			return (0);
-// 		}
-// 		res = pull_from_base(value, type);
-// 		free(value);
-// 		return (res);
-// 	}
-// 	return (ft_atoi_base(operand->value, (int)operand->type));
-// }
-
-// long	check_result(t_dlist *opd_stack, ENV *env, ERR *err)
-// {
-// 	char	*value;
-// 	DSTRING	*tmp;
-// 	long	res;
-
-// 	res = 0;
-// 	if (!err->err_code)
-// 	{
-// 		value = opd_stack ? ((t_tok *)opd_stack->content)->value : NULL;
-// 		if (!value || (count_dlist(opd_stack)) != 1)
-// 		{
-// 			set_error(value, OPERAND_EXP, err);
-// 			return (0);
-// 		}
-// 		if (((t_tok *)opd_stack->content)->type == OPRND)
-// 		{
-// 			tmp = env_get_variable(value, env);
-// 			if (!tmp || !(*tmp->txt))
-// 			{
-// 				if (tmp)
-
-// 			}
-// 			res = ft_atoi(tmp->txt);
-// 			dstr_del(&tmp);
-// 		}
-// 		else
-// 			res = ft_atoi_base(value, ((t_tok *)opd_stack->content)->type);
-// 	}
-// 	del_tokens(opd_stack);
-// 	return (res);
-// }
-
-// t_dlist	*substitute_single(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
-// {
-// 	char	*value;
-// 	t_dlist	*tmp;
-
-// 	value = ft_itoa(res);
-// 	if (((t_tok *)opd_stack->content)->type == OPRND && (op == INCRM || op == DECRM))
-// 	{
-// 		env_unset_variable(((t_tok *)tmp->content)->value, env);
-// 		env_set_variable(((t_tok *)opd_stack->content)->value, dstr_new(value), env);
-// 		free(value);
-// 	}
-// 	else
-// 	{
-// 		free(((t_tok *)opd_stack->content)->value);
-// 		((t_tok *)opd_stack->content)->value = value;
-// 		((t_tok *)opd_stack->content)->type = DEC;
-// 	}
-// 	while (opd_stack && opd_stack->prev)
-// 		opd_stack = opd_stack->prev;
-// 	return (opd_stack);
-// }
-
-// char *pull_env_val(t_dlist *opd_stack, ENV *env, ERR *err)
-// {
-// 	char		*new;
-// 	char		*value;
-// 	t_tk_type	type;
-// 	long		res;
-	
-// 	new = ((t_tok *)opd_stack->content)->value;
-// 	value = env_get_variable(((t_tok *)opd_stack->content)->value, env)->txt;
-// 	if (!value)
-// 		value = ft_strdup("0");
-// 	if (!(type = is_number(value)))
-// 	{
-// 		set_error(new, STR_OPERAND, err);
-// 		free(value);
-// 		return (NULL);
-// 	}
-// 	res = ft_atoi_base(value, type);
-// 	new = ((t_tok *)opd_stack->prev->content)->value;
-// 	if (((t_tok *)opd_stack->prev->content)->type != OPRND)
-// 	{
-// 		set_error(new, INVALID_ASSIG, err);
-// 		free(value);
-// 		return (NULL);
-// 	}
-// 	// env_unset_variable(new, env);
-// 	free(value);
-// 	value = ft_itoa(res);
-// 	env_set_variable(new, dstr_new(value), env);
-// 	return (value);
-// }

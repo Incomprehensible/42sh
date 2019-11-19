@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_polish_reverse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 02:09:25 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 16:51:41 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,8 @@ short	pop_operator(t_dlist *op_stack, t_tk_type new_tok)
 	op_stack = lst_to_end(op_stack);
 	if (new_tok == INTO_BR || ((t_tok *)op_stack->content)->type == INTO_BR)
 		return (0);
-	// if (new_tok == ((t_tok *)op_stack->content)->type && (new_tok == NOT || new_tok == REJECT))
-	// 	return (0);
 	id1 = get_operator_tok((t_tk_type *)ops, ((t_tok *)op_stack->content)->type);
 	id2 = get_operator_tok((t_tk_type *)ops, new_tok);
-	//was if (id1 < id2)
 	if (!id1 && id1 == id2)
 		return (0);
 	if (id1 < id2 || id1 == id2)
@@ -139,6 +136,34 @@ static short	stop_token(t_tk_type stop, t_tk_type current)
 	return (0);
 }
 
+t_dlist	*clean_op_stack(t_dlist *ops)
+{
+	del_tokens(ops);
+	ops = NULL;
+	return (ops);
+}
+
+t_dlist	*prepare_op_stack(t_dlist *ops, t_tk_type op)
+{
+	t_dlist		*tmp;
+
+	if (op != OUT_BR)
+	{
+		tmp = ops;
+		ops = (ops && ops->next) ? ops->next : NULL;
+	}
+	else
+		tmp = ops ? ops->prev : NULL;
+	del_tokens(ops);
+	if (tmp)
+	{
+		tmp->next = NULL;
+		while (tmp->prev)
+			tmp = tmp->prev;
+	}
+	return (tmp);
+}
+
 //it clears two stacks inside 
 //if we got closing bracket or operand lower value appeared we make or update final linked list
 t_dlist	*update_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops, t_tk_type op)
@@ -157,26 +182,33 @@ t_dlist	*update_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops, t_tk_t
 	{
 		if (!is_bracket(((t_tok *)ops->content)->type))
 			fin_list[0] = push_to_stack(fin_list[0], ops);
+		if (!ops->prev)
+			break ;
 		ops = ops->prev;
 	}
 	tmp = lst_to_end(fin_list[0]);
 	fin_list[1] = tmp;
 	del_tokens(start_opds);
-	if (op != OUT_BR)
-	{
-		tmp = ops;
-		ops = (ops && ops->next) ? ops->next : ops;
-	}
+	if (ops && !ops->prev)
+		return (clean_op_stack(ops));
 	else
-		tmp = ops ? ops->prev : NULL;
-	if (tmp)
-	{
-		tmp->next = NULL;
-		while (tmp->prev)
-			tmp = tmp->prev;
-	}
-	del_tokens(ops);
-	return (tmp);
+		return (prepare_op_stack(ops, op));
+	// if (op != OUT_BR)
+	// {
+	// 	tmp = ops;
+	// 	ops = (ops && ops->next) ? ops->next : NULL;
+	// }
+	// else
+	// 	tmp = ops ? ops->prev : NULL;
+	// del_tokens(ops);
+	// if (tmp)
+	// {
+	// 	tmp->next = NULL;
+	// 	while (tmp->prev)
+	// 		tmp = tmp->prev;
+	// }
+	// //del_tokens(ops);
+	// return (tmp);
 }
 
 t_dlist	*into_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops)
@@ -217,7 +249,6 @@ t_dlist	*go_through_brackets(t_dlist *dimon_loh, t_tk_type type)
 	return (dimon_loh);
 }
 
-//add brackets to stack if its into; remove brackets from stack if its out and check whether we closed all brackets
 void	into_reverse_notation(t_dlist *dimon_loh, t_dlist **fin)
 {
 	t_tk_type		type;
@@ -261,94 +292,7 @@ long	ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err)
 		return (0);
 	if (!polish_not[0])
 		return (0);
-	//DBG_PRINT_MATH(polish_not[0]);
+	DBG_PRINT_MATH(polish_not[0]);
 	pshe_pshe_res = polish_calculate(polish_not, env, err);
 	return (pshe_pshe_res);
 }
-
-// void	into_reverse_notation(t_dlist *dimon_loh, ERR *err, t_dlist **fin)
-// {
-// 	t_tk_type		type;
-// 	t_dlist			*op_stack;
-// 	t_dlist			*opd_stack;
-// 	int				br;
-
-// 	br = 0;
-// 	op_stack = NULL;
-// 	opd_stack = NULL;
-// 	while (dimon_loh)
-// 	{
-// 		type = ((t_tok *)dimon_loh->content)->type;
-// 		if (type == INTO_BR || type == OUT_BR)
-// 			br = (type == INTO_BR) ? ++br : --br;
-// 		if (is_operand_tok(type))
-// 			opd_stack = push_to_stack(opd_stack, dimon_loh); //add new operand to stack
-// 		else if (type == TK_EOF || pop_operator(op_stack, type))
-// 		{
-// 			op_stack = update_fin_list(fin, opd_stack, op_stack, type);
-// 			opd_stack = NULL;
-// 			while (dimon_loh && (type == OUT_BR || type == TK_EOF))
-// 			{
-// 				dimon_loh = dimon_loh->next;
-// 				type = dimon_loh ? ((t_tok *)dimon_loh->content)->type : 0;
-// 			}
-// 			continue ;
-// 		}
-// 		else
-// 			op_stack = push_to_stack(op_stack, dimon_loh); //add new operator or bracket to stack
-// 		dimon_loh = dimon_loh->next;
-// 	}
-// 	if (op_stack)
-// 		update_fin_list(fin, opd_stack, op_stack, TK_EOF);
-// 	if (br)
-// 	{
-// 		set_error(NULL, PARSE_ERR, err);
-// 		clear_tokens(fin, 0);
-// 	}
-// }
-
-// short	check_sequence(t_dlist **fin, int br, ERR *err)
-// {
-// 	if (br)
-// 	{
-// 		set_error(NULL, PARSE_ERR, err);
-// 		clear_tokens(fin, 0);
-// 		return (0);
-// 	}
-// 	return (1);
-// }
-
-//t_dlist	*push_to_stack(t_dlist *stack, t_dlist *new_elem)
-//{
-//	t_dlist		*start;
-//	t_dlist		*tmp;
-//	char		*value;
-//	t_tok		token_data;
-//
-//	value = ((t_tok *)new_elem->content)->value;
-//	//token_data.value = (value) ? ft_strdup(value) : NULL;
-//	//token_data.type = ((t_tok *)new_elem->content)->type;
-//	start = stack;
-//	stack = lst_to_end(stack);
-//	tmp = stack;
-//	if (!start)
-//	{
-//		stack = ft_dlstnew(NULL, 0);
-//		start = stack;
-//	}
-//	else
-//	{
-//		stack->next = ft_dlstnew(NULL, 0);
-//		stack = stack->next;
-//	}
-//	stack->content = (t_tok *)malloc(sizeof(t_tok));
-//	printf("address of stack->content before assign: %p\n", stack->content);
-//	((t_tok *)stack->content)->type = ((t_tok *)new_elem->content)->type;
-//	((t_tok *)stack->content)->value = (value) ? ft_strdup(value) : NULL;
-//	printf("address of stack->content after assign: %p\n", stack->content);
-//	stack->next = NULL;
-//	stack->prev = tmp;
-//	// if (tmp)
-//	//     tmp->next = stack;
-//	return (start);
-//}

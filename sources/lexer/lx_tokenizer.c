@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/18 22:15:19 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 13:56:11 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ short     find_token(t_stx **tree, char *str)
     choice = 0;
     if (ft_isspace(*str) || *str == '\n')
         return (EMPTY);
-    else if (*str == '$' && *(str + 1) != '=')
+    else if (*str == '$' && valid_deref(str))
         return (DEREF);
     else if (is_sep_no_space(*str) && *str && !is_redir(str + 1))
         return (SEPS);
@@ -252,9 +252,16 @@ short				sh_tokenizer(char *str, t_dlist **token_list)
         tmp = str;
     if ((i = get_tokens(tmp, token_list)) != 1)
     {
-        if (i < 0 && last_input)
-            free(last_input);
-        last_input = i ? NULL : ft_strdup(tmp);
+		if (i < 0 && last_input)
+		{
+			free(last_input);
+			last_input = NULL;
+		}
+        // if (i < 0 && last_input)
+        //     free(last_input);
+		//was last_input = i ? NULL : ft_strdup(tmp);
+		if (!i)
+        	last_input = last_input ? last_input : ft_strdup(tmp);
         return (i ? -1 : 0);
     }
     if (last_input)

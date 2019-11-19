@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/25 16:39:14 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 12:20:40 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,8 +318,8 @@ char	*qa_qt_cls_n(char *str, int *q)
 			++str;
 		else if (*str == '\"' && (--(*q) || 1))
 			return (++str);
-		else if (*str == '$' && *(++str) == '(') // i plus
-			str = br_cls_n(++str, &dump);
+		else if (*str == '$' && *(str + 1) == '(') // i plus
+			str = br_cls_n(++str + 1, &dump);
 		else
 			++str;
 	}
