@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 04:21:28 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/13 16:16:55 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 15:25:48 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ static int	bltn_cd_setglobals(ENV *env, DSTRING **newpath,\
 				ft_avl_node("OLDPWD", (*oldpath)->txt, (*oldpath)->strlen + 1));
 	ft_avl_set(env->globals,\
 				ft_avl_node("PWD", (*newpath)->txt, (*newpath)->strlen + 1));
-	dstr_del(&pwd);
-	dstr_del(&oldpwd);
-	pwd = dstr_new((*newpath)->txt);
-	oldpwd = dstr_new((*oldpath)->txt);
+	dstr_del(&g_pwd);
+	dstr_del(&g_oldpwd);
+	g_pwd = dstr_new((*newpath)->txt);
+	g_oldpwd = dstr_new((*oldpath)->txt);
 	bltn_cd_freepaths(oldpath, newpath, path);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 16:14:37 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/11 13:07:33 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 15:18:07 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static int	bltn_type_check_reserved(char *str)
 	int		i;
 
 	i = -1;
-	while (bltn_keywords[++i])
-		if (ft_strequ(bltn_keywords[i], str))
+	while (g_bltn_keywords[++i])
+		if (ft_strequ(g_bltn_keywords[i], str))
 			return (1);
 	return (0);
 }

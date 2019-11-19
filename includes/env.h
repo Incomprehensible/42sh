@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 02:00:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 15:14:23 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,52 +30,63 @@ typedef struct	s_env
 	t_avl_tree	*core;
 }				t_env;
 
-/*	strings - array of DSTRING'S(every string is name of command / directory)
-	maxlen  - max length name command / directory
-	count   - count elements in array
-	allsize - count symbols all elements in array */
+/*
+**strings - array of DSTRING'S(every string is name of command / directory)
+**maxlen  - max length name command / directory
+**count   - count elements in array
+**allsize - count symbols all elements in array
+*/
 typedef struct	s_darr
 {
 	DSTRING		*strings[S_DARR_STRINGS];
-	size_t 		count;
-	size_t 		maxlen;
-	size_t 		allsize;
+	size_t		count;
+	size_t		maxlen;
+	size_t		allsize;
 }				t_darr;
 
-/* INIT ENV 
- -if success return 1
- -else (errcode)
- */
-	
-int		env_init(char **envp, ENV *env);
+/*
+**INIT ENV
+**-if success return 1
+**-else (errcode)
+*/
 
-/* Возвращает дубликат значения перменной среды */
-DSTRING	*env_get_variable(const char *key, ENV *enviroment);
+int				env_init(char **envp, ENV *env);
 
-/* Добавляет или изменяет существующую переменную в среду. */
-int		env_set_variable(const char *key, DSTRING *value, ENV *enviroment);
+/*
+**Возвращает дубликат значения перменной среды
+*/
+DSTRING			*env_get_variable(const char *key, ENV *enviroment);
 
-/* Удаляет переменную и очищает её память.*/
-int		env_unset_variable(const char *key, ENV *enviroment);
-int		env_unset_func(const char *key, ENV *enviroment);
+/*
+**Добавляет или изменяет существующую переменную в среду.
+*/
+int				env_set_variable(const char *key, DSTRING *value,\
+									ENV *enviroment);
 
-/*Функция для обработки ошибок инициализации */
-int		env_init_error(ENV *env, int errcode);
+/*
+**Удаляет переменную и очищает её память.
+*/
+int				env_unset_variable(const char *key, ENV *enviroment);
+int				env_unset_func(const char *key, ENV *enviroment);
 
-void	free_spl(char ***spl);
+/*
+**Функция для обработки ошибок инициализации
+*/
+int				env_init_error(ENV *env, int errcode);
 
-int		env_core_set(char *key, char *value, t_avl_tree *core);
-int		prs_set_pid(ENV *envr);
+void			free_spl(char ***spl);
 
-void	env_get_bins_parsepath(t_darr *res, ENV *envp);
-void	env_get_bins_parsebltn(t_darr *res, ENV *envp);
-void	env_get_bins_parefunc(t_darr *res, ENV *envp);
+int				env_core_set(char *key, char *value, t_avl_tree *core);
+int				prs_set_pid(ENV *envr);
 
-t_darr	env_get_bins(ENV *env);
+void			env_get_bins_parsepath(t_darr *res, ENV *envp);
+void			env_get_bins_parsebltn(t_darr *res, ENV *envp);
+void			env_get_bins_parefunc(t_darr *res, ENV *envp);
 
-int		env_get_bins_unq(t_darr *res, char *str);
-void	env_get_bins_cmp_name(t_darr *res, int namelen);
-t_darr	env_get_keys(ENV *envp, char *pref);
+t_darr			env_get_bins(ENV *env);
+
+int				env_get_bins_unq(t_darr *res, char *str);
+void			env_get_bins_cmp_name(t_darr *res, int namelen);
+t_darr			env_get_keys(ENV *envp, char *pref);
 
 #endif
-

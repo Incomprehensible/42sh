@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 13:18:39 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 15:24:25 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void			et_rm_clear_env(ENV *env)
 	i = -1;
 	while (++i < bltn_cnt_builtins())
 	{
-		node = ft_avl_search(env->builtns, bltns_str[i]);
+		node = ft_avl_search(env->builtns, g_bltns_str[i]);
 		node->content = NULL;
 	}
 	if (env->globals)
@@ -139,6 +139,6 @@ void			et_rm_clear_env(ENV *env)
 		ft_avl_tree_free(env->aliases);
 	if (env->core)
 		ft_avl_tree_free(env->core);
-	dstr_del(&pwd);
-	dstr_del(&oldpwd);
+	dstr_del(&g_pwd);
+	dstr_del(&g_oldpwd);
 }

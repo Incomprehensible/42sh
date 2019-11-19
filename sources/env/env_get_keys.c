@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_get_keys.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 13:18:14 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 22:46:14 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 15:08:08 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ static void	env_get_keys_treetrav(t_darr *res, t_avln *root, char *pre)
 	}
 }
 
-
-t_darr	env_get_keys(ENV *envp, char *pre)
+t_darr		env_get_keys(ENV *envp, char *pre)
 {
 	t_darr	res;
 	t_avln	*root;

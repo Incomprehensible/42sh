@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_cd_parser.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 04:21:07 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/19 02:02:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 15:25:32 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int					bltn_cd_parser(ENV *env, t_dlist **path)
 	t_dyn_string	*tmp;
 
 	env = 0;
-	str = dstr_new(pwd->txt);
+	str = dstr_new(g_pwd->txt);
 	while (str->strlen != 0)
 	{
 		if (ft_strrchr(str->txt, '/'))

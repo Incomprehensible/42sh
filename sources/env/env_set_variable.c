@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 16:12:50 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/18 22:37:24 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 15:08:23 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int		env_set_variable(const char *key, DSTRING *value, ENV *enviroment)
 	else
 	{
 		if ((ft_avl_set(enviroment->locals, node)) < 0)
-		// !BUG FIXED
 			return (-1);
 	}
 	return (1);
