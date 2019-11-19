@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_subsh.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:03:04 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 22:30:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 09:53:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int				io_subsh_ex(char *code, ENV *envr)
 	sys_init(1);
 	g_hsh = getppid();
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
-	// SYNTAX ERROR
 	if (sh_tokenizer(code, toks) <= 0)
 	{
 		sys_error_message("smt", 0);
@@ -41,31 +40,25 @@ int				io_subsh_ex(char *code, ENV *envr)
 	exit(status);
 }
 
-// ERROR CHECKING!
-// NORM CHEKING!
-// PRCSUBSTITUTED REFACTOR!
-// SIGNAL CHECKER!
 char			*get_deref_subsh(char *code, ENV *envr)
 {
-	int			pips[2]; //* fifo for output
+	int			pips[2];
 	SUBSH		sbh;
 	int			status;
 	int			pid;
 	char		*res;
-	t_lbuf		*buff;
 
+	res = NULL;
 	ft_bzero(&sbh, sizeof(SUBSH));
 	sbh.commands = code;
 	sbh.opipe_fds = pips;
 	status = 127;
-
-	pid = exe_subshell_expr(&sbh, envr, &status);
-
-	buff = ft_lb_readbytes(pips[0], 0);
-	res = ft_lb_flush(buff);
-	waitpid(pid, 0, 0);
-
-	close(pips[0]);
+	if ((pid = exe_subshell_expr(&sbh, envr, &status)) > 0)
+	{
+		res = ft_lb_flush(ft_lb_readbytes(pips[0], 0));
+		waitpid(pid, 0, 0);
+		close(pips[0]);
+	}
 	return (res);
 }
 
@@ -98,10 +91,10 @@ char			*ps_sbst_mods(int *pips, int mode)
 
 char			*prc_substitute(char *code, ENV *envr, int is_in)
 {
-	int			pips[2];
-	pid_t		pid;
-	DSTRING		*dstr;
-	char		*tmp;
+	int				pips[2];
+	pid_t			pid;
+	t_dyn_string	*dstr;
+	char			*tmp;
 
 	sys_create_pipe(pips);
 	if ((pid = fork()) == 0)

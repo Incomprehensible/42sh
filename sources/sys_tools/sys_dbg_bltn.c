@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 01:48:29 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 14:39:30 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ int			DBG_SYS_GLB(void)
 		"\tJID: %d\n"
 		"\tPPID: %d\n"
 		"\tPID: %d\n"
-		"\tADR: &g_pipes=%p / &hot_gid=%p\n\n"
-		, g_hsh, &g_hsh, g_jid, getppid(), getpid(), &g_pipes, &hot_gid);
+		"\tADR: &g_pipes=%p / &g_hgid=%p\n\n"
+		, g_hsh, &g_hsh, g_jid, getppid(), getpid(), &g_pipes, &g_hgid);
 	return (0);
 }

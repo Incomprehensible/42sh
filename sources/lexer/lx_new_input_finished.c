@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_new_input_finished.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/25 16:39:14 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 11:18:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,7 +397,7 @@ int  validate_cycles(char *str, char *meta)
                 num++;
             else if (is_token_here(str, meta))
                 num--;
-            str++;
+            *str ? str++ : 0;
         }
     }
     return (num);

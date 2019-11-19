@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_assigm.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:01:26 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/07 12:40:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 09:20:32 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static char		*prs_assigm_val_get(t_dlist **tks, ENV *envs)
 
 static int		prs_assigm_do(char *key, char *n_val, char asgm_tp, ENV *envs)
 {
-	DSTRING		*val_buff;
-	DSTRING		*orig_val;
+	t_dyn_string	*val_buff;
+	t_dyn_string	*orig_val;
 
 	val_buff = dstr_new(n_val);
 	if (asgm_tp == '+')

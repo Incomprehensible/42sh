@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rms.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 13:18:39 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 13:29:16 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void			et_rm_prc(void *ptr, size_t sz)
 void			et_rm_func(void *func)
 {
 	t_dlist		*toks;
-	FUNC		*func_ptr;
+	t_func		*func_ptr;
 
 	func_ptr = func;
 	if (func_ptr)
@@ -48,7 +48,7 @@ void			free_token(void *tok, size_t sz)
 
 void			et_rm_rdr(void *rdir, size_t type)
 {
-	REDIRECT	*redir;
+	t_redir		*redir;
 
 	redir = rdir;
 	type = 0;
@@ -102,7 +102,7 @@ void			et_rm_sbsh(SUBSH *sbh)
 
 void			et_rm_ett(void *et_cont, size_t type)
 {
-	ETAB		*cnt;
+	t_extab		*cnt;
 
 	if (!(cnt = et_cont))
 		return ;
@@ -118,8 +118,8 @@ void			et_rm_ett(void *et_cont, size_t type)
 
 void			et_rm_clear_env(ENV *env)
 {
-	int i;
-	t_avln *node;
+	int		i;
+	t_avln	*node;
 
 	i = -1;
 	while (++i < bltn_cnt_builtins())

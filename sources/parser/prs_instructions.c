@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_instructions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:26:19 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 21:39:28 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 09:35:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,6 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs)
 	return (tokens);
 }
 
-/*
-!! TEMPORARY FUNCTION
-!! Soon will be changed!
-*/
 t_dlist			*prs_subsh(ETAB **tab, t_dlist *tokens, ENV *envs)
 {
 	SUBSH		*subsh;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_basename.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 20:45:07 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 21:46:25 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 08:34:27 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char		*ft_basename(const char *path)
 
 	it = ft_strrchr(path, '/');
 	if (*(++it) == 0)
-		return (ft_strdup("/")); // MALLOC DEFENSE HIGHER
+		return (ft_strdup("/"));
 	return (ft_strdup(it));
 }
 
@@ -31,17 +31,17 @@ int			sh_check_f_b(char *name, ENV *envr)
 		return (1);
 	else if (ft_avl_search(envr->builtns, name))
 		return (2);
-	return(0);
+	return (0);
 }
 
 pid_t		set_pid_err(pid_t pid, char *path)
 {
 	const int code = sys_is_ex_bin(path);
 
-	pid = code == -1 ? -1 : 0; // NOT FOUND
-	pid = code == -3 ? -5 : pid; // NOT EXE
-	pid = code == -2 ? -9 : pid; // IS DIR
-	pid = code == -4 ? -10 : pid; //? NOT REGULAR
+	pid = code == -1 ? -1 : 0;
+	pid = code == -3 ? -5 : pid;
+	pid = code == -2 ? -9 : pid;
+	pid = code == -4 ? -10 : pid;
 	return (pid);
 }
 
@@ -68,12 +68,11 @@ char		*sh_checkpathes(const char *cmd, char **pathes, pid_t *pid)
 	return (0);
 }
 
-// ! CHECK FOR A DIRS
 char		*sh_checkbins(const char *cmd, ENV *envr, pid_t *pid)
 {
-	DSTRING		*dstr;
-	char		**pathes;
-	char		*str;
+	t_dyn_string	*dstr;
+	char			**pathes;
+	char			*str;
 
 	if (((*cmd == '.' && *(cmd + 1) == '/') \
 	|| *cmd == '/'))

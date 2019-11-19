@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_errors.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:37:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 22:37:50 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 08:53:19 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "env.h"
 #include "bltn_math/math_hidden.h"
 
-char	*g_errmess[ERR_CNT] =
+char		*g_errmess[ERR_CNT] =
 {
 	"",
 	"Command not found",
@@ -40,18 +40,18 @@ char	*g_errmess[ERR_CNT] =
 	"Is not a directory",
 	"no such file or directory",
 	"too many arguments",
-	"invalid options", 
+	"invalid options",
 	"cannot simultaneously unset a function and a variable"
 };
 
-char	*sys_get_std_message(int ecode)
+char		*sys_get_std_message(int ecode)
 {
 	if (ecode > ERR_CNT)
 		ecode = 0;
 	return (g_errmess[ecode]);
 }
 
-void	sys_fatal_memerr(char *mess)
+void		sys_fatal_memerr(char *mess)
 {
 	char	buff[FATAL_BUFF_MSG_LEN];
 
@@ -66,7 +66,7 @@ void	sys_fatal_memerr(char *mess)
 	exit(255);
 }
 
-int		sys_error_handler(char *descr, int ecode, ENV *envr)
+int			sys_error_handler(char *descr, int ecode, ENV *envr)
 {
 	t_dyn_string	*message;
 
@@ -101,14 +101,14 @@ int			math_error_handler(ERR *err, int ret, ENV *env)
 	char	*final_mess;
 	char	*middle;
 
-	final_mess = (err->err_code == VALUE_TOO_GREAT) ? "invalid operand: value too great for base" : NULL;
-	final_mess = (err->err_code == INVALID_OP) ? "syntax error: invalid operator" : final_mess;
-	final_mess = (err->err_code == DOUBLE_COMPARE) ? "syntax error: double compare (why'd you compare something twice, you nuts?)" : final_mess;
-	final_mess = (err->err_code == OPERAND_EXP) ? "syntax error: operand expected" : final_mess;
-	final_mess = (err->err_code == INVALID_ASSIG) ? "error: attempted assignment to non-variable" : final_mess;
-	final_mess = (err->err_code == STR_OPERAND) ? "error: string operand (it's not Python, it can't do that!)" : final_mess;
-	final_mess = (err->err_code == DIVISION_ZERO) ? "WHAT HAVE YOU DONE? It's division by ZERO. RUN everyone! We're fucked, world end" : final_mess;
-	final_mess = (err->err_code == WEIRD_ERR) ? "error: malloc fucked up or some other weird error occured" : final_mess;
+	final_mess = (err->err_code == VALUE_TOO_GREAT) ? MSG_ME_VLTG : NULL;
+	final_mess = (err->err_code == INVALID_OP) ? MSG_ME_IVOP : final_mess;
+	final_mess = (err->err_code == DOUBLE_COMPARE) ? MSG_ME_DCMP : final_mess;
+	final_mess = (err->err_code == OPERAND_EXP) ? MSG_ME_OPEX : final_mess;
+	final_mess = (err->err_code == INVALID_ASSIG) ? MSG_ME_IVAS : final_mess;
+	final_mess = (err->err_code == STR_OPERAND) ? MSG_ME_STRO : final_mess;
+	final_mess = (err->err_code == DIVISION_ZERO) ? MSG_ME_DVZR : final_mess;
+	final_mess = (err->err_code == WEIRD_ERR) ? MSG_ME_WERR : final_mess;
 	if (err->error_msg)
 	{
 		middle = pull_err_token(err);

@@ -6,7 +6,7 @@
 #    By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/19 04:39:01 by hgranule         ###   ########.fr        #
+#    Updated: 2019/11/19 15:01:30 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,9 +44,10 @@ OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 
-SRC_FILES = sh_main.c get_line.c sh_launch.c \
+SRC_FILES = sh_main.c sh_launch.c \
 			ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
 			ft_basename.c exe_sys/exe_binaries.c exe_sys/exe_builtns.c \
+			exe_sys/exe_load_save_rdr.c exe_sys/exe_rdr_hered.c \
 			exe_sys/exe_redirs.c parser/prs_arch.c parser/prs_args.c exe_sys/exe_subshell.c \
 			parser/prs_instructions.c parser/prs_rdrs.c parser/prs_types.c \
 			env/env_init.c env/env_get_variable.c env/env_set_variable.c env/env_unset_variable.c env/env_unset_func.c env/env_get_keys.c\
@@ -59,6 +60,7 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			exe_sys/exe_funcs.c parser/prs_and_or.c parser/prs_assigm.c \
 			parser/prs_funcs.c parser/prs_if_while.c parser/prs_skipers.c \
 			parser/prs_error.c parser/prs_core_setter.c parser/prs_background.c \
+			parser/prs_get_deref.c parser/prs_for.c parser/prs_rdrs_support.c parser/prs_arch_support.c \
 			\
 			bltns/math/bltn_math.c bltns/math/math_bases_in.c bltns/math/math_tokenize.c \
 			bltns/math/math_polish_reverse.c bltns/math/math_operations.c \

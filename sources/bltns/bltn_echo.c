@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 12:40:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 22:37:15 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 13:26:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void		echo_put_estr(char **args, char fl_space)
 	}
 }
 
-int			echo_flag_check(char **argc, char *flags)
+int				echo_flag_check(char **argc, char *flags)
 {
 	int		i;
 	int		j;

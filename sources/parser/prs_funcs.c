@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_funcs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 17:59:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 21:40:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 09:26:14 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,21 @@ static t_dlist	*prs_f_dup_tks(t_dlist *tks, t_dlist **fcode)
 		ft_dlstpush(fcode, instr);
 		tks = tks->next;
 		if (tok->type == TK_FEND)
-			break;
+			break ;
 	}
 	return (tks);
 }
 
 t_dlist			*prs_func(t_dlist *tks, ENV *envr)
 {
-	FUNC		*func;
 	t_avln		*node;
 	t_tok		*tok;
+	t_func		*func;
 
 	tks = tks->next;
 	tok = tks->content;
 	if (!(func = ft_memalloc(sizeof(FUNC))))
-		sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0"); // TODO: MALLOC CHECKING
+		sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0");
 	node = ft_avl_node_cc(tok->value, func, sizeof(FUNC));
 	tks = tks->next;
 	if (!(tks = prs_f_dup_tks(tks, &func->func_code)))

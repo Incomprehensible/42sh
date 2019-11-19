@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_jobs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 07:56:57 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 21:50:00 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 13:22:59 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "libftprintf.h"
 #include "stdio.h"
 
-char	*states[] = {
+char	*g_states[] = {
 	"ERRMAC",
 	"Done",
 	"Terminated",
@@ -25,7 +25,7 @@ char	*states[] = {
 	"Running"
 };
 
-char	*signals[] = {
+char	*g_signals[] = {
 	"ERRMAC",
 	"S_HUP (1)",
 	"S_INT (2)",
@@ -71,12 +71,12 @@ char	jobs_cur_char_set(ssize_t i)
 
 char	*jobs_state_str_set(const t_pgrp *pg)
 {
-	DSTRING		*buff;
-	t_ps_d		*psd;
-	t_dlist		*member;
-	char		*ex_str;
+	t_dyn_string	*buff;
+	t_ps_d			*psd;
+	t_dlist			*member;
+	char			*ex_str;
 
-	if (!(buff = dstr_new(states[pg->state])))
+	if (!(buff = dstr_new(g_states[pg->state])))
 		sys_fatal_memerr("JOBS_STATE_ERR_DSTR");
 	if (pg->state == PS_S_DON)
 	{
@@ -92,7 +92,7 @@ char	*jobs_state_str_set(const t_pgrp *pg)
 	else if (pg->state == PS_S_SIG)
 	{
 		dstr_insert_str(buff, ": ", buff->strlen);
-		dstr_insert_str(buff, signals[pg->signal], buff->strlen);
+		dstr_insert_str(buff, g_signals[pg->signal], buff->strlen);
 	}
 	return (dstr_flush(&buff));
 }
@@ -129,10 +129,12 @@ int		jobs_check_str_job(char *job_s)
 	{
 		if (g_ptab[i])
 		{
-			if (g_ptab[i]->input_line && ft_strstr(g_ptab[i]->input_line, job_s))
+			if (g_ptab[i]->input_line && \
+			ft_strstr(g_ptab[i]->input_line, job_s))
 			{
 				fl = 1;
-				state = sys_wait_prg(&g_ptab[i], &ret, 0, WUNTRACED | WNOHANG | WCONTINUED);
+				state = sys_wait_prg(&g_ptab[i], &ret, 0, \
+				WUNTRACED | WNOHANG | WCONTINUED);
 				jobs_put_entry_sm(i);
 				sys_del_if_done(i, state);
 			}
@@ -161,8 +163,8 @@ int		jobs_check_num_job(char *num)
 
 int		no_job_error(char *job, char *cont, ENV *envr)
 {
-	DSTRING *buff;
-	char	*err_str;
+	t_dyn_string	*buff;
+	char			*err_str;
 
 	if (!(buff = dstr_new("")))
 		sys_fatal_memerr("JOBS_ERR_MSG_DSTR");
@@ -175,34 +177,43 @@ int		no_job_error(char *job, char *cont, ENV *envr)
 	return (1);
 }
 
+int		bltn_jobs_iterate(char **args, ENV *envr)
+{
+	size_t	j;
+	int		ret;
+
+	j = 1;
+	while (args[j])
+	{
+		if (ft_str_isnumeric(args[j], 10))
+			ret = jobs_check_num_job(args[j]);
+		else
+			ret = jobs_check_str_job(args[j]);
+		if (ret)
+			no_job_error(args[j], "jobs: ", envr);
+		++j;
+	}
+	return (ret);
+}
+
 int		bltn_jobs(char **args, ENV *envr)
 {
-	ssize_t		i = g_jid;
+	ssize_t		i;
 	int			state;
-	ssize_t		j = 1;
 	int			ret;
 
+	i = g_jid;
 	if (args_len(args) < 2)
 		while (--i)
 		{
 			if (!g_ptab[i])
 				continue ;
-			state = sys_wait_prg(&g_ptab[i], &ret, 0, WUNTRACED | WNOHANG | WCONTINUED);
+			state = sys_wait_prg(&g_ptab[i], &ret, 0, \
+			WUNTRACED | WNOHANG | WCONTINUED);
 			jobs_put_entry_sm(i);
 			sys_del_if_done(i, state);
 		}
 	else
-	{
-		while (args[j])
-		{
-			if (ft_str_isnumeric(args[j], 10))
-				ret = jobs_check_num_job(args[j]);
-			else
-				ret = jobs_check_str_job(args[j]);
-			if (ret)
-				no_job_error(args[j], "jobs: ", envr);
-			++j;
-		}
-	}
+		bltn_jobs_iterate(args, envr);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:09:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/17 02:15:54 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 18:19:36 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st);
 int			exe_bkgr_expr(BCKGR *bkgr, ENV *envr, int *status);
 int			sbsh_is_fork_n_need(t_dlist *tok);
 
+int			exe_redir_list(t_dlist *lst, ENV *envr);
+
 void		exe_redir_save420(t_dlist *redrs);
 void		exe_redir_load420(t_dlist *redrs);
 int			exe_execute_b(EXPRESSION *expr, ENV *envr, \
@@ -60,5 +62,11 @@ int (*bltn)(char **, ENV *));
 long		do_math_bltn(char *str_xp, ENV *envr, ERR *err);
 int			exe_execute_f(EXPRESSION *expr, ENV *envr, FUNC *func, int *status);
 int			exe_execute_pi_f(EXPRESSION *expr, ENV *envr, FUNC *func);
+int			exe_rdr_heredocument(REDIRECT *rdr, ENV *env);
+int			pex_g_ptab_pgid(pid_t cpid, char *i_line);
+int			prs_executor(ETAB **etab, ENV *envs);
+int			prs_etab_handlers(ETAB **etab_row, \
+ETAB **pipe_cache, int *status, ENV *envr);
+int			prs_post_execute_xp(int *status, pid_t cpid, ENV *env);
 
 #endif

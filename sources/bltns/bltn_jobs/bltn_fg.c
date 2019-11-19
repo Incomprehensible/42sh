@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_fg.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 07:43:43 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 21:50:00 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 13:30:09 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int				bltn_fg_bg_launch(ssize_t a, int mode)
 {
 	t_dlist		*pd_lst;
 	t_ps_d		*psd;
-	
+
 	if (g_ptab[a] && g_ptab[a]->mode == PS_M_BG)
 	{
 		pd_lst = g_ptab[a]->members;
@@ -37,7 +37,7 @@ int				bltn_fg_bg_launch(ssize_t a, int mode)
 	return (1);
 }
 
-ssize_t		fg_by_str(char *job)
+ssize_t			fg_by_str(char *job)
 {
 	ssize_t		i;
 
@@ -131,4 +131,3 @@ int				bltn_bg(char **args, ENV *envr)
 	}
 	return (1);
 }
-

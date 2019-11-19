@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/02 09:13:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 04:06:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 18:09:29 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,19 +112,19 @@ char		*sys_get_prg_iline(char *old_il, char *new_cm)
 
 int			sys_hot_charge(pid_t pid, int mode, char *str)
 {
-	extern pid_t	hot_gid;
+	extern pid_t	g_hgid;
 	t_pgrp			*prg;
 	char			*tmp;
 
 	if (pid == 0)
 		return (-1);
-	if (hot_gid == 0)
+	if (g_hgid == 0)
 	{
-		hot_gid = pid;
+		g_hgid = pid;
 		prg = sys_prg_create(pid, 0, 0, mode);
 	}
 	else
-		prg = sys_prg_get(hot_gid);
+		prg = sys_prg_get(g_hgid);
 	tmp = sys_get_prg_iline(prg->input_line, str);
 	if (prg->input_line)
 		free(prg->input_line);
@@ -135,10 +135,10 @@ int			sys_hot_charge(pid_t pid, int mode, char *str)
 
 int			sys_hot_off(int ret_status)
 {
-	extern pid_t	hot_gid;
+	extern pid_t	g_hgid;
 	extern char		*g_hbg;
 
-	hot_gid = 0;
+	g_hgid = 0;
 	g_hbg = 0;
 	return (ret_status);
 }

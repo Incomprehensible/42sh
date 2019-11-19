@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_subshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 22:30:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 22:57:26 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,21 +60,9 @@ int			sbsh_is_fork_n_need(t_dlist *tl)
 ** 4) pipes init
 ** 5) return pid
 */
-int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
-{
-	t_dlist			*redirs;
-	extern pid_t	g_hsh;
-	t_pgrp			*pg;
-	int				err;
 
-	err = 0;
-	redirs = sb->redirections;
-	while (redirs)
-	{
-		if (!err && (err = exe_redir_ex(redirs->content, envr)))
-			sys_error_handler(0, -err, 0);
-		redirs = redirs->next;
-	}
+int			exe_sbsh_pipes(SUBSH *sb)
+{
 	if (sb->ipipe_fds && (dup2(sb->ipipe_fds[0], 0) >= 0))
 	{
 		close(sb->ipipe_fds[0]);
@@ -85,24 +73,45 @@ int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
 		close(sb->opipe_fds[0]);
 		close(sb->opipe_fds[1]);
 	}
+	return (0);
+}
+
+int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
+{
+	t_dlist			*redirs;
+	extern pid_t	g_hsh;
+	t_pgrp			*pg;
+	int				err;
+
+	err = 0;
+	sys_sig_dfl();
+	signal(SIGPIPE, SIG_IGN);
+	redirs = sb->redirections;
+	while (redirs)
+	{
+		if (!err && (err = exe_redir_ex(redirs->content, envr)))
+			sys_error_handler(0, -err, envr);
+		redirs = redirs->next;
+	}
+	exe_sbsh_pipes(sb);
 	if (err)
 		exit(2);
 	sys_init(1);
 	g_hsh = getpid();
 	pg = sys_prg_create(g_hsh, 0, 0, PS_M_FG);
 	sh_tparse(toks, envr, TK_EOF, status);
-	// sys_delete_prg(&pg);
 	exit(*status);
 }
 
 int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st)
 {
-	ETAB		*etab;
+	t_extab		*etab;
 	EXPRESSION	*xp;
 	pid_t		cpid;
 
 	etab = 0;
 	prs_expr(&etab, tl, envr);
+	close(g_prompt_fd);
 	xp = (EXPRESSION *)etab->instruction;
 	xp->ipipe_fds = subsh->ipipe_fds;
 	xp->opipe_fds = subsh->opipe_fds;
@@ -117,11 +126,8 @@ int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st)
 	}
 	else if ((cpid = fork()) < 0)
 		return (-E_FRKFL);
-	else if (cpid == 0)
-	{
-		exe_execute_expr(xp, envr, st);
+	else if (cpid == 0 && (exe_execute_expr(xp, envr, st) || 1))
 		exit(*st);
-	}
 	return (cpid);
 }
 
@@ -132,12 +138,8 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 	extern pid_t	g_hsh;
 
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
-	if (sh_tokenizer(subsh->commands, toks) <= 0)
-	{
-		*status = 255;
+	if (sh_tokenizer(subsh->commands, toks) <= 0 && (*status = 255))
 		INPUT_NOT_OVER = -1;
-		return (sys_perror("subshell: Input not ove, or syntax error", 0, envr));
-	}
 	if (sbsh_is_fork_n_need(toks[0]))
 		cpid = exe_one_command_lnch(subsh, toks[0], envr, status);
 	else
@@ -147,8 +149,8 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 			return (-E_FRKFL);
 		else if (cpid == 0)
 			exe_subshell_alg(toks[0], subsh, envr, status);
-		subsh->ipipe_fds ? close(subsh->ipipe_fds[0]) : 0;
-		subsh->ipipe_fds ? close(subsh->ipipe_fds[1]) : 0;
+			subsh->ipipe_fds ? close(subsh->ipipe_fds[0]) : 0;
+			subsh->ipipe_fds ? close(subsh->ipipe_fds[1]) : 0;
 	}
 	if (cpid < 0)
 		return ((int)cpid);

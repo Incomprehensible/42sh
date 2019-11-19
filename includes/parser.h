@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/23 15:56:16 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 09:55:00 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ typedef struct		s_42func
 # include "rms.h"
 
 char		*ft_basename(const char *path);
+size_t		sizeof_warr(char **arr);
 
 t_dlist		*sh_tparse(t_dlist *tokens, ENV *vars, t_tk_type end_tk, int *status);
 char		*sh_checkbins(const char *cmd, ENV *vars, pid_t *pid);
@@ -119,6 +120,11 @@ t_rdtype		prs_rdr_type(t_tok *tok);
 ** Function creates a new t_dlist with REDIRECTION DESC.
 */
 t_dlist			*prs_new_rdr_cr(t_dlist *tokens, ENV *envs);
+int				prs_hrd_word(t_dlist *tl, REDIRECT *redr);
+int				prs_rdr_fdr_file(t_dlist *tokens, REDIRECT *redir, ENV *envr);
+int				prs_rdr_fdl(t_dlist *tokens, REDIRECT *redir);
+int				prs_rdr_is_std_fd(t_dlist *fd_tl);
+char			*rdr_get_filename(t_tok *tok, ENV *envr);
 
 /*
 ** Function returns a full double-list with RDR DESCS
@@ -187,13 +193,18 @@ t_dlist			*prs_assigm(t_dlist *tks, ENV *envs, int *status);
 t_dlist			*prs_while(t_dlist *tks, ENV *envs, int *status);
 t_dlist			*prs_if(t_dlist *tks, ENV *envs, int *status);
 t_dlist			*prs_for(t_dlist *tks, ENV *envs, int *status);
+char			*prs_forin_vals(t_dlist *tks, ENV *env);
 
-
+/*
+** GET DEREFERENCING
+*/
+char			*get_deref_name(char *key, ENV *envr);
+char			*get_deref_math(char *expr, ENV *envr);
+char			*get_deref(t_dlist *tokens, ENV *envr);
 char			*get_deref_subsh(char *code, ENV *envr);
 char			*prc_substitute(char *code, ENV *envr, int is_in);
 
 int				prs_error_handler(int ecode, size_t type, ENV *envr, EXPRESSION *expr);
-
 int				prs_set_last_status(int *status, ENV *envr);
 
 #endif

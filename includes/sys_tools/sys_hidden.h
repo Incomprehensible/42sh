@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_hidden.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 22:37:08 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 14:39:30 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ typedef struct		s_proc_ds
 
 t_pgrp				*g_ptab[SYS_PRGS_SIZE];
 char				g_pipes[SYS_PIPES_SIZE];
-pid_t				hot_gid;
+pid_t				g_hgid;
 pid_t				g_hsh;
 char				*g_hbg;
 int					g_jid;

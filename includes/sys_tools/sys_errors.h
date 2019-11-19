@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_errors.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:29:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 22:36:55 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/19 08:51:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,19 @@ void		sys_fatal_memerr(char *mess);
 
 #define ERR t_err
 
-typedef struct      s_err
+typedef struct		s_err
 {
     int				err_code;
     char			*error_msg;
-}                   t_err;
+}					t_err;
+
+# define MSG_ME_VLTG "invalid operand: value too great for base"
+# define MSG_ME_IVOP "syntax error: invalid operator"
+# define MSG_ME_DCMP "syntax error: double compare"
+# define MSG_ME_OPEX "syntax error: operand expected"
+# define MSG_ME_IVAS "error: attempted assignment to non-variable"
+# define MSG_ME_STRO "error: string operand"
+# define MSG_ME_DVZR "error: division by zero"
+# define MSG_ME_WERR "error: undefiend error (allocation or smt)"
 
 #endif

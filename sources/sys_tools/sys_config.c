@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 17:56:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/17 07:50:20 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 08:38:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@
 ** %g - 256bit color
 ** %G - 256bit b_color
 ** %n - new_line
-
+**
 ** %h - hostname
 ** %H - domainname
 ** %u - username
 ** %p - path
 ** %P - directory
-
+**
 ** %? - last status
 ** %t - time			=DUNNO
 */
