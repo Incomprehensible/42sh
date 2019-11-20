@@ -6,33 +6,15 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:09:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 18:19:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:40:24 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTER_H
 # define EXECUTER_H
 
-# include <stdlib.h>
-
-# define ETAB t_extab
-
-# define ET_EXPR (size_t)1
-# define ET_PIPE (size_t)2
-# define ET_MATH (size_t)3
-# define ET_SUBSH (size_t)4
-# define ET_BCKGR (size_t)5
-
-typedef struct		s_extab			// RELOADING OF T_DLIST
-{
-	void			*instruction;
-	size_t			type;
-	struct s_extab	*next_e;
-	struct s_extab	*prev_e;
-}					t_extab;
-
-# include "sys_tools/sys_errors.h"
-# include "parser.h"
+# include "exe_prs_defines.h"
+# include "rms.h"
 
 /*
 ** BLTN FUNC
@@ -44,7 +26,6 @@ typedef struct		s_extab			// RELOADING OF T_DLIST
 */
 int			exe_execute_pi(EXPRESSION *cmd, ENV *vars);
 int			exe_redir_ex(REDIRECT *rdr, ENV *envr);
-int			exe_wait_cps(pid_t);
 int			exe_execute_expr(EXPRESSION *expr, ENV *envr, int *status);
 int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status);
 int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st);

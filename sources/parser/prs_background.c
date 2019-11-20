@@ -6,11 +6,12 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 13:24:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 09:21:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:36:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
+#include "parser.h"
 #include "sys_tools/sys_errors.h"
 
 t_dlist		*prs_bkgr(ETAB **tab, t_dlist *tokens, ENV *envr)

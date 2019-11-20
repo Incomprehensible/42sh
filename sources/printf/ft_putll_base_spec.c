@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putll_base_spec.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 15:35:23 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/20 09:45:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:14:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ void				ft_putull_base_spec(unsigned long long nb, char spec)
 	while (dec > 0)
 	{
 		if ((cur = nb / dec) == base)
-			write(STDOUT_FILENO, "10", 2);
+			write(1, "10", 2);
 		else
-			write(STDOUT_FILENO, spec == 'X' ? &(alphu[cur]) : &(alph[cur]), 1);
+			write(1, spec == 'X' ? &(alphu[cur]) : &(alph[cur]), 1);
 		nb %= dec;
 		dec /= base;
 	}
@@ -88,9 +88,9 @@ void				ft_putll_base_spec(__int128_t nb, char spec)
 		while (dec > 0)
 		{
 			if ((cur = nb / dec) == base)
-				write(STDOUT_FILENO, "10", 2);
+				write(1, "10", 2);
 			else
-				write(STDOUT_FILENO, spec == 'X' ? &(alphu[cur]) : &(alph[cur]), 1);
+				write(1, spec == 'X' ? &(alphu[cur]) : &(alph[cur]), 1);
 			nb %= dec;
 			dec /= base;
 		}

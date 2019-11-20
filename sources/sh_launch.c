@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 08:36:00 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:36:30 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,12 @@
 #include "sh_readline.h"
 #include "env.h"
 #include "executer.h"
+#include "parser.h"
 #include "dstring.h"
 #include "bltn.h"
 #include "sys_tools/sys_errors.h"
 #include "sys_tools/sys_tools.h"
 #include "ft_lbuffer.h"
-
-#include <sys/ioctl.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
-
 #include "sh_tokenizer.h"
 
 int			sh_launch_string(ENV *env, char *string)

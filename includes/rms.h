@@ -3,21 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   rms.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:56:29 by hgranule          #+#    #+#             */
-/*   Updated: 2019/10/20 11:26:53 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:29:57 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RMS_H
 # define RMS_H
 
-# include "ft_dlist.h"
-# include "ft_avl_tree.h"
-# include "executer.h"
-# include "parser.h"
-# include <stdlib.h>
+# include "exe_prs_defines.h"
 
 /*
 ** FREES A REDIRECTION FROM parser.h

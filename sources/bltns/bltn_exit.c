@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 13:55:49 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/19 11:21:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:07:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int		make_exit(unsigned char ret, ENV *envr)
 			return (sys_perror("exit: there are STOPPED jobs", 2, envr));
 	}
 	free_darr_re(g_histr.strings, g_histr.count);
+	sys_term_restore();
 	exit(ret);
 	return (0);
 }

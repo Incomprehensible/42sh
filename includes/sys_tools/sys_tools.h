@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_tools.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/17 08:29:06 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/20 08:21:49 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int			sys_getch(void);
 ** R - is file readable.
 ** W - is file writeable.
 ** X - is file executable.
-** 
+**
 ** EXAMPLES:
 ** 1) EXECUTABLE REGULAR FILE : [ 1000 1**1 ]
 ** 2) DIRECTORY FILE : [ 0100 1*** ]
@@ -72,7 +72,7 @@ int			sys_touch_file(const char *path);
 int			sys_is_ex_bin(const char *path);
 
 /*
-** Returns a new string with path to the file called {FILE} at 
+** Returns a new string with path to the file called {FILE} at
 ** standart configuration directory.
 **
 ** FATAL ERROR IS MALLOC FAIL.
@@ -82,7 +82,7 @@ char		*sys_get_conf_path(char *file, ENV *envr);
 
 /*
 ** Returns a DYN_string with STD_PROMPT
-** If type is 0, returns PS varibale's value. 
+** If type is 0, returns PS varibale's value.
 ** Else if type is 'p', '\\', 'l', 'h', 's', 'a', 'q'
 ** returns a one of const values.
 **
@@ -91,25 +91,34 @@ char		*sys_get_conf_path(char *file, ENV *envr);
 */
 DSTRING		*sys_get_prompt_num(ENV *envr, char type);
 int			sys_put_prompt(ENV *envr, char type);
-
 int			sys_perror(char *contex, int ret_code, ENV *envr);
-
-int			sys_write_history(DSTRING *line, ENV *envr);
-
-int			sys_prc_create(pid_t pid, t_dlist **members);
+int			sys_prc_create(pid_t pid, t_dlist **members, char *str);
 t_pgrp		*sys_prg_create(pid_t prg, t_dlist *prcs, char *str, int mode);
 t_pgrp		*sys_prg_get(pid_t prg);
 int			sys_delete_prg(t_pgrp **prg);
 int			sys_hot_charge(pid_t pid, int mode, char *str);
 int			sys_hot_off(int ret_status);
-
 int			sys_wait_ptable(int *status, pid_t lpid);
-
 int			sys_argv_parse(char **argv, char ***long_flags, char **flags);
 void		sys_sig_init(void);
 void		sys_sig_dfl(void);
+void		sys_prg_sig_set(t_pgrp **ps_grp);
+int			sys_wait_prg_jobs_checks(t_pgrp **ps_grp, int state, int o_state);
+int			math_error_handler(ERR *err, int ret, ENV *env);
+char		*sys_get_prg_iline(char *old_il, char *new_cm);
+int			sys_wait_ps(t_dlist *ps, int *status, pid_t lpid, int mode);
 
-int		math_error_handler(ERR *err, int ret, ENV *env);
-
+void		put_prompt_new_line(DSTRING **pr_src, \
+size_t ind, size_t *ofs);
+void		put_prompt_color8bit(DSTRING **pr_src, \
+size_t ind, size_t *ofs);
+void		put_prompt_color(DSTRING **pr_src, \
+size_t ind, size_t *ofs);
+void		put_prompt_sys_path_uh(DSTRING **pr_src, \
+size_t ind, size_t *ofs);
+void		put_prompt_bolder(DSTRING **pr_src, \
+size_t ind, size_t *ofs);
+void		put_prompt_time_status(DSTRING **pr, \
+size_t ind, size_t *of, ENV *env);
 
 #endif

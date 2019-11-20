@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 05:18:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:36:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,14 @@
 #include "sh_readline.h"
 #include "env.h"
 #include "executer.h"
+#include "parser.h"
 #include "dstring.h"
 #include "bltn.h"
 #include "sys_tools/sys_errors.h"
 #include "sys_tools/sys_tools.h"
 #include "sys_tools/sys_token_to_str.h"
-
 #include "sys_tools/sys_dbg.h"
-
 #include <sys/ioctl.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
-
 #include "sh_tokenizer.h"
 
 // !! TEMPORARY FUNCTIONS ===================================================================== !!

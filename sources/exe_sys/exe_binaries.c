@@ -6,11 +6,12 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:01:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 22:56:19 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:35:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
+#include "parser.h"
 #include "sys_tools/sys_tools.h"
 
 static void		exe_b_child_alg(EXPRESSION *cmd, char **envp, char *path)

@@ -6,7 +6,7 @@
 #    By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/19 15:01:30 by hgranule         ###   ########.fr        #
+#    Updated: 2019/11/20 08:26:06 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,10 @@ SRC_FILES = sh_main.c sh_launch.c \
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
 			sys_tools/sys_touch.c sys_tools/sys_argc.c sys_tools/sys_token_string.c \
-			sys_tools/sys_exprs_strings.c \
+			sys_tools/sys_exprs_strings.c sys_tools/sys_sigs_dfl_init.c \
+			sys_tools/sys_hot_proc.c sys_tools/sys_wait_ps.c \
+			sys_tools/sys_exprs_strings_2.c sys_tools/sys_exprs_strings_3.c \
+			sys_tools/sys_prompt.c \
 			\
 			bltns/bltn_jobs/bltn_jobs.c bltns/bltn_jobs/bltn_fg.c bltns/bltn_set.c\
 			\

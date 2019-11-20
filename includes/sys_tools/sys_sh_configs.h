@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sys_sh_configs.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 22:45:32 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/20 08:12:44 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SYS_SH_CONFIGS_H
 # define SYS_SH_CONFIGS_H
 
-// %C1S%C3H%C2E%C6L%C4L %C5\$> %B
 # define SHELL_NAME_STD "42sh"
 # define SH_VAR_SHNAME "SHELL_NAME"
 # define SH_VAR_HIST_RC_PATH "HOME"
@@ -40,8 +39,6 @@
 
 # define HIST_FILE_DENY_TRIES 16;
 
-int			history_file_status;
-int			rc_file_status;
 int			g_prompt_fd;
 
 #endif

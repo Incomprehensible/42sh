@@ -6,11 +6,12 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 22:57:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:34:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "executer.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 #include "ft_io.h"
@@ -33,6 +34,13 @@ int				pex_g_ptab_pgid(pid_t cpid, char *i_line)
 		g_hgid = g_hsh;
 	sys_hot_charge(cpid, mode, str);
 	setpgid(cpid, g_hgid);
+	if (cpid > 0)
+	{
+		if (!g_hbg && !g_hsh)
+			tcsetpgrp(0, g_hgid);
+		else
+			g_hbg = 0;
+	}
 	return (0);
 }
 
@@ -63,13 +71,6 @@ ETAB **pipe_cache, int *status, ENV *envr)
 
 int				prs_post_execute_xp(int *status, pid_t cpid, ENV *env)
 {
-	if (cpid > 0)
-	{
-		if (!g_hbg && !g_hsh)
-			tcsetpgrp(0, g_hgid);
-		else
-			g_hbg = 0;
-	}
 	sys_wait_ptable(status, cpid);
 	sys_hot_off(2);
 	prs_set_last_status(status, env);

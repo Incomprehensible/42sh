@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 22:57:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:35:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 #include "sys_tools/sys_hidden.h"
 #include "sys_tools/sys_errors.h"
 #include "executer.h"
+#include "parser.h"
 #include "sh_tokenizer.h"
-#include "rms.h"
-
-#include "stdio.h"
 
 int			sbsh_is_fork_n_need(t_dlist *tl)
 {
@@ -149,8 +147,8 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 			return (-E_FRKFL);
 		else if (cpid == 0)
 			exe_subshell_alg(toks[0], subsh, envr, status);
-			subsh->ipipe_fds ? close(subsh->ipipe_fds[0]) : 0;
-			subsh->ipipe_fds ? close(subsh->ipipe_fds[1]) : 0;
+		subsh->ipipe_fds ? close(subsh->ipipe_fds[0]) : 0;
+		subsh->ipipe_fds ? close(subsh->ipipe_fds[1]) : 0;
 	}
 	if (cpid < 0)
 		return ((int)cpid);

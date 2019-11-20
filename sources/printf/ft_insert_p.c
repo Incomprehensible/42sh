@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_insert_p.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/28 14:14:44 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/10/20 09:45:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:12:57 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ int				ft_insert_p(t_frmt_fs *f, va_list arg)
 	{
 		len[0] += ft_putchar_n(' ', f->ispre && f->precision > len[1] ?\
 		f->field_len - f->precision - 2 : f->field_len - 2 - len[1]);
-		len[0] += write(STDOUT_FILENO, "0x", 2);
+		len[0] += write(1, "0x", 2);
 		len[0] += ft_putchar_n('0', f->precision - len[1]);
-		(!f->ispre || f->precision) ? (len[0] += write(STDOUT_FILENO, str, len[1])) : 0;
+		(!f->ispre || f->precision) ? (len[0] += write(1, str, len[1])) : 0;
 	}
 	else if (str)
 	{
-		len[0] += write(STDOUT_FILENO, "0x", 2);
+		len[0] += write(1, "0x", 2);
 		len[0] += ft_putchar_n('0', f->precision - len[1]);
-		(!f->ispre || f->precision) ? (len[0] += write(STDOUT_FILENO, str, len[1])) : 0;
+		(!f->ispre || f->precision) ? (len[0] += write(1, str, len[1])) : 0;
 		len[0] += ft_putchar_n(' ', f->ispre && f->precision > len[1] ?\
 		f->field_len - f->precision - 2 : f->field_len - 2 - len[1]);
 	}

@@ -6,13 +6,14 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 02:19:09 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 08:23:24 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sys_tools/sys_hidden.h"
 #include "sys_tools/sys_tools.h"
 #include "sys_tools/sys_sh_configs.h"
+#include "sys_tools/sys_token_to_str.h"
 #include "sys_tools/sys_errors.h"
 
 #include "ft_mem.h"
@@ -48,30 +49,6 @@ int				sys_var_init(ENV *env)
 	return (0);
 }
 
-void			sighand(int s)
-{
-	printf("SIGNAL input: %d (%d)\n", s, g_hsh);
-	g_intr = s;
-}
-
-void			sys_sig_dfl(void)
-{
-	signal(SIGTTIN, SIG_DFL);
-	signal(SIGTTOU, SIG_DFL);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGTSTP, SIG_DFL);
-}
-
-void			sys_sig_init(void)
-{
-	signal(SIGINT, sighand);
-	signal(SIGQUIT, sighand);
-	signal(SIGTSTP, sighand);
-	signal(SIGTTOU, SIG_IGN);
-	signal(SIGTTIN, SIG_IGN);
-}
-
 int				sys_init(int sbh_on)
 {
 	extern t_pgrp	*g_ptab[SYS_PRGS_SIZE];
@@ -87,4 +64,33 @@ int				sys_init(int sbh_on)
 	ft_bzero(g_ptab, SYS_PRGS_SIZE * sizeof(t_pgrp *));
 	ft_bzero(g_pipes, SYS_PIPES_SIZE * sizeof(char));
 	return (sbh_on);
+}
+
+DSTRING			*sys_get_prompt_num(ENV *envr, char type)
+{
+	DSTRING		*prm;
+	char		*sprompt;
+
+	sprompt = 0;
+	if (type == 0)
+	{
+		if (!(prm = env_get_variable(SH_VAR_PROMPT, envr)))
+			sys_fatal_memerr("PROMT ALLOC FAILED");
+		if (prm->strlen != 0)
+			return (parse_promt(prm, envr));
+		else
+			dstr_del(&prm);
+	}
+	sprompt = type == 'a' ? SH_PROMPT_AP : sprompt;
+	sprompt = type == 'q' ? SH_PROMPT_QT : sprompt;
+	sprompt = type == 'h' ? SH_PROMPT_HD : sprompt;
+	sprompt = type == 's' ? SH_PROMPT_SBH : sprompt;
+	sprompt = type == 'l' ? SH_PROMPT_LM : sprompt;
+	sprompt = type == 'p' ? SH_PROMPT_PIP : sprompt;
+	sprompt = type == '&' ? SH_PROMPT_AND : sprompt;
+	sprompt = type == '|' ? SH_PROMPT_OR : sprompt;
+	sprompt = sprompt == 0 ? SH_PROMPT : sprompt;
+	if (!(prm = dstr_new(sprompt)))
+		sys_fatal_memerr("PROMT ALLOC FAILED");
+	return (prm);
 }

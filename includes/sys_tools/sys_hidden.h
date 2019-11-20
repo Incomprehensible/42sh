@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 14:39:30 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:43:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,33 +32,69 @@
 
 # define CHECK_INTS_P 0x0000008000000080
 
-/* IS IT EXIST */
+/*
+** IS IT EXIST
+*/
 # define SYS_TCH_F 0x8
-/* IS IT WRITEABLE */
+
+/*
+** IS IT WRITEABLE
+*/
 # define SYS_TCH_W 0x4
-/* IS IT READABLE */
+
+/*
+** IS IT READABLE
+*/
 # define SYS_TCH_R 0x2
-/* IS IT EXECUTABLE */
+
+/*
+** IS IT EXECUTABLE
+*/
 # define SYS_TCH_X 0x1
 
-/* MASK FOR GETTING FILE TYPE */
+/*
+** MASK FOR GETTING FILE TYPE
+*/
 # define SYS_TCH_TYP 0xF0
 
-/* IS IT FIFO */
+/*
+** IS IT FIFO
+*/
 # define SYS_TCH_PIP 0x10
-/* IS IT CHAR SPECIAL */
+
+/*
+** IS IT CHAR SPECIAL
+*/
 # define SYS_TCH_CHR 0x20
-/* IS IT DIRECTORY */
+
+/*
+** IS IT DIRECTORY
+*/
 # define SYS_TCH_DIR 0x40
-/* IS IT BLOCK SPECIAL */
+
+/*
+** IS IT BLOCK SPECIAL
+*/
 # define SYS_TCH_BLK 0x60
-/* IS IT REGULAR */
+
+/*
+** IS IT REGULAR
+*/
 # define SYS_TCH_REG 0x80
-/* IS IT SYMBOL LINK */
+
+/*
+** IS IT SYMBOL LINK
+*/
 # define SYS_TCH_LNK 0xA0
-/* IS IT SOCKET */
+
+/*
+** IS IT SOCKET
+*/
 # define SYS_TCH_SOC 0xC0
-/* IS IT WHITEOUT */
+
+/*
+** IS IT WHITEOUT
+*/
 # define SYS_TCH_WHT 0xE0
 
 # define PS_M_FG 1
@@ -69,7 +105,7 @@
 # define PS_S_SIG 2
 # define PS_S_DON 1
 
-typedef struct	s_proc_grp
+typedef struct		s_proc_grp
 {
 	t_dlist			*members;
 	char			*input_line;
@@ -96,7 +132,9 @@ char				*g_hbg;
 int					g_jid;
 int					g_intr;
 
-int			sys_wait_prg(t_pgrp **ps_grp, int *status, pid_t lpid, int mode);
-int			sys_del_if_done(ssize_t i, int state_code);
+int					sys_wait_prg(t_pgrp **ps_grp, \
+int *status, pid_t lpid, int mode);
+int					sys_del_if_done(ssize_t i, \
+int state_code);
 
 #endif

@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   sys_token_string.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 09:49:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/13 22:10:21 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:38:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sys_tools/sys_token_to_str.h"
 #include "sys_tools/sys_errors.h"
+#include "executer.h"
+#include "parser.h"
 
 char		*g_string_toks[] = {
 	"<<", " ", 0, "; ", "|| ", "&& ", " ", ">", "<", ">>", "<>", 0, 0, 0, "| ",

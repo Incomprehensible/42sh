@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 13:46:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 03:41:18 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 07:37:13 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 #include "sys_tools/sys_errors.h"
 #include "sys_tools/sys_token_to_str.h"
 #include "executer.h"
+#include "parser.h"
 #include "sh_tokenizer.h"
-#include "rms.h"
-
-#include "stdio.h"
 
 int		exe_bkgr_alg(BCKGR *bkgr, ENV *envr, int *status)
 {
