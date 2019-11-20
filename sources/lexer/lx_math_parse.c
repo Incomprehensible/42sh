@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_math_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 02:38:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 13:20:45 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ size_t   cut_brackets(char *str)
         counter++;
 	br = 2;
     //br = counter;
-    while (counter && str[len] && str[len] != '\n' && str[len] != ';')
+    while (counter && str[len])
     {
         if (str[len] == '(')
             ++counter;

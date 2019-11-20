@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 16:51:41 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/20 13:23:46 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,7 +292,7 @@ long	ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err)
 		return (0);
 	if (!polish_not[0])
 		return (0);
-	DBG_PRINT_MATH(polish_not[0]);
+	//DBG_PRINT_MATH(polish_not[0]);
 	pshe_pshe_res = polish_calculate(polish_not, env, err);
 	return (pshe_pshe_res);
 }

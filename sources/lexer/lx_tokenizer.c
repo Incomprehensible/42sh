@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 13:56:11 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/20 14:14:58 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,9 +218,16 @@ void    concatenate_str(char **last_input, char *str)
 {
     char        *tmp;
 	char		last;
+	char		prev;
+	size_t		len;
 
     // tmp = *last_input;
-	last = *(*last_input + (ft_strlen(*last_input) - 1));
+	len = ft_strlen(*last_input);
+	last = *(*last_input + (len - 1));
+	if (len >= 2)
+		prev = *(*last_input + (len - 2));
+	if (last == ')' && prev == last)
+		last ^= last;
 	if (last != '(' && last != ')')
 	{
 		tmp = *last_input;
@@ -257,9 +264,6 @@ short				sh_tokenizer(char *str, t_dlist **token_list)
 			free(last_input);
 			last_input = NULL;
 		}
-        // if (i < 0 && last_input)
-        //     free(last_input);
-		//was last_input = i ? NULL : ft_strdup(tmp);
 		if (!i)
         	last_input = last_input ? last_input : ft_strdup(tmp);
         return (i ? -1 : 0);

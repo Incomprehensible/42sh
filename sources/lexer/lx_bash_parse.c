@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_bash_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 02:35:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 13:15:59 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,138 +60,168 @@ static short    special_condition(char *patt)
     return (0);
 }
 
-static size_t validate_simple_struct(char *s, size_t i, size_t br)
-{
-    size_t tmp;
+// static size_t validate_simple_struct(char *s, size_t i, size_t br)
+// {
+//     size_t tmp;
 
+//     while (s[br] == '(')
+//         br++;
+//     tmp = br;
+//     s += i;
+//     i = 0;
+//     while (ft_isspace(s[i]))
+//         i++;
+//     while (s[i] && s[i] != ')')
+//     {
+//         if (s[i] == ';')
+//             return (0);
+//         if (s[i] == '\\')
+//             i++;
+//         i++;
+//     }
+//     while (s[i] == ')')
+//     {
+//         i++;
+//         br--;
+//     }
+//     if (br)
+//         return (0);
+//     return (i - tmp);
+// }
+
+// static size_t validate_math_struct(char *s, size_t i, short pass)
+// {
+//     while (s[i] && s[i] != ')')
+//     {
+//         while (ft_isspace(s[i]))
+//             i++;
+//         while (s[i] && s[i] != ';' && s[i] != ')')
+//         {
+//             if (s[i] == '\\')
+//                 i++;
+//             i++;
+//         }
+//         if (!s[i] || (s[i] != ';' && pass < 2) || (s[i] != ')' && pass == 2))
+//             return (0);
+//         pass = (s[i] == ';') ? ++pass : pass;
+//         i++;
+//     }
+//     if (s[i] == ')' && s[i + 1] == ')')
+//         return (0);
+//     return (pass == 2 ? i - 1 : 0);
+// }
+
+// char    *pull_legit_math(char *s, t_dlist **tok, size_t i, short tp)
+// {
+//     size_t k;
+
+//     if (tp == FORMATH)
+//     {
+//         if (!(i = validate_math_struct(s + i, 0, 0)))
+//             return (NULL);
+//     }
+//     else
+//         if (!(i = validate_simple_struct(s, i, 0)))
+//             return (NULL);
+//     while (*s == '(' || ft_isspace(*s))
+//         s = (*s == '\\') ? s + 2 : ++s;
+//     k = remove_spaces(s + i - 1, i);
+//     make_token(tok, pull_token(s, i - k), TK_MATH);
+//     s += i;
+//     while (*s == ')' || (ft_isspace(*s) && *s != '\n'))
+//         s = (*s == '\\') ? s + 2 : ++s;
+//     if (*s != ';' && *s != '\n')
+//         return (NULL);
+//     return (parse_sep(s, tok, 0));
+// }
+
+static size_t validate_simple_struct(char *s, size_t br)
+{
     while (s[br] == '(')
         br++;
-    tmp = br;
-    s += i;
-    i = 0;
-    while (ft_isspace(s[i]))
-        i++;
-    while (s[i] && s[i] != ')')
+    s += br;
+    while (ft_isspace(*s))
+        s++;
+    while (*s && *s != ')')
     {
-        if (s[i] == ';')
+        if (*s == ';')
             return (0);
-        if (s[i] == '\\')
-            i++;
-        i++;
+        if (*s == '\\')
+            s++;
+        s++;
     }
-    while (s[i] == ')')
+    while (*s == ')')
     {
-        i++;
+        s++;
         br--;
     }
     if (br)
         return (0);
-    return (i - tmp);
-}
-
-static size_t validate_math_struct(char *s, size_t i, short pass)
-{
-    while (s[i] && s[i] != ')')
-    {
-        while (ft_isspace(s[i]))
-            i++;
-        while (s[i] && s[i] != ';' && s[i] != ')')
-        {
-            if (s[i] == '\\')
-                i++;
-            i++;
-        }
-        if (!s[i] || (s[i] != ';' && pass < 2) || (s[i] != ')' && pass == 2))
-            return (0);
-        pass = (s[i] == ';') ? ++pass : pass;
-        i++;
-    }
-    if (s[i] == ')' && s[i + 1] == ')')
-        return (0);
-    return (pass == 2 ? i - 1 : 0);
-}
-
-short   validate_math_condition(char *tmp)
-{
     return (1);
 }
 
-short   validate_math_stx(char *s)
+static size_t validate_triple_struct(char *s, short pass)
 {
-    size_t j;
-    size_t k;
-    char    *tmp;
-
-    while (*s != ')')
+    while (s && *s != ')')
     {
-        j = 0;
-        s = skip_spaces(s);
-        while (*s != ';' && *s != ')')
+        while (ft_isspace(*s))
+            s++;
+        while (*s && *s != ';' && *s != ')')
         {
             if (*s == '\\')
-            {
                 s++;
-                j++;
-            }
             s++;
-            j++;
         }
-        k = remove_spaces(s - 1, j + 1);
-        tmp = (char *)ft_memalloc(j - k + 1);
-        ft_strlcat(tmp, s - j, j - k + 1);
-        if (!validate_math_condition(tmp))
-        {
-            free(tmp);
+        if (!(*s) || (*s != ';' && pass < 2) || (*s != ')' && pass == 2))
             return (0);
-        }
+        pass = (*s == ';') ? ++pass : pass;
         s++;
-        free(tmp);
     }
-    return (1);
+    return (pass == 2 ? 1 : 0);
 }
 
-char    *pull_legit_math(char *s, t_dlist **tok, size_t i, short tp)
+char    *pull_legit_math(char *s, t_dlist **tok, t_stx **tr)
 {
-    size_t k;
-
-    if (tp == FORMATH)
-    {
-        if (!(i = validate_math_struct(s + i, 0, 0)))
-            return (NULL);
-    }
-    else
-        if (!(i = validate_simple_struct(s, i, 0)))
-            return (NULL);
-    while (*s == '(' || ft_isspace(*s))
-        s = (*s == '\\') ? s + 2 : ++s;
-    if (!validate_math_stx(s))
-        return (NULL);
-    k = remove_spaces(s + i - 1, i);
-    make_token(tok, pull_token(s, i - k), TK_MATH);
-    s += i;
-    while (*s == ')' || (ft_isspace(*s) && *s != '\n'))
+    s = parse_math(s, tok, tr, 0);
+	if (!s)
+		return (NULL);
+    while (*s == ')' || !is_sep_no_space(*s))
         s = (*s == '\\') ? s + 2 : ++s;
     if (*s != ';' && *s != '\n')
         return (NULL);
     return (parse_sep(s, tok, 0));
 }
 
-char    *pull_math(char *s, t_dlist **tok, short tp)
+char    *pull_math(char *s, t_dlist **tok, t_stx **tr, short tp)
 {
-    size_t i;
-
-    i = 0;
-    if (!layer_parse_two("((x))", s))
+    if (!layer_parse_two("((w))", s))
         return (s);
-    while (s[i] && s[i] == '(')
-        i = (s[i] == '\\') ? i + 2 : ++i;
-    if ((i != 2 && tp == FORMATH) || (i < 2 && tp == MATH_NT))
+    if (tp == FORMATH && !validate_triple_struct(s, 0))
         return (0);
-    while (ft_isspace(s[i]))
-        i = (s[i] == '\\') ? i + 2 : ++i;
-    s = pull_legit_math(s, tok, i, tp);
+	else if (tp == MATH_NT && !validate_simple_struct(s, 0))
+		return (0);
+    while (ft_isspace(*s))
+        s = (*s == '\\') ? s + 2 : ++s;
+    s = pull_legit_math(s, tok, tr);
     return (s);
 }
+
+// char    *pull_math(char *s, t_dlist **tok, short tp)
+// {
+//     size_t i;
+
+//     i = 0;
+//     if (!layer_parse_two("((x))", s))
+//         return (s);
+//     while (s[i] && s[i] == '(')
+//         i = (s[i] == '\\') ? i + 2 : ++i;
+//     if ((i != 2 && tp == FORMATH) || (i < 2 && tp == MATH_NT))
+//         return (0);
+//     while (ft_isspace(s[i]))
+//         i = (s[i] == '\\') ? i + 2 : ++i;
+//     s = pull_legit_math(s, tok, i, tp);
+//     return (s);
+// }
 
 static char *make_it_glue(char *s, t_stx **tr, t_dlist **tok)
 {
@@ -259,7 +289,7 @@ char    *script_pull(char *patt, t_tk_type tp, char *s, t_stx **tr, t_dlist **to
             return (((special_condition(patt)) ? pull_expr1(patt, s, tr, tok) : pull_expr2(s, tr, tok)));
     }
     else if (tp == MATH_NT || tp == FORMATH)
-        return (pull_math(s, tok, tp));
+        return (pull_math(s, tok, tr, tp));
     else
         s = normal_token(patt, tp, s, tok);
 	if (*s == ' ' || *s == '\t') 
