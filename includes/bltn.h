@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/19 04:38:10 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 18:17:12 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "ft_avl_tree.h"
 # include "env.h"
 # include "rms.h"
+# include "sys_tools/sys_tools.h"
 # include <unistd.h>
 
 static char	*bltns_str[] = {"setenv", "env", "getenv", "unsetenv", "exit",\
@@ -100,6 +101,28 @@ int			bltn_bg(char **args, ENV *envr);
 int			bltn_jobs(char **args, ENV *envr);
 int			bltn_export(char **args, ENV *envr);
 int			bltn_unset(char **args, ENV *envr);
+
+/*
+** FG_BG_HELPERS
+*/
+
+ssize_t			fg_args_get_jid(char *job);
+ssize_t			fg_by_str(char *job);
+int				bltn_fg_bg_launch(ssize_t a, int mode);
+
+/*
+** JOBS_HELPRES
+*/
+
+int				jobs_put_by_mode(const ssize_t i, int md);
+int				jobs_put_long_entry(const ssize_t i);
+int				jobs_put_pids(const ssize_t i);
+int				jobs_put_entry_sm(const ssize_t i);
+
+int				no_job_error(char *job, char *cont, ENV *envr);
+char			*jobs_state_str_set(const t_pgrp *pg);
+char			jobs_cur_char_set(ssize_t i);
+int				ft_isodigit(int ch);
 
 void		et_rm_str(void *cont, size_t ske);
 

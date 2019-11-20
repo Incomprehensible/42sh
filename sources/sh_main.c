@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:36:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 18:16:21 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,16 @@ size_t			args_len(char **argv)
 		++i;
 	}
 	return (i);
+}
+
+/*
+** NEEDED IN ECHO
+*/
+int		ft_isodigit(int ch)
+{
+	if ('0' <= ch && ch <= '8')
+		return (1);
+	return (0);
 }
 
 // !! TEMPORARY FUNCTIONS ===================================================================== !!

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 12:40:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 13:26:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 18:15:27 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,6 @@
 #include "bltn.h"
 #include "sys_tools/sys_tools.h"
 #include "sys_tools/sys_errors.h"
-
-static int		ft_isodigit(int ch)
-{
-	if ('0' <= ch && ch <= '8')
-		return (1);
-	return (0);
-}
 
 static void		echo_put_och(char *arg, size_t *i)
 {

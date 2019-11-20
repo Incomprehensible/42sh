@@ -6,7 +6,7 @@
 #    By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/20 08:26:06 by hgranule         ###   ########.fr        #
+#    Updated: 2019/11/20 18:13:53 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 
 SRC_FILES = sh_main.c sh_launch.c \
-			ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c \
+			ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c free_me/rms_2.c \
 			ft_basename.c exe_sys/exe_binaries.c exe_sys/exe_builtns.c \
 			exe_sys/exe_load_save_rdr.c exe_sys/exe_rdr_hered.c \
 			exe_sys/exe_redirs.c parser/prs_arch.c parser/prs_args.c exe_sys/exe_subshell.c \
@@ -74,7 +74,9 @@ SRC_FILES = sh_main.c sh_launch.c \
 			sys_tools/sys_exprs_strings_2.c sys_tools/sys_exprs_strings_3.c \
 			sys_tools/sys_prompt.c \
 			\
-			bltns/bltn_jobs/bltn_jobs.c bltns/bltn_jobs/bltn_fg.c bltns/bltn_set.c\
+			bltns/bltn_jobs/bltn_jobs.c bltns/bltn_jobs/bltn_fg_bg.c bltns/bltn_set.c \
+			bltns/bltn_jobs/bltn_fg_bg_helper.c bltns/bltn_jobs/bltn_jobs_entries.c \
+			bltns/bltn_jobs/bltn_jobs_help.c \
 			\
 			$(addprefix gui/, $(GUI_FILES)) \
 			sys_tools/sys_config.c sys_tools/sys_files.c sys_tools/sys_proc_tables.c \
