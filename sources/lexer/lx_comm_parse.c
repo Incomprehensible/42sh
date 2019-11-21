@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 12:27:51 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/21 21:28:46 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,106 +14,92 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-char	*skip_comment(char *str)
+char			*parse_exec(char *str, t_dlist **tok)
 {
-	while (*str && *str != '\n')
+	size_t	i;
+	char	*new;
+
+	i = 0;
+	make_token(tok, pull_token(str, 4), TK_EXEC);
+	str += 4;
+	if (ft_isspace(*str))
+		str = parse_empty(str, 0x0, tok);
+	while (*str && !is_sep_no_space((*str)))
+	{
+		if ((*str && *str == '\\') || ((*str == '<' || *str == '>')
+		&& *(str + 1) == '&'))
+		{
+			str++;
+			i++;
+		}
 		str++;
-	return (str);
+		i++;
+	}
+	new = pull_token(str - i, i);
+	make_token(tok, markup_station(new, TK_EXPR), TK_EXPR);
+	free(new);
+	return (parse_sep(str, tok, 0));
 }
 
-char    *parse_exec(char *str, t_dlist **tok)
-{
-    size_t i;
-
-    i = 0;
-    make_token(tok, pull_token(str, 4), TK_EXEC);
-    str += 4;
-   if (ft_isspace(*str))
-       str = parse_empty(str, 0x0, tok);
-    while (*str && !is_sep_no_space((*str)))
-    {
-        if ((*str && *str == '\\') || ((*str == '<' || *str == '>') && *(str + 1) == '&'))
-        {
-            str++;
-            i++;
-        }
-        str++;
-        i++;
-    }
-	make_token(tok, markup_station(pull_token(str - i, i), TK_EXPR), TK_EXPR);
-    return (parse_sep(str, tok, 0));
-}
-
-static short   redir_detected(char *str, t_stx **tree, short stop)
+static short	redir_detected(char *str, t_stx **tree, short stop)
 {
 	if (stop == '<')
 		return (0);
-    str = (*str == '\\') ? str + 2 : str;
-    while (*str && *str != stop && !(is_sep_no_space(*str)))
-    {
-        if (check_branch(str, tree[REDIR]))
-            return (1);
-        str = (*str == '\\') ? str + 2 : ++str;
-    }
-    return (0);
+	str = (*str == '\\') ? str + 2 : str;
+	while (*str && *str != stop && !(is_sep_no_space(*str)))
+	{
+		if (check_branch(str, tree[REDIR]))
+			return (1);
+		str = (*str == '\\') ? str + 2 : ++str;
+	}
+	return (0);
 }
 
-short valid_deref(char *str)
-{
-	if (*str == '$' && *(str + 1) != '=' && !is_separator(*(str + 1)))
-        return (1);
-    // if (*str == '$' && *(str + 1) != '=' && !ft_isspace(*(str + 1)))
-    //     return (1);
-    return (0);
-}
-
-short   time_for_portal(char *str, t_stx **tree, short stop)
+short			time_for_portal(char *str, t_stx **tree, short stop)
 {
 	if ((ft_isdigit(*str) || *str == '&') && redir_detected(str, tree, stop))
 		return (1);
 	else if (is_sep_no_space(*str) || ft_isspace(*str))
 		return (1);
-    else if (*str == '#' || *str == '(' || *str == '"' || *str == '\'')
+	else if (*str == '#' || *str == '(' || *str == '"' || *str == '\'')
 		return (1);
-	// else if (*str == '=' && !(ft_isspace(*(str + 1))))
-	// 	return (1);
-	// else if (*str == '+' && *(str + 1) == '=' && !(ft_isspace(*(str + 2))))
-	// 	return (1);
 	else if (is_redir(str) || valid_deref(str) || is_token_here(str, "exec"))
-        return (1);
-    return (0);
+		return (1);
+	return (0);
 }
 
-char*   parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
+char			*parse_expr(char *str, t_dlist **tok, t_stx **tr, short sp)
 {
-    size_t j;
-    short i;
+	size_t	j;
+	short	i;
 
-    j = 0;
-    i = 0;
-    if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
-        return (parse_exec(str, tok));
-    while (!(special_case(stop, str)) && *str)
-    {
-        if (*str == '\\' && (++j) && (++str))
-            i = 1;
-		if (!i && !j && *str == '\n')
-			str = parse_empty(str, 0x0, tok);
-		else if (!i && *str && time_for_portal(str, tree, stop))
-        {
-            j = can_pull_tk(j, str, tok, stop);
-            if (!(str = check_subbranch(str, tok, tree)))
-                return (NULL);
-            if (sep_detected(tok[1]))
-                return (str);
-        }
+	j = 0;
+	i = 0;
+	while (!(special_case(sp, &str[j])) && str[j])
+	{
+		if (*str == '\\' && (++j))
+			i = 1;
+		if (!i && !j && str[j] == '\n')
+			str = parse_empty(&str[j], 0x0, tok);
+		else if (!i && str[j] && time_for_portal(&str[j], tr, sp))
+		{
+			str += can_pull_tk(j, &str[j], tok, sp);
+			if (!(str = check_subbranch(str, tok, tr)))
+				return (NULL);
+			if (!(j = 0) && sep_detected(tok[1]))
+				return (str);
+		}
 		else
-        {
-            str++;
-            j++;
-        }
-        i = (*str == '\\') ? 1 : 0;
-    }
-    can_pull_tk(j, str, tok, stop);
-    return (parse_sep(str + i, tok, 0));
+			j++;
+		i = 0;
+	}
+	return (str + can_pull_tk(j, &str[j], tok, sp));
+}
+
+char			*parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
+{
+	if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
+		return (parse_exec(str, tok));
+	str = parse_expr(str, tok, tree, stop);
+	return (parse_sep(str, tok, 0));
 }

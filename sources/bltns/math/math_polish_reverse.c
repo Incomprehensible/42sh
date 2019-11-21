@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/20 13:23:46 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/20 15:29:04 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ t_dlist	*lst_to_end(t_dlist *stack)
  	return (start);
  }
 
-//compares indexes of ops - last from stack and preceding one - inside
 short	pop_operator(t_dlist *op_stack, t_tk_type new_tok)
 {
 	static t_tk_type	ops[7][16];
@@ -164,8 +163,6 @@ t_dlist	*prepare_op_stack(t_dlist *ops, t_tk_type op)
 	return (tmp);
 }
 
-//it clears two stacks inside 
-//if we got closing bracket or operand lower value appeared we make or update final linked list
 t_dlist	*update_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops, t_tk_type op)
 {
 	t_dlist		*start_opds;
@@ -193,22 +190,6 @@ t_dlist	*update_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops, t_tk_t
 		return (clean_op_stack(ops));
 	else
 		return (prepare_op_stack(ops, op));
-	// if (op != OUT_BR)
-	// {
-	// 	tmp = ops;
-	// 	ops = (ops && ops->next) ? ops->next : NULL;
-	// }
-	// else
-	// 	tmp = ops ? ops->prev : NULL;
-	// del_tokens(ops);
-	// if (tmp)
-	// {
-	// 	tmp->next = NULL;
-	// 	while (tmp->prev)
-	// 		tmp = tmp->prev;
-	// }
-	// //del_tokens(ops);
-	// return (tmp);
 }
 
 t_dlist	*into_fin_list(t_dlist **fin_list, t_dlist *opds, t_dlist *ops)
@@ -263,7 +244,7 @@ void	into_reverse_notation(t_dlist *dimon_loh, t_dlist **fin)
 	{
 		type = ((t_tok *)dimon_loh->content)->type;
 		if (is_operand_tok(type))
-			opd_stack = push_to_stack(opd_stack, dimon_loh); //add new operand to stack
+			opd_stack = push_to_stack(opd_stack, dimon_loh);
 		else if (type == TK_EOF || (id = pop_operator(op_stack, type)))
 		{
 			op_stack = id < 2 ? update_fin_list(fin, opd_stack, op_stack, type) : into_fin_list(fin, opd_stack, op_stack);
@@ -272,7 +253,7 @@ void	into_reverse_notation(t_dlist *dimon_loh, t_dlist **fin)
 			continue ;
 		}
 		else
-			op_stack = push_to_stack(op_stack, dimon_loh); //add new operator or bracket to stack
+			op_stack = push_to_stack(op_stack, dimon_loh);
 		dimon_loh = dimon_loh->next;
 	}
 	if (op_stack)
@@ -285,14 +266,12 @@ long	ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err)
 	long 				pshe_pshe_res;
 
 	ft_bzero(polish_not, sizeof(t_dlist *) * 2);
-	//DBG_PRINT_MATH(dimon_loh[0]);
 	into_reverse_notation(dimon_loh[0], polish_not);
 	clear_tokens(dimon_loh, 0);
 	if (err->err_code)
 		return (0);
 	if (!polish_not[0])
 		return (0);
-	//DBG_PRINT_MATH(polish_not[0]);
 	pshe_pshe_res = polish_calculate(polish_not, env, err);
 	return (pshe_pshe_res);
 }

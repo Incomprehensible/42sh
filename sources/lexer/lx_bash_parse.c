@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/20 13:15:59 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/22 02:09:33 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,134 +52,6 @@ static short   graph_type(char *str)
     return (choice);
 }
 
-static short    special_condition(char *patt)
-{
-    patt = skip_spaces(patt);
-    if (*patt == '!')
-        return (1);
-    return (0);
-}
-
-// static size_t validate_simple_struct(char *s, size_t i, size_t br)
-// {
-//     size_t tmp;
-
-//     while (s[br] == '(')
-//         br++;
-//     tmp = br;
-//     s += i;
-//     i = 0;
-//     while (ft_isspace(s[i]))
-//         i++;
-//     while (s[i] && s[i] != ')')
-//     {
-//         if (s[i] == ';')
-//             return (0);
-//         if (s[i] == '\\')
-//             i++;
-//         i++;
-//     }
-//     while (s[i] == ')')
-//     {
-//         i++;
-//         br--;
-//     }
-//     if (br)
-//         return (0);
-//     return (i - tmp);
-// }
-
-// static size_t validate_math_struct(char *s, size_t i, short pass)
-// {
-//     while (s[i] && s[i] != ')')
-//     {
-//         while (ft_isspace(s[i]))
-//             i++;
-//         while (s[i] && s[i] != ';' && s[i] != ')')
-//         {
-//             if (s[i] == '\\')
-//                 i++;
-//             i++;
-//         }
-//         if (!s[i] || (s[i] != ';' && pass < 2) || (s[i] != ')' && pass == 2))
-//             return (0);
-//         pass = (s[i] == ';') ? ++pass : pass;
-//         i++;
-//     }
-//     if (s[i] == ')' && s[i + 1] == ')')
-//         return (0);
-//     return (pass == 2 ? i - 1 : 0);
-// }
-
-// char    *pull_legit_math(char *s, t_dlist **tok, size_t i, short tp)
-// {
-//     size_t k;
-
-//     if (tp == FORMATH)
-//     {
-//         if (!(i = validate_math_struct(s + i, 0, 0)))
-//             return (NULL);
-//     }
-//     else
-//         if (!(i = validate_simple_struct(s, i, 0)))
-//             return (NULL);
-//     while (*s == '(' || ft_isspace(*s))
-//         s = (*s == '\\') ? s + 2 : ++s;
-//     k = remove_spaces(s + i - 1, i);
-//     make_token(tok, pull_token(s, i - k), TK_MATH);
-//     s += i;
-//     while (*s == ')' || (ft_isspace(*s) && *s != '\n'))
-//         s = (*s == '\\') ? s + 2 : ++s;
-//     if (*s != ';' && *s != '\n')
-//         return (NULL);
-//     return (parse_sep(s, tok, 0));
-// }
-
-static size_t validate_simple_struct(char *s, size_t br)
-{
-    while (s[br] == '(')
-        br++;
-    s += br;
-    while (ft_isspace(*s))
-        s++;
-    while (*s && *s != ')')
-    {
-        if (*s == ';')
-            return (0);
-        if (*s == '\\')
-            s++;
-        s++;
-    }
-    while (*s == ')')
-    {
-        s++;
-        br--;
-    }
-    if (br)
-        return (0);
-    return (1);
-}
-
-static size_t validate_triple_struct(char *s, short pass)
-{
-    while (s && *s != ')')
-    {
-        while (ft_isspace(*s))
-            s++;
-        while (*s && *s != ';' && *s != ')')
-        {
-            if (*s == '\\')
-                s++;
-            s++;
-        }
-        if (!(*s) || (*s != ';' && pass < 2) || (*s != ')' && pass == 2))
-            return (0);
-        pass = (*s == ';') ? ++pass : pass;
-        s++;
-    }
-    return (pass == 2 ? 1 : 0);
-}
-
 char    *pull_legit_math(char *s, t_dlist **tok, t_stx **tr)
 {
     s = parse_math(s, tok, tr, 0);
@@ -205,23 +77,6 @@ char    *pull_math(char *s, t_dlist **tok, t_stx **tr, short tp)
     s = pull_legit_math(s, tok, tr);
     return (s);
 }
-
-// char    *pull_math(char *s, t_dlist **tok, short tp)
-// {
-//     size_t i;
-
-//     i = 0;
-//     if (!layer_parse_two("((x))", s))
-//         return (s);
-//     while (s[i] && s[i] == '(')
-//         i = (s[i] == '\\') ? i + 2 : ++i;
-//     if ((i != 2 && tp == FORMATH) || (i < 2 && tp == MATH_NT))
-//         return (0);
-//     while (ft_isspace(s[i]))
-//         i = (s[i] == '\\') ? i + 2 : ++i;
-//     s = pull_legit_math(s, tok, i, tp);
-//     return (s);
-// }
 
 static char *make_it_glue(char *s, t_stx **tr, t_dlist **tok)
 {
@@ -263,7 +118,7 @@ static char	*pull_break_cont(char *s, t_tk_type tp, t_dlist **tok)
 	if (tmp == s)
 		return (s);
 	s = tmp;
-	if (*s == ' ' || *s == '\t') 
+	if (*s == ' ' || *s == '\t')
 		s = parse_empty(s, 0x0, tok);
 	s = parse_sep(s, tok, 0);
 	if (!sep_detected(tok[1]) || !check_valid_sep(tok[1]))
@@ -271,30 +126,34 @@ static char	*pull_break_cont(char *s, t_tk_type tp, t_dlist **tok)
 	return (s);
 }
 
-char    *script_pull(char *patt, t_tk_type tp, char *s, t_stx **tr, t_dlist **tok)
+char    *expr_in(char *s, t_graph *g, t_stx **tr, t_dlist **tk)
+{
+	if (g->type != TK_VAR && is_token_here(skip_spaces(s), "break"))
+        return (pull_break_cont(s, TK_BREAK, tk));
+    else if (g->type != TK_VAR && is_token_here(skip_spaces(s), "continue"))
+        return (pull_break_cont(s, TK_CONTIN, tk));
+    else if (special_condition(g->patt))
+        return (pull_expr1(g->patt, s, tr, tk));
+    return (pull_expr2(s, tr, tk));
+}
+
+char    *script_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
 {
     if (!(*s))
         return (s);
-    if (tp == TK_SEP)
+    if (g->type == TK_SEP)
         return (parse_sep(s, tok, 0));
-    if (tp == GLUE)
+    if (g->type == GLUE)
         return (make_it_glue(s, tr, tok));
-    if (tp == TK_EXPR || tp == TK_VAR || tp == EX)
-    {
-        if (tp != TK_VAR && is_token_here(skip_spaces(s), "break"))
-            return (pull_break_cont(s, TK_BREAK, tok));
-        else if (tp != TK_VAR && is_token_here(skip_spaces(s), "continue"))
-            return (pull_break_cont(s, TK_CONTIN, tok));
-        else
-            return (((special_condition(patt)) ? pull_expr1(patt, s, tr, tok) : pull_expr2(s, tr, tok)));
-    }
-    else if (tp == MATH_NT || tp == FORMATH)
-        return (pull_math(s, tok, tr, tp));
+    if (g->type == TK_EXPR || g->type == TK_VAR || g->type == EX)
+        return (expr_in(s, g, tr, tok));
+    else if (g->type == MATH_NT || g->type == FORMATH)
+        return (pull_math(s, tok, tr, g->type));
     else
-        s = normal_token(patt, tp, s, tok);
-	if (*s == ' ' || *s == '\t') 
+        s = normal_token(g->patt, g->type, s, tok);
+	if (*s == ' ' || *s == '\t')
 		s = parse_empty(s, 0x0, tok);
-    if (is_sep_no_space(*s) && (tp != TK_DONE && tp != TK_FI))
+    if (is_sep_no_space(*s) && (g->type != TK_DONE && g->type != TK_FI))
         s = parse_sep(s, tok, 0);
     return (s);
 }
@@ -323,7 +182,7 @@ char    *get_script(t_graph *g, char *s, t_dlist **tok, t_stx **tr)
 
     if ((tmp = into_the_portal(g, s, tok, tr)) != s && tmp)
         return (tmp);
-    return (script_pull(g->patt, g->type, s, tr, tok));
+    return (script_pull(g, s, tr, tok));
 }
 
 static char *pull_empty(t_graph *g, char *s, t_dlist **tok)

@@ -6,48 +6,13 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 12:20:40 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/21 23:41:25 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
-
-short   is_it_q(char c)
-{
-    if (c == '\'' || c == '"' || c == '`')
-        return (1);
-    return (0);
-}
-
-size_t   mirror_passes(char *str)
-{
-    size_t i;
-
-    i = 0;
-    if (ft_isspace(str[i]))
-        i++;
-    i++;
-    return (i);
-}
-
-size_t  skip_field(char *str, char skip)
-{
-    size_t jump;
-
-    jump = 1;
-    while (str[jump] && str[jump] != skip)
-    {
-        if (str[jump] == '\\' && str[++jump])
-            jump++;
-        else
-            jump++;
-    }
-    if (!str[jump])
-        return (0);
-    return (jump);
-}
 
 short   q_closed(char *str, char q, char q1, char q2)
 {
@@ -77,13 +42,6 @@ short   q_closed(char *str, char q, char q1, char q2)
     return (times ? 0 : 1);
 }
 
-short   is_it_br(char c)
-{
-    if (c == '(')
-        return (1);
-    return (0);
-}
-
 char	*br_ap_cls_n(char *str)
 {
 	while (*str)
@@ -105,11 +63,11 @@ char	*br_cls_n(char *str, short *i)
 			++str;
 		else if (*str == '\"')
 			str = br_qt_cls_n(++str, i);
-		else if (*str == '(' && (++(*i) || 1)) // i plus
+		else if (*str == '(' && (++(*i) || 1))
 			str = br_cls_n(++str, i);
 		else if (*str == '\'')
 			str = br_ap_cls_n(++str);
-		else if (*str == ')' && (--(*i) || 1)) // i minus
+		else if (*str == ')' && (--(*i) || 1))
 			return (++str);
 		else
 			++str;
@@ -125,7 +83,7 @@ char	*br_qt_cls_n(char *str, short *i)
 			++str;
 		else if (*str == '\"')
 			return (++str);
-		else if (*str == '$' && *(++str) == '(' && (++(*i) || 1)) // i plus
+		else if (*str == '$' && *(++str) == '(' && (++(*i) || 1))
 			str = br_cls_n(++str, i);
 		else
 			++str;
@@ -318,7 +276,7 @@ char	*qa_qt_cls_n(char *str, int *q)
 			++str;
 		else if (*str == '\"' && (--(*q) || 1))
 			return (++str);
-		else if (*str == '$' && *(str + 1) == '(') // i plus
+		else if (*str == '$' && *(str + 1) == '(')
 			str = br_cls_n(++str + 1, &dump);
 		else
 			++str;
@@ -418,18 +376,11 @@ short   scripts_closed(char *str)
     return (1);
 }
 
-char    *skip_spaces_newline(char *str)
-{
-    while (*str && (*str == ' ' || *str == '\t' || *str == '\n'))
-        str++;
-    return (str);
-}
-
 short func_really_closed(char *str)
 {
     short times;
 
-    str = skip_spaces_newline(str);
+    str = skip_spaces_nd_nl(str);
     if (!(*str))
         return (0);
     if (*str == '{')

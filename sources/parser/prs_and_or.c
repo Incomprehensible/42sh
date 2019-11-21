@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   prs_and_or.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 17:54:50 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/02 09:14:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 15:25:07 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-extern void			DBG_PRINT_TOKENS(t_dlist *toklst);
+extern void			dbg_print_tokens(t_dlist *toklst);
 
 static t_dlist	*prs_skip_flows(t_dlist *tks, t_tk_type type)
 {

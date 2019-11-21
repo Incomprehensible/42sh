@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/17 08:28:38 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/19 18:15:59 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ char			*get_deref_math(char *expr, ENV *envr)
 	err.error_msg = NULL;
 	err.err_code = 0;
 	num = do_math_bltn(expr, envr, &err);
-	if (err.err_code)
-		math_error_handler(&err, 0, envr);
+	if (err.err_code && math_error_handler(&err, 1, envr))
+		return (NULL);
 	// ERROR IO
 	res = ft_lltoa_base(num, 10);
 	return (res);

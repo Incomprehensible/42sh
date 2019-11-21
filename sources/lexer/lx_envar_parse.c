@@ -6,27 +6,13 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 03:22:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 10:54:25 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/21 00:10:27 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
-
-short   is_separator(char str)
-{
-	if (str != ' ' && str != '\t' && str != '\n' && str != ';' && str != '&' && str != '|' && str != '"' && str)
-		return (0);
-	return (1);
-}
-
-static short	is_assign(char c)
-{
-	if (c != '=' && c != '+' && c != '-')
-		return (0);
-	return (1);
-}
 
 static short	validate_envar(char *str)
 {
@@ -69,64 +55,6 @@ static short validate_var(char *varname)
 		varname++;
 	}
 	return (1);
-}
-
-static void substitute_value(t_dlist *token_list)
-{
-	while (token_list && TOK_TYPE != TK_ASSIGM)
-	{
-		if (TOK_TYPE == TK_EXPR)
-			TOK_TYPE = TK_VALUE;
-		token_list = token_list->prev;
-	}
-}
-
-char	*assig_into_portal(char *str, t_dlist **tok, t_stx **tree)
-{
-	if (*str == '$')
-	{
-		if (!(str = parse_deref(str, tok, tree, 0)))
-			return (NULL);
-	}
-	else if (*str == '"')
-	{
-		if (!(str = parse_dquotes(str, tok, tree, 0)))
-			return (NULL);
-	}
-	// else if (*str == '\'')
-	// {
-	//	 if (!(str = parse_apofs(str, tok, tree, 0)))
-	//	 return (NULL);
-	// }
-	return (str);
-}
-
-char	*parse_assig_block(char *str, t_dlist **tok, t_stx **tree)
-{
-	size_t	j;
-	short	i;
-
-	j = 0;
-	i = 0;
-	while (*str && !((!i && is_separator(*str)) && *str != '"'))
-	{
-		if (*str == '\\' && ++str && ++j)
-			i = 1;
-		else if (!i && (*str == '$' || *str == '"'))
-		{
-			j = can_pull_tk(j, str, tok, 0);
-			if (!(str = assig_into_portal(str, tok, tree)))
-				return (NULL);
-			if (sep_detected(tok[1]))
-				return (str);
-			continue ;
-		}
-		++str;
-		++j;
-		i = 0;
-	}
-	can_pull_tk(j, str, tok, 0);
-	return (str);
 }
 
 static char	*get_value(char *str, t_stx **tr, t_dlist **tok)

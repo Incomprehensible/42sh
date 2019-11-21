@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 05:18:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 15:28:24 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ void			sh_loop(ENV *env)
 		dstr_del(&prompt);
 		dstr_del(&line);
 		if (dbg_tok_pr_flag)
-			DBG_PRINT_TOKENS(token_list[0]);
+			dbg_print_tokens(token_list[0]);
 		g_intr = 0;
 		sh_tparse(token_list[0], env, TK_EOF, &status);
 		ft_dlst_delf(token_list, 0, free_token);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_subsh_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 01:49:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/22 01:28:29 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,20 @@ char	*pull_subsh(char *str, t_dlist **tok, t_tk_type type)
 	return (str);
 }
 
-char   *parse_subsh(char *str, t_dlist **tok, t_stx **tree, short ind)
+char	*parse_subsh(char *str, t_dlist **tok, t_stx **tree, short ind)
 {
-    char *patt;
-    char *tmp;
+	char	*patt;
+	char	*tmp;
 
 	ind = 0;
-    patt = "(z)";
-    if (*str == '\\' || *str != '(')
-        return (parse_comm(str, tok, tree, '('));
-    if ((tmp = reg_process(patt, TK_SUBSH, str, tok, tree)) == str)
-        return (NULL);
-    str = tmp;
-    return (str);
+	patt = "(z)";
+	str = parse_empty(str, 0x0, tok);
+	if (*str == '\\' || *str != '(')
+		return (parse_comm(str, tok, tree, '('));
+	if (*str == '$' && valid_deref(str))
+		return (parse_deref(str, tok, tree, 0));
+	if ((tmp = pull_subsh(str, tok, TK_SUBSH)) == str)
+		return (NULL);
+	str = tmp;
+	return (str);
 }

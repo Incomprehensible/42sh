@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/02 20:26:15 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/22 01:47:04 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,26 @@
 #include <unistd.h>
 #include <termios.h>
 
-char	*get_err_messg(t_tk_type type)
+char	*get_err_1(t_tk_type type)
 {
-	char	*str;
+	char    *str;
 
-	str = NULL;
+	str = (type == TK_HERED) ? ft_strdup("syntax error or unexpected token near '<<' token") : str;
+	str = (type == TK_OR) ? ft_strdup("syntax error or unexpected token near 'or' token") : str;
+	str = (type == TK_AND) ? ft_strdup("syntax error or unexpected token near 'and' token") : str;
+	str = (type == TK_RD_W) ? ft_strdup("syntax error or unexpected token near '<' token") : str;
+	str = (type == TK_RD_R) ? ft_strdup("syntax error or unexpected token near '>' token") : str;
+	str = (type == TK_RD_A) ? ft_strdup("syntax error or unexpected token near '>>' token") : str;
+	str = (type == TK_RD_RW) ? ft_strdup("syntax error or unexpected token near '<>' token") : str;
+	str = (type == TK_PIPE) ? ft_strdup("syntax error or unexpected token near '|' token") : str;
+	str = (type == TK_DEREF) ? ft_strdup("syntax error or unexpected token near '$' token") : str;
+	return (str);
+}
+
+char	*get_err_2(t_tk_type type)
+{
+	char    *str;
+
 	str = (type == TK_IF) ? ft_strdup("syntax error or unexpected token near 'if' token") : str;
 	str = (type == TK_THEN) ? ft_strdup("syntax error or unexpected token near 'then' token") : str;
 	str = (type == TK_ELSE) ? ft_strdup("syntax error or unexpected token near 'else' token") : str;
@@ -36,6 +51,18 @@ char	*get_err_messg(t_tk_type type)
 	str = (type == TK_IN) ? ft_strdup("syntax error or unexpected token near 'in' token") : str;
 	str = (type == TK_BREAK) ? ft_strdup("syntax error or unexpected token near 'break' token") : str;
 	str = (type == TK_CONTIN) ? ft_strdup("syntax error or unexpected token near 'continue' token") : str;
+	return (str);
+}
+
+char	*get_err_messg(t_tk_type type)
+{
+	char	*str;
+
+	str = NULL;
+	if (type >= TK_HERED && type <= TK_DEREF)
+		return (get_err_1(type));
+	else if (type >= TK_IF && type <= TK_CONTIN)
+		return (get_err_2(type));
 	str = (type == TK_UNTIL) ? ft_strdup("syntax error or unexpected token near 'until' token") : str;
 	str = (type == TK_EXEC) ? ft_strdup("syntax error or unexpected token near 'exec' token") : str;
 	str = (type == TK_FUNCTION) ? ft_strdup("syntax error or unexpected token near 'function' token") : str;
@@ -43,15 +70,6 @@ char	*get_err_messg(t_tk_type type)
 	str = (type == TK_RETURN) ? ft_strdup("syntax error or unexpected token near 'return' token") : str;
 	str = (type == TK_FEND) ? ft_strdup("syntax error or unexpected token near the end of function") : str;
 	str = (type == TK_ARSHLOCH) ? ft_strdup("syntax error or unexpected token near '&' token") : str;
-	str = (type == TK_HERED) ? ft_strdup("syntax error or unexpected token near '<<' token") : str;
-	str = (type == TK_OR) ? ft_strdup("syntax error or unexpected token near 'or' token") : str;
-	str = (type == TK_AND) ? ft_strdup("syntax error or unexpected token near 'and' token") : str;
-	str = (type == TK_RD_W) ? ft_strdup("syntax error or unexpected token near '<' token") : str;
-	str = (type == TK_RD_R) ? ft_strdup("syntax error or unexpected token near '>' token") : str;
-	str = (type == TK_RD_A) ? ft_strdup("syntax error or unexpected token near '>>' token") : str;
-	str = (type == TK_RD_RW) ? ft_strdup("syntax error or unexpected token near '<>' token") : str;
-	str = (type == TK_PIPE) ? ft_strdup("syntax error or unexpected token near '|' token") : str;
-	str = (type == TK_DEREF) ? ft_strdup("syntax error or unexpected token near '$' token") : str;
 	return (str);
 }
 

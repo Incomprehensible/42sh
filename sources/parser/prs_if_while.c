@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_if_while.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:03:53 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 23:02:58 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 18:18:48 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,8 +172,8 @@ t_dlist			*prs_for_mt_conds(t_dlist *tks, ENV *envs, int *status, char **mt_cond
 			break ;
 		do_math_bltn(mt_conds[2], envs, &m_err);
 	}
-	if (m_err.err_code)
-		math_error_handler(&m_err, 0, envs); // NADYA PUT HERE
+	if (m_err.err_code && math_error_handler(&m_err, 1, envs))
+		return (NULL); // NADYA PUT HERE
 	et_rm_warr(mt_conds);
 	return (prs_skip_paired(loop_bg, TK_DO, TK_DONE));
 }

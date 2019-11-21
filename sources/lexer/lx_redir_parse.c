@@ -3,23 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lx_redir_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 01:49:35 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/21 00:29:57 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
-
-short is_sep_no_space(char str)
-{
-    if (str != '\n' && str != ';' && str != '|' && str != '&' && str != '\0')
-        return (0);
-    return (1);
-}
 
 static size_t decimals_proceed(char *str, char *meta)
 {
@@ -45,31 +38,6 @@ static size_t decimals_proceed(char *str, char *meta)
         return (i);
     return (0);
 }
-
-// static size_t decimals_proceed(char *str, char *meta)
-// {
-//     size_t  i;
-
-//     i = 0;
-//     if (*meta == '@')
-//     {
-//         if ((str = ft_process_seq(str, meta)))
-//             i = get_seq(str);
-//         if (!str)
-//             return (0);
-//         str += i;
-//     }
-//     meta = (*meta == '@') ? get_point(meta) + 1 : ++meta;
-//     while (*meta && *str && *meta == *str)
-//     {
-//         str++;
-//         meta++;
-//         i++;
-//     }
-//     if (!(*meta) && *str != '-')
-//         return (i);
-//     return (0);
-// }
 
 static size_t parse_fd(char *meta, char *str)
 {
@@ -154,25 +122,6 @@ static char *in_redir_blocks(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
     else
         s = redir_pull(g, s, tr, tok);
     return (s);
-}
-
-size_t remove_spaces(char *str, size_t len)
-{
-    size_t spaces;
-
-    spaces = 0;
-    while (*str && len && ft_isspace(*str))
-    {
-        str--;
-        spaces++;
-        if (*str == '\\')
-        {
-            spaces--;
-            break;
-        }
-        len--;
-    }
-    return (spaces);
 }
 
 static char	*get_expr(char *s, size_t i, t_dlist **tok, t_stx **tr)

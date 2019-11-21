@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 14:15:30 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/20 22:51:13 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 static short	is_operand(t_tk_type type)
 {
-	if (type == OPRND || type == DEC || type == HEX || type == BIN || type == SEV)
+	if (type == OPRND || type == DEC || type == HEX ||
+	type == BIN || type == SEV)
 		return (1);
 	return (0);
 }
@@ -63,7 +64,8 @@ t_tk_type	is_number(char *value)
 		type = SEV;
 	else if (parse_base("0o@01234567@", value))
 		type = SEV;
-	else if (!(*value == '0' && *(value + 1)) && parse_base("@0123456789@", value))
+	else if (!(*value == '0' && *(value + 1)) &&
+	parse_base("@0123456789@", value))
 		type = DEC;
 	else
 		return (0);
@@ -125,7 +127,8 @@ long	check_result(t_dlist *opd_stack, ENV *env, ERR *err)
 
 static short	get_op_type(t_tk_type op)
 {
-	if (op == INCRM || op == DECRM || op == POSIT || op == NEGAT || op == REJECT || op == NOT)
+	if (op == INCRM || op == DECRM || op == POSIT || op == NEGAT ||
+	op == REJECT || op == NOT)
 		return (1);
 	else if (op == EQU)
 		return (3);
@@ -211,7 +214,8 @@ t_dlist	*substitute_single(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
 	DSTRING	*d_value;
 
 	value = ft_itoa(res);
-	if (((t_tok *)opd_stack->content)->type == OPRND && (op == INCRM || op == DECRM))
+	if (((t_tok *)opd_stack->content)->type == OPRND &&
+	(op == INCRM || op == DECRM))
 	{
 		d_value = dstr_new(value);
 		env_set_variable(((t_tok *)opd_stack->content)->value, d_value, env);
@@ -236,7 +240,8 @@ t_dlist	*substitute_both(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
 	del_tokens(opd_stack);
 	tmp->next = NULL;
 	new = dstr_new(value);
-	if (((t_tok *)tmp->content)->type == OPRND && (op == PLUS_EQ || op == MIN_EQ))
+	if (((t_tok *)tmp->content)->type == OPRND &&
+	(op == PLUS_EQ || op == MIN_EQ))
 		env_set_variable(((t_tok *)tmp->content)->value, new, env);
 	dstr_del(&new);
 	free(((t_tok *)tmp->content)->value);
@@ -262,6 +267,16 @@ t_dlist	*get_single_opd(t_dlist *opd_stack, t_tk_type op, ENV *env, ERR *err)
 	return (substitute_single(opd_stack, env, res, op));
 }
 
+t_dlist	*process_opd_err(t_dlist *opd_stack, ERR *err)
+{
+	if (opd_stack)
+	{
+		set_error(ft_strdup(((t_tok *)opd_stack->content)->value), OPERAND_EXP, err);
+		return (opd_stack);
+	}
+	return (set_error(NULL, OPERAND_EXP, err));
+}
+
 t_dlist	*get_both_opd(t_dlist *opd_stack, t_tk_type op, ENV *env, ERR *err)
 {
 	static long			(*ptr[5])(long, long, t_tk_type, ERR *);
@@ -278,21 +293,12 @@ t_dlist	*get_both_opd(t_dlist *opd_stack, t_tk_type op, ENV *env, ERR *err)
 		ptr[4] = assign_ops;
 	}
 	if (!opd_stack || !opd_stack->prev)
-	{
-		if (opd_stack)
-		{
-			set_error(ft_strdup(((t_tok *)opd_stack->content)->value), OPERAND_EXP, err);
-			return (opd_stack);
-		}
-		else
-			return (set_error(NULL, OPERAND_EXP, err));
-	}
+		return (process_opd_err(opd_stack, err));
 	a = fetch_operand((t_tok *)opd_stack->prev->content, env, err);
 	b = fetch_operand((t_tok *)opd_stack->content, env, err);
 	if (err->err_code)
 		return (opd_stack);
-	int choice = get_ind(op);
-	res = ptr[choice](a, b, op, err);
+	res = ptr[get_ind(op)](a, b, op, err);
 	if (err->err_code)
 		return (opd_stack);
 	return (substitute_both(opd_stack, env, res, op));
