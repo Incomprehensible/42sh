@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 22:16:24 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 22:51:26 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/19 15:11:04 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void			clear_screen(void)
 	ft_putstr("\x001b[100A");
 }
 
-char				is_ctrl(const char ch)
+char			is_ctrl(const char ch)
 {
 	if (ch == 0x1 || ch == 0x5 \
 		|| ch == 0x15 || ch == 0x14 \

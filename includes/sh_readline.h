@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 02:34:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 16:05:09 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include "ft_avl_tree.h"
 # include "libft.h"
 # include "env.h"
+# include <unistd.h>
+# include <sys/ioctl.h>
+
 
 #define S_ASTR_STR 50000
 #define SPEC_SYMBOLS " $=&|)('\"><{}*~`\\"
@@ -114,11 +117,25 @@ DSTRING			*new_return_line(DSTRING **buf, t_indch indch);
 void			new_reg_expr(DSTRING **buf, t_indch *indch);
 void			sh_type_input(DSTRING *buf, t_indch *indch);
 void			sh_tab(DSTRING **buf, t_indch *indch, ENV *env);
+t_darr			get_overlap(t_buf *buffer, t_indch *indch, ENV *env);
+t_buf			slicer(DSTRING **buf, int cut, int slash);
+void			unite_buf(DSTRING **buf, t_buf *buffer);
+int				end_cut(char *str, int start, char ch);
+void			dell_slash(DSTRING **sub);
+t_name_ind		tab_loop(t_darr overlap, t_buf *buffer, int fl, \
+					t_name_ind n_ind);
+int				is_var(t_buf *buffer, t_darr *allvar, ENV *env);
+t_darr			get_executable_files(char *path);
+int				is_executable(t_buf *bufffer);
+DSTRING			*get_path(DSTRING *file, int fl);
+
+
 char			is_sysdir(char *name, char *sub);
 int				ft_isdir(DSTRING *buf);
 
 void			init_histr(ENV *envr);
-
+void			print_his_line(DSTRING *str_srch, DSTRING *str_over);
+void			skip_escp(void);
 void			fill_buf(DSTRING **buf, const t_astr rez);
 int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
 
@@ -129,6 +146,10 @@ DSTRING			*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei);
 DSTRING			*check_null(DSTRING *line);
 
 char			is_ctrl(const char ch);
+void			sh_move_up_lines(int lines);
+void			sh_move_back(int move_back);
+void			sh_clear_buf(struct winsize term, int len_p, int index);
+
 
 /* 
 ** Command line editing

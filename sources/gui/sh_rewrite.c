@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_rewrite.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 05:08:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 16:00:05 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,77 +41,6 @@ void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
 		++ind;
 	}
 	ft_putstr_fd(b_ptr, STDOUT_FILENO);
-}
-
-void			sh_movec_front(struct winsize term, int len_all, int index)
-{
-	int		lines;
-	int		segment;
-	char	*n;
-	char	*cmd_str;
-
-	lines = 0;
-	segment = len_all % term.ws_col;
-	if ((len_all - segment) > index)
-		lines = ((len_all + (term.ws_col - segment)) - index) / term.ws_col;
-	if (lines)
-	{
-		n = ft_itoa(lines);
-		cmd_str = ft_concat(3, "00", "\x001b[", n, "B");
-		ft_putstr(cmd_str);
-		free(n);
-		free(cmd_str);
-	}
-}
-
-void			sh_clear_line(struct winsize term, int len_all)
-{
-	int		lines;
-
-	lines = len_all / term.ws_col;
-	while (lines--)
-	{
-		ft_putstr("\x001b[2K");
-		ft_putstr(MOVEUP);
-	}
-	ft_putstr("\x001b[2K");
-	ft_putstr(MOVEBGN);
-}
-
-void			sh_clear_buf(struct winsize term, int len_p, int index)
-{
-	int len_all;
-	int mov_front;
-
-	len_all = g_prebuf + len_p;
-	mov_front = len_all - (index + len_p);
-	if (len_all >= term.ws_col)
-		sh_movec_front(term, len_all, g_preind + len_p);
-	sh_clear_line(term, len_all);
-}
-
-void			sh_move_up_lines(int lines)
-{
-	char	*n;
-	char	*cmd_str;
-
-	n = ft_itoa(lines);
-	cmd_str = ft_concat(3, "00", "\x001b[", n, "A");
-	ft_putstr(cmd_str);
-	free(n);
-	free(cmd_str);
-}
-
-void			sh_move_back(int move_back)
-{
-	char	*n;
-	char	*cmd_str;
-
-	n = ft_itoa(move_back);
-	cmd_str = ft_concat(3, "00", "\x001b[", n, "D");
-	ft_putstr(cmd_str);
-	free(n);
-	free(cmd_str);
 }
 
 void			sh_new_move_cors(const DSTRING *buf, struct winsize term, \
@@ -158,7 +87,7 @@ int				ft_color_strlen(char *str, struct winsize term)
 {
 	int		rez;
 	int		i;
-	int 	fl;
+	int		fl;
 
 	i = -1;
 	fl = 0;
