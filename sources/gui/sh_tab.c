@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 13:51:59 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 15:57:58 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/20 20:06:15 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,10 @@ void			sh_tab(DSTRING **buf, t_indch *indch, ENV *env)
 	ft_bzero(&n_ind, sizeof(t_name_ind));
 	n_ind.indch = (*indch);
 	n_ind.ind_name = indch->ind_inp;
-	buffer = slicer(buf, indch->ind_inp, indch->ind_slash);
+	buffer = slicer(buf, indch, env);
 	overlap = get_overlap(&buffer, indch, env);
-	if (overlap.count == (size_t)-1 && overlap.count)
-		unite_buf(buf, &buffer);
 	sort_darr(&overlap);
-	while (1)
+	while (1 && overlap.count != (size_t)-1)
 	{
 		n_ind = tab_loop(overlap, &buffer, n_ind.fl++, n_ind);
 		if (overlap.count <= 1 && insert_space(buf, (*indch)))

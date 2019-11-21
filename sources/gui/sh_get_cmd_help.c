@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:41:28 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 16:23:04 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/20 21:32:05 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_darr			get_executable_files(char *path)
 	while ((entry = readdir(dir)) != NULL)
 	{
 		ex = is_ex(path, entry->d_name);
-		if (is_sysdir(entry->d_name, "") && (ex != -3 || ex != -2))
+		if (is_sysdir(entry->d_name, "") || !(!ex || ex == -2))
 			continue ;
 		rez.strings[++i] = dstr_nerr(entry->d_name);
 		if (ex == -2)
@@ -70,7 +70,7 @@ int				is_executable(t_buf *bufffer)
 	int				sl;
 	t_dyn_string	*tmp;
 
-	if ((sl = dstrrchr(bufffer->sub, '/')) == -1)
+	if ((sl = dstrrchr(bufffer->dir, '/')) == -1)
 		return (0);
 	tmp = dstr_nerr(bufffer->buf->txt);
 	bufffer->dir = dstr_scerr(&tmp, bufffer->cut, sl + 1);

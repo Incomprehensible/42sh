@@ -6,14 +6,14 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:47:43 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 15:49:56 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/20 17:41:17 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
 #include "sh_termcomand.h"
 
-static void	check_spic_sumbols(DSTRING **str)
+void		check_spec_symbols(DSTRING **str)
 {
 	int			i;
 
@@ -33,7 +33,7 @@ static void	subst_val(t_buf *buffer, t_darr overlap, t_name_ind n_ind)
 	if (buffer->dir)
 		dstr_insert_dstr(new, buffer->dir, new->strlen);
 	if (!n_ind.road && n_ind.indch.type_inp != 2)
-		check_spic_sumbols(&overlap.strings[n_ind.ind]);
+		check_spec_symbols(&overlap.strings[n_ind.ind]);
 	dstr_insert_dstr(new, overlap.strings[n_ind.ind], new->strlen);
 	dstr_insert_dstr(new, buffer->end, new->strlen);
 	sh_rewrite(n_ind.indch.prompt, new, buffer->cut < buffer->slash ? \
@@ -43,7 +43,7 @@ static void	subst_val(t_buf *buffer, t_darr overlap, t_name_ind n_ind)
 
 t_name_ind	tab_loop(t_darr overlap, t_buf *buffer, int fl, t_name_ind n_ind)
 {
-	if (!fl && overlap.count > 1)
+	if (!fl && overlap.count > 1 && overlap.count != (size_t)-1)
 		put_col(overlap, buffer->buf, n_ind.indch);
 	else if (overlap.count > 1)
 	{

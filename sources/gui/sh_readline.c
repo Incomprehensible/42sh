@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 15:48:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 02:34:30 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/20 21:12:33 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,27 @@ t_indch			management_line(t_indch indch, DSTRING **buf)
 	return (indch);
 }
 
-DSTRING			*new_return_line(DSTRING **buf, t_indch indch)
+int				is_reg(DSTRING *buf)
 {
+	int			i;
+	int			sp;
+
+	sp = 0;
+	i = -1;
+	while (++i < buf->strlen)
+	{
+		if (buf->txt[i] == ' ')
+			sp = i;
+		if (ft_memchr("*[?", buf->txt[i], 3))
+			return (sp);
+	}
+	return (-1);
+}
+
+DSTRING			*new_return_line(DSTRING **buf, t_indch indch, ENV *env)
+{
+	int			i;
+
 	if (indch.ch == (char)0x04)
 	{
 		dstr_del(buf);
@@ -60,8 +79,11 @@ DSTRING			*new_return_line(DSTRING **buf, t_indch indch)
 	free_lines_down();
 	sh_rewrite(indch.prompt, *buf, indch.ind);
 	ft_putstr("\n");
-	if (indch.reg)
-		new_reg_expr(buf, &indch);
+	while ((i = is_reg(*buf)) != -1)
+	{
+		indch.ind_inp = i + 1;
+		new_reg_expr(buf, &indch, env);
+	}
 	sys_term_restore();
 	return ((*buf));
 }
@@ -90,14 +112,14 @@ DSTRING			*readlie_loop(DSTRING **buf, t_indch indch, ENV *env)
 		if (!(indch.fl = 0) && indch.ch == BAKSP)
 			indch.ind = sh_del_char(buf, indch.ind, indch.ch);
 		if (indch.ch == (char)0x04 || (indch.ch == '\n') || indch.ch == -1)
-			return (new_return_line(buf, indch));
+			return (new_return_line(buf, indch, env));
 		if (ft_isprint(indch.ch) && indch.ch != ESC)
 			dstr_insert_ch((*buf), indch.ch, indch.ind++);
 		sh_type_input((*buf), &indch);
 		if (is_ctrl(indch.ch))
 			indch = management_line(indch, buf);
 		else if (indch.ch == TAB && indch.reg)
-			new_reg_expr(buf, &indch);
+			new_reg_expr(buf, &indch, env);
 		if (indch.ch == TAB)
 			sh_tab(buf, &indch, env);
 		else if (indch.ch == ESC)

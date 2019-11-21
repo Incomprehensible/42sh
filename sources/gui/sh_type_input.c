@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 13:46:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/17 18:17:15 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/20 19:52:53 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void				ind_inp_correct(const DSTRING *buf, t_indch *indch)
 	int				i;
 
 	indch->ind_slash = 0;
-	if (indch->type_inp != 1)
-		return ;
+	// if (indch->type_inp != 1)
+	// 	return ;
 	i = indch->ind_inp;
 	while (buf->txt[i])
 	{

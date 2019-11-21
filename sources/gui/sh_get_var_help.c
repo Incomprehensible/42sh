@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:38:10 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 16:23:16 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/20 19:32:49 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,20 @@
 int			is_var(t_buf *buffer, t_darr *allvar, ENV *env)
 {
 	t_dyn_string	*value;
-	t_dyn_string	*tmp;
-	int				sl;
+	int				ex;
 
-	if ((sl = dstrrchr(buffer->sub, '/')) == -1)
+	value = env_get_variable(buffer->sub->txt, env);
+	if ((ex = sys_is_ex_bin(value->txt)) \
+	&& (ex != -3 && ex != -2))
+	{
+		dstr_del(&value);
 		return (0);
-	tmp = dstr_scerr(&(buffer->sub), 0, sl);
-	dstr_insert_dstr(buffer->end, buffer->sub, 0);
-	value = env_get_variable(tmp->txt, env);
-	if (!value->strlen)
-		return (0);
+	}
+	if (ex == -2)
+		dstr_insert_ch(value, '/', value->strlen);
+	check_spec_symbols(&value);
 	allvar->strings[0] = value;
 	allvar->count = 1;
 	dstr_del_char(&(buffer->begin), buffer->begin->strlen - 1);
-	dstr_del(&tmp);
 	return (1);
 }

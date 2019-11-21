@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:26:44 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 15:56:54 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/20 20:22:26 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int				is_all_space(DSTRING *buf, t_indch *indch)
 {
-	int		i;
+	int			i;
 
 	i = -1;
 	while (buf->txt[++i])
@@ -28,8 +28,8 @@ int				is_all_space(DSTRING *buf, t_indch *indch)
 
 t_darr			sh_get_cmd(t_buf *buffer, ENV *env)
 {
-	t_darr			allcmd;
-	t_darr			overlap;
+	t_darr		allcmd;
+	t_darr		overlap;
 
 	if (is_executable(buffer))
 		allcmd = get_executable_files(buffer->dir->txt);
@@ -68,8 +68,8 @@ t_darr			sh_get_file(DSTRING *dir, DSTRING **sub, int ind_inp, ENV *env)
 
 t_darr			sh_get_var(t_buf *buffer, ENV *env)
 {
-	t_darr			allvar;
-	t_darr			overlap;
+	t_darr		allvar;
+	t_darr		overlap;
 
 	if (is_var(buffer, &allvar, env))
 		return (allvar);

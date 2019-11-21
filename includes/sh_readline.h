@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 16:05:09 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/20 21:12:18 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,12 @@ t_darr			g_histr;
 DSTRING			*sh_readline(const DSTRING *prompt, ENV *env);
 
 void			fl_input(const DSTRING *buf, t_indch *indch);
-DSTRING			*new_return_line(DSTRING **buf, t_indch indch);
-void			new_reg_expr(DSTRING **buf, t_indch *indch);
+DSTRING			*new_return_line(DSTRING **buf, t_indch indch, ENV *env);
+void			new_reg_expr(DSTRING **buf, t_indch *indch, ENV *env);
 void			sh_type_input(DSTRING *buf, t_indch *indch);
 void			sh_tab(DSTRING **buf, t_indch *indch, ENV *env);
 t_darr			get_overlap(t_buf *buffer, t_indch *indch, ENV *env);
-t_buf			slicer(DSTRING **buf, int cut, int slash);
+t_buf			slicer(DSTRING **buf, t_indch *indch, ENV *env);
 void			unite_buf(DSTRING **buf, t_buf *buffer);
 int				end_cut(char *str, int start, char ch);
 void			dell_slash(DSTRING **sub);
@@ -128,7 +128,7 @@ int				is_var(t_buf *buffer, t_darr *allvar, ENV *env);
 t_darr			get_executable_files(char *path);
 int				is_executable(t_buf *bufffer);
 DSTRING			*get_path(DSTRING *file, int fl);
-
+void			check_spec_symbols(DSTRING **str);
 
 char			is_sysdir(char *name, char *sub);
 int				ft_isdir(DSTRING *buf);
@@ -256,8 +256,7 @@ char			cmp_dirreg(DSTRING *n_dir, DSTRING *cmp,\
 						 DSTRING *reg, const char fl);
 int				nmatch(const char *s1, const char *s2);
 
-/* returns regular expression */
-DSTRING			*cut_reg_expr(DSTRING *buf);
+DSTRING			*get_dstr_rez(t_astr rez);
 
 /*
 ** parsing a regular expression if there is a path in it,
@@ -267,10 +266,6 @@ t_regpath		get_regpath(DSTRING *reg);
 
 /*
 ** To enable history management, click the up or down arrow
-**
-** ctrl+l clear history buf
-** ctrl+k print columns in chronological order
-** ctrl+p print sorted column
 ** ctrl+r search history
 ** tab	  show overlap history
 */
