@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 11:02:30 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/22 21:10:27 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,23 @@
 
 # define PROMPT_OUT_FD 100
 
-# define HIST_FILE_DENY_TRIES 16;
+# define HIST_FILE_DENY_TRIES 16
 
 int			g_prompt_fd;
 
 #endif
+
+/*
+** 42sh IN FLAGS
+**
+** 42sh [-env f1 f2 f3 --] [-lib f1 f2 f3 --] [-logt f1] \
+	[-env_fo] [-o opt=var] file/[-str <string>] param1 param2 param3
+**
+** -str <STRING> - If it is present, executes string (all other after string is parametrs)
+** -env <file1> - specify env-init-file
+** -lib <file1> <file2> <file3> -- - specify lib-files
+** -logt <file1> - logout-file ????
+** -env_fo - turn-off reading envp
+** -o OPTION=NAME OPTION=NAME -- - options
+**		OPTION:: color=yes/no
+*/

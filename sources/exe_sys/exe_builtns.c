@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:00:14 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 22:56:10 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/22 13:58:59 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@
 int		exe_b_cbiltn_alg(EXPRESSION *expr, ENV *envr, \
 int (*bltn)(char **, ENV *))
 {
-	signal(SIGPIPE, SIG_IGN);
-	close(g_prompt_fd);
+	int		err;
+
+	err = 0;
 	sys_sig_dfl();
+	close(g_prompt_fd);
 	if (expr->ipipe_fds && (dup2(expr->ipipe_fds[0], 0) >= 0))
 	{
 		close(expr->ipipe_fds[0]);
@@ -29,6 +31,8 @@ int (*bltn)(char **, ENV *))
 		close(expr->opipe_fds[0]);
 		close(expr->opipe_fds[1]);
 	}
+	if ((err = exe_redir_list(expr->redirections, envr)))
+		exit(127);
 	exit(bltn(expr->args, envr));
 }
 
@@ -36,18 +40,17 @@ int		exe_execute_pi_b(EXPRESSION *expr, ENV *envr, \
 	int (*bltn)(char **, ENV *))
 {
 	pid_t		pid;
-	int			err;
 
 	expr->opipe_fds ? pipe(expr->opipe_fds) : 0;
-	if (!(err = exe_redir_list(expr->redirections, envr)))
-		pid = fork();
-	if (!err && pid == 0)
+	if ((exe_heredoc_check(expr->redirections, envr)))
+		return (0);
+	pid = fork();
+	if (pid == 0)
 		exe_b_cbiltn_alg(expr, envr, bltn);
 	expr->ipipe_fds ? close(expr->ipipe_fds[0]) : 0;
 	expr->ipipe_fds ? close(expr->ipipe_fds[1]) : 0;
-	if (!err && pid < 0)
+	if (pid < 0)
 		return (-1);
-	exe_redir_load420(expr->redirections);
 	return ((int)pid);
 }
 

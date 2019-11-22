@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/13 17:19:55 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 22:54:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/22 13:59:09 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,12 @@ int			exe_b_func_alg(EXPRESSION *expr, ENV *envr, FUNC *func)
 {
 	int			status;
 	t_avl_tree	*tmp;
+	int			err;
 
 	sys_sig_dfl();
-	signal(SIGPIPE, SIG_IGN);
 	exe_func_pipes(expr);
+	if ((err = exe_redir_list(expr->redirections, envr)))
+		exit(127);
 	tmp = envr->core;
 	envr->core = func_core_create(expr);
 	sh_tparse(func->func_code, envr, TK_FEND, &status);
@@ -73,20 +75,17 @@ int			exe_b_func_alg(EXPRESSION *expr, ENV *envr, FUNC *func)
 int			exe_execute_pi_f(EXPRESSION *expr, ENV *envr, FUNC *func)
 {
 	pid_t	pid;
-	int		err;
 
 	expr->opipe_fds ? pipe(expr->opipe_fds) : 0;
-	if (!(err = exe_redir_list(expr->redirections, envr)))
-		pid = fork();
-	if (!err && pid == 0)
+	if ((exe_heredoc_check(expr->redirections, envr)))
+		return (0);
+	pid = fork();
+	if (pid == 0)
 		exe_b_func_alg(expr, envr, func);
 	expr->ipipe_fds ? close(expr->ipipe_fds[0]) : 0;
 	expr->ipipe_fds ? close(expr->ipipe_fds[1]) : 0;
-	if (!err && pid < 0)
+	if (pid < 0)
 		return (-1);
-	exe_redir_load420(expr->redirections);
-	if (err)
-		return (err);
 	return ((int)pid);
 }
 

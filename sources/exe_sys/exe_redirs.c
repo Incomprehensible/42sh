@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:02:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 18:25:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/22 13:32:52 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int			exe_redir_do(int fdl, int fdr, char *file, int flags)
 	{
 		if (dup2(fdr, fdl) < 0)
 			return (-E_BADFD);
-		close(fdr);
 	}
 	return (0);
 }
@@ -55,7 +54,7 @@ int			exe_redir_ex(REDIRECT *rdr, ENV *envr)
 
 	if (rdr->type == herd)
 	{
-		if (exe_rdr_heredocument(rdr, envr) < 0)
+		if (exe_rdr_heredocument(rdr) < 0)
 			return (sys_perror("Heredocument io failed!", -1, 0));
 	}
 	else if ((fd = rdr->fdr) >= 0)
@@ -72,10 +71,9 @@ int			exe_redir_ex(REDIRECT *rdr, ENV *envr)
 
 int			exe_redir_list(t_dlist *lst, ENV *envr)
 {
-	int		err;
+	int			err;
 
 	err = 0;
-	exe_redir_save420(lst);
 	while (lst)
 	{
 		if (!err && (err = exe_redir_ex(lst->content, envr)))

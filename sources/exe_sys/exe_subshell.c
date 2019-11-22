@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:35:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/22 13:59:20 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,13 @@
 #include "parser.h"
 #include "sh_tokenizer.h"
 
-int			sbsh_is_fork_n_need(t_dlist *tl)
+int			sbsh_is_fork_n_need(t_dlist *tl, t_dlist *rdrs)
 {
 	t_tok	*tok;
 
 	while (tl)
 	{
-		tok = tl->content;
-		if (tok->type & TK_SEPS)
+		if ((tok = tl->content) && (tok->type & TK_SEPS))
 		{
 			if (tok->type & (TK_EOF | TK_ARSHLOCH))
 				return (1);
@@ -33,12 +32,13 @@ int			sbsh_is_fork_n_need(t_dlist *tl)
 			tl = arg_tok_skip(tl->next, TK_EMPTY);
 			if ((tok = tl->content)->type & (TK_EOF | TK_ARSHLOCH))
 				return (1);
-			else
-				break ;
+			return (0);
 		}
-		if (tok->type == TK_DEREF)
+		if (tok && (tok->type & TK_RDS && rdrs))
+			break ;
+		if (tok && (tok->type == TK_DEREF))
 			tl = tl->next;
-		if (!(tok->type & (TK_EXPR | TK_EMPTY | \
+		if (tok && !(tok->type & (TK_EXPR | TK_EMPTY | \
 		0xf0000000000 | TK_VALUE | TK_NAME | 0x3f81)))
 			break ;
 		tl = tl->next;
@@ -83,15 +83,9 @@ int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
 
 	err = 0;
 	sys_sig_dfl();
-	signal(SIGPIPE, SIG_IGN);
 	redirs = sb->redirections;
-	while (redirs)
-	{
-		if (!err && (err = exe_redir_ex(redirs->content, envr)))
-			sys_error_handler(0, -err, envr);
-		redirs = redirs->next;
-	}
 	exe_sbsh_pipes(sb);
+	err = exe_redir_list(redirs, envr);
 	if (err)
 		exit(2);
 	sys_init(1);
@@ -113,7 +107,6 @@ int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st)
 	xp = (EXPRESSION *)etab->instruction;
 	xp->ipipe_fds = subsh->ipipe_fds;
 	xp->opipe_fds = subsh->opipe_fds;
-	xp->redirections = subsh->redirections;
 	if (xp->ipipe_fds || xp->opipe_fds || \
 	!(ft_avl_search(envr->builtns, xp->args[0]) || \
 	ft_avl_search(envr->funcs, xp->args[0])))
@@ -138,11 +131,13 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
 	if (sh_tokenizer(subsh->commands, toks) <= 0 && (*status = 255))
 		INPUT_NOT_OVER = -1;
-	if (sbsh_is_fork_n_need(toks[0]))
+	if (sbsh_is_fork_n_need(toks[0], subsh->redirections))
 		cpid = exe_one_command_lnch(subsh, toks[0], envr, status);
 	else
 	{
 		subsh->opipe_fds ? pipe(subsh->opipe_fds) : 0;
+		if ((exe_heredoc_check(subsh->redirections, envr)))
+			return (0);
 		if ((cpid = fork()) < 0)
 			return (-E_FRKFL);
 		else if (cpid == 0)
@@ -150,9 +145,8 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 		subsh->ipipe_fds ? close(subsh->ipipe_fds[0]) : 0;
 		subsh->ipipe_fds ? close(subsh->ipipe_fds[1]) : 0;
 	}
-	if (cpid < 0)
+	if (!(g_hsh = 0) && cpid < 0)
 		return ((int)cpid);
 	ft_dlst_delf(toks, 0, free_token);
-	g_hsh = 0;
 	return ((int)cpid);
 }

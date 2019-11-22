@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 13:46:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 15:15:00 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/22 10:06:44 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int		exe_bkgr_expr(BCKGR *bkgr, ENV *envr, int *status)
 
 	*status = 0;
 	ft_bzero(&f_subsh, sizeof(SUBSH));
-	if (sbsh_is_fork_n_need(bkgr->tls))
+	if (sbsh_is_fork_n_need(bkgr->tls, 0))
 		cpid = exe_one_command_lnch(&f_subsh, bkgr->tls, envr, status);
 	else if (sbsh_is_fork_n_needp(bkgr->tls))
 		return (exe_pipe_bckgr(bkgr, envr, status));

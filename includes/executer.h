@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:09:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:40:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/22 13:31:50 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@ int			exe_execute_expr(EXPRESSION *expr, ENV *envr, int *status);
 int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status);
 int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st);
 int			exe_bkgr_expr(BCKGR *bkgr, ENV *envr, int *status);
-int			sbsh_is_fork_n_need(t_dlist *tok);
+int			sbsh_is_fork_n_need(t_dlist *tok, t_dlist *rdrs);
 
 int			exe_redir_list(t_dlist *lst, ENV *envr);
+int			exe_heredoc_check(t_dlist *lst, ENV *envr);
 
 void		exe_redir_save420(t_dlist *redrs);
 void		exe_redir_load420(t_dlist *redrs);
@@ -43,7 +44,7 @@ int (*bltn)(char **, ENV *));
 long		do_math_bltn(char *str_xp, ENV *envr, ERR *err);
 int			exe_execute_f(EXPRESSION *expr, ENV *envr, FUNC *func, int *status);
 int			exe_execute_pi_f(EXPRESSION *expr, ENV *envr, FUNC *func);
-int			exe_rdr_heredocument(REDIRECT *rdr, ENV *env);
+int			exe_rdr_heredocument(REDIRECT *rdr);
 int			pex_g_ptab_pgid(pid_t cpid, char *i_line);
 int			prs_executor(ETAB **etab, ENV *envs);
 int			prs_etab_handlers(ETAB **etab_row, \

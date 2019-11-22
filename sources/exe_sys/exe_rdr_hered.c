@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 12:17:16 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 17:03:51 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/22 21:22:22 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,42 @@
 #include "sys_tools/sys_tools.h"
 #include "sys_tools/sys_errors.h"
 
-void		exe_rdr_heredoc_pipes(DSTRING *buff, int *fd)
+void		exe_rdr_heredoc_pipes(DSTRING *buff)
 {
-	sys_create_pipe(fd);
+	int		fd[2];
+
+	pipe(fd);
 	dup2(fd[0], 0);
 	write(fd[1], buff->txt, buff->strlen);
-	sys_destroy_pipe(fd[0]);
-	sys_destroy_pipe(fd[1]);
+	close(fd[1]);
+	close(fd[0]);
 }
 
-int			exe_heredoc_loop(DSTRING **b, REDIRECT *rdr, ENV *env)
+int			exe_rdr_heredocument(REDIRECT *rdr)
 {
-	DSTRING			*line;
-	DSTRING	const	*prompt = dstr_new("heredoc> ");
-	DSTRING			*buff;
+	DSTRING		*buff;
 
-	buff = *b;
-	while ((line = sh_readline(prompt, env)) || 1)
+	if (!rdr->file)
+		return (-1);
+	buff = dstr_new(rdr->file);
+	exe_rdr_heredoc_pipes(buff);
+	dstr_del(&buff);
+	return (0);
+}
+
+int			exe_heredoc_get_buff(DSTRING **buff, REDIRECT *rdr, ENV *env)
+{
+	DSTRING	*line;
+	DSTRING	*prm;
+
+	line = 0;
+	prm = dstr_new("hered> ");
+	while ((line = sh_readline(prm, env)) || 1)
 	{
 		if (!line)
 		{
-			dstr_del(&buff);
-			dstr_del((DSTRING **)&prompt);
+			dstr_del(buff);
+			dstr_del((DSTRING **)&prm);
 			return (-1);
 		}
 		if (ft_strequ(line->txt, rdr->file))
@@ -44,24 +58,42 @@ int			exe_heredoc_loop(DSTRING **b, REDIRECT *rdr, ENV *env)
 			dstr_del(&line);
 			break ;
 		}
-		dstr_insert_dstr(buff, line, buff->strlen);
-		dstr_insert_ch(buff, '\n', buff->strlen);
+		dstr_insert_dstr(*buff, line, (*buff)->strlen);
+		dstr_insert_ch(*buff, '\n', (*buff)->strlen);
 		dstr_del(&line);
 	}
-	dstr_del((DSTRING **)&prompt);
-	*b = buff;
+	dstr_del((DSTRING **)&prm);
 	return (0);
 }
 
-int			exe_rdr_heredocument(REDIRECT *rdr, ENV *env)
+int			exe_init_heredoc(REDIRECT *rdr, ENV *env)
 {
 	DSTRING			*buff;
-	int				fd[2];
 
-	buff = dstr_new("");
-	if (exe_heredoc_loop(&buff, rdr, env) < 0)
+	if (!(buff = dstr_new("")))
+		return (-2);
+	if (exe_heredoc_get_buff(&buff, rdr, env))
 		return (-1);
-	exe_rdr_heredoc_pipes(buff, fd);
-	dstr_del(&buff);
+	if (rdr->file)
+		free(rdr->file);
+	if (!(rdr->file = dstr_flush(&buff)))
+		return (-2);
 	return (0);
+}
+
+int			exe_heredoc_check(t_dlist *lst, ENV *envr)
+{
+	int			err;
+	REDIRECT	*rd;
+
+	err = 0;
+	while (lst)
+	{
+		if (!err && (rd = lst->content) && rd->type == herd)
+		{
+			err = exe_init_heredoc(rd, envr);
+		}
+		lst = lst->next;
+	}
+	return (err);
 }
