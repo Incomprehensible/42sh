@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_tokenize.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 02:04:09 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/24 01:10:53 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 #include "bltn_math/math_hidden.h"
-
-//разрезание на выражения
-//каждое выражение проходит через валидацию и счет
-//приходит строка, чтобы понять, произошла ошибка или нет
-//котор конвертится в лонг
 
 void	*set_error(char *err_token, int code, ERR *err)
 {
@@ -106,32 +101,6 @@ static char	*pull_predessor(char *expr, t_dlist **math, ERR *err)
 	return (expr);
 }
 
-// static char	*pull_predessor(char *expr, t_dlist **math, ERR *err)
-// {
-// 	t_tk_type	type;
-// 	char		op;
-// 	int			n;
-
-// 	op = *expr++;
-// 	n = 1;
-// 	while (*expr == op)
-// 	{
-// 		expr++;
-// 		n++;
-// 	}
-// 	if (op == '!' && n > 1)
-// 		return (set_error(NULL, DOUBLE_NEGATION, err));
-// 	else if ((op == '+' || op == '-') && n > 2)
-// 		return (set_error(NULL, INVALID_INFIX, err));
-// 	type = (op == '!') ? REJECT : 0;
-// 	type = (op == '+' && n == 1) ? POSIT : type;
-// 	type = (op == '+' && n == 2) ? INCRM : type;
-// 	type = (op == '-' && n == 1) ? NEGAT : type;
-// 	type = (op == '-' && n == 2) ? DECRM : type;
-// 	make_token(math, NULL, type);
-// 	return (expr);
-// }
-
 static char	*pull_operator(char *expr, t_dlist **math)
 {
 	t_tk_type	type;
@@ -200,23 +169,6 @@ static t_tk_type	get_hex_or_bin(t_dlist **math, t_mtx **bases, char *operand)
 	}
 	return (0);
 }
-
-// static t_tk_type	get_hex_or_bin(t_dlist **math, t_mtx **bases, char *operand)
-// {
-// 	if (layer_parse_two(bases[0]->fin_meta, operand))
-// 	{
-// 		make_token(math, ft_strdup(operand + 2), bases[0]->base);
-// 		free(operand);
-// 		return (BIN);
-// 	}
-// 	else if (layer_parse_two(bases[1]->fin_meta, operand))
-// 	{
-// 		make_token(math, ft_strdup(operand + 2), bases[1]->base);
-// 		free(operand);
-// 		return (HEX);
-// 	}
-// 	return (0);
-// }
 
 static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
 {
@@ -311,12 +263,11 @@ static char	*pull_bracket(char *expr, t_dlist **math)
 	return (expr);
 }
 
-//double bracket and single bracket to differentiate tokens
 static char	*ariphmetic_tokenize(char *expr, t_dlist **math, ERR *err)
 {
 	short		flag;
 
-	flag = 0; //if flag is switched to 1 then we just had an operand
+	flag = 0;
 	expr = skip_spaces(expr);
 	while (expr && *expr)
 	{
@@ -402,37 +353,3 @@ long		ariphmetic_eval(char *expr, ENV *env, ERR *err)
 		res = get_math_result(expr, env, err);
 	return (res);
 }
-
-// static t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math)
-// {
-// 	t_mtx			*base;
-// 	size_t			i;
-// 	t_tk_type		choice;
-
-// 	i = 2;
-// 	choice = 0;
-// 	while (bases[i] && !choice)
-// 	{
-// 		base = bases[i];
-// 		while (base)
-// 		{
-// 			if (layer_parse_two(base->strt_meta, op))
-// 			{
-// 				if (!(layer_parse_two(base->fin_meta, op)))
-// 					return (0);
-// 				choice |= base->base;
-// 				if (choice == SEV && !base->next)
-// 				{
-// 					make_token(math, ft_strdup(op + 2), base->base);
-// 					free(op);
-// 				}
-// 				else
-// 					make_token(math, op, base->base);
-// 				break ;
-// 			}
-// 			base = base->next;
-// 		}
-// 		i++;
-// 	}
-// 	return (choice);
-// }

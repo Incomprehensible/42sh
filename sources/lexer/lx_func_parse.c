@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 01:26:24 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/22 16:01:21 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,9 @@ static char	*func_args(char *str, t_dlist **tok, t_stx **tr)
 
 static char	*get_function(char *str, char *reg1, t_dlist **tok, t_stx **tr)
 {
-	size_t	i;
-	char	*reg2;
+	size_t		i;
+	char *const	reg2 = "{z}";
 
-	reg2 = "{z}";
 	str = skip_spaces(str);
 	if ((*str >= 65 && *str <= 90) || (*str >= 97 && *str <= 122))
 	{
@@ -98,9 +97,8 @@ char		*parse_func(char *str, t_dlist **tok, t_stx **tree, short ind)
 
 char		*parse_lambda(char *str, t_dlist **tok, t_stx **tree, short i)
 {
-	char	*reg2;
+	char *const reg2 = "{z}";
 
-	reg2 = "{z}";
 	str = parse_empty(str, 0x0, tok);
 	if (*str != '{')
 		str = parse_comm(str, tok, tree, 0);

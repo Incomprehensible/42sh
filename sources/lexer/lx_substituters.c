@@ -6,13 +6,24 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/21 21:53:52 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/22 15:35:04 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
+
+char	*cook_err_msg(char *insertion)
+{
+	char	*str;
+	char	*tmp;
+
+	tmp = ft_strjoin(SIMPERR, insertion);
+	str = ft_strjoin(tmp, "' token");
+	free(tmp);
+	return (str);
+}
 
 void	expr_to_value(t_dlist *token_list)
 {

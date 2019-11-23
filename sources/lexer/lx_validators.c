@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lx_validate.c                                      :+:      :+:    :+:   */
+/*   lx_validators.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 02:02:32 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/22 15:58:27 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,28 +57,6 @@ size_t	validate_triple_struct(char *s, short pass)
 	return (pass == 2 ? 1 : 0);
 }
 
-short	validate_math(char *str, short i)
-{
-	static t_graph	*math[2];
-	t_graph			*choice;
-
-	if (!math[0])
-		math[0] = let_math_in();
-	if (!math[1])
-		math[1] = brackets_math_in();
-	choice = math[1];
-	if (is_token_here(str, "let"))
-	{
-		choice = math[0];
-		if ((str = ft_process_ignore(str, ".let%")) &&
-		!(is_q(*(str = skip_spaces(str)))))
-			choice = choice->next;
-	}
-	if (!(i = math_traverse(str, choice, 0)))
-		return (0);
-	return (i);
-}
-
 short	check_valid_sep(t_dlist *token_list)
 {
 	if (!token_list->content || !TOK_TYPE)
@@ -96,4 +74,11 @@ short	check_valid_sep(t_dlist *token_list)
 	&& TOK_TYPE != TK_CONTIN)
 		return (0);
 	return (1);
+}
+
+short	is_prefix(char str)
+{
+	if (str == '+' || str == '-')
+		return (1);
+	return (0);
 }

@@ -6,13 +6,60 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 01:52:55 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/23 18:08:34 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
+
+char	*join_mirr(char *new, char *tmp, char *add)
+{
+	if (new)
+	{
+		tmp = ft_strjoin(new, tmp);
+		free(new);
+		return (tmp);
+	}
+	else
+		new = ft_strjoin(add, tmp);
+	return (new);
+}
+
+char	*cook_mirr(char *new, char *add)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(new, "\\");
+	free(new);
+	new = tmp;
+	tmp = ft_strjoin(new, add);
+	free(new);
+	return (tmp);
+}
+
+char	*cut_mirr(char **splitted)
+{
+	char	*new;
+	char	*tmp;
+	size_t	i;
+
+	i = 1;
+	new = NULL;
+	if (!splitted[i] && splitted[0])
+		new = pull_single(splitted[0]);
+	while (splitted[i])
+	{
+		if (splitted[i] && splitted[i][0] == '\n')
+			tmp = &splitted[i][1];
+		else
+			tmp = splitted[i];
+		new = join_mirr(new, tmp, splitted[i - 1]);
+		i++;
+	}
+	return (new);
+}
 
 size_t	cut_quots(char *str)
 {

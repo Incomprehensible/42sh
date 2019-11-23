@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/20 22:51:13 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/24 00:43:47 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,7 +311,7 @@ char *pull_env_val(t_dlist *opd_stack, ENV *env, ERR *err)
 	char		*to_str;
 	t_tk_type	type;
 	long		res;
-	
+
 	new = ((t_tok *)opd_stack->content)->value;
 	value = env_get_variable(((t_tok *)opd_stack->content)->value, env);
 	if (!(*(value->txt)))
@@ -348,7 +348,7 @@ char *set_var(t_dlist *opd_stack, ENV *env, ERR *err)
 	char		*new;
 	t_tk_type	type;
 	long		res;
-	
+
 	err = 0;
 	value = ((t_tok *)opd_stack->content)->value;
 	type = ((t_tok *)opd_stack->content)->type;
@@ -434,7 +434,7 @@ long	polish_calculate(t_dlist **polish_not, ENV *env, ERR *err)
 		if (is_operand(type))
 			opd_stack = push_to_stack(opd_stack, start);
 		else
-			opd_stack = calculate_res(opd_stack, type, env, err); // we check whether we have operator type 1 or type 2 inside 
+			opd_stack = calculate_res(opd_stack, type, env, err);
 		start = start->next;
 		type = start ? ((t_tok *)start->content)->type : 0;
 	}

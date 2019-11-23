@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+         #
+#    By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/19 04:39:01 by hgranule         ###   ########.fr        #
+#    Updated: 2019/11/22 16:05:37 by bomanyte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,9 +88,17 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			lexer/lx_redir_parse.c lexer/lx_regulars.c \
 			lexer/lx_sep_parse.c lexer/lx_subsh_parse.c \
 			lexer/lx_tokenizer.c lexer/lx_usefull_func.c \
-			lexer/lx_validate.c lexer/lx_input_codes.c \
+			lexer/lx_validators.c lexer/lx_input_codes.c \
 			lexer/lx_parse_func.c lexer/lx_deref_parse.c \
-			lexer/lx_syntax_err.c \
+			lexer/lx_syntax_err.c lexer/lx_skippers.c \
+			lexer/lx_skippers_2.c lexer/lx_checkers.c \
+			lexer/lx_checkers_2.c lexer/lx_checkers_3.c \
+			lexer/lx_cutters.c lexer/lx_first_layer.c \
+			lexer/lx_make_clear.c lexer/lx_second_layer.c \
+			lexer/lx_mirror_parse.c lexer/lx_portal.c \
+			lexer/lx_regulars_2.c lexer/lx_regulars_3.c \
+			lexer/lx_substituters.c lexer/lx_validators_2.c \
+			lexer/lx_constructors.c
 			\
 			sys_tools/sys_dbg_bltn.c \
 			\

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/21 23:32:25 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/22 14:40:53 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,22 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
+void	yes_we_can(char *s, t_dlist **tk, t_tk_type type, size_t j)
+{
+	char	*new;
+	char	*tmp;
+
+	tmp = pull_token(s - j, j);
+	new = markup_station(tmp, type);
+	type = (type == TK_VAR) ? TK_VAR : TK_EXPR;
+	make_token(tk, new, type);
+	if (tmp)
+		free(tmp);
+}
+
 char	*parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
 {
 	size_t	j;
-	char	*new;
 
 	j = 0;
 	if (!is_q(*str))
@@ -36,30 +48,14 @@ char	*parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
 			str++;
 			j++;
 		}
-		new = markup_station(pull_token(str - j, j), APOF);
-		make_token(tok, new, TK_EXPR);
+		yes_we_can(str, tok, APOF, j);
 	}
 	return (parse_sep(++str, tok, i));
-}
-
-void	yes_we_can(char *s, t_dlist **tk, t_tk_type type, size_t j)
-{
-	char	*new;
-	char	*tmp;
-
-	tmp = pull_token(s - j, j);
-	new = markup_station(tmp, type);
-	type = (type == TK_VAR) ? TK_VAR : TK_EXPR;
-	make_token(tk, new, type);
-	if (tmp)
-		free(tmp);
 }
 
 size_t	can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
 {
 	t_tk_type	type;
-	char		*new;
-	char		*tmp;
 
 	type = (t == '"') ? DQUOTS : 0;
 	type = (t == '\'') ? APOF : type;

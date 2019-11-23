@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lx_metatree.c                                      :+:      :+:    :+:   */
+/*   lx_metabranch.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/24 00:39:41 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/24 00:40:31 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,93 +14,86 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-t_stx	*init_lambda(t_stx *tree)
+t_stx	*init_scripts(t_stx *tree)
 {
-	tree = (t_stx *)malloc(sizeof(t_stx));
-	tree->meta = ft_strdup("{w}");
-	tree->prev = NULL;
-	tree->next = NULL;
-	return (tree);
-}
-
-t_stx	*init_proc(t_stx *tree)
-{
-	char	*proc;
-	char	**procs;
+	char	*scrp;
+	char	**scrps;
 	short	i;
 	t_stx	*tmp;
 	t_stx	*start;
 
 	i = 0;
-	proc = "<~(w) >~(w)";
-	procs = ft_strsplit(proc, ' ');
+	scrp = "if_ then_ else_ fi_ while_ do_ done_ for_ until_ break_ continue_";
+	scrps = ft_strsplit(scrp, ' ');
 	tree = (t_stx *)malloc(sizeof(t_stx));
-	tree->meta = ft_strdup(procs[i]);
+	tree->meta = ft_strdup(scrps[i]);
 	tree->prev = NULL;
 	start = tree;
-	while (procs[++i])
+	while (scrps[++i])
 	{
 		tmp = tree;
 		tree->next = (t_stx *)malloc(sizeof(t_stx));
 		tree = tree->next;
-		tree->meta = ft_strdup(procs[i]);
+		tree->meta = ft_strdup(scrps[i]);
 		tree->next = NULL;
 		tree->prev = tmp;
 	}
-	ft_arrmemdel((void **)procs);
+	ft_arrmemdel((void **)scrps);
 	return (start);
 }
 
-t_stx	*init_subsh(t_stx *tree)
+t_stx	*init_hedoc(t_stx *tree)
 {
-	char	*sub;
-	char	**subs;
+	char	*hed;
+	char	**heds;
 	short	i;
 	t_stx	*tmp;
 	t_stx	*start;
 
 	i = 0;
-	sub = "(w) $(w)";
-	subs = ft_strsplit(sub, ' ');
+	hed = "<< <<<";
+	heds = ft_strsplit(hed, ' ');
 	tree = (t_stx *)malloc(sizeof(t_stx));
-	tree->meta = ft_strdup(subs[i]);
+	tree->meta = ft_strdup(heds[i]);
 	tree->prev = NULL;
 	start = tree;
-	while (subs[++i])
+	while (heds[++i])
 	{
 		tmp = tree;
 		tree->next = (t_stx *)malloc(sizeof(t_stx));
 		tree = tree->next;
-		tree->meta = ft_strdup(subs[i]);
+		tree->meta = ft_strdup(heds[i]);
 		tree->next = NULL;
 		tree->prev = tmp;
 	}
-	ft_arrmemdel((void **)subs);
+	ft_arrmemdel((void **)heds);
 	return (start);
 }
 
-t_stx	*init_comm(t_stx *tree)
+t_stx	*init_math(t_stx *tree)
 {
-	tree = (t_stx *)malloc(sizeof(t_stx));
-	tree->meta = ft_strdup("exec_");
-	tree->prev = NULL;
-	tree->next = NULL;
-	return (tree);
-}
+	char	*mat;
+	char	**mats;
+	short	i;
+	t_stx	*tmp;
+	t_stx	*start;
 
-void	tree_init(t_stx **tree)
-{
-	tree[0] = init_dquotes(tree[0]);
-	tree[1] = init_apofs(tree[0]);
-	tree[2] = init_math(tree[1]);
-	tree[3] = init_subsh(tree[2]);
-	tree[4] = init_scripts(tree[3]);
-	tree[5] = init_envar(tree[4]);
-	tree[6] = init_hedoc(tree[5]);
-	tree[7] = init_proc(tree[6]);
-	tree[8] = init_redir(tree[7]);
-	tree[9] = init_func(tree[8]);
-	tree[10] = init_lambda(tree[9]);
-	tree[11] = init_comm(tree[10]);
-	tree[12] = NULL;
+	i = 0;
+	mat = "let_ ((";
+	mats = ft_strsplit(mat, ' ');
+	tree = (t_stx *)malloc(sizeof(t_stx));
+	tree->meta = ft_strdup(mats[i]);
+	tree->prev = NULL;
+	start = tree;
+	while (mats[++i])
+	{
+		tmp = tree;
+		tree->next = (t_stx *)malloc(sizeof(t_stx));
+		tree = tree->next;
+		tree->meta = ft_strdup(mats[i]);
+		tree->next = NULL;
+		tree->prev = tmp;
+	}
+	ft_arrmemdel((void **)mats);
+	return (start);
 }

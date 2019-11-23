@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 02:13:46 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/24 00:01:28 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct  s_graph
 short		sh_tokenizer(char *str, t_dlist **token_list);
 t_dlist		**toklst_init(t_dlist **token_list);
 char		*null_last_input(char **last_input);
-char		*pull_token(char *str, size_t i);
+void        tree_init(t_stx **tree);
 t_stx       *init_comm(t_stx *tree);
 t_stx       *init_scripts(t_stx *tree);
 t_stx       *init_math(t_stx *tree);
@@ -104,95 +104,122 @@ char		*parse_proc(char *str, t_dlist **tok, t_stx **tree, short i);
 char		*parse_lambda(char *str, t_dlist **tok, t_stx **tree, short i);
 char		*parse_exec(char *s, t_dlist **tok);
 char		*parse_empty(char *str, char *patt, t_dlist **tok);
+char        *parse_assig_block(char *str, t_dlist **tok, t_stx **tree);
+char		*parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br);
 void		make_token(t_dlist **list, char *value, t_tk_type type);
+short       find_token(t_stx **tree, char *str);
 short		clear_tokens(t_dlist **tokens, short id);
-int         special_meta(char meta);
 char		*ft_process_s(char *str, char *meta);
 char		*ft_process_space(char *str, char *meta);
 char		*ft_process_seq(char *str, char *meta);
 char		*ft_process_any(char *str, char *meta);
+char        *ft_process_limits(char *str);
+char        *ft_process_ignore(char *str, char *meta);
+char        *ft_process_all(char *str, char *meta);
+char		*ft_process_wall(char *str, char *meta);
+char		*ft_process_trash(char *str, char *meta);
 char		*process_reg(char *str, char *meta);
-char		*get_point(char *meta);
 char		*block_pass(short i, char *str, t_dlist **tok, t_stx **tree);
-short       find_token(t_stx **tree, char *str);
 int         check_branch(char *str, t_stx *tree);
-char		*scripts_traverse(t_graph *g, char *s, t_dlist **tok, t_stx **tr);
-short       is_token_here(char *start, char *meta);
+char		*check_subbranch(char *str, t_dlist **tok, t_stx **tree);
+char		*script_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok);
+char		*into_the_portal(t_graph *g, char *s, t_dlist **tok, t_stx **tr);
 short       input_finished(char *str);
-void        tree_init(t_stx **tree);
 t_graph     *if_script_in(void);
 t_graph     *until_script_in(void);
 t_graph     *for_script_in(void);
 t_graph     *while_script_in(void);
+char		*expr_in(char *s, t_graph *g, t_stx **tr, t_dlist **tk);
+t_graph     *do_init(t_graph *tk);
+t_graph     *done_init(void);
+t_graph     *forexpr_init(t_graph *fortk, t_tk_type tk);
+t_graph     *condition_init(t_graph *whiletk);
+t_graph     *sep_init(void);
+t_graph     *exprtk2_init(void);
+t_graph     *fd_in(void);
+t_graph     *prof_in(void);
 t_graph     *redir_in(void);
 t_graph     *redir_two(void);
 t_graph     *redir_one(void);
-t_graph     *let_math_in(void);
-t_graph     *brackets_math_in(void);
-char		*check_subbranch(char *str, t_dlist **tok, t_stx **tree);
+short       redir_proceeded(t_dlist *token_list);
+char        *redirect_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok);
+char        *redir_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok);
+char        *fd_pull(t_graph *g, char *s, t_dlist **tok);
 short       graph_forward_only(t_graph *g);
 short       graph_end(t_graph *g, char *str);
+char		*pull_token(char *str, size_t i);
 char		*pull_expr2(char *str, t_stx **tr, t_dlist **tok);
 char		*pull_expr1(char *patt, char *str, t_stx **tr, t_dlist **tok);
 char		*pull_subsh(char *str, t_dlist **tok, t_tk_type type);
+char		*pull_token(char *str, size_t i);
+char		*pull_single(char *str);
+char		*script_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok);
 int         layer_parse_one(char *meta, char *str);
 size_t      layer_parse_two(char *meta, char *str);
-char		*pull_token(char *str, size_t i);
-char		*script_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok);
 char		*reg_process(char *patt, t_tk_type type, char *str, t_dlist **tok);
-char		*parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br);
-short       is_separator(char str);
-short		unexpected_token(t_dlist **tok);
-short       is_sep_no_space(char str);
-char		*ft_process_wall(char *str, char *meta);
-char		*ft_process_ignore(char *str, char *meta);
-char		*skip_spaces(char *str);
-size_t      valid_math_seq(char *str);
-size_t      valid_operand(char *str, size_t i);
-size_t      valid_operator(char *str, size_t i);
-short       valid_apof(char *str, size_t i);
-size_t      valid_bracket(char *str, char *patt);
-short       valid_sep(char *str);
+size_t      decimals_proceed(char *str, char *meta);
 short		closed_dels(char *str);
 t_tk_type   make_offset(t_dlist **token, t_tk_type type);
-size_t      get_seq(char *str, char *meta);
 short       list_ready_to_go(t_dlist **token_list);
-short       is_redir(char *str);
-size_t      remove_spaces(char *str, size_t len);
+short       is_separator(char str);
+short       is_sep_no_space(char str);
+short       is_meta(char *str, char meta);
 short       is_q(char c);
-short		sep_detected(t_dlist *token_list);
-size_t      can_pull_tk(size_t j, char *str, t_dlist **tok, short t);
-short       special_case(char br, char *str);
-short       check_valid_sep(t_dlist *token_list);
-short       back_ps_check(t_dlist *token_list);
-short       seps_check(t_dlist *token_list);
+short		is_assign(char c);
+short		is_it_q(char c);
+short       is_it_br(char c);
 short       is_prefix(char str);
+short       is_ariphmetic(char str);
+short       is_redir(char *str);
 short       is_tok_redir(t_tk_type type, short id);
+short       is_sep_token(t_tk_type type);
+short		is_flow(t_tk_type type);
+short       is_token_here(char *start, char *meta);
+short		sep_detected(t_dlist *token_list);
+short       seps_check(t_dlist *token_list);
+short       back_ps_check(t_dlist *token_list);
+short       check_valid_sep(t_dlist *token_list);
+size_t      can_pull_tk(size_t j, char *str, t_dlist **tok, short t);
+int         special_meta(char meta);
+short       special_case(char br, char *str);
+short		special_condition(char *patt);
+size_t      get_seq(char *str, char *meta);
 char		get_code(void);
+char		*get_point(char *meta);
 char		*into_envar(char *str, t_dlist **tok, t_stx **tree);
-size_t		skip_field(char *str, char skip);
-char		*skip_comment(char *str);
-char		*markup_station(char *str, t_tk_type type);
+size_t      remove_spaces(char *str, size_t len);
 void		*ft_arrmemdel(void **ap);
-short		valid_deref(char *str);
+short		unexpected_token(t_dlist **tok);
 short		got_in_seq(char sym, char *seq);
 t_dlist		*skip_function(t_dlist *token_list);
 t_dlist		*skip_done_script(t_dlist *token_list);
 t_dlist		*skip_if_script(t_dlist *token_list);
-short		is_flow(t_tk_type type);
+char        *skip_brackets(char *str, char br);
+char		*skip_spaces(char *str);
+size_t		skip_field(char *str, char skip);
+char        *skip_spaces_nd_nl(char *str);
+char		*skip_comment(char *str);
 char		*skip_spaces_newline(char *str);
 size_t		mirror_passes(char *str);
-short		is_assign(char c);
-short		is_it_q(char c);
-void		expr_to_value(t_dlist *token_list);
-void		substitute_value(t_dlist *token_list);
-char		*assig_into_portal(char *str, t_dlist **tok, t_stx **tree);
 short		mirrored(char *arr);
-char		*pull_single(char *str);
+char		*assig_into_portal(char *str, t_dlist **tok, t_stx **tree);
 void		exec_on(t_dlist *token_list);
-short		special_condition(char *patt);
+short       following_pipe(t_dlist *token_list);
+short		valid_deref(char *str);
+short       valid_sep(char *str);
 size_t      validate_simple_struct(char *s, size_t br);
 size_t      validate_triple_struct(char *s, short pass);
+short       validate_var(char *varname);
+void		expr_to_value(t_dlist *token_list);
+void		substitute_value(t_dlist *token_list);
+char        *cook_err_msg(char *insertion);
+char		*markup_station(char *str, t_tk_type type);
+size_t      cut_brackets(char *str);
+size_t      cut_quots(char *str);
+char        *cut_mirr(char **splitted);
+char        *cook_mirr(char *new, char *add);
+char        *join_mirr(char	*new, char *tmp, char *add);
+void        construct_node(t_graph *g, char **dict, size_t *r);
 
 //more comfortable form of type cast
 # define TOK_TYPE ((t_tok *)(token_list->content))->type
@@ -221,6 +248,11 @@ short   INPUT_NOT_OVER;
 # define PRO_DO     14
 # define PRO_THEN   15
 # define PRO_ELSE   16
+
+#define STRTERR "syntax error or unexpected token in the beginning of a command"
+#define NEWLERR "syntax error or unexpected token near new line"
+#define SIMPERR "syntax error or unexpected token near '"
+#define FENDERR "syntax error or unexpected token near the end of function"
 
 //DEBUGGING
 void		dbg_print_tokens(t_dlist *toklst);

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/20 15:29:04 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/24 00:44:35 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_dlist	*lst_to_end(t_dlist *stack)
  	t_dlist		*tmp;
  	char		*value;
  	t_tok		token_data;
-	
+
  	value = ((t_tok *)new_elem->content)->value;
  	token_data.value = (value) ? ft_strdup(value) : NULL;
  	token_data.type = ((t_tok *)new_elem->content)->type;

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 00:57:01 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/22 13:38:38 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void	make_next_tok(t_dlist **list, char *value, t_tk_type type)
 void	make_token(t_dlist **list, char *value, t_tk_type type)
 {
 	t_tok	token_data;
-	t_dlist	*tmp;
 
 	if (list[0] == list[1] && !list[0]->content)
 	{
