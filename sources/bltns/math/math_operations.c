@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_operations.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/19 02:18:02 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/24 18:43:39 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,6 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 #include "bltn_math/math_hidden.h"
-
-long	normal_ops(long a, long b, t_tk_type op, ERR *err)
-{
-	long res;
-
-	if (op == DEVID || op == DEVREM)
-	{
-		if (b == 0)
-		{
-			set_error(ft_itoa(b), DIVISION_ZERO, err);
-			return (0);
-		}
-	}
-	res = op == PLUS ? a + b : 0;
-	res = op == MINUS ? a - b : res;
-	res = op == MULT ? a * b : res;
-	res = op == DEVID ? a / b : res;
-	res = op == DEVREM ? a % b : res;
-	return (res);
-}
 
 long	bit_ops(long a, long b, t_tk_type op, ERR *err)
 {

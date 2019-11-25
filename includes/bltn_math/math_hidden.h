@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_hidden.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:13:30 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 02:17:51 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/25 02:22:36 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ typedef struct      s_mtx
 # define SEV (t_tk_type)7
 # define DEC (t_tk_type)10
 # define HEX (t_tk_type)16
-# define OPRND (t_tk_type)34 
+# define OPRND (t_tk_type)34
 
 //MATH ERRORS
 # define VALUE_TOO_GREAT (int)666
 # define INVALID_OP (int)228
-//# define DOUBLE_NEGATION (int)1488 //double or multiple negation 
+//# define DOUBLE_NEGATION (int)1488 //double or multiple negation
 //# define INVALID_INFIX (int)2007
 # define DOUBLE_COMPARE (int)1337
 # define OPERAND_EXP (int)2012 //syntax error: operand expected
@@ -81,13 +81,40 @@ typedef struct      s_mtx
 # define WEIRD_ERR (int)2007
 
 long		ariphmetic_eval(char *expr, ENV *env, ERR *err);
-void		*set_error(char *err_token, int code, ERR *err);
 void		init_num_bases(t_mtx **bases);
+void        first_level_in(t_tk_type *arr);
+void        second_level_in(t_tk_type *arr);
+void        third_level_in(t_tk_type *arr);
+void        assign_level_in(t_tk_type *arr);
+void        logic_level_in(t_tk_type *arr);
+void        bit_level_in(t_tk_type *arr);
+void        normal_level_in(t_tk_type *arr);
+void        compare_level_in(t_tk_type *arr);
 long		ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err);
+short       is_op(char op);
+short       is_operand_tok(t_tk_type type);
+short       is_bracket(t_tk_type type);
+short       stop_token(t_tk_type stop, t_tk_type current);
+t_dlist     *go_through_brackets(t_dlist *dimon_loh, t_tk_type type);
+short       get_operator_tok(t_tk_type *ops, t_tk_type type);
+short       get_op_type(t_tk_type op);
+size_t      get_base_seq(char *str, char *meta);
+char		*get_operand(char *expr);
+size_t      parse_base(char *meta, char *str);
+char        *pull_bracket(char *expr, t_dlist **math);
+char        *pull_bit_offset(char *expr, t_dlist **math, ERR *err);
+char		*pull_predessor(char *expr, t_dlist **math, ERR *err);
+char        *pull_math_compr(char *expr, t_dlist **math, ERR *err);
+char        *pull_operand(char *expr, t_dlist **math, ERR *err);
+char		*pull_operator(char *expr, t_dlist **math);
+char		*pull_number(char *expr, t_dlist **math, ERR *err);
+size_t		parse_base(char *meta, char *str);
 void		ops_init(t_tk_type *ops);
 void		del_tokens(t_dlist *token);
 t_dlist		*lst_to_end(t_dlist *stack);
 t_dlist		*push_to_stack(t_dlist *stack, t_dlist *new_elem);
+char        *env_set(char *new, long res, ENV *env);
+char        *set_var(t_dlist *opd_stack, ENV *env, ERR *err);
 long		polish_calculate(t_dlist **polish_not, ENV *env, ERR *err);
 long		apply_to_single(long var, t_tk_type op);
 long		logic_ops(long a, long b, t_tk_type op, ERR *err);
@@ -95,7 +122,14 @@ long		compare_ops(long a, long b, t_tk_type op, ERR *err);
 long		bit_ops(long a, long b, t_tk_type op, ERR *err);
 long		normal_ops(long a, long b, t_tk_type op, ERR *err);
 long		assign_ops(long a, long b, t_tk_type op, ERR *err);
-size_t		parse_base(char *meta, char *str);
+long        pull_from_base(char *value, t_tk_type type);
+t_dlist     *clean_op_stack(t_dlist *ops);
+size_t      count_dlist(t_dlist *list);
+t_dlist     *prepare_op_stack(t_dlist *ops, t_tk_type op);
+void		*set_error(char *err_token, int code, ERR *err);
+void        *error_process(char *new, DSTRING *val, int code, ERR *err);
+t_dlist     *process_opd_err(t_dlist *opd_stack, ERR *err);
+long        check_result(t_dlist *opd_stack, ENV *env, ERR *err);
 
 //DEBUGGING
 void		DBG_PRINT_MATH(t_dlist *toklst);

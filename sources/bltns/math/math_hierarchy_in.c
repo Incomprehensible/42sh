@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/17 01:57:10 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/24 18:41:40 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,6 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 #include "bltn_math/math_hidden.h"
-
-void	first_level_in(t_tk_type *arr)
-{
-	arr[0] = INCRM;
-	arr[1] = DECRM;
-	arr[2] = NEGAT;
-	arr[3] = REJECT;
-	arr[4] = NOT;
-	arr[5] = POSIT;
-	arr[6] = 0;
-}
-
-void	second_level_in(t_tk_type *arr)
-{
-	arr[0] = BIT_L;
-	arr[1] = BIT_R;
-	arr[2] = 0;
-}
-
-void	third_level_in(t_tk_type *arr)
-{
-	arr[0] = AND;
-	arr[1] = OR;
-	arr[2] = XOR;
-	arr[3] = 0;
-}
 
 void	forth_level_in(t_tk_type *arr)
 {

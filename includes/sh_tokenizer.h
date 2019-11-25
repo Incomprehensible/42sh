@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/24 00:01:28 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/24 18:34:41 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,16 @@ typedef struct  s_graph
 short		sh_tokenizer(char *str, t_dlist **token_list);
 t_dlist		**toklst_init(t_dlist **token_list);
 char		*null_last_input(char **last_input);
+short       scripts_closed(char *str);
+char        *cycle_to_the_start(char *str);
+char        *if_to_the_start(char *str);
+short       quotes_closed(char *str);
+char		*qa_qt_cls_n(char *str, int *q);
+short       q_closed(char *str, char q, char q1, char q2);
+short		input_closed(char *str);
+short		brackets_closed(char *str);
+char        *br_cls_n(char *str, short *i);
+char        *br_qt_cls_n(char *str, short *i);
 void        tree_init(t_stx **tree);
 t_stx       *init_comm(t_stx *tree);
 t_stx       *init_scripts(t_stx *tree);
@@ -175,6 +185,7 @@ short       is_tok_redir(t_tk_type type, short id);
 short       is_sep_token(t_tk_type type);
 short		is_flow(t_tk_type type);
 short       is_token_here(char *start, char *meta);
+short		are_tokens_here(char *str);
 short		sep_detected(t_dlist *token_list);
 short       seps_check(t_dlist *token_list);
 short       back_ps_check(t_dlist *token_list);
@@ -210,6 +221,7 @@ short       valid_sep(char *str);
 size_t      validate_simple_struct(char *s, size_t br);
 size_t      validate_triple_struct(char *s, short pass);
 short       validate_var(char *varname);
+int			validate_ifs(char *str);
 void		expr_to_value(t_dlist *token_list);
 void		substitute_value(t_dlist *token_list);
 char        *cook_err_msg(char *insertion);

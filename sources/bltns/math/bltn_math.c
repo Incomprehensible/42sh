@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_math.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 17:42:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 02:08:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/25 03:05:22 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int		bltn_math(char **args, ENV *env)
 	ERR			err;
 	long		res;
 
-	// TODO: Need to do malloc safer.
 	err.err_code = 0;
 	err.error_msg = NULL;
 	res = do_math_bltn(args[1], env, &err);
