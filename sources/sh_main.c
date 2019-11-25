@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 18:16:21 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/25 20:09:45 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,10 @@
 #include "sys_tools/sys_dbg.h"
 #include <sys/ioctl.h>
 #include "sh_tokenizer.h"
+#include "sh_options.h"
 
 // !! TEMPORARY FUNCTIONS ===================================================================== !!
 // !! Soon will be changed! =================================================================== !!
-
-#define UT_TOK_INIT()		t_dlist *tokens = 0;\
-							t_tok	token
-#define UT_TOK_CR(typ, str)	token.type = typ; \
-							if (str == 0) token.value = 0; \
-							else token.value = ft_strdup(str); \
-							ft_dlstpush(&tokens, \
-							ft_dlstnew(&token, sizeof(t_tok)))
-#define UT_TOK_END()		ft_dlst_delf(&tokens, (size_t)-1, free_token)
-#define UT_TOK				tokens
 
 int				bltn_source(char **args, ENV *envr)
 {
@@ -61,31 +52,6 @@ int				bltn_source(char **args, ENV *envr)
 	ft_avl_tree_free(envr->core);
 	envr->core = tmp;
 	return (status);
-}
-
-char			*tmp_readline(char *prompt)
-{
-	DSTRING		*dstr;
-	char		*line;
-	int			status;
-	extern int	g_prompt_fd;
-
-	ft_putstr_fd(prompt, g_prompt_fd);
-	dstr = 0;
-	status = get_next_line(0, &dstr);
-	if (status == 0)
-		return (0);
-	if (status < 0)
-	{
-		sys_error_message("INPUT ERROR1 :(", 0);
-		perror("INP");
-		return (0);
-	}
-	line = ft_strdup(dstr->txt);
-	if (line == 0)
-		sys_error_message("INPUT ERROR2 :(", 0);
-	dstr_del(&dstr);
-	return (line);
 }
 
 void			add_buf_history(DSTRING *buf)
@@ -165,6 +131,29 @@ int		ft_isodigit(int ch)
 	return (0);
 }
 
+void			put_dlist_str(t_dlist *lst)
+{
+	while (lst)
+	{
+		ft_putstr("> ");
+		ft_putendl(lst->content);
+		lst = lst->next;
+	}
+}
+
+void			put_ops(t_opt opt)
+{
+	ft_putendl("LIBS:");
+	if (opt.lib_fs)
+		put_dlist_str(opt.lib_fs);
+	ft_putendl("OPS:");
+	if (opt.ops)
+		put_dlist_str(opt.ops);
+	ft_putendl("PARAMS:");
+	if (opt.params)
+		put_dlist_str(opt.params);
+}
+
 // !! TEMPORARY FUNCTIONS ===================================================================== !!
 // !! Soon will be changed! =================================================================== !!
 
@@ -213,56 +202,98 @@ void			sh_loop(ENV *env)
 
 #define _TEST_PS "%B%c2%t %c1%u%c4@%c5%H%c4:%c6%P%n%c3$> %c"
 
-int				main(int argc, char **argv, char **envp)
+// int				main(int argc, char **argv, char **envp)
+// {
+// 	ENV				env;
+// 	char			**lflags = 0;
+// 	char			*flags = 0;
+
+// 	argc = 0;
+// 	if (sys_argv_parse(argv, &lflags, &flags))
+// 		sys_fatal_memerr("ARGV_PRS_FAILED");
+
+// 	env_init(envp, &env);
+// 	sys_var_init(&env);
+// 	sys_init(0);
+
+// 	// temp bltns
+// 	ft_avl_set(env.builtns, ft_avl_node_cc("dbg_42", &bltn_dbg_snap, 8));
+// 	ft_avl_set(env.builtns, ft_avl_node_cc("source", &bltn_source, 8));
+// 	ft_avl_set(env.globals, ft_avl_node_cc("CLICOLOR", "1", 2));
+// 	ft_avl_set(env.locals, ft_avl_node_cc("PS", _TEST_PS, ft_strlen(_TEST_PS) + 1));
+// 	ft_avl_set(env.globals, ft_avl_node_cc("GREP_OPTIONS", "--color=auto", 14));
+
+// 	// CHOOSE A TYPE OF LAUNCH WITH lflags n flags
+// 	sh_launch_system(&env, flags, argv);
+
+// 	et_rm_clear_env(&env);
+// 	if (lflags)
+// 		et_rm_warr(lflags);
+// 	if (flags)
+// 		free(flags);
+// 	return (0);
+// }
+
+int				sh_do_str(ENV *env, char *str)
 {
-	ENV				env;
-	char			**lflags = 0;
-	char			*flags = 0;
+	int			status;
+	t_dlist		*toks[2];
+	int			wtf;
 
-	argc = 0;
-	if (sys_argv_parse(argv, &lflags, &flags))
-		sys_fatal_memerr("ARGV_PRS_FAILED");
-
-	env_init(envp, &env);
-	sys_var_init(&env);
-	sys_init(0);
-
-	// temp bltns
-	ft_avl_set(env.builtns, ft_avl_node_cc("dbg_42", &bltn_dbg_snap, 8));
-	ft_avl_set(env.builtns, ft_avl_node_cc("source", &bltn_source, 8));
-	ft_avl_set(env.globals, ft_avl_node_cc("CLICOLOR", "1", 2));
-	ft_avl_set(env.locals, ft_avl_node_cc("PS", _TEST_PS, ft_strlen(_TEST_PS) + 1));
-	ft_avl_set(env.globals, ft_avl_node_cc("GREP_OPTIONS", "--color=auto", 14));
-
-	// CHOOSE A TYPE OF LAUNCH WITH lflags n flags
-	sh_launch_system(&env, flags, argv);
-
-	et_rm_clear_env(&env);
-	if (lflags)
-		et_rm_warr(lflags);
-	if (flags)
-		free(flags);
+	if (!str)
+		return (-1);
+	ft_bzero(toks, sizeof(t_dlist *) * 2);
+	if ((wtf = sh_tokenizer(str, toks)) <= 0)
+		return (wtf);
+	sh_tparse(toks[0], env, TK_EOF, &status);
+	if (toks[0])
+		ft_dlst_delf(toks, 0, free_token);
 	return (0);
 }
 
+int				sh_do_src(char *filename, ENV *env)
+{
+	DSTRING		*line;
+	int			fd;
+	int			status;
 
-// #include <fcntl.h>
+	line = 0;
+	if ((fd = sys_file_op(filename, env, O_RDONLY, filename)) < 0)
+		return (-1);
+	while ((status = get_next_line(fd, &line)) > 0)
+	{
+		sh_do_str(env, line->txt);
+		dstr_del(&line);
+		line = 0;
+	}
+	if (line)
+		dstr_del(&line);
+	return (0);
+}
 
-// int main()
-// {
-// 	char	name[] = "/Users/gdaemoni/Desktop/test_histr.txt";
-// 	int		fd;
-// 	int		num = 0;
+int				sh_launch(t_opt *opt, ENV *env)
+{
+	if (opt->params && (sys_touch_file(opt->params->content) & SYS_TCH_F))
+		return (sh_do_src(opt->params->content, env));
+	else
+		sys_error_message("42sh: fail", 0);
+	return (-1);
+}
 
-// 	fd = open(name, O_RDWR | O_CREAT);
+int				main(int ac, char **av, char **ev)
+{
+	ENV			env;
+	t_opt		opt;
 
-// 	while (num < 2500)
-// 	{
-// 		char *tmp = ft_itoa(num);
-// 		write(fd, tmp, ft_strlen(tmp));
-// 		write(fd, "\n", 1);
-// 		free(tmp);
-// 		num++;
-// 	}
-// 	return (1);
-// }
+	opt_init(ac, av, &opt);
+	env_init(ev, &env);
+	sys_var_init(&env);
+	sys_init(0);
+
+	put_ops(opt);
+	sh_launch(&opt, &env);
+
+	et_rm_clear_env(&env);
+	et_rm_clear_opt(&opt);
+	return (0);
+}

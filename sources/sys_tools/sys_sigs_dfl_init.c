@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 07:55:01 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:55:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/25 21:37:17 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,18 @@ void			sys_sig_dfl(void)
 
 void			sys_sig_init(void)
 {
-	signal(SIGINT, sighand);
-	signal(SIGQUIT, sighand);
-	signal(SIGTSTP, sighand);
+	struct sigaction	siga;
+	union __sigaction_u	s_u;
+	sigset_t			smask;
+
+	sigemptyset(&smask);
+	s_u.__sa_handler = sighand;
+	siga.__sigaction_u = s_u;
+	siga.sa_mask = smask;
+	siga.sa_flags = 0;
+	sigaction(SIGINT, &siga, 0);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
 }

@@ -6,7 +6,7 @@
 #    By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/20 18:13:53 by hgranule         ###   ########.fr        #
+#    Updated: 2019/11/25 17:16:36 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -109,9 +109,14 @@ SRC_FILES = sh_main.c sh_launch.c \
 			printf/ft_insert_p.c printf/ft_insert_percent.c \
 			printf/ft_insert_r.c printf/ft_insert_s.c \
 			printf/ft_insert_spec.c printf/ft_printf.c \
-			printf/ft_putll_base_spec.c
+			printf/ft_putll_base_spec.c \
+			\
+			options/sh_options_conds.c options/sh_options_fsm.c \
+			options/sh_options_handlers.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer printf bltns/bltn_jobs)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases \
+bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer \
+printf bltns/bltn_jobs options)
 
 GUI_FILES = sh_control_term.c sh_dir_content.c \
 			dstr.c ft_concat.c sh_put_col.c sh_darr.c \
