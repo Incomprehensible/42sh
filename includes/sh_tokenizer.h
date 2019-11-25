@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/24 18:34:41 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 18:41:48 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ char		*qa_qt_cls_n(char *str, int *q);
 short       q_closed(char *str, char q, char q1, char q2);
 short		input_closed(char *str);
 short		brackets_closed(char *str);
+short       br_closed(char *s, char strt, char fin);
 char        *br_cls_n(char *str, short *i);
 char        *br_qt_cls_n(char *str, short *i);
 void        tree_init(t_stx **tree);
@@ -157,12 +158,15 @@ char        *redir_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok);
 char        *fd_pull(t_graph *g, char *s, t_dlist **tok);
 short       graph_forward_only(t_graph *g);
 short       graph_end(t_graph *g, char *str);
+short       graph_type(char *str);
 char		*pull_token(char *str, size_t i);
 char		*pull_expr2(char *str, t_stx **tr, t_dlist **tok);
 char		*pull_expr1(char *patt, char *str, t_stx **tr, t_dlist **tok);
 char		*pull_subsh(char *str, t_dlist **tok, t_tk_type type);
 char		*pull_token(char *str, size_t i);
 char		*pull_single(char *str);
+char		*pull_break_cont(char *s, t_tk_type tp, t_dlist **tok);
+char        *pull_legit_math(char *s, t_dlist **tok, t_stx **tr);
 char		*script_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok);
 int         layer_parse_one(char *meta, char *str);
 size_t      layer_parse_two(char *meta, char *str);
@@ -221,11 +225,13 @@ short       valid_sep(char *str);
 size_t      validate_simple_struct(char *s, size_t br);
 size_t      validate_triple_struct(char *s, short pass);
 short       validate_var(char *varname);
+short       validate_envar(char *str);
 int			validate_ifs(char *str);
 void		expr_to_value(t_dlist *token_list);
 void		substitute_value(t_dlist *token_list);
 char        *cook_err_msg(char *insertion);
 char		*markup_station(char *str, t_tk_type type);
+char		*cutting_mirr_station(char *str, t_tk_type type);
 size_t      cut_brackets(char *str);
 size_t      cut_quots(char *str);
 char        *cut_mirr(char **splitted);

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/24 00:23:12 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 19:22:52 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,17 +118,11 @@ short		find_token(t_stx **tree, char *str)
 		return (DEREF);
 	else if (is_sep_no_space(*str) && *str && !is_redir(str + 1))
 		return (SEPS);
-	while (*str && !(is_sep_no_space(*str) && !is_redir(str + 1)) && !choice)
-	{
-		i = 0;
-		if (*str == '$' || *str == '\\')
-			return (EXPRS);
-		if (*str == '#')
-			return (COMMENT);
-		while (tree[i] && !(choice = check_branch(str, tree[i])))
-			i++;
-		if (!tree[i])
-			str++;
-	}
+	else if (*str == '\\')
+		return (EXPRS);
+	else if (*str == '#')
+		return (COMMENT);
+	while (tree[i] && !check_branch(str, tree[i]))
+		i++;
 	return (tree[i] ? i : EXPRS);
 }

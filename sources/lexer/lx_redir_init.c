@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/23 20:08:20 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 18:50:08 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_graph			*redir_two(void)
 	red->forward = prof_in();
 	red->left = filename_in();
 	red->right = NULL;
-	construct_node(red, redir, r);
+	construct_node(red, redir, (size_t *)r);
 	ft_arrmemdel((void **)redir);
 	return (start);
 }
@@ -70,7 +70,7 @@ t_graph			*redir_one(void)
 	red->forward = prof_in();
 	red->left = fd_in();
 	red->right = filename_in();
-	construct_node(red, redir, r);
+	construct_node(red, redir, (size_t *)r);
 	ft_arrmemdel((void **)redir);
 	return (start);
 }

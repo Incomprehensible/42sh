@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/25 00:08:10 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 17:21:27 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 
 char	*env_set(char *new, long res, ENV *env)
 {
-	char	*to_str;
-	DSTRING	*value;
+	char			*to_str;
+	t_dyn_string	*value;
 
 	to_str = ft_itoa(res);
 	value = dstr_new(to_str);
@@ -29,10 +29,10 @@ char	*env_set(char *new, long res, ENV *env)
 
 char	*pull_env_val(t_dlist *opd_stack, ENV *env, ERR *err)
 {
-	char		*new;
-	DSTRING		*value;
-	t_tk_type	type;
-	long		res;
+	char			*new;
+	t_dyn_string	*value;
+	t_tk_type		type;
+	long			res;
 
 	new = ((t_tok *)opd_stack->content)->value;
 	value = env_get_variable(((t_tok *)opd_stack->content)->value, env);

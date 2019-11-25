@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/23 17:09:41 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 18:38:51 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ static char	*cut_mirr_q(char **splitted)
 
 char		*cutting_mirr_station(char *str, t_tk_type type)
 {
-	char	*tmp;
 	char	**splitted;
 	char	*new;
 

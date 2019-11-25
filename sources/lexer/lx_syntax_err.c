@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 15:34:37 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 18:38:44 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ short	unexpected_token(t_dlist **tok)
 {
 	t_dlist *token_list;
 	char	*str;
-	char	*tmp;
 
 	token_list = tok[1];
 	if (!token_list || !token_list->content)

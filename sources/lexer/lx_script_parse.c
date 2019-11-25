@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/23 21:01:56 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 18:30:09 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static char		*normal_token(char *patt, t_tk_type tp, char *s, t_dlist **tok)
 	return (s);
 }
 
-static char		*pull_break_cont(char *s, t_tk_type tp, t_dlist **tok)
+char		*pull_break_cont(char *s, t_tk_type tp, t_dlist **tok)
 {
 	char	*tmp;
 

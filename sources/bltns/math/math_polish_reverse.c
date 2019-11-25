@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/25 02:48:45 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 18:36:11 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	into_reverse_notation(t_dlist *dimon_loh, t_dlist **fin, int id)
 		dimon_loh = dimon_loh->next;
 	}
 	if (op_stack)
-		upd_fin_list(fin, opd_stack, op_stack, TK_EOF);
+		upd_finlst(fin, opd_stack, op_stack, TK_EOF);
 }
 
 long	ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err)

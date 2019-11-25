@@ -6,7 +6,7 @@
 #    By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/22 16:05:37 by bomanyte         ###   ########.fr        #
+#    Updated: 2019/11/25 18:37:31 by bomanyte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,12 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			bltns/math/bltn_math.c bltns/math/math_bases_in.c bltns/math/math_tokenize.c \
 			bltns/math/math_polish_reverse.c bltns/math/math_operations.c \
 			bltns/math/math_hierarchy_in.c bltns/math/math_calculate.c \
+			bltns/math/math_hierarchy_init.c bltns/math/math_tokenize_2.c \
+			bltns/math/math_tokenize_3.c bltns/math/math_errors.c \
+			bltns/math/math_environment.c bltns/math/math_memory.c \
+			bltns/math/math_operands.c bltns/math/math_checkers.c \
+			bltns/math/math_optable.c bltns/math/math_useful_func.c \
+			bltns/math/math_obliczac.c \
 			\
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
@@ -76,14 +82,13 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			env/env_get_bins/env_get_bins_parsebltn.c env/env_get_bins/env_get_bins_parsefunc.c \
 			env/env_get_bins/env_get_bins_parsepath.c env/env_get_bins/env_get_bins.c \
 			\
-			lexer/lx_backgr_offset.c lexer/lx_bash_init.c \
-			lexer/lx_bash_parse.c lexer/lx_cleaners.c \
+			lexer/lx_backgr_offset.c lexer/lx_script_init.c \
+			lexer/lx_script_parse.c lexer/lx_cleaners.c \
 			lexer/lx_comm_parse.c lexer/lx_envar_parse.c \
 			lexer/lx_func_parse.c \
 			lexer/lx_hedoc_parse.c lexer/lx_lexer.c \
-			lexer/lx_math_init.c \
 			lexer/lx_math_parse.c lexer/lx_metatree.c \
-			lexer/lx_new_input_finished.c lexer/lx_proc_parse.c \
+			lexer/lx_input_finished.c lexer/lx_proc_parse.c \
 			lexer/lx_quots_parse.c lexer/lx_redir_init.c \
 			lexer/lx_redir_parse.c lexer/lx_regulars.c \
 			lexer/lx_sep_parse.c lexer/lx_subsh_parse.c \
@@ -97,8 +102,15 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			lexer/lx_make_clear.c lexer/lx_second_layer.c \
 			lexer/lx_mirror_parse.c lexer/lx_portal.c \
 			lexer/lx_regulars_2.c lexer/lx_regulars_3.c \
-			lexer/lx_substituters.c lexer/lx_validators_2.c \
-			lexer/lx_constructors.c
+			lexer/lx_substitutors.c lexer/lx_validators_2.c \
+			lexer/lx_constructors.c lexer/lx_graph_func.c \
+			lexer/lx_input_check.c lexer/lx_input_check_2.c \
+			lexer/lx_input_check_3.c lexer/lx_input_check_4.c \
+			lexer/lx_metabranches.c lexer/lx_metabranch.c \
+			lexer/lx_redir_init_2.c lexer/lx_redir_parse_2.c \
+			lexer/lx_redir_trace.c lexer/lx_script_trace.c \
+			lexer/lx_script_in_2.c lexer/lx_script_in_3.c \
+			lexer/lx_script_in_4.c lexer/lx_script_in_5.c \
 			\
 			sys_tools/sys_dbg_bltn.c \
 			\

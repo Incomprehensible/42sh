@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/25 01:46:38 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 17:20:03 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 
 long	fetch_operand(t_tok *operand, ENV *env, ERR *err)
 {
-	DSTRING		*value;
-	t_tk_type	type;
-	long		res;
+	t_dyn_string	*value;
+	t_tk_type		type;
+	long			res;
 
 	if (operand->type == OPRND)
 	{
@@ -43,7 +43,7 @@ long	fetch_operand(t_tok *operand, ENV *env, ERR *err)
 
 long	pull_from_base(char *value, t_tk_type type)
 {
-	long res;
+	long	res;
 
 	if (type == HEX || type == BIN)
 		value += 2;
@@ -55,8 +55,8 @@ long	pull_from_base(char *value, t_tk_type type)
 
 t_dlist	*substitute_single(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
 {
-	char	*value;
-	DSTRING	*d_value;
+	char			*value;
+	t_dyn_string	*d_value;
 
 	value = ft_itoa(res);
 	if (((t_tok *)opd_stack->content)->type == OPRND &&
@@ -76,9 +76,9 @@ t_dlist	*substitute_single(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
 
 t_dlist	*substitute_both(t_dlist *opd_stack, ENV *env, long res, t_tk_type op)
 {
-	char	*value;
-	t_dlist	*tmp;
-	DSTRING	*new;
+	char			*value;
+	t_dlist			*tmp;
+	t_dyn_string	*new;
 
 	value = ft_itoa(res);
 	tmp = opd_stack->prev;

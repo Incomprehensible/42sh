@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:13:30 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/25 02:22:36 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 18:36:57 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,15 @@ long		ariphmetic_calc(t_dlist **dimon_loh, ENV *env, ERR *err);
 short       is_op(char op);
 short       is_operand_tok(t_tk_type type);
 short       is_bracket(t_tk_type type);
+t_tk_type	is_number(char *value);
 short       stop_token(t_tk_type stop, t_tk_type current);
 t_dlist     *go_through_brackets(t_dlist *dimon_loh, t_tk_type type);
 short       get_operator_tok(t_tk_type *ops, t_tk_type type);
 short       get_op_type(t_tk_type op);
+t_tk_type	get_base(char *op, t_mtx **bases, t_dlist **math);
 size_t      get_base_seq(char *str, char *meta);
 char		*get_operand(char *expr);
+long        fetch_operand(t_tok *operand, ENV *env, ERR *err);
 size_t      parse_base(char *meta, char *str);
 char        *pull_bracket(char *expr, t_dlist **math);
 char        *pull_bit_offset(char *expr, t_dlist **math, ERR *err);
@@ -113,9 +116,12 @@ void		ops_init(t_tk_type *ops);
 void		del_tokens(t_dlist *token);
 t_dlist		*lst_to_end(t_dlist *stack);
 t_dlist		*push_to_stack(t_dlist *stack, t_dlist *new_elem);
+short		pop_operator(t_dlist *op_stack, t_tk_type new_tok);
 char        *env_set(char *new, long res, ENV *env);
 char        *set_var(t_dlist *opd_stack, ENV *env, ERR *err);
+t_dlist     *set_new_var(t_dlist *opd_stack, ENV *env, ERR *err);
 long		polish_calculate(t_dlist **polish_not, ENV *env, ERR *err);
+t_dlist     *equate_opd(t_dlist *opd_stack, ENV *env, ERR *err);
 long		apply_to_single(long var, t_tk_type op);
 long		logic_ops(long a, long b, t_tk_type op, ERR *err);
 long		compare_ops(long a, long b, t_tk_type op, ERR *err);
@@ -123,6 +129,8 @@ long		bit_ops(long a, long b, t_tk_type op, ERR *err);
 long		normal_ops(long a, long b, t_tk_type op, ERR *err);
 long		assign_ops(long a, long b, t_tk_type op, ERR *err);
 long        pull_from_base(char *value, t_tk_type type);
+t_dlist     *substitute_single(t_dlist *opd_stack, ENV *env, long res, t_tk_type op);
+t_dlist     *substitute_both(t_dlist *opd_stack, ENV *env, long res, t_tk_type op);
 t_dlist     *clean_op_stack(t_dlist *ops);
 size_t      count_dlist(t_dlist *list);
 t_dlist     *prepare_op_stack(t_dlist *ops, t_tk_type op);
