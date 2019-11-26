@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/25 20:09:45 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/26 20:01:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,11 @@ int				bltn_source(char **args, ENV *envr)
 		envr->core = tmp;
 		return (255);
 	}
-	sys_core_set_init(envr, args);
-	status = sh_launch_file(envr, args[1]);
+	sys_core_set_init(envr, args + 1);
+	if (!(SYS_TCH_F & sys_touch_file(args[1])) && (status = 2))
+		sys_error_handler(args[1], E_FOPEF, envr);
+	else
+		status = sh_do_src(args[1], envr);
 	ft_avl_tree_free(envr->core);
 	envr->core = tmp;
 	return (status);
@@ -271,13 +274,69 @@ int				sh_do_src(char *filename, ENV *env)
 	return (0);
 }
 
-int				sh_launch(t_opt *opt, ENV *env)
+size_t			ft_dlst_len(t_dlist *lst)
 {
+	size_t		len;
+
+	len = 0;
+	while (lst && ++len)
+		lst = lst->next;
+	return (len);
+}
+
+char			**ft_dlst_to_warr(t_dlist *lst, \
+char *(*cnt_cb)(void *, size_t sz))
+{
+	size_t		len;
+	size_t		i;
+	char		**warr;
+
+	len = ft_dlst_len(lst);
+	i = 0;
+	warr = ft_memalloc((len + 1) * sizeof(char *));
+	if (!warr)
+		return (NULL);
+	while (lst)
+	{
+		warr[i] = cnt_cb(lst->content, lst->size);
+		++i;
+		lst = lst->next;
+	}
+	warr[i] = NULL;
+	return (warr);
+}
+
+char			*callback_dlst_warr(void *cnt, size_t sz)
+{
+	sz = 0;
+	return ((char *)cnt);
+}
+
+int				sh_launch_file(t_opt *opt, ENV *env)
+{
+	char		**argv;
+	size_t		len;
+	int			status;
+
+	len = ft_dlst_len(opt->params);
 	if (opt->params && (sys_touch_file(opt->params->content) & SYS_TCH_F))
-		return (sh_do_src(opt->params->content, env));
-	else
-		sys_error_message("42sh: fail", 0);
+	{
+		argv = ft_dlst_to_warr(opt->params, callback_dlst_warr);
+		if (!argv)
+			sys_fatal_memerr("ARG_CORE_FAILED");
+		sys_core_set_init(env, argv);
+		status = sh_do_src(opt->params->content, env);
+		free(argv);
+		return (status);
+	}
+	sys_error_handler(opt->params ? \
+	opt->params->content : 0, E_FOPEF, env);
 	return (-1);
+}
+
+int				sh_launch_lines(t_opt *opt, ENV *env)
+{
+	
 }
 
 int				main(int ac, char **av, char **ev)
@@ -290,8 +349,10 @@ int				main(int ac, char **av, char **ev)
 	sys_var_init(&env);
 	sys_init(0);
 
-	put_ops(opt);
-	sh_launch(&opt, &env);
+	ft_avl_set(env.builtns, ft_avl_node_cc("source", &bltn_source, 8));
+
+	// put_ops(opt);
+	sh_launch_file(&opt, &env);
 
 	et_rm_clear_env(&env);
 	et_rm_clear_opt(&opt);
