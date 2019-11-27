@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/20 18:17:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/27 23:35:48 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 static char	*bltns_str[] = {"setenv", "env", "getenv", "unsetenv", "exit",\
 	"alias", "unalias", "cd", "pwd", "type", "((", "echo", "fg", "bg", "jobs",\
-	"export", "unset", "set"};
+	"export", "unset", "set", "source"};
 
 t_dyn_string		*pwd;
 t_dyn_string		*oldpwd;
@@ -101,6 +101,7 @@ int			bltn_bg(char **args, ENV *envr);
 int			bltn_jobs(char **args, ENV *envr);
 int			bltn_export(char **args, ENV *envr);
 int			bltn_unset(char **args, ENV *envr);
+int			bltn_source(char **args, ENV *envr);
 
 /*
 ** FG_BG_HELPERS
@@ -129,6 +130,6 @@ void		et_rm_str(void *cont, size_t ske);
 static int	(*bltns_func[]) (char **, ENV *) = {&bltn_setenv,\
 	&bltn_env, &bltn_getenv, &bltn_unsetenv, &bltn_exit, &bltn_alias, &bltn_unalias,\
 	&bltn_cd, &bltn_pwd, &bltn_type, &bltn_math, &bltn_echo, &bltn_fg, &bltn_bg, \
-	&bltn_jobs, &bltn_export, &bltn_unset, &bltn_set};
+	&bltn_jobs, &bltn_export, &bltn_unset, &bltn_set, &bltn_source};
 
 #endif

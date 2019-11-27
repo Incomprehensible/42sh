@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_sigs_dfl_init.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 07:55:01 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/25 21:37:17 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/27 23:48:46 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,10 @@ void			sys_sig_dfl(void)
 void			sys_sig_init(void)
 {
 	struct sigaction	siga;
-	union __sigaction_u	s_u;
 	sigset_t			smask;
 
 	sigemptyset(&smask);
-	s_u.__sa_handler = sighand;
-	siga.__sigaction_u = s_u;
+	siga.__sigaction_u = ((union __sigaction_u)(sighand));
 	siga.sa_mask = smask;
 	siga.sa_flags = 0;
 	sigaction(SIGINT, &siga, 0);

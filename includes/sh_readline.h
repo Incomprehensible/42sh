@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 02:34:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/27 17:07:27 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,5 +277,9 @@ char			get_histr(t_darr *histr, ENV *envr);
 void			sys_term_init(void);
 void			sys_term_restore(void);
 void			sys_term_noecho(void);
+
+void			add_buf_history(DSTRING *buf);
+void			save_histr(ENV *envr);
+void			del_history_buf(t_darr *histr);
 
 #endif

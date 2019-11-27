@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+         #
+#    By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/25 17:16:36 by hgranule         ###   ########.fr        #
+#    Updated: 2019/11/27 23:40:16 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,7 @@ SRC_FILES = sh_main.c sh_launch.c \
 			\
 			bltns/bltn_jobs/bltn_jobs.c bltns/bltn_jobs/bltn_fg_bg.c bltns/bltn_set.c \
 			bltns/bltn_jobs/bltn_fg_bg_helper.c bltns/bltn_jobs/bltn_jobs_entries.c \
-			bltns/bltn_jobs/bltn_jobs_help.c \
+			bltns/bltn_jobs/bltn_jobs_help.c bltns/bltn_source.c \
 			\
 			$(addprefix gui/, $(GUI_FILES)) \
 			sys_tools/sys_config.c sys_tools/sys_files.c sys_tools/sys_proc_tables.c \
@@ -112,7 +112,8 @@ SRC_FILES = sh_main.c sh_launch.c \
 			printf/ft_putll_base_spec.c \
 			\
 			options/sh_options_conds.c options/sh_options_fsm.c \
-			options/sh_options_handlers.c
+			options/sh_options_handlers.c \
+			ft_dlst_helper.c sys_tools/sys_core_set.c sh_history_rl.c
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases \
 bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer \

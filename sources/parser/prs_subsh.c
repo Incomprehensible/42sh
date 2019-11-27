@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_subsh.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 11:03:04 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:38:13 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/27 16:39:57 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ char			*get_deref_subsh(char *code, ENV *envr)
 	status = 127;
 	if ((pid = exe_subshell_expr(&sbh, envr, &status)) > 0)
 	{
+		close(pips[1]);
 		res = ft_lb_flush(ft_lb_readbytes(pips[0], 0));
 		waitpid(pid, 0, 0);
 		close(pips[0]);

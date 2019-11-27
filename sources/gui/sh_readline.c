@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 15:48:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 02:34:30 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/27 21:11:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ DSTRING			*new_return_line(DSTRING **buf, t_indch indch)
 	{
 		dstr_del(buf);
 		free_lines_down();
-		ft_putstr("\n");
 		sys_term_restore();
-		(*buf) = dstr_nerr("exit");
-		return ((*buf));
+		return (NULL);
 	}
 	free_lines_down();
 	sh_rewrite(indch.prompt, *buf, indch.ind);

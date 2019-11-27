@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tokenizer.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/17 09:34:43 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/27 23:09:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,8 @@ short		got_in_seq(char sym, char *seq);
 //more comfortable form of type cast
 # define TOK_TYPE ((t_tok *)(token_list->content))->type
 # define TOK_VALUE ((t_tok *)(token_list->content))->value
+
+# define INO INPUT_NOT_OVER
 
 //MISTAKES
 short   PARSE_ERR;

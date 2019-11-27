@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_errors.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:29:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:52:44 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/27 21:00:21 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,11 @@
 ** 2 FLAGS
 */
 # define E_UNFLG 19
+
+/*
+** zero length
+*/
+# define E_ARGZL 42
 
 # define ERR_CNT (E_UNFLG + 1)
 
