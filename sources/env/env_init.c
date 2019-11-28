@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 14:43:29 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/19 01:59:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 15:08:38 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int			env_init(char **envp, ENV *env)
 		free_spl(&spl);
 		envp++;
 	}
-	if (bltn_init(env) == -1 /*|| alias_init(env) == -1*/)
+	if (bltn_init(env) == -1)
 		return (env_init_error(env, 12));
 	return (1);
 }

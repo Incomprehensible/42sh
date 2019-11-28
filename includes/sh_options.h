@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   sh_options.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 11:18:22 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/25 17:17:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/28 13:51:04 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH_OPTIONS_H
 # define SH_OPTIONS_H
 
-#include "ft_dlist.h"
+# include "ft_dlist.h"
 
 /*
 ** 42sh IN FLAGS
 **
 ** 42sh [-lib f1 f2 f3 --] \
-	[-o opt=var/opt --] file param1 param2 param3
+** [-o opt=var/opt --] file param1 param2 param3
 **
 ** -l <file1> <file2> <file3> -- - specify lib-files
 ** -o OPTION=NAME OPTION=NAME -- - options
@@ -48,7 +48,7 @@ typedef enum	e_fsm_stts
 }				t_stts;
 
 typedef int		t_state;
-typedef t_state (*t_stt_handler)(int *, char **, t_opt *);
+typedef t_state	(*t_stt_handler)(int *, char **, t_opt *);
 
 int				opt_is_flend(const char *arg);
 int				opt_is_opsfl(const char *arg);

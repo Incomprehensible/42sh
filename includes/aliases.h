@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aliases.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 14:39:09 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/21 20:16:04 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/28 13:51:32 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,5 @@
 # include "bltn.h"
 # include <unistd.h>
 # include <fcntl.h>
-# define FILE_ALIASES "/.42shrc"
-
-/*
-**Инициализация алиасов
-*/
-int		alias_init(ENV *env);
-/*
-**Добавление алиаса в файл конфига
-*/
-int		alias_add(ENV *env);
 
 #endif

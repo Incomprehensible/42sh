@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_type.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 10:36:07 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/27 20:33:55 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/19 15:17:25 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "bltn.h"
 
-static char	*bltn_keywords[] = {"{", "}", "do",\
+static char	*g_bltn_keywords[] = {"{", "}", "do",\
 	"done", "else", "fi", "for", "function", "if", "in",\
 	"then", "while"};
 
