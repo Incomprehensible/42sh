@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_histr.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 14:47:35 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 02:20:30 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/28 20:06:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int				write_history_buf(char side, int ind, DSTRING **buf, \
 	ind = (side == UP[0]) ? ++ind : --ind;
 	dstr_del(buf);
 	(*buf) = dstr_nerr(g_histr.strings[ind]->txt);
-	sh_rewrite(indc.prompt, (*buf), (*buf)->strlen);
+	sh_rewrite(indc.prompt, (*buf), (*buf)->strlen, -1);
 	return (ind);
 }
 
@@ -55,12 +55,12 @@ int				get_oldbuf(DSTRING **buf, DSTRING *oldbuf, t_indch indch)
 {
 	if (ft_strequ((*buf)->txt, oldbuf->txt))
 	{
-		sh_rewrite(indch.prompt, (*buf), (*buf)->strlen);
+		sh_rewrite(indch.prompt, (*buf), (*buf)->strlen, -1);
 		return (S_DARR_STRINGS - g_histr.count - 1);
 	}
 	dstr_del(buf);
 	(*buf) = dstr_nerr(oldbuf->txt);
-	sh_rewrite(indch.prompt, (*buf), (*buf)->strlen);
+	sh_rewrite(indch.prompt, (*buf), (*buf)->strlen, -1);
 	return (S_DARR_STRINGS - g_histr.count - 1);
 }
 

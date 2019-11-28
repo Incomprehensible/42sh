@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_rewrite.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/27 22:47:43 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 20:55:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,37 @@
 #include <unistd.h>
 #include "sys_tools/sys_errors.h"
 
+DSTRING			*dstr_copy(const DSTRING *dstr, int bi, int ei)
+{
+	DSTRING		*dstr_clone;
+
+	dstr_clone = dstr_new(0);
+	dstr_clone->strlen = dstr->strlen + 8;
+	dstr_clone->bks = ((dstr_clone->strlen + 1) / DSTR_BLK_SZ) + 1;
+	dstr_clone->txt = malloc(dstr_clone->bks * DSTR_BLK_SZ);
+	ft_memcpy(dstr_clone->txt, dstr->txt, bi);
+	ft_memcpy(dstr_clone->txt + bi, "\033[7m", 4);
+	ft_memcpy(dstr_clone->txt + bi + 4, dstr->txt + bi, ei - bi);
+	ft_memcpy(dstr_clone->txt + ei + 4, "\033[0m", 4);
+	ft_memcpy(dstr_clone->txt + ei + 8, dstr->txt + ei, dstr->strlen - ei);
+	dstr_clone->txt[dstr->strlen + 8] = '\0';
+	return (dstr_clone);
+}
+
 void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
-					int len_p, int len_b)
+					int *lensi)
 {
 	size_t		ind;
 	size_t		lines;
 	size_t		to_print;
 	char		*b_ptr;
-
 	ind = 0;
-	lines = (len_b + (len_p % term.ws_col)) / term.ws_col;
+	lines = (lensi[1] + (lensi[0] % term.ws_col)) / term.ws_col;
 	b_ptr = buf->txt;
 	while (ind < lines)
 	{
 		if (ind == 0)
-			to_print = term.ws_col - (len_p % term.ws_col);
+			to_print = term.ws_col - (lensi[0] % term.ws_col);
 		else
 			to_print = term.ws_col;
 		write(STDOUT_FILENO, b_ptr, to_print);
@@ -41,6 +57,38 @@ void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
 		++ind;
 	}
 	ft_putstr_fd(b_ptr, STDOUT_FILENO);
+}
+
+void			sh_putstr_term_c(DSTRING *buf, struct winsize term, \
+					int *lensi)
+{
+	size_t		ind;
+	size_t		lines;
+	size_t		to_print;
+	char		*b_ptr;
+
+	ind = 0;
+	clip_index(lensi[2], lensi[3], &lensi[2], &lensi[3]);
+	lines = (lensi[1] + (lensi[0] % term.ws_col)) / term.ws_col;
+	buf = dstr_copy(buf, lensi[2], lensi[3]);
+	b_ptr = buf->txt;
+	while (ind < lines)
+	{
+		if (ind == 0)
+			to_print = term.ws_col - (lensi[0] % term.ws_col);
+		else
+			to_print = term.ws_col;
+		if (lensi[2] / term.ws_col == (int)ind)
+			to_print += 4;
+		if (lensi[3] / term.ws_col == (int)ind)
+			to_print += 4;
+		write(STDOUT_FILENO, b_ptr, to_print);
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		b_ptr += to_print;
+		++ind;
+	}
+	ft_putstr_fd(b_ptr, STDOUT_FILENO);
+	dstr_del(&buf);
 }
 
 void			sh_new_move_cors(int len_b, struct winsize term, \
@@ -118,18 +166,26 @@ int				ft_color_strlen(char *str, struct winsize term)
 */
 
 void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
-						const size_t index)
+						const size_t index, int cli)
 {
 	struct winsize		term;
 	int					len_p;
 	int					len_b;
+	int					lensi[4];
 
 	ioctl(0, TIOCGWINSZ, &term);
 	len_p = ft_color_strlen(prompt->txt, term);
 	len_b = buf->strlen;
 	sh_clear_buf(term, len_p, index);
 	ft_putstr_fd(prompt->txt, STDOUT_FILENO);
-	sh_putstr_term(buf, term, len_p, len_b);
+	lensi[0] = len_p;
+	lensi[1] = len_b;
+	lensi[2] = (int)index;
+	lensi[3] = cli;
+	if (lensi[3] >= 0)
+		sh_putstr_term_c((DSTRING *)buf, term, lensi);
+	else
+		sh_putstr_term(buf, term, lensi);
 	if (len_b != (ssize_t)index)
 		sh_new_move_cors(len_b, term, len_p, index);
 	g_prebuf = len_b;

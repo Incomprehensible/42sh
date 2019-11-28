@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_put_col.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 21:49:37 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 20:07:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,6 @@ void			put_col(t_darr overlap, const DSTRING *buf, t_indch indch)
 	ft_putstr(colstr->txt);
 	ft_putstr("\n");
 	ft_putstr(indch.prompt->txt);
-	sh_rewrite(indch.prompt, buf, indch.ind);
+	sh_rewrite(indch.prompt, buf, indch.ind, -1);
 	dstr_del(&colstr);
 }

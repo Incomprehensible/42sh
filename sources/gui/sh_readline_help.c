@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline_help.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 22:16:24 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/28 17:34:01 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 19:23:20 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			clear_screen(void)
 
 char			is_ctrl(const char ch)
 {
-	const int	ctrl[] = {0x1, 0x5, 0x15, 0x14, 0x2, 0x6, 0xc, 0x12};
+	const int	ctrl[] = {0x1, 0x5, 0x15, 0x14, 0x2, 0x6, 0xc, 0x12, 0x18, 0x10, 0xb};
 	size_t		i;
 
 	i = -1;

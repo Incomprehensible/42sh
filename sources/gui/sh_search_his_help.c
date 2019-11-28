@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_search_his_help.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:15:19 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/28 15:17:19 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 20:07:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		print_his_line(DSTRING *str_srch, DSTRING *str_over)
 
 	prompt = dstr_nerr("search in history ");
 	if (!str_srch->strlen)
-		sh_rewrite(prompt, str_srch, 0);
+		sh_rewrite(prompt, str_srch, 0, -1);
 	else
 	{
 		tmp = dstr_nerr(str_srch->txt);
@@ -33,7 +33,7 @@ void		print_his_line(DSTRING *str_srch, DSTRING *str_over)
 			dstr_insert_str(tmp, str_over->txt, tmp->strlen);
 		else
 			dstr_insert_str(tmp, "", tmp->strlen);
-		sh_rewrite(prompt, tmp, str_srch->strlen);
+		sh_rewrite(prompt, tmp, str_srch->strlen, -1);
 		dstr_del(&tmp);
 	}
 	dstr_del(&prompt);

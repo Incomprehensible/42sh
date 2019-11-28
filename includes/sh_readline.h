@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/28 17:42:01 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 20:05:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,15 @@ typedef struct	s_concat
 
 typedef struct	s_clip_board
 {
-	size_t		b_i;
-	size_t		e_i;
 	DSTRING		*buffer;
+	int			ind;
 }				t_clipbrd;
 
 
 typedef struct	s_indch
 {
-	char		ch;
+	DSTRING		*prompt;
 	int			ind;
-	char		fl;
 	// int			his;
 	int			reg;
 	int			var;
@@ -64,7 +62,8 @@ typedef struct	s_indch
 	int			ind_slash;
 	int			select;
 	int			exit;
-	DSTRING		*prompt;
+	char		fl;
+	char		ch;
 }				t_indch;
 
 typedef struct	s_buf
@@ -157,6 +156,7 @@ char			is_ctrl(const char ch);
 void			sh_move_up_lines(int lines);
 void			sh_move_back(int move_back);
 void			sh_clear_buf(struct winsize term, int len_p, int index);
+void			clip_index(int x1, int x2, int *y1, int *y2);
 
 /*
 ** Command line editing
@@ -168,7 +168,7 @@ void			sh_clear_buf(struct winsize term, int len_p, int index);
 ** ctrl+f move insertion point one word ahead
 ** ctrl+n clear all screen
 */
-t_indch			management_line(t_indch indch, DSTRING **buf);
+t_indch			management_line(t_indch indch, DSTRING **buf, t_clipbrd *clip);
 void			clear_screen(void);
 int				sh_t_insertion_point(const DSTRING *str, \
 						int ind, const char ch);
@@ -182,7 +182,7 @@ t_darr			get_list_cmds(ENV *envp);
 ** overwrites the buffer string in the console and sets the cursor at the index
 */
 void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
-						const size_t index);
+						const size_t index, int i);
 void			sh_new_rewrite(const DSTRING *buf,\
 						const size_t index);
 
@@ -245,7 +245,8 @@ int				sort_darr(t_darr *darr);
 /*
 ** handles arrow clicks
 */
-t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf);
+t_indch			sh_esc(t_indch indch, const size_t max, \
+DSTRING **buf, t_clipbrd *clip);
 
 /*
 ** intercepts all keystrokes on the keyboard
