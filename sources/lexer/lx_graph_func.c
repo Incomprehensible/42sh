@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/25 18:39:34 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/29 00:02:38 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static short	pull_type(char *str)
 	return (-1);
 }
 
-short	graph_type(char *str)
+short			graph_type(char *str)
 {
 	static short	tmp;
 	short			choice;

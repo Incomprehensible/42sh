@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/25 22:32:54 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/29 00:03:56 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-size_t	validate_simple_struct(char *s, size_t br)
+size_t			validate_simple_struct(char *s, size_t br)
 {
 	while (s[br] == '(')
 		br++;
@@ -37,7 +37,7 @@ size_t	validate_simple_struct(char *s, size_t br)
 	return (br ? 0 : 1);
 }
 
-size_t	validate_triple_struct(char *s, short pass)
+size_t			validate_triple_struct(char *s, short pass)
 {
 	while (s && *s != ')')
 	{
@@ -57,7 +57,7 @@ size_t	validate_triple_struct(char *s, short pass)
 	return (pass == 2 ? 1 : 0);
 }
 
-static short    slash_tok(t_dlist *token_list)
+static short	slash_tok(t_dlist *token_list)
 {
 	if (TOK_TYPE == TK_SEP)
 	{
@@ -67,7 +67,7 @@ static short    slash_tok(t_dlist *token_list)
 	return (0);
 }
 
-short	check_valid_sep(t_dlist *token_list)
+short			check_valid_sep(t_dlist *token_list)
 {
 	if (!token_list->content || !TOK_TYPE)
 		return (0);
@@ -86,7 +86,7 @@ short	check_valid_sep(t_dlist *token_list)
 	return (1);
 }
 
-short	is_prefix(char str)
+short			is_prefix(char str)
 {
 	if (str == '+' || str == '-')
 		return (1);
