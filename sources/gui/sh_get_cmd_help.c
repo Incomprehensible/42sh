@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:41:28 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/22 20:10:31 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/27 23:53:38 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,9 @@ t_darr			get_executable_files(char *path)
 	int				ex;
 
 	i = -1;
-	dir = opendir(path);
 	ft_bzero(&rez, sizeof(t_darr));
+	if (!(dir = opendir(path)))
+		return (rez);
 	while ((entry = readdir(dir)) != NULL)
 	{
 		ex = is_ex(path, entry->d_name);

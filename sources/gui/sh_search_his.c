@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 11:29:17 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/27 22:18:15 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 15:16:22 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,21 @@ void		bakspace_dstr(DSTRING **str_srch)
 
 void		get_overlap_histr(t_darr *overlap, DSTRING *str_srch)
 {
-	size_t	i;
 	size_t	c;
 	size_t	j;
 
-	c = (size_t)-1;
-	i = S_DARR_STRINGS;
+	c = S_DARR_STRINGS - g_histr.count - 1;
 	j = (size_t)-1;
 	ft_bzero(overlap, sizeof(t_darr));
-	while (++c < g_histr.count)
+	while (++c < S_DARR_STRINGS)
 	{
-		if (g_histr.strings[--i]->txt && ft_strncmp(str_srch->txt, \
-							g_histr.strings[i]->txt, str_srch->strlen) == 0)
+		if (g_histr.strings[c]->txt && \
+		dstr_search_dstr(g_histr.strings[c], str_srch, 0) != SIZE_T_MAX)
 		{
-			overlap->strings[++j] = g_histr.strings[i];
-			if ((ssize_t)overlap->maxlen < g_histr.strings[i]->strlen)
-				overlap->maxlen = g_histr.strings[i]->strlen;
-			overlap->allsize += g_histr.strings[i]->strlen;
+			overlap->strings[++j] = g_histr.strings[c];
+			if ((ssize_t)overlap->maxlen < g_histr.strings[c]->strlen)
+				overlap->maxlen = g_histr.strings[c]->strlen;
+			overlap->allsize += g_histr.strings[c]->strlen;
 			overlap->count++;
 		}
 	}
@@ -55,7 +53,7 @@ t_indch		supplement_srch(DSTRING *str_srch, DSTRING **str_over, \
 	t_darr		overlap;
 	size_t		i;
 
-	i = 0;
+	i = -1;
 	if ((*str_over) != NULL)
 		*str_over = NULL;
 	if (indch.ch == TAB)

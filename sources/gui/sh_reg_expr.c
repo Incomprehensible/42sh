@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:51:57 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/23 14:27:19 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 15:36:08 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void			loop(DSTRING *reg, int i, t_astr *rez, const int itr)
 		loop(rez->strings[itr], rez->count, &(*rez), itr + 1);
 }
 
-void			new_reg_expr(DSTRING **buf, t_indch *indch, ENV *env)
+void			reg_expr(DSTRING **buf, t_indch *indch, ENV *env)
 {
 	t_astr		rez;
 	t_buf		buffer;
@@ -107,6 +107,7 @@ void			new_reg_expr(DSTRING **buf, t_indch *indch, ENV *env)
 	if (rez.count > 0)
 		buffer.val = get_dstr_rez(rez);
 	unite_buf(buf, &buffer);
+	dstr_del(&buffer.val);
 	free_t_astr(&rez);
 	indch->tab = 0;
 	indch->reg = 0;

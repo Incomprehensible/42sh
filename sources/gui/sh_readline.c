@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 15:48:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/27 22:24:40 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 17:47:40 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,59 +37,16 @@ t_indch			management_line(t_indch indch, DSTRING **buf)
 	}
 	else if (indch.ch == 0x14)
 		dstr_cutins_str(buf, "", indch.ind);
-	else if ((indch.ch == 0x18 || indch.ch == 0x06) && (*buf)->strlen)
+	else if ((indch.ch == 0x02 || indch.ch == 0x06) && (*buf)->strlen)
 		indch.ind = sh_move_insertion_point((*buf), indch.ind, indch.ch);
-	else if (indch.ch == 0x0e)
+	else if (indch.ch == 0x0c)
 		clear_screen();
 	else if (indch.ch == 0x12)
 		indch = sh_search_his(buf, indch);
 	return (indch);
 }
 
-int				is_reg(DSTRING *buf)
-{
-	int			i;
-	int			sp;
-
-	sp = 0;
-	i = -1;
-	while (++i < buf->strlen)
-	{
-		if (buf->txt[i] == ' ')
-			sp = i;
-		if (ft_memchr("*[?", buf->txt[i], 3))
-			return (sp);
-	}
-	return (-1);
-}
-
-DSTRING			*old_ret_line(DSTRING **buf, t_indch *indch, ENV *env)
-{
-	int			i;
-
-	indch->exit = 1;
-	if (indch->ch == (char)0x04)
-	{
-		dstr_del(buf);
-		free_lines_down();
-		ft_putstr("\n");
-		sys_term_restore();
-		(*buf) = dstr_nerr("exit");
-		return ((*buf));
-	}
-	free_lines_down();
-	sh_rewrite(indch->prompt, *buf, indch->ind);
-	ft_putstr("\n");
-	while ((i = is_reg(*buf)) != -1)
-	{
-		indch->ind_inp = i + 1;
-		new_reg_expr(buf, indch, env);
-	}
-	sys_term_restore();
-	return ((*buf));
-}
-
-void	 		new_return_line(DSTRING **buf, t_indch *indch, ENV *env)
+void			return_line(DSTRING **buf, t_indch *indch, ENV *env)
 {
 	int			i;
 
@@ -109,7 +66,7 @@ void	 		new_return_line(DSTRING **buf, t_indch *indch, ENV *env)
 		while ((i = is_reg(*buf)) != -1)
 		{
 			indch->ind_inp = i + 1;
-			new_reg_expr(buf, indch, env);
+			reg_expr(buf, indch, env);
 		}
 	}
 	indch->fl = 0;
@@ -131,7 +88,7 @@ int				sh_del_char(DSTRING **buf, int ind, const char cmd)
 	return (ind);
 }
 
-DSTRING			*readline_loop(DSTRING **buf, t_indch indch, ENV *env)
+DSTRING			*readline_loop(DSTRING **buf, t_indch indch, ENV *env, t_clipbrd clip)
 {
 	while (!indch.exit)
 	{
@@ -145,14 +102,14 @@ DSTRING			*readline_loop(DSTRING **buf, t_indch indch, ENV *env)
 		if (is_ctrl(indch.ch))
 			indch = management_line(indch, buf);
 		else if (indch.ch == TAB && indch.reg)
-			new_reg_expr(buf, &indch, env);
+			reg_expr(buf, &indch, env);
 		else if (indch.ch == TAB)
 			sh_tab(buf, &indch, env);
 		else if (indch.ch == ESC)
 			indch = sh_esc(indch, (*buf)->strlen, buf);
 		sh_rewrite(indch.prompt, (*buf), indch.ind);
 		if (indch.ch == (char)0x04 || (indch.ch == '\n') || indch.ch == -1)
-			new_return_line(buf, &indch, env);
+			return_line(buf, &indch, env);
 	}
 	return (*buf);
 }
@@ -161,6 +118,7 @@ DSTRING			*sh_readline(const DSTRING *prompt, ENV *env)
 {
 	DSTRING		*buf;
 	t_indch		indch;
+	t_clipbrd	clip;
 
 	buf = dstr_nerr("");
 	ft_bzero(&indch, sizeof(t_indch));
@@ -168,9 +126,9 @@ DSTRING			*sh_readline(const DSTRING *prompt, ENV *env)
 	g_preind = 0;
 	sys_term_init();
 	sys_term_noecho();
-	sh_rewrite(prompt, buf, 0);
+	ft_putstr_fd(prompt->txt, STDOUT_FILENO);
 	indch.prompt = (DSTRING *)prompt;
-	buf = readline_loop(&buf, indch, env);
+	buf = readline_loop(&buf, indch, env, clip);
 	sys_term_restore();
 	return (buf);
 }

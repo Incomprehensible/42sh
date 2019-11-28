@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/27 22:28:38 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 17:42:01 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@
 # include "env.h"
 # include <unistd.h>
 # include <sys/ioctl.h>
-#include "sh_termcomand.h"
-
-
-#define S_ASTR_STR 50000
-#define SPEC_SYMBOLS " $=&|)('\"><{}*~`\\"
+# include "sh_termcomand.h"
+# define S_ASTR_STR 50000
+# define SPEC_SYMBOLS " $=&|)('\"><{}*~`\\"
 
 char			*tmp_readline(char *prompt);
 
-/* to save strings ft_concat */
+/*
+** to save strings ft_concat
+*/
 typedef struct	s_concat
 {
 	size_t		start;
@@ -38,22 +38,22 @@ typedef struct	s_concat
 	size_t		n;
 	size_t		i;
 	size_t		all;
-
 }				t_concat;
 
-/* 
-** ch - user entered character
-** ind - where to insert the character
-** fl - 0 вызываем гетчар. 1 не вызываем
-** reg = 1 если регулярное выражение
-** tab = 1 если нажат таб
-*/
+typedef struct	s_clip_board
+{
+	size_t		b_i;
+	size_t		e_i;
+	DSTRING		*buffer;
+}				t_clipbrd;
+
+
 typedef struct	s_indch
 {
 	char		ch;
 	int			ind;
 	char		fl;
-	int			his;
+	// int			his;
 	int			reg;
 	int			var;
 	int			is_var;
@@ -62,6 +62,7 @@ typedef struct	s_indch
 	int			type_inp;
 	int			ind_inp;
 	int			ind_slash;
+	int			select;
 	int			exit;
 	DSTRING		*prompt;
 }				t_indch;
@@ -78,7 +79,9 @@ typedef struct	s_buf
 	int			slash;
 }				t_buf;
 
-/* to save strings sh_tab */
+/*
+** to save strings sh_ta
+*/
 typedef struct	s_name_ind
 {
 	int			ind;
@@ -88,14 +91,18 @@ typedef struct	s_name_ind
 	t_indch		indch;
 }				t_name_ind;
 
-/* array of strings with a counter */
+/*
+** array of strings with a counter
+*/
 typedef struct	s_astr
 {
 	DSTRING		*strings[S_ASTR_STR];
 	size_t		count;
 }				t_astr;
 
-/* if flag 1 means the path is part of the buffer */
+/*
+** if flag 1 means the path is part of the buffer
+*/
 typedef struct	s_regpath
 {
 	DSTRING		*path;
@@ -113,19 +120,19 @@ int				g_preind;
 t_darr			g_histr;
 
 DSTRING			*sh_readline(const DSTRING *prompt, ENV *env);
-
 void			fl_input(const DSTRING *buf, t_indch *indch);
-void			new_return_line(DSTRING **buf, t_indch *indch, ENV *env);
-void			new_reg_expr(DSTRING **buf, t_indch *indch, ENV *env);
+void			return_line(DSTRING **buf, t_indch *indch, ENV *env);
+void			reg_expr(DSTRING **buf, t_indch *indch, ENV *env);
 void			sh_type_input(DSTRING *buf, t_indch *indch);
+
 void			sh_tab(DSTRING **buf, t_indch *indch, ENV *env);
+t_name_ind		tab_loop(t_darr overlap, t_buf *buffer, int fl, \
+					t_name_ind n_ind);
 t_darr			get_overlap(t_buf *buffer, t_indch *indch, ENV *env);
 t_buf			slicer(DSTRING **buf, t_indch *indch, ENV *env);
 void			unite_buf(DSTRING **buf, t_buf *buffer);
 int				end_cut(char *str, int start, char ch);
 void			dell_slash(DSTRING **sub);
-t_name_ind		tab_loop(t_darr overlap, t_buf *buffer, int fl, \
-					t_name_ind n_ind);
 int				is_var(t_buf *buffer, t_darr *allvar, ENV *env);
 t_darr			get_executable_files(char *path);
 int				is_executable(t_buf *bufffer);
@@ -139,12 +146,11 @@ void			init_histr(ENV *envr);
 void			print_his_line(DSTRING *str_srch, DSTRING *str_over);
 void			skip_escp(void);
 void			fill_buf(DSTRING **buf, const t_astr rez);
-int				sh_move_insertion_point(const DSTRING *str, int ind, const char ch);
-
+int				sh_move_insertion_point(const DSTRING *str, \
+					int ind, const char ch);
 
 DSTRING			*dstr_nerr(char *src);
 DSTRING			*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei);
-// DSTRING			*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei);
 DSTRING			*check_null(DSTRING *line);
 
 char			is_ctrl(const char ch);
@@ -152,10 +158,8 @@ void			sh_move_up_lines(int lines);
 void			sh_move_back(int move_back);
 void			sh_clear_buf(struct winsize term, int len_p, int index);
 
-
-/* 
+/*
 ** Command line editing
-**
 ** ctrl+a move the cursor to the beginning of the line
 ** ctrl+e move the cursor to the end of the line
 ** ctrl+u Delete to the beginning of the line
@@ -166,31 +170,41 @@ void			sh_clear_buf(struct winsize term, int len_p, int index);
 */
 t_indch			management_line(t_indch indch, DSTRING **buf);
 void			clear_screen(void);
-int				sh_t_insertion_point(const DSTRING *str, int ind, const char ch);
+int				sh_t_insertion_point(const DSTRING *str, \
+						int ind, const char ch);
 
-/*	GET ALL CMDS FROM $PATH */
+/*
+** GET ALL CMDS FROM $PATH
+*/
 t_darr			get_list_cmds(ENV *envp);
 
-/* overwrites the buffer string in the console and sets the cursor at the index */
+/*
+** overwrites the buffer string in the console and sets the cursor at the index
+*/
 void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
-						 const size_t index);
-// void			sh_new_rewrite(const DSTRING *prompt, const DSTRING *buf,\
-// 						const size_t index);
+						const size_t index);
 void			sh_new_rewrite(const DSTRING *buf,\
 						const size_t index);
 
-/* deletes a character by index. flag == BAKSP moves carriage one character back */
+/*
+** deletes a character by index. flag == BAKSP moves carriage one character back
+*/
 int				sh_del_char(DSTRING **buf, int ind, const char cmd);
 
-/* search for a character from the end of a line. returns character index or -1 */
+/*
+** search for a character from the end of a line. returns character index or -1
+*/
 ssize_t			dstrrchr(const DSTRING *src, const int ch);
 
-/* removes a char on an index */
+/*
+** removes a char on an index
+*/
 ssize_t			dstr_del_char(DSTRING **src, ssize_t n);
 
 /*
 ** changes dst:
-** cuts out from dst everything after the index inclusively. inserts at the end of src
+** cuts out from dst everything after the index inclusively.
+** inserts at the end of src
 */
 void			dstr_cutins_dstr(DSTRING **dst, DSTRING *src, size_t ind);
 void			dstr_cutins_str(DSTRING **dst, char *src, ssize_t ind);
@@ -200,67 +214,96 @@ DSTRING			*dstr_scerr(DSTRING **src, ssize_t bi, ssize_t ei);
 DSTRING			*dstr_serr(DSTRING *src, ssize_t bi, ssize_t ei);
 DSTRING			*dstr_nerr(char *src);
 
-/* puts the contents of the directory in t_darr */
+/*
+** puts the contents of the directory in t_darr
+*/
 t_darr			sh_dir_content(char *path, DSTRING *sub);
 
-/* checks the buffer slice from the index if the directory is written there return 1 */
+/*
+** checks the buffer slice from the index if the directory
+** is written there return 1
+*/
 char			sh_isdir(DSTRING *buf, ssize_t start_dir);
 
-/* will return 0 if the path is "." or ".." else 1 */
+/*
+** will return 0 if the path is "." or ".." else 1
+*/
 char			sh_check_dot(const DSTRING *path);
 
-/* clears an array DSTRING */
+/*
+** clears an array DSTRIN
+*/
 void			free_t_darr(t_darr *darr);
 void			free_t_astr(t_astr *darr);
 void			free_darr_re(DSTRING **darr, const int size);
 
-/* sorts lexicographically array DSTRING */
+/*
+** sorts lexicographically array DSTRING
+*/
 int				sort_darr(t_darr *darr);
 
-/* handles arrow clicks */
+/*
+** handles arrow clicks
+*/
 t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf);
 
-/* intercepts all keystrokes on the keyboard */
+/*
+** intercepts all keystrokes on the keyboard
+*/
 int				ft_getch(void);
 
-/* prints an array in the form of columns. does not move the carriage */
+/*
+** prints an array in the form of columns. does not move the carriage
+*/
 void			put_col(t_darr overlap, const DSTRING *buf, t_indch indch);
 ushort			get_col(const int lencol);
 DSTRING			*sh_get_col(t_darr dar, const ushort col, ushort iter);
 void			free_lines_down(void);
 
-/* appends directory name */
+/*
+** appends directory name
+*/
 void			help_correct_namedir_buf(t_darr *darrcopy, DSTRING **name_fil,\
 					DSTRING **name_dir);
 
-/* returns a t_darr of matches with str */
+/*
+** returns a t_darr of matches with str
+*/
 t_darr			sh_cmp_darr(const t_darr darr, DSTRING *str);
 
-/* returns the path written in the buffer by index or "." */
+/*
+** returns the path written in the buffer by index or "."
+*/
 DSTRING			*sh_get_path(DSTRING *buf, size_t start_dir);
 
 /*
-** concatenates strings into one. if the special line “00” is connected between the lines, 
+** concatenates strings into one.
+** if the special line “00” is connected between the lines,
 ** no separator will be inserted, if the special line “1 /” between the lines /
 */
 char			*ft_concat(const size_t n, const char *spec, ...);
 
-/* handles a special asterisk character */
-int				reg_expr(DSTRING **buf, t_fl *fl);
+/*
+** handles a special asterisk character
+*/
 t_regpath		help_get_regpath(const int fl, DSTRING *path);
 DSTRING			*slice_reg(DSTRING *reg);
+int				is_reg(DSTRING *buf);
 
-
-/* auto-replace reg_expr */
+/*
+** auto-replace reg_expr
+*/
 void			loop(DSTRING *reg, int i, t_astr *rez, const int itr);
 
-/* help reg_expr */
+/*
+** help reg_expr
+*/
 char			chek_astr(const DSTRING *reg);
 DSTRING			*add_slash(char *str, DSTRING *reg);
 char			is_strdot(const char *path);
 DSTRING			*join_reg(DSTRING *n_dir, DSTRING *cmp, const char fl);
 char			cmp_dirreg(DSTRING *n_dir, DSTRING *cmp,\
-						 DSTRING *reg, const char fl);
+						DSTRING *reg, const char fl);
 int				nmatch(const char *s1, const char *s2);
 
 DSTRING			*get_dstr_rez(t_astr rez);
@@ -279,23 +322,29 @@ t_regpath		get_regpath(DSTRING *reg);
 
 int				get_history_fd(int flags, char *er_context, ENV *envr);
 
-/* write history in file */
+/*
+** write history in file
+*/
 void			write_history(DSTRING *line);
 
-/* history management */
+/*
+** history management
+*/
 t_indch			show_history(DSTRING **buf, t_indch indc);
 
 t_indch			sh_search_his(DSTRING **buf, t_indch indch);
 
 char			get_new_histr(t_darr *histr, ENV *envr);
 
-
-/* overwrites the command history file to avoid buffer overflow */
+/*
+** overwrites the command history file to avoid buffer overflow
+*/
 void			rewrite_histr(t_darr *histr, ENV *envr);
 
-/* reads history file and fill struct t_darr */
+/*
+** reads history file and fill struct t_darr
+*/
 char			get_histr(t_darr *histr, ENV *envr);
-
 
 void			sys_term_init(void);
 void			sys_term_restore(void);

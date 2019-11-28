@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 11:21:26 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/06 17:41:43 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 17:25:37 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int			sh_move_insertion_point(const DSTRING *str, int ind, const char ch)
 	int		fl;
 
 	fl = 0;
-	if (ch == 0x18)
+	if (ch == 0x02)
 	{
 		if (str->txt[ind] == ' ' || str->txt[ind] == '\0')
 			ind = skip_r_alpha(str->txt, skip_r_space(str->txt, ind));

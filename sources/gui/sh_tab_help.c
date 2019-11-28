@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:47:43 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/25 14:06:52 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/27 23:22:16 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	subst_val(t_buf *buffer, t_darr overlap, t_name_ind n_ind)
 	DSTRING		*new;
 
 	new = dstr_nerr("");
-	buffer->val = dstr_nerr(overlap.strings[n_ind.ind]->txt);
+	buffer->val = overlap.strings[n_ind.ind];
 	dstr_insert_dstr(new, buffer->begin, 0);
 	if (buffer->dir)
 		dstr_insert_dstr(new, buffer->dir, new->strlen);

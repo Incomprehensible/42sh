@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:21:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/23 13:21:19 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/27 23:44:59 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ t_buf			slicer(DSTRING **buf, t_indch *indch, ENV *env)
 		new.dir = dstr_scerr(buf, indch->ind_inp, indch->ind_slash);
 		if (indch->type_inp == 2 && (indch->type_inp = 1))
 			put_var_sls(&new, indch, env);
-		
 	}
 	new.end = dstr_serr((*buf), indch->ind_inp, (*buf)->strlen);
 	new.val = NULL;
@@ -84,7 +83,6 @@ void			unite_buf(DSTRING **buf, t_buf *buffer)
 	dstr_del(&(buffer->begin));
 	dstr_del(&(buffer->end));
 	dstr_del(&(buffer->sub));
-	dstr_del(&(buffer->val));
 	if (buffer->dir)
 		dstr_del(&(buffer->dir));
 }

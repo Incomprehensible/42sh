@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/27 22:29:00 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/27 22:47:43 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,25 +95,27 @@ int				ft_color_strlen(char *str, struct winsize term)
 	return (rez);
 }
 
-// void			get_coord_caret(t_caret *caret)
-// {
-// 	char			buf[64];
-// 	int				i;
-// 	int				c;
-
-// 	write(1, "\033[6n", 4);
-// 	ft_bzero(buf, 64);
-// 	i = -1;
-// 	c = 0;
-// 	while (read(0, &(buf[++i]), 1) && buf[i] != 'R')
-// 		if (buf[i] == ';')
-// 			c = i + 1;
-// 	buf[i] = '\0';
-// 	caret->y = ft_atoi(buf + 2);
-// 	caret->s_y = ft_itoa(caret->y);
-// 	caret->x = ft_atoi(buf + c);
-// 	caret->s_x = ft_itoa(caret->x);
-// }
+/*
+** void			get_coord_caret(t_caret *caret)
+** {
+** 	char			buf[64];
+** 	int				i;
+** 	int				c;
+**
+** 	write(1, "\033[6n", 4);
+** 	ft_bzero(buf, 64);
+** 	i = -1;
+** 	c = 0;
+** 	while (read(0, &(buf[++i]), 1) && buf[i] != 'R')
+** 		if (buf[i] == ';')
+** 			c = i + 1;
+** 	buf[i] = '\0';
+** 	caret->y = ft_atoi(buf + 2);
+** 	caret->s_y = ft_itoa(caret->y);
+** 	caret->x = ft_atoi(buf + c);
+** 	caret->s_x = ft_itoa(caret->x);
+** }
+*/
 
 void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
 						const size_t index)

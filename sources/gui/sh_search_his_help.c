@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:15:19 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 16:00:20 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/28 15:17:19 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void		print_his_line(DSTRING *str_srch, DSTRING *str_over)
 
 void		skip_escp(void)
 {
-	ft_getch();
+	if (ft_getch() != '[')
+		return ;
 	ft_getch();
 }
 
