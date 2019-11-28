@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 14:40:53 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 21:35:02 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,15 @@ char	*parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
 	return (parse_sep(++str, tok, i));
 }
 
-size_t	can_pull_tk(size_t j, char *str, t_dlist **tok, short t)
+size_t	can_pull_tk(size_t j, char *str, t_dlist **tok, int t)
 {
 	t_tk_type	type;
 
-	type = (t == '"') ? DQUOTS : 0;
+	type = (t == '"') ? DQUOTS : TK_EXPR;
 	type = (t == '\'') ? APOF : type;
-	type = type ? type : TK_EXPR;
 	if (j)
 	{
-		if (t == IN)
+		if ((short)t == IN)
 			yes_we_can(str, tok, TK_VAR, j);
 		else
 			yes_we_can(str, tok, type, j);
@@ -74,7 +73,7 @@ short	special_case(char br, char *str)
 {
 	if (br == '\n')
 		return (*str != ';' && *str != '\n' && *str) ? 0 : 1;
-	else if (br == IN)
+	else if ((short)br == IN)
 	{
 		if (!(is_token_here(str, " in")) && !(is_token_here(str, "\tin")) &&
 		!is_sep_no_space(*str))

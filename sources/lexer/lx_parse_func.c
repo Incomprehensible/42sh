@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/21 21:39:04 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 21:21:09 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*pull_single(char *str)
 	return (ft_strdup(str));
 }
 
-char	*trim_str(char *str, short br, t_dlist **tok)
+char	*trim_str(char *str, char br, t_dlist **tok)
 {
 	str = (br == '"') ? ++str : str;
 	if (*str == ' ' || *str == '\t')
@@ -38,7 +38,7 @@ char	*trim_str(char *str, short br, t_dlist **tok)
 	return (parse_sep(str, tok, 0));
 }
 
-char	*parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br)
+char	*parse_str_block(char *str, t_dlist **tok, t_stx **tree, int br)
 {
 	size_t	j;
 	short	i;

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 15:13:06 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/28 22:00:14 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ short	back_ps_check(t_dlist *token_list)
 			token_list = token_list->next;
 		}
 		if (token_list && (type == TK_SEP || type == TK_AND ||
-		type == TK_OR || type == TK_PIPE))
+		type == TK_OR || type == TK_PIPE || type == TK_BCKR_PS))
 			return (0);
 		if (token_list)
 			token_list = token_list->next;

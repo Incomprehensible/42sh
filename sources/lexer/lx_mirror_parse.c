@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/23 18:11:12 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 21:45:58 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@ char			*add_slashes(char *strt, short flag, t_tk_type type)
 {
 	char	*tmp;
 
-	type = 0;
 	if (flag)
 	{
-		if (flag == 1 || flag == 3)
+		if ((flag == 1 || flag == 3) && type != TK_EXPR)
 		{
 			tmp = ft_strjoin("\\", strt);
 			free(strt);
@@ -42,8 +41,6 @@ static short	get_flag(char *strt, char *fin, size_t i)
 	short	flag;
 
 	flag = 0;
-	if (!fin || !strt || !(*fin) || !(*strt))
-		return (0);
 	if (*fin && *fin == '\\' && *(fin + 1) == '\\')
 		flag = 2;
 	if (*(strt - i) == '\\' && !(mirrored(strt - i + 1)))

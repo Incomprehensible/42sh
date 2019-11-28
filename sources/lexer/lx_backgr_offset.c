@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/21 23:46:15 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/28 21:56:24 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_tk_type	make_offset(t_dlist **token, t_tk_type type)
 			token_list = skip_function(token_list);
 		token_list = (token_list->prev) ? token_list->prev : token_list;
 	}
-	token[1] = backgr->prev;
+	token[1] = (token[1] == token[0]) ? backgr : backgr->prev;
 	if (!token_list || !token_list->prev)
 		all_to_backgr(token, backgr);
 	else

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/25 18:41:48 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 21:15:45 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ char		*parse_lambda(char *str, t_dlist **tok, t_stx **tree, short i);
 char		*parse_exec(char *s, t_dlist **tok);
 char		*parse_empty(char *str, char *patt, t_dlist **tok);
 char        *parse_assig_block(char *str, t_dlist **tok, t_stx **tree);
-char		*parse_str_block(char *str, t_dlist **tok, t_stx **tree, short br);
+char		*parse_str_block(char *str, t_dlist **tok, t_stx **tree, int br);
 void		make_token(t_dlist **list, char *value, t_tk_type type);
 short       find_token(t_stx **tree, char *str);
 short		clear_tokens(t_dlist **tokens, short id);
@@ -194,7 +194,7 @@ short		sep_detected(t_dlist *token_list);
 short       seps_check(t_dlist *token_list);
 short       back_ps_check(t_dlist *token_list);
 short       check_valid_sep(t_dlist *token_list);
-size_t      can_pull_tk(size_t j, char *str, t_dlist **tok, short t);
+size_t      can_pull_tk(size_t j, char *str, t_dlist **tok, int t);
 int         special_meta(char meta);
 short       special_case(char br, char *str);
 short		special_condition(char *patt);

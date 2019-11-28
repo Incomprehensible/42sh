@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/21 21:28:46 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 22:37:09 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ char			*parse_expr(char *str, t_dlist **tok, t_stx **tr, short sp)
 			j++;
 		i = 0;
 	}
-	return (str + can_pull_tk(j, &str[j], tok, sp));
+	str += can_pull_tk(j, &str[j], tok, sp);
+	return (parse_sep(str, tok, 0));
 }
 
 char			*parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
@@ -101,5 +102,5 @@ char			*parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
 	if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
 		return (parse_exec(str, tok));
 	str = parse_expr(str, tok, tree, stop);
-	return (parse_sep(str, tok, 0));
+	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 15:58:27 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 22:32:54 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,16 @@ size_t	validate_triple_struct(char *s, short pass)
 	return (pass == 2 ? 1 : 0);
 }
 
+static short    slash_tok(t_dlist *token_list)
+{
+	if (TOK_TYPE == TK_SEP)
+	{
+		if (TOK_VALUE && *(TOK_VALUE) == '\n')
+			return (1);
+	}
+	return (0);
+}
+
 short	check_valid_sep(t_dlist *token_list)
 {
 	if (!token_list->content || !TOK_TYPE)
@@ -64,7 +74,7 @@ short	check_valid_sep(t_dlist *token_list)
 	while (token_list && TOK_TYPE != TK_SEP)
 		token_list = token_list->prev;
 	token_list = (token_list) ? token_list->prev : token_list;
-	while (token_list && TOK_TYPE == TK_EMPTY)
+	while (token_list && (TOK_TYPE == TK_EMPTY || slash_tok(token_list)))
 		token_list = token_list->prev;
 	if (!token_list)
 		return (0);
