@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 08:07:20 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 17:12:12 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/23 14:07:04 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,18 @@
 #include "libft.h"
 #include "sh_readline.h"
 #include <dirent.h>
+
+void				free_t_astr(t_astr *darr)
+{
+	size_t	i;
+
+	i = -1;
+	if (darr->count == (size_t)-1)
+		return ;
+	while (++i < darr->count)
+		dstr_del(&darr->strings[i]);
+	darr->count = 0;
+}
 
 void				free_t_darr(t_darr *darr)
 {

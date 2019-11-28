@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:41:28 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/20 21:32:05 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/22 20:10:31 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,18 @@ t_darr			get_executable_files(char *path)
 	return (rez);
 }
 
-int				is_executable(t_buf *bufffer)
+int				is_executable(t_buf *buffer)
 {
 	int				sl;
 	t_dyn_string	*tmp;
 
-	if ((sl = dstrrchr(bufffer->dir, '/')) == -1)
+	if ((sl = dstrrchr(buffer->dir, '/')) == -1)
 		return (0);
-	tmp = dstr_nerr(bufffer->buf->txt);
-	bufffer->dir = dstr_scerr(&tmp, bufffer->cut, sl + 1);
-	bufffer->sub = dstr_scerr(&tmp, 0, end_cut(bufffer->dir->txt, 0, ' '));
-	dstr_del(&tmp);
+	sl = buffer->slash;
+	tmp = buffer->buf;
+	dstr_del(&(buffer->dir));
+	dstr_del(&(buffer->sub));
+	buffer->dir = dstr_serr(tmp, buffer->cut, sl);
+	buffer->sub = dstr_serr(tmp, sl, end_cut(buffer->buf->txt, sl, ' '));
 	return (1);
 }

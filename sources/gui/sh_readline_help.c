@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 22:16:24 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 15:11:04 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/24 21:02:28 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@ void			clear_screen(void)
 
 char			is_ctrl(const char ch)
 {
-	if (ch == 0x1 || ch == 0x5 \
-		|| ch == 0x15 || ch == 0x14 \
-		|| ch == 0x18 || ch == 0x06 \
-		|| ch == 0x0e || ch == 0x12)
-		return (1);
+	const int	ctrl[6] = {0x02, 0x06, 0x10, 0xff, 0x06, 0x17};
+	int			i;
+
+	i = -1;
+	while (++i < 6)
+		if (ch == ctrl[i])
+			return (1);
 	return (0);
 }

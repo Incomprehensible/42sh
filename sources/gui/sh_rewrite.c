@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 16:00:05 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/27 22:29:00 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "sys_tools/sys_errors.h"
 
 void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
-					int len_p)
+					int len_p, int len_b)
 {
 	size_t		ind;
 	size_t		lines;
@@ -27,7 +27,7 @@ void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
 	char		*b_ptr;
 
 	ind = 0;
-	lines = (buf->strlen + (len_p % term.ws_col)) / term.ws_col;
+	lines = (len_b + (len_p % term.ws_col)) / term.ws_col;
 	b_ptr = buf->txt;
 	while (ind < lines)
 	{
@@ -43,7 +43,7 @@ void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
 	ft_putstr_fd(b_ptr, STDOUT_FILENO);
 }
 
-void			sh_new_move_cors(const DSTRING *buf, struct winsize term, \
+void			sh_new_move_cors(int len_b, struct winsize term, \
 					int len_p, int index)
 {
 	int		move_back;
@@ -52,7 +52,7 @@ void			sh_new_move_cors(const DSTRING *buf, struct winsize term, \
 	int		lines;
 
 	lines = 0;
-	len_all = buf->strlen + len_p;
+	len_all = len_b + len_p;
 	segment = len_all % term.ws_col;
 	move_back = len_all - (index + len_p);
 	if (move_back > segment)
@@ -67,20 +67,6 @@ void			sh_new_move_cors(const DSTRING *buf, struct winsize term, \
 		sh_move_up_lines(lines);
 	if (move_back)
 		sh_move_back(move_back);
-}
-
-int				skip_num(char *str)
-{
-	int num;
-
-	if (!str)
-		return (0);
-	num = ft_atoi(str);
-	if (num > 100)
-		return (3);
-	if (num > 10)
-		return (2);
-	return (1);
 }
 
 int				ft_color_strlen(char *str, struct winsize term)
@@ -109,19 +95,41 @@ int				ft_color_strlen(char *str, struct winsize term)
 	return (rez);
 }
 
+// void			get_coord_caret(t_caret *caret)
+// {
+// 	char			buf[64];
+// 	int				i;
+// 	int				c;
+
+// 	write(1, "\033[6n", 4);
+// 	ft_bzero(buf, 64);
+// 	i = -1;
+// 	c = 0;
+// 	while (read(0, &(buf[++i]), 1) && buf[i] != 'R')
+// 		if (buf[i] == ';')
+// 			c = i + 1;
+// 	buf[i] = '\0';
+// 	caret->y = ft_atoi(buf + 2);
+// 	caret->s_y = ft_itoa(caret->y);
+// 	caret->x = ft_atoi(buf + c);
+// 	caret->s_x = ft_itoa(caret->x);
+// }
+
 void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
 						const size_t index)
 {
 	struct winsize		term;
 	int					len_p;
+	int					len_b;
 
 	ioctl(0, TIOCGWINSZ, &term);
 	len_p = ft_color_strlen(prompt->txt, term);
+	len_b = buf->strlen;
 	sh_clear_buf(term, len_p, index);
 	ft_putstr_fd(prompt->txt, STDOUT_FILENO);
-	sh_putstr_term(buf, term, len_p);
-	if (buf->strlen != (ssize_t)index)
-		sh_new_move_cors(buf, term, len_p, index);
-	g_prebuf = buf->strlen;
+	sh_putstr_term(buf, term, len_p, len_b);
+	if (len_b != (ssize_t)index)
+		sh_new_move_cors(len_b, term, len_p, index);
+	g_prebuf = len_b;
 	g_preind = index;
 }

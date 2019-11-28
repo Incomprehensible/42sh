@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 14:40:25 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 21:25:46 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/23 13:34:48 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ t_darr				sh_dir_content(char *path, DSTRING *sub)
 	rez.count = 0;
 	rez.maxlen = 0;
 	dir = opendir(path);
-	while ((entry = readdir(dir)) != NULL)
+	while ((entry = readdir(dir)) != NULL && i < S_DARR_STRINGS)
 	{
 		if (is_sysdir(entry->d_name, sub->txt))
 			continue ;

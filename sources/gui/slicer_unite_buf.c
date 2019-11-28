@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:21:46 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/20 21:09:26 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/23 13:21:19 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void			unite_buf(DSTRING **buf, t_buf *buffer)
 	dstr_del(&(buffer->begin));
 	dstr_del(&(buffer->end));
 	dstr_del(&(buffer->sub));
+	dstr_del(&(buffer->val));
 	if (buffer->dir)
 		dstr_del(&(buffer->dir));
 }

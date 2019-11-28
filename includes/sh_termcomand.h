@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/14 13:43:30 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 16:31:05 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/27 22:27:48 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 ** Вниз: \ u001b [{n} B перемещает курсор вниз на n
 ** Справа: \ u001b [{n} C перемещает курсор вправо на n
 ** Влево: \ u001b [{n} D перемещает курсор влево на n
+
 ** Следующая строка: \ u001b [{n} E перемещает курсор в начало строки на n строк вниз
 ** Предыдущая строка: \ u001b [{n} F] перемещает курсор в начало строки на n строк вниз
 ** Установить столбец: \ u001b [{n} G перемещает курсор в столбец n
@@ -38,29 +39,31 @@
 */
 
 /* arrow keys */
-#define LEFT	"D"
-#define RIGHT	"C"
-#define UP		"A"
-#define DOWN	"B"
+# define LEFT	"D"
+# define RIGHT	"C"
+# define UP		"A"
+# define DOWN	"B"
 
-#define DELCHR	"\x001b[P"
-#define SAVECAR	"\x001b[s"
-#define LOADCAR "\x001b[u"
-#define NEXTLIN "\x001b[1E"
-#define MOVEBGN "\x001b[10000D"
+# define CLRSTR	"\x001b[2K"
+# define MOVEUP	"\x001b[1A"
+
+
+# define DELCHR	"\x001b[P"
+# define SAVECAR "\x001b[s"
+# define LOADCAR "\x001b[u"
+# define NEXTLIN "\x001b[1E"
+# define MOVEBGN "\x001b[10000D"
 /* clears from cursor to end of line */
-#define CLEARL	"\x001b[0J"
+# define CLEARL	"\x001b[0J"
 /* clears from cursor to start of line */
-#define CLRCRBG "\x001b[1K"
+# define CLRCRBG "\x001b[1K"
 /* clears all screen */
-#define CLRSCR	"\x001b[2J"
-#define MOVEUP	"\x001b[1A"
-#define MOVEDWN "\x001b[1B"
+# define CLRSCR	"\x001b[2J"
+# define MOVEDWN "\x001b[1B"
 
-#define BAKSP	127
-#define DEL		126
-#define TAB		9
-#define ESC		27
-
+# define BAKSP	127
+# define DEL		126
+# define TAB		9
+# define ESC		27
 
 #endif

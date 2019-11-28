@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:51:57 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/20 21:13:43 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/23 14:27:19 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void			new_reg_expr(DSTRING **buf, t_indch *indch, ENV *env)
 	if (rez.count > 0)
 		buffer.val = get_dstr_rez(rez);
 	unite_buf(buf, &buffer);
-	free_t_darr((t_darr *)&rez);
+	free_t_astr(&rez);
 	indch->tab = 0;
 	indch->reg = 0;
 	indch->fl = 0;

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 11:29:17 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/20 21:56:43 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/27 22:18:15 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_indch		supplement_srch(DSTRING *str_srch, DSTRING **str_over, \
 
 	i = 0;
 	if ((*str_over) != NULL)
-		ft_bzero((*str_over), sizeof(DSTRING));
+		*str_over = NULL;
 	if (indch.ch == TAB)
 		get_overlap_histr(&overlap, str_srch);
 	while (indch.ch == TAB && overlap.count)

@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/20 21:12:18 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/27 22:28:38 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "env.h"
 # include <unistd.h>
 # include <sys/ioctl.h>
+#include "sh_termcomand.h"
 
 
 #define S_ASTR_STR 50000
@@ -61,6 +62,7 @@ typedef struct	s_indch
 	int			type_inp;
 	int			ind_inp;
 	int			ind_slash;
+	int			exit;
 	DSTRING		*prompt;
 }				t_indch;
 
@@ -113,7 +115,7 @@ t_darr			g_histr;
 DSTRING			*sh_readline(const DSTRING *prompt, ENV *env);
 
 void			fl_input(const DSTRING *buf, t_indch *indch);
-DSTRING			*new_return_line(DSTRING **buf, t_indch indch, ENV *env);
+void			new_return_line(DSTRING **buf, t_indch *indch, ENV *env);
 void			new_reg_expr(DSTRING **buf, t_indch *indch, ENV *env);
 void			sh_type_input(DSTRING *buf, t_indch *indch);
 void			sh_tab(DSTRING **buf, t_indch *indch, ENV *env);
@@ -172,6 +174,10 @@ t_darr			get_list_cmds(ENV *envp);
 /* overwrites the buffer string in the console and sets the cursor at the index */
 void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
 						 const size_t index);
+// void			sh_new_rewrite(const DSTRING *prompt, const DSTRING *buf,\
+// 						const size_t index);
+void			sh_new_rewrite(const DSTRING *buf,\
+						const size_t index);
 
 /* deletes a character by index. flag == BAKSP moves carriage one character back */
 int				sh_del_char(DSTRING **buf, int ind, const char cmd);
@@ -205,6 +211,7 @@ char			sh_check_dot(const DSTRING *path);
 
 /* clears an array DSTRING */
 void			free_t_darr(t_darr *darr);
+void			free_t_astr(t_astr *darr);
 void			free_darr_re(DSTRING **darr, const int size);
 
 /* sorts lexicographically array DSTRING */
