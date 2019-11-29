@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:09:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/22 13:31:50 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 22:10:39 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define EXECUTER_H
 
 # include "exe_prs_defines.h"
+# include "sh_tokenizer.h"
 # include "rms.h"
 
 /*
@@ -24,6 +25,7 @@
 ** Creates redirections following the redir_descriptor;
 ** Returns a child's pid.
 */
+int			subsh_tok_err(char *contx, int rcode, t_dlist **tks, ENV *envr);
 int			exe_execute_pi(EXPRESSION *cmd, ENV *vars);
 int			exe_redir_ex(REDIRECT *rdr, ENV *envr);
 int			exe_execute_expr(EXPRESSION *expr, ENV *envr, int *status);

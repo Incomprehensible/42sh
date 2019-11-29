@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_jobs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 07:56:57 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 15:51:25 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 20:38:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int		bltn_jobs(char **args, ENV *envr)
 	i = 0;
 	mode = 0;
 	j = jobs_flag_checker(args, &mode);
-	if (j == 0 || (j == 2 && !args[2]))
+	if (j == 0 || (j == 2 && !args[2] && args[1][0] == '-' && (j = 1)))
 		while (++i < g_jid)
 		{
 			if (!g_ptab[i])

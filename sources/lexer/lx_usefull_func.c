@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/17 10:00:30 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/22 01:50:47 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,115 +14,53 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-short   check_valid_sep(t_dlist *token_list)
+short	is_sep_no_space(char str)
 {
-    if (!token_list->content || !TOK_TYPE)
-        return (0);
-    while (token_list && TOK_TYPE != TK_SEP)
-        token_list = token_list->prev;
-    token_list = (token_list) ? token_list->prev : token_list;
-    while (token_list && TOK_TYPE == TK_EMPTY)
-        token_list = token_list->prev;
-    if (!token_list)
-        return (0);
-    if (TOK_TYPE != TK_EXPR && TOK_TYPE != TK_NAME && TOK_TYPE != TK_VALUE &&
-        TOK_TYPE != TK_SUBSH && TOK_TYPE != TK_MATH && !is_tok_redir(TOK_TYPE, 0)
-        && TOK_TYPE != TK_FI && TOK_TYPE != TK_DONE && TOK_TYPE != TK_BREAK
-		&& TOK_TYPE != TK_CONTIN)
-        return (0);
-    return (1);
+	if (str != '\n' && str != ';' && str != '|' &&
+	str != '&' && str != '\0')
+		return (0);
+	return (1);
 }
 
-short   sep_detected(t_dlist *token_list)
+short	is_sep_token(t_tk_type type)
 {
-    if (!token_list->content || !TOK_TYPE)
-        return (0);
-    while (token_list && TOK_TYPE == TK_EMPTY)
-        token_list = token_list->prev;
-    if (!token_list)
-        return (0);
-    if (TOK_TYPE != TK_SEP)
-        return (0);
-    return (1);
-}
-
-// short   sep_detected(t_dlist *token_list, short sep)
-// {
-//     if (!token_list->content || !TOK_TYPE)
-//         return (0);
-//     while (token_list && TOK_TYPE == TK_EMPTY)
-//         token_list = token_list->prev;
-//     if (!token_list)
-//         return (0);
-//     if (TOK_TYPE != TK_SEP)
-//         return (0);
-//     if (sep && sep != '\n' && ft_strcmp(TOK_VALUE, ";"))
-//         return (0);
-//     return (1);
-// }
-
-char    *skip_spaces(char *str)
-{
-    while (*str && (*str == ' ' || *str == '\t'))
-        str++;
-    return (str);
-}
-
-short   graph_end(t_graph *g, char *str)
-{
-    while (*str && (*str == ' ' || *str == '\t'))
-        str++;
-    if (g->type == TK_DONE || g->type == TK_FI)
-        if (is_token_here(skip_spaces(str), "done") ||
-        is_token_here(skip_spaces(str), "fi"))
-            return (1);
-    if ((g->type == TK_FI || g->type == TK_DONE) && !(*str))
-        return (1);
-    if (!g->forward && !g->right && !g->left)
-        return (1);
-    return (0);
-}
-
-short   graph_forward_only(t_graph *g)
-{
-    if (g->forward && (!g->right && !g->left))
-        return (1);
-    return (0);
-}
-
-short	got_in_seq(char sym, char *seq)
-{
-	while (*seq && *seq != '@')
-	{
-		if (*seq == sym)
-			return (1);
-		seq++;
-	}
+	if (type == TK_SEP || type == TK_AND || type == TK_OR
+	|| type == TK_BCKR_PS || type == TK_PIPE)
+		return (1);
 	return (0);
 }
 
-size_t get_seq(char *str, char *meta)
+short	sep_detected(t_dlist *token_list)
 {
-    size_t i;
-
-    i = 0;
-    while (got_in_seq(*str, meta + 1))
-    {
-        str++;
-        i++;
-    }
-    return (i);
+	if (!token_list->content || !TOK_TYPE)
+		return (0);
+	while (token_list && TOK_TYPE == TK_EMPTY)
+		token_list = token_list->prev;
+	if (!token_list)
+		return (0);
+	if (TOK_TYPE != TK_SEP)
+		return (0);
+	return (1);
 }
 
-// size_t get_seq(char *str, char *meta)
-// {
-//     size_t i;
+short	graph_end(t_graph *g, char *str)
+{
+	while (*str && (*str == ' ' || *str == '\t'))
+		str++;
+	if (g->type == TK_DONE || g->type == TK_FI)
+		if (is_token_here(skip_spaces(str), "done") ||
+		is_token_here(skip_spaces(str), "fi"))
+			return (1);
+	if ((g->type == TK_FI || g->type == TK_DONE) && !(*str))
+		return (1);
+	if (!g->forward && !g->right && !g->left)
+		return (1);
+	return (0);
+}
 
-//     i = 0;
-//     while (*str >= 48 && *str <= 57)
-//     {
-//         str++;
-//         i++;
-//     }
-//     return (i);
-// }
+short	graph_forward_only(t_graph *g)
+{
+	if (g->forward && (!g->right && !g->left))
+		return (1);
+	return (0);
+}

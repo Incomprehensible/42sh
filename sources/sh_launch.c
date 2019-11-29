@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/27 23:47:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 16:57:41 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int				sh_do_src(char *filename, ENV *env)
 			continue ;
 		}
 		dstr_del(&line);
-		dbg_tok_pr_flag ? DBG_PRINT_TOKENS(toks[0]) : 0;
+		dbg_tok_pr_flag ? dbg_print_tokens(toks[0]) : 0;
 		sh_tparse(toks[0], env, TK_EOF, &status);
 		ft_dlst_delf(toks, 0, free_token);
 	}

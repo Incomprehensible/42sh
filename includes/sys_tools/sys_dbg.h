@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_dbg.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:14:06 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:53:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 16:51:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 int			DBG_SYS_GLB(void);
 int			DBG_SYS_SNAP(void);
-void		DBG_PRINT_TOKENS(t_dlist *toklst);
+void		dbg_print_tokens(t_dlist *toklst);
 void		DBG_SYS_CONFS(void);
 
 int			bltn_dbg_snap(char **args, ENV *envr);

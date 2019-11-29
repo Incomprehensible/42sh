@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/10/24 12:23:58 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/25 18:50:08 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,164 +14,84 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-t_graph  *redir_in(void);
-
-static t_graph    *prof_in(void)
+static t_graph	*filename_in(void)
 {
-    static t_graph *prof;
+	static t_graph	*red;
 
-    if (prof)
-        return (prof);
-    prof = (t_graph *)malloc((sizeof(t_graph)));
-    prof->type = TK_PROF_OUT;
-    prof->patt = ft_strdup("<(z)");
-    prof->forward = redir_one();
-    prof->left = redir_two();
-    prof->right = redir_in();
-    prof->next = (t_graph *)malloc((sizeof(t_graph)));
-    prof->next->type = TK_PROF_IN;
-    prof->next->patt = ft_strdup(">(z)");
-    prof->next->forward = prof->forward;
-    prof->next->left = prof->left;
-    prof->next->right = prof->right;
-    prof->next->next = NULL;
-    return (prof);
+	if (red)
+		return (red);
+	red = (t_graph *)malloc((sizeof(t_graph)));
+	red->type = TK_FILENAME;
+	red->patt = ft_strdup("~ ");
+	red->forward = fd_in();
+	red->left = redir_one();
+	red->right = redir_two();
+	red->next = NULL;
+	return (red);
 }
 
-static t_graph    *fd_in(void)
+t_graph			*redir_two(void)
 {
-    static t_graph *red;
-    short i;
-    static t_graph *start;
-    char **redir;
+	t_graph			*red;
+	static t_graph	*start;
+	char			**redir;
+	size_t const	r[] = {TK_RD_R, TK_RD_W, TK_RD_A, \
+	TK_RD_RW, TK_RD_W, TK_RD_R};
 
-    if (start)
-        return (start);
-    i = 0;
-    redir = ft_strsplit("@123456789@ @123456789@- -", ' ');
-    red = (t_graph *)malloc(sizeof(t_graph));
-    red->patt = ft_strdup(redir[i]);
-    start = red;
-    red->type = TK_FD;
-    red->forward = redir_one();
-    red->left = redir_two();
-    red->right = redir_in();
-    while (redir[++i])
-    {
-        red->next = (t_graph *)malloc(sizeof(t_graph));
-        red->next->forward = NULL;
-        red->next->left = NULL;
-        red->next->right = NULL;
-        red->next->next = NULL;
-        red = red->next;
-        red->patt = ft_strdup(redir[i]);
-        red->type = CLOSE;
-    }
+	if (start)
+		return (start);
+	redir = ft_strsplit("&> &< >> <> > <", ' ');
+	red = (t_graph *)malloc(sizeof(t_graph));
+	red->patt = ft_strdup(redir[0]);
+	start = red;
+	red->type = r[0];
+	red->forward = prof_in();
+	red->left = filename_in();
+	red->right = NULL;
+	construct_node(red, redir, (size_t *)r);
 	ft_arrmemdel((void **)redir);
-    return (start);
+	return (start);
 }
 
-static t_graph    *filename_in(void)
+t_graph			*redir_one(void)
 {
-    static t_graph *red;
+	t_graph			*red;
+	static t_graph	*start;
+	char			**redir;
+	size_t const	r[] = {TK_RD_A, TK_RD_RW, TK_RD_W, TK_RD_R};
 
-    if (red)
-        return (red);
-    red = (t_graph *)malloc((sizeof(t_graph)));
-    red->type = TK_FILENAME;
-    red->patt = ft_strdup("~ ");
-    red->forward = fd_in();
-    red->left = redir_one();
-    red->right = redir_two();
-    red->next = NULL;
-    return (red);
-}
-
-t_graph    *redir_two(void)
-{
-    t_graph *red;
-    static t_graph *start;
-    char **redir;
-    size_t r[] = {TK_RD_R, TK_RD_W, TK_RD_A, TK_RD_RW, TK_RD_W, TK_RD_R};
-    short i;
-
-    if (start)
-        return (start);
-    i = 0;
-    redir = ft_strsplit("&> &< >> <> > <", ' ');
-    red = (t_graph *)malloc(sizeof(t_graph));
-    red->patt = ft_strdup(redir[i]);
-    start = red;
-    red->type = r[i];
-    red->forward = prof_in();
-    red->left = filename_in();
-    red->right = NULL;
-    while (redir[++i])
-    {
-        red->next = (t_graph *)malloc(sizeof(t_graph));
-        red->next->forward = red->forward;
-        red->next->left = red->left;
-        red->next->right = red->right;
-        red->next->next = NULL;
-        red = red->next;
-        red->patt = ft_strdup(redir[i]);
-        red->type = r[i];
-    }
+	if (start)
+		return (start);
+	redir = ft_strsplit(">>& <>& >& <&", ' ');
+	red = (t_graph *)malloc(sizeof(t_graph));
+	red->patt = ft_strdup(redir[0]);
+	start = red;
+	red->type = r[0];
+	red->forward = prof_in();
+	red->left = fd_in();
+	red->right = filename_in();
+	construct_node(red, redir, (size_t *)r);
 	ft_arrmemdel((void **)redir);
-    return (start);
+	return (start);
 }
 
-t_graph  *redir_one(void)
+static void		comm_init(t_graph *red)
 {
-    t_graph *red;
-    static t_graph *start;
-    char **redir;
-    size_t r[] = {TK_RD_A, TK_RD_RW, TK_RD_W, TK_RD_R};
-    short i;
-
-    if (start)
-        return (start);
-    i = 0;
-    redir = ft_strsplit(">>& <>& >& <&", ' ');
-    red = (t_graph *)malloc(sizeof(t_graph));
-    red->patt = ft_strdup(redir[i]);
-    start = red;
-    red->type = r[i];
-    red->forward = prof_in();
-    red->left = fd_in();
-    red->right = filename_in();
-    while (redir[++i])
-    {
-        red->next = (t_graph *)malloc(sizeof(t_graph));
-        red->next->forward = red->forward;
-        red->next->left = red->left;
-        red->next->right = red->right;
-        red->next->next = NULL;
-        red = red->next;
-        red->patt = ft_strdup(redir[i]);
-        red->type = r[i];
-    }
-	ft_arrmemdel((void **)redir);
-    return (start);
+	red->type = TK_EXPR;
+	red->patt = ft_strdup("~");
+	red->forward = fd_in();
+	red->left = redir_one();
+	red->right = redir_two();
+	red->next = NULL;
 }
 
-static void     comm_init(t_graph *red)
+t_graph			*redir_in(void)
 {
-    red->type = TK_EXPR;
-    red->patt = ft_strdup("~");
-    red->forward = fd_in();
-    red->left = redir_one();
-    red->right = redir_two();
-    red->next = NULL;
-}
+	static t_graph	*red;
 
-t_graph  *redir_in(void)
-{
-    static t_graph *red;
-
-    if (red)
-        return (red);
-    red = (t_graph *)malloc((sizeof(t_graph)));
-    comm_init(red);
-    return (red);
+	if (red)
+		return (red);
+	red = (t_graph *)malloc((sizeof(t_graph)));
+	comm_init(red);
+	return (red);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_math.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 17:42:46 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 02:08:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 00:06:38 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	skip_alnums_n_space(char *str, size_t *ind)
 
 long	do_math_bltn(char *str_xp, ENV *envr, ERR *err)
 {
-	size_t		ind;
-	DSTRING		*expr;
-	long		res;
+	size_t			ind;
+	t_dyn_string	*expr;
+	long			res;
 
 	ind = 0;
 	skip_alnums_n_space(str_xp, &ind);
@@ -41,7 +41,6 @@ int		bltn_math(char **args, ENV *env)
 	ERR			err;
 	long		res;
 
-	// TODO: Need to do malloc safer.
 	err.err_code = 0;
 	err.error_msg = NULL;
 	res = do_math_bltn(args[1], env, &err);

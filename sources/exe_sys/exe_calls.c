@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   exe_calls.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:03:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 12:04:53 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 22:06:11 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
+
+int			subsh_tok_err(char *contx, int rcode, t_dlist **tks, ENV *envr)
+{
+	extern char		*g_last_input;
+
+	ft_dlst_delf(tks, 0, free_token);
+	ft_strdel(&g_last_input);
+	INPUT_NOT_OVER = -1;
+	g_hsh = 0;
+	return (sys_perror(contx, rcode, envr));
+}
 
 int			exe_execute_expr(EXPRESSION *expr, ENV *envr, int *status)
 {

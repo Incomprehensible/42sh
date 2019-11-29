@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 13:55:49 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/27 23:30:51 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 17:46:59 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		bltn_exit(char **args, ENV *env)
 	int				exit_status;
 	unsigned char	res;
 
-	if (args[1])
+	if (args[1] && !args[2])
 	{
 		if (!ft_isdigit(*args[1]) && *args[1] != '+' && *args[1] != '-')
 			sys_error_handler("exit: argument is not numeric", 0, env);

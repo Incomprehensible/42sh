@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_get_deref.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 09:14:22 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:37:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 16:53:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ char			*get_deref_math(char *expr, ENV *envr)
 	err.error_msg = NULL;
 	err.err_code = 0;
 	num = do_math_bltn(expr, envr, &err);
-	if (err.err_code)
-		math_error_handler(&err, 0, envr);
+	if (err.err_code && math_error_handler(&err, 1, envr))
+		return (NULL);
 	res = ft_lltoa_base(num, 10);
 	return (res);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_dbg_bltn.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 14:39:30 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 16:56:23 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void			DBG_SYS_CONFS(void)
 	);
 }
 
-void			DBG_PRINT_TOKENS(t_dlist *toklst)
+void			dbg_print_tokens(t_dlist *toklst)
 {
 	t_tok		*token;
 	char		*msg;

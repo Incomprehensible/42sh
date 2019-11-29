@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_for.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 09:33:42 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:37:45 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 17:21:31 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ int *sts, char **mt_conds)
 			break ;
 		do_math_bltn(mt_conds[2], env, &m_err);
 	}
-	if (m_err.err_code)
-		math_error_handler(&m_err, 0, env);
+	if (m_err.err_code && math_error_handler(&m_err, 1, env))
+		return (NULL);
 	et_rm_warr(mt_conds);
 	return (prs_skip_paired(loop_bg, TK_DO, TK_DONE));
 }

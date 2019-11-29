@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rms_2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 18:11:17 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 18:12:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 21:31:04 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void			free_token(void *tok, size_t sz)
 {
 	t_tok	*token;
 
-	token = tok;
+	if (!(token = tok))
+		return ;
 	sz = 0;
 	if (token->value)
 		free(token->value);

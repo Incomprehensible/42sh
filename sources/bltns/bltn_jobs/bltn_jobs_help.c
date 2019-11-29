@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_jobs_help.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 15:49:20 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 16:33:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 20:17:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,6 @@ int		no_job_error(char *job, char *cont, ENV *envr)
 	if (!(err_str = dstr_flush(&buff)))
 		sys_fatal_memerr("JOBS_ERR_MSG_DSTR");
 	sys_perror(err_str, 1, envr);
+	free(err_str);
 	return (1);
 }

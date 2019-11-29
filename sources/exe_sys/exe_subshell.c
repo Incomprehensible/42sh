@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_subshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/22 13:59:20 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 22:10:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,13 @@ int			exe_subshell_alg(t_dlist *toks, SUBSH *sb, ENV *envr, int *status)
 	int				err;
 
 	err = 0;
-	sys_sig_dfl();
 	redirs = sb->redirections;
 	exe_sbsh_pipes(sb);
 	err = exe_redir_list(redirs, envr);
 	if (err)
 		exit(2);
 	sys_init(1);
+	sys_sig_dfl();
 	g_hsh = getpid();
 	pg = sys_prg_create(g_hsh, 0, 0, PS_M_FG);
 	sh_tparse(toks, envr, TK_EOF, status);
@@ -130,7 +130,7 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
 	if (sh_tokenizer(subsh->commands, toks) <= 0 && (*status = 255))
-		INPUT_NOT_OVER = -1;
+		return (subsh_tok_err("Subshell: syntax error!", 0, toks, envr));
 	if (sbsh_is_fork_n_need(toks[0], subsh->redirections))
 		cpid = exe_one_command_lnch(subsh, toks[0], envr, status);
 	else

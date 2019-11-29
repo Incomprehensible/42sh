@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/28 13:47:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 17:20:01 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int				main(int ac, char **av, char **ev)
 	env_init(ev, env);
 	sys_var_init(env);
 	sys_init(0);
-	ft_avl_set(env->builtns, ft_avl_node("dbg_42", &bltn_dbg_snap, 8));
+	// ft_avl_set(env->builtns, ft_avl_node("dbg_42", &bltn_dbg_snap, 8));
 	ft_avl_set(env->locals, ft_avl_node("PS", \
 	"%B%c2%t %c1%u%c4@%c5%H%c4:%c6%P%n%c3$> %c", 42));
 	sh_launch(opt, env);

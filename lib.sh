@@ -1,1 +1,0 @@
-LIB1=DENIS
