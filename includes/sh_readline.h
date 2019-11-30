@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/28 20:05:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 22:41:10 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,12 @@ typedef struct	s_fl
 	char		reg;
 }				t_fl;
 
+typedef struct	s_beend
+{
+	int			begin;
+	int			end;
+}				t_beend;
+
 size_t			g_prebuf;
 int				g_preind;
 t_darr			g_histr;
@@ -121,9 +127,10 @@ t_darr			g_histr;
 DSTRING			*sh_readline(const DSTRING *prompt, ENV *env);
 void			fl_input(const DSTRING *buf, t_indch *indch);
 void			return_line(DSTRING **buf, t_indch *indch, ENV *env);
-void			reg_expr(DSTRING **buf, t_indch *indch, ENV *env);
+int				reg_expr(DSTRING **buf, t_indch *indch, ENV *env);
+t_buf			slicer_reg(DSTRING **buf);
 void			sh_type_input(DSTRING *buf, t_indch *indch);
-
+void			clip_work(t_indch *indch, t_clipbrd *clip, DSTRING **buf);
 void			sh_tab(DSTRING **buf, t_indch *indch, ENV *env);
 t_name_ind		tab_loop(t_darr overlap, t_buf *buffer, int fl, \
 					t_name_ind n_ind);
@@ -183,9 +190,10 @@ t_darr			get_list_cmds(ENV *envp);
 */
 void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
 						const size_t index, int i);
-void			sh_new_rewrite(const DSTRING *buf,\
-						const size_t index);
-
+void			get_coord_caret(int *x, int *y);
+void			sh_putstr_term_c(DSTRING *buf, struct winsize term, \
+					int *lensi);
+int				skip_str(char *str);
 /*
 ** deletes a character by index. flag == BAKSP moves carriage one character back
 */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tab_help.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:47:43 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/28 20:07:35 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 22:12:59 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ static void	subst_val(t_buf *buffer, t_darr overlap, t_name_ind n_ind)
 	dstr_insert_dstr(new, overlap.strings[n_ind.ind], new->strlen);
 	dstr_insert_dstr(new, buffer->end, new->strlen);
 	sh_rewrite(n_ind.indch.prompt, new, buffer->cut < buffer->slash ? \
-	buffer->slash + buffer->val->strlen : buffer->cut + buffer->val->strlen, -1);
+	buffer->slash + buffer->val->strlen : buffer->cut + buffer->val->strlen, \
+	-1);
 	dstr_del(&new);
 }
 

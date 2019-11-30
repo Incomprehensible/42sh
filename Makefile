@@ -6,7 +6,7 @@
 #    By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/19 16:15:30 by gdaemoni         ###   ########.fr        #
+#    Updated: 2019/11/29 22:15:19 by gdaemoni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,15 +107,15 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer printf bltns/bltn_jobs)
 
 GUI_FILES = sh_control_term.c sh_dir_content.c \
-			sh_rewrite.c sh_rewrite_help.c sh_type_input.c \
+			sh_rewrite.c sh_rewrite_help.c sh_rewrite_clip.c\
 			dstr.c ft_concat.c sh_put_col.c sh_darr.c \
-			match.c sh_reg_expr.c sh_reg_expr_help.c sh_reg_help.c \
+			match.c sh_reg_expr.c sh_reg_expr_help.c sh_reg_help.c sh_reg_expr_help2.c sh_type_input.c \
 			sh_histr.c sh_histr_help.c sh_search_his.c sh_search_his_help.c \
-			sh_readline.c sh_readline_help.c\
-			sh_put_col_help.c sh_dir_content_help.c\
-			sh_move_insertion_point.c\
+			sh_readline.c sh_readline_help.c clip.c \
+			sh_put_col_help.c sh_dir_content_help.c \
+			sh_move_insertion_point.c \
 			gui_errors.c \
-			sh_tab.c sh_tab_help.c slicer_unite_buf.c sh_get_overlap.c sh_get_file_help.c sh_get_cmd_help.c sh_get_var_help.c\
+			sh_tab.c sh_tab_help.c slicer_unite_buf.c sh_get_overlap.c sh_get_file_help.c sh_get_cmd_help.c sh_get_var_help.c \
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

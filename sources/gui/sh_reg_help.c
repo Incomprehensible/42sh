@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 21:42:47 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/20 21:17:25 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/29 21:42:43 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ DSTRING			*get_dstr_rez(t_astr rez)
 	reg = dstr_nerr("");
 	while (++i < rez.count)
 	{
-		if (is_add_in_reg(rez.strings[i]))
+		if (is_add_in_reg(rez.strings[i]) && rez.count != 1)
 			continue ;
 		check_spec_symbols(&rez.strings[i]);
 		dstr_insert_dstr(reg, rez.strings[i], reg->strlen);
