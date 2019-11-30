@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_launch.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/29 16:57:41 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/30 06:59:54 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int				sh_do_src(char *filename, ENV *env)
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
 	while ((status = get_next_line(fd, &line)) > 0)
 	{
-		if (sh_tokenizer(line->txt, toks) <= 0 && (INPUT_NOT_OVER = -1))
+		if (sh_tokenizer(line->txt, toks) <= 0 && (input_not_over = -1))
 		{
 			dstr_del(&line);
 			continue ;

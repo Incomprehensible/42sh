@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_calls.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:03:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/29 22:06:11 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/30 06:58:15 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int			subsh_tok_err(char *contx, int rcode, t_dlist **tks, ENV *envr)
 
 	ft_dlst_delf(tks, 0, free_token);
 	ft_strdel(&g_last_input);
-	INPUT_NOT_OVER = -1;
+	input_not_over = -1;
 	g_hsh = 0;
 	return (sys_perror(contx, rcode, envr));
 }

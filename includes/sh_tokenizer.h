@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tokenizer.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/29 16:51:25 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/30 07:00:11 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define SUBSHS (short)0x0000000003
 # define FLOWS (short)0x0000000004
 # define ENVAR (short)0x0000000005
+# define HERED (short)0x0000000006
 # define REDIR (short)0x0000000008
 # define FUNCS (short)0x0000000009
 # define EXPRS (short)0xB
@@ -34,7 +35,6 @@
 # define PROC (short)0x0000000065
 # define PROF (short)0x0000000067
 # define CURLY (short)0x0000000068
-# define LOL (size_t)123
 //TEMPORARY
 # define RETURN TK_RETURN
 
@@ -243,12 +243,12 @@ void        construct_node(t_graph *g, char **dict, size_t *r);
 # define TOK_TYPE ((t_tok *)(token_list->content))->type
 # define TOK_VALUE ((t_tok *)(token_list->content))->value
 
-# define INO INPUT_NOT_OVER
+# define INO input_not_over
 
 //MISTAKES
-short   PARSE_ERR;
-short   SYNTAX_ERR;
-short   INPUT_NOT_OVER;
+short   parse_err;
+short   syntax_err;
+short   input_not_over;
 
 //for INPUT_NOT_OVER and SYNTAX_ERR
 # define PRO_SUBSH  0

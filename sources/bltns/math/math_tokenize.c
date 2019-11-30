@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/25 02:24:57 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/30 06:51:04 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ static char		*ariphmetic_tokenize(char *expr, t_dlist **math, ERR *err)
 	expr = skip_spaces(expr);
 	while (expr && *expr)
 	{
-		if ((ind = get_op_id(expr, flag)))
+		if (*expr == '(' || *expr == ')')
+			expr = pull_bracket(expr, math);
+		else if ((ind = get_op_id(expr, flag)))
 		{
 			expr = pull_math_tok(ind, expr, math, err);
 			flag = 0;
 		}
-		else if (*expr == '(' || *expr == ')')
-			expr = pull_bracket(expr, math);
 		else
 		{
 			expr = pull_operand(expr, math, err);

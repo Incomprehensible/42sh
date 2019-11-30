@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/24 18:13:05 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/30 06:58:35 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ short			brackets_closed(char *str)
 	times = br_closed_n(str, 0);
 	if (times)
 	{
-		PARSE_ERR = times < 0 ? PRO_SUBSH : PARSE_ERR;
-		INPUT_NOT_OVER = times > 0 ? PRO_SUBSH : INPUT_NOT_OVER;
+		parse_err = times < 0 ? PRO_SUBSH : parse_err;
+		input_not_over = times > 0 ? PRO_SUBSH : input_not_over;
 		return (times > 0 ? 0 : -1);
 	}
 	return (1);
@@ -61,18 +61,18 @@ short			input_closed(char *str)
 	if (*(str + size - 1) == '|' && (size - 2 >= 0) &&
 	*(str + size - 2) != '\\')
 	{
-		INPUT_NOT_OVER = *(str + size - 2) == '|' ? PRO_OR : PRO_PIPE;
+		input_not_over = *(str + size - 2) == '|' ? PRO_OR : PRO_PIPE;
 		return (0);
 	}
 	if (*(str + size - 1) == '\\' && (size - 2 >= 0) &&
 	*(str + size - 2) != '\\')
 	{
-		INPUT_NOT_OVER = PRO_NONE;
+		input_not_over = PRO_NONE;
 		return (0);
 	}
 	if (!is_and_closed(str, size))
 	{
-		INPUT_NOT_OVER = PRO_AND;
+		input_not_over = PRO_AND;
 		return (0);
 	}
 	return (1);

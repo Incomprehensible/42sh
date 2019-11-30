@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_tokenizer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/29 21:50:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/30 06:59:04 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ char	*g_last_input;
 
 void	global_init(void)
 {
-	PARSE_ERR = -1;
-	SYNTAX_ERR = -1;
-	INPUT_NOT_OVER = -1;
+	parse_err = -1;
+	syntax_err = -1;
+	input_not_over = -1;
 }
 
 short	get_tokens(char *str, t_dlist **token_list)

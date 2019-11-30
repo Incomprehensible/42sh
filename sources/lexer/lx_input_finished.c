@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/28 23:21:41 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/30 06:58:54 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ short	func_really_closed(char *str)
 		times = br_closed(str, '{', '}');
 		if (times)
 		{
-			PARSE_ERR = times < 0 ? PRO_NONE : PARSE_ERR;
+			parse_err = times < 0 ? PRO_NONE : parse_err;
 			return (times > 0 ? 0 : -1);
 		}
 		return (1);
@@ -63,7 +63,7 @@ short	funcs_closed(char *str)
 		{
 			if (!(i = func_really_closed(str)))
 				return (2);
-			PARSE_ERR = i < 0 ? PRO_NONE : PARSE_ERR;
+			parse_err = i < 0 ? PRO_NONE : parse_err;
 			return (i);
 		}
 		str += (*str == '\\') ? mirror_passes(str) : 1;
@@ -73,15 +73,15 @@ short	funcs_closed(char *str)
 
 short	parse_error(void)
 {
-	if (PARSE_ERR == PRO_SUBSH)
+	if (parse_err == PRO_SUBSH)
 		ft_putstr("42sh: parse error in subshell: unexpected ')'");
-	else if (PARSE_ERR == PRO_SQU)
+	else if (parse_err == PRO_SQU)
 		ft_putstr("42sh: parse error: '[' didn't close");
-	else if (PARSE_ERR == PRO_NONE)
+	else if (parse_err == PRO_NONE)
 		ft_putstr("42sh: parse error in function: unexpected '}'");
 	else
 		ft_putstr("42sh: parse error occured");
-	PARSE_ERR = 1;
+	parse_err = 1;
 	return (-1);
 }
 
@@ -99,14 +99,14 @@ short	input_finished(char *str)
 		return (id ? parse_error() : 0);
 	if (!scripts_closed(str))
 	{
-		INPUT_NOT_OVER = PRO_NONE;
+		input_not_over = PRO_NONE;
 		return (0);
 	}
 	id = funcs_closed(str);
 	if (id != 1)
 	{
-		INPUT_NOT_OVER = id ? INPUT_NOT_OVER : PRO_NONE;
-		INPUT_NOT_OVER = id == 2 ? PRO_LAM : INPUT_NOT_OVER;
+		input_not_over = id ? input_not_over : PRO_NONE;
+		input_not_over = id == 2 ? PRO_LAM : input_not_over;
 		id = id == 2 ? 0 : id;
 		return (id ? parse_error() : 0);
 	}

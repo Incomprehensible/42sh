@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 00:50:19 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/30 06:58:43 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ char	get_code(void)
 {
 	const char	codes_buf[] = "sp&|uaqll";
 
-	if (PARSE_ERR >= 0 || SYNTAX_ERR >= 0)
+	if (parse_err >= 0 || syntax_err >= 0)
 	{
-		PARSE_ERR = -1;
-		SYNTAX_ERR = -1;
+		parse_err = -1;
+		syntax_err = -1;
 		return (0);
 	}
-	if (INPUT_NOT_OVER >= 0 && INPUT_NOT_OVER <= 8)
-		return (codes_buf[INPUT_NOT_OVER]);
+	if (input_not_over >= 0 && input_not_over <= 8)
+		return (codes_buf[input_not_over]);
 	return (0);
 }

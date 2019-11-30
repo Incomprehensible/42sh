@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/24 18:26:33 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/30 06:58:22 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ short	quotes_closed(char *str)
 	qa_cls_n(str, &aps, &qts);
 	if (aps)
 	{
-		INPUT_NOT_OVER = PRO_APOF;
+		input_not_over = PRO_APOF;
 		return (0);
 	}
 	if (qts)
 	{
-		INPUT_NOT_OVER = PRO_DQUOT;
+		input_not_over = PRO_DQUOT;
 		return (0);
 	}
 	return (1);

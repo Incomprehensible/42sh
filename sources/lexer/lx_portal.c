@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 00:59:26 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/30 00:50:42 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ char			*check_subbranch(char *str, t_dlist **tok, t_stx **tree)
 		str = block_pass(MATHS, str, tok, tree);
 	else if (*str == '(' && check_branch(str, tree[SUBSHS]))
 		str = block_pass(SUBSHS, str, tok, tree);
+	else if (check_branch(str, tree[HERED]))
+		str = block_pass(HERED, str, tok, tree);
 	else if (is_token_here(str, "exec"))
 		str = parse_exec(str, tok);
 	else

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 00:48:50 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/30 05:54:00 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ char	*pull_word(char *str, t_dlist **tok, short i)
 
 char	*parse_hedoc(char *str, t_dlist **tok, t_stx **tree, short i)
 {
-	str = parse_comm(str, tok, tree, '<');
+	if (*str != '<')
+		str = parse_comm(str, tok, tree, '<');
 	while (*str++ == '<')
 		i++;
 	if (i > 3 || i < 2)
