@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:29:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/18 22:36:55 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/26 17:18:55 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,11 @@
 # define E_TMARG 17 /* TOO MANY ARGUMENTS*/
 # define E_FLGER 18 /* BAD  OPTIONS */
 # define E_UNFLG 19 /* 2 FLAGS */
+# define E_MFLTS 20 /* 2 FLAGS FOR TEST*/
+# define E_BNEXP 21 /* BINARY OPERATED EXPENDET */
+# define E_INTEX 22 /* integer expression expected */
 
-# define ERR_CNT (E_UNFLG + 1)
+# define ERR_CNT (E_INTEX + 1)
 
 /*
 ** Returns a standart error message string with code {ECODE}

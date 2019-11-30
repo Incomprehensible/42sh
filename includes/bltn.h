@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/19 16:04:29 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/11/23 13:32:41 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 static char	*g_bltns_str[] = {"setenv", "env", "getenv", "unsetenv", "exit",\
 	"cd", "pwd", "type", "((", "echo", "fg", "bg", "jobs",\
-	"export", "unset", "set"};
+	"export", "unset", "set", "test", "[["};
 
 t_dyn_string		*g_pwd;
 t_dyn_string		*g_oldpwd;
@@ -97,12 +97,14 @@ int					bltn_jobs(char **args, ENV *envr);
 int					bltn_export(char **args, ENV *envr);
 int					bltn_unset(char **args, ENV *envr);
 
+int					bltn_test(char **args, ENV *env);
+
 void				et_rm_str(void *cont, size_t ske);
 
 static int	(*g_bltns_func[]) (char **, ENV *) = {&bltn_setenv,\
 	&bltn_env, &bltn_getenv, &bltn_unsetenv, &bltn_exit,\
 	&bltn_cd, &bltn_pwd, &bltn_type,\
 	&bltn_math, &bltn_echo, &bltn_fg, &bltn_bg,\
-	&bltn_jobs, &bltn_export, &bltn_unset, &bltn_set};
+	&bltn_jobs, &bltn_export, &bltn_unset, &bltn_set, &bltn_test, &bltn_test};
 
 #endif

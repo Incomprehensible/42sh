@@ -6,7 +6,7 @@
 #    By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/11/19 16:05:03 by fnancy           ###   ########.fr        #
+#    Updated: 2019/11/26 16:49:37 by fnancy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,10 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			bltns/math/math_polish_reverse.c bltns/math/math_operations.c \
 			bltns/math/math_hierarchy_in.c bltns/math/math_calculate.c \
 			\
+			bltns/bltn_test/bltn_test.c bltns/bltn_test/bltn_test_parser/bltn_test_fileflgs.c\
+			bltns/bltn_test/bltn_test_expr/bltn_test_expr.c bltns/bltn_test/bltn_test_expr/test_expr.c bltns/bltn_test/bltn_test_expr/test_expr_action.c\
+			bltns/bltn_test/bltn_test_file/bltn_test_file.c bltns/bltn_test/bltn_test_file/test_checkfile.c\
+			\
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
 			sys_tools/sys_touch.c sys_tools/sys_argc.c sys_tools/sys_token_string.c \
@@ -104,7 +108,8 @@ SRC_FILES = sh_main.c get_line.c sh_launch.c \
 			printf/ft_insert_spec.c printf/ft_printf.c \
 			printf/ft_putll_base_spec.c
 
-ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer printf bltns/bltn_jobs)
+ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer printf bltns/bltn_jobs bltns/bltn_test\
+									bltns/bltn_test/bltn_test_parser bltns/bltn_test/bltn_test_expr bltns/bltn_test/bltn_test_file)
 
 GUI_FILES = sh_control_term.c sh_dir_content.c \
 			dstr.c ft_concat.c sh_put_col.c sh_darr.c \
