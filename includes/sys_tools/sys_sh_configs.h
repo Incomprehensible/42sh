@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_sh_configs.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 10:36:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/25 11:23:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/01 18:26:37 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define SH_PROMPT_PIP "pipe> "
 # define SH_PROMPT_AND "and> "
 # define SH_PROMPT_OR "or> "
+# define SH_PROMPT_MATH "math> "
 
 # define PROMPT_OUT_FD 100
 

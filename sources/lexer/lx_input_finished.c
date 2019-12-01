@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/30 06:58:54 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 18:31:52 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ short	funcs_closed(char *str)
 short	parse_error(void)
 {
 	if (parse_err == PRO_SUBSH)
-		ft_putstr("42sh: parse error in subshell: unexpected ')'");
+		ft_putstr("42sh: parse error in subshell or math: unexpected ')'");
 	else if (parse_err == PRO_SQU)
 		ft_putstr("42sh: parse error: '[' didn't close");
 	else if (parse_err == PRO_NONE)

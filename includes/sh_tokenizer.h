@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/01 03:28:58 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 18:46:30 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,7 @@ char        *cut_mirr(char **splitted);
 char        *cook_mirr(char *new, char *add);
 char        *join_mirr(char	*new, char *tmp, char *add);
 void        construct_node(t_graph *g, char **dict, size_t *r);
+short       input_no_over_code(void);
 
 //more comfortable form of type cast
 # define TOK_TYPE ((t_tok *)(token_list->content))->type
@@ -261,6 +262,7 @@ short   input_not_over;
 # define PRO_DQUOT  6
 # define PRO_SQU	7
 # define PRO_LAM	8
+# define PRO_MATH   9
 
 //for SYNTAX_ERR
 # define PRO_IF     11

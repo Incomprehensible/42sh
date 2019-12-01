@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 08:23:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/01 18:26:13 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ DSTRING			*sys_get_prompt_num(ENV *envr, char type)
 	sprompt = type == 'p' ? SH_PROMPT_PIP : sprompt;
 	sprompt = type == '&' ? SH_PROMPT_AND : sprompt;
 	sprompt = type == '|' ? SH_PROMPT_OR : sprompt;
+	sprompt = type == 'm' ? SH_PROMPT_MATH : sprompt;
 	sprompt = sprompt == 0 ? SH_PROMPT : sprompt;
 	if (!(prm = dstr_new(sprompt)))
 		sys_fatal_memerr("PROMT ALLOC FAILED");
