@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 14:43:29 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/19 15:08:38 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/12/01 18:17:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,19 @@ int			env_init_error(ENV *env, int errcode)
 
 void		free_spl(char ***spl)
 {
+	size_t	i;
+
+	i = -1;
 	if (!(*spl))
 		return ;
-	if ((*spl)[0])
-		free((*spl)[0]);
-	if ((*spl)[1])
-		free((*spl)[1]);
-	if ((*spl))
-		free((*spl));
+	if (*spl)
+	{
+		while ((*spl)[++i])
+		{
+			free((*spl)[i]);
+		}
+		free(*spl);
+	}
 }
 
 int			env_init(char **envp, ENV *env)

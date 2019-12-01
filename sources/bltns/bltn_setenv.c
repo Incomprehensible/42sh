@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_setenv.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:46:16 by fnancy            #+#    #+#             */
-/*   Updated: 2019/08/31 15:57:40 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/12/01 18:08:58 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 static int	setenv_error(char ***str, int errcode)
 {
 	free_spl(str);
+	if (errcode == 1488)
+		return (sys_perror("setenv: '=' - bad input", 2, 0));
 	return (errcode);
 }
 
@@ -28,6 +30,8 @@ int			bltn_setenv(char **args, ENV *env)
 	while (args[++i])
 	{
 		spl = ft_strsplit(args[i], '=');
+		if (!spl[0])
+			return (setenv_error(&spl, 1488));
 		if (!spl[1])
 			spl[1] = ft_strdup("");
 		if (ft_avl_search(env->locals, spl[0]) != 0)

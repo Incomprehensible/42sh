@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_tokenizer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/01 01:38:47 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 17:55:26 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ short	sh_tokenizer(char *str, t_dlist **token_list)
 	char		*tmp;
 	short		i;
 
+	if (g_intr == 2 && (input_not_over = -1))
+		g_last_input ? ft_strdel(&g_last_input) : 0;
 	if (!str || !(*str))
 		return (0);
 	token_list = toklst_init(token_list);

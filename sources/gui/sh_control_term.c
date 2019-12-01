@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_control_term.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 18:35:15 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 02:33:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/01 17:39:22 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,31 +18,15 @@
 
 struct termios	g_std_term;
 
-t_indch			sh_esc(t_indch indch, const size_t max, DSTRING **buf)
+int				skip_str(char *str)
 {
-	if (!indch.fl)
-		indch.ch = ft_getch();
-	if (indch.ch == '[' || indch.fl)
-	{
-		if (!indch.fl)
-			indch.ch = ft_getch();
-		indch.fl = 0;
-		if (indch.ch == LEFT[0] && indch.ind > 0)
-		{
-			indch.ind--;
-			return (indch);
-		}
-		else if (indch.ch == RIGHT[0] && (size_t)indch.ind < max)
-		{
-			indch.ind++;
-			return (indch);
-		}
-		else if (indch.ch == UP[0] || indch.ch == DOWN[0])
-			return (show_history(buf, indch));
-		else if (indch.ch == 51)
-			sh_del_char(buf, indch.ind, ft_getch());
-	}
-	return (indch);
+	int			i;
+
+	i = -1;
+	while (str[++i])
+		if (str[i] != ft_getch())
+			return (0);
+	return (i);
 }
 
 int				ft_getch(void)

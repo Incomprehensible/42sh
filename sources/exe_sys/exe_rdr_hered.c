@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_rdr_hered.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 12:17:16 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/22 21:22:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/01 19:06:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,28 +42,29 @@ int			exe_heredoc_get_buff(DSTRING **buff, REDIRECT *rdr, ENV *env)
 {
 	DSTRING	*line;
 	DSTRING	*prm;
+	int		status;
 
 	line = 0;
+	status = 0;
 	prm = dstr_new("hered> ");
 	while ((line = sh_readline(prm, env)) || 1)
 	{
+		if (g_intr == 2 && (status = -1))
+			break;
 		if (!line)
-		{
-			dstr_del(buff);
-			dstr_del((DSTRING **)&prm);
-			return (-1);
-		}
-		if (ft_strequ(line->txt, rdr->file))
-		{
-			dstr_del(&line);
 			break ;
-		}
+		if (ft_strequ(line->txt, rdr->file))
+			break ;
 		dstr_insert_dstr(*buff, line, (*buff)->strlen);
 		dstr_insert_ch(*buff, '\n', (*buff)->strlen);
 		dstr_del(&line);
 	}
+	if (status == -1 && buff)
+			dstr_del(buff);
+	if (line)
+		dstr_del(&line);
 	dstr_del((DSTRING **)&prm);
-	return (0);
+	return (status);
 }
 
 int			exe_init_heredoc(REDIRECT *rdr, ENV *env)

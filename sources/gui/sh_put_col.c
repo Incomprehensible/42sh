@@ -6,7 +6,7 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 18:33:07 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 21:49:37 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/29 19:18:48 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,14 @@ DSTRING			*sh_get_col(t_darr dar, const ushort col, ushort iter)
 
 void			free_lines_down(void)
 {
-	struct winsize		term;
-	int					lines;
+	struct winsize	term;
+	int				x;
+	int				y;
 
 	ioctl(0, TIOCGWINSZ, &term);
+	get_coord_caret(&y, &x);
 	ft_putstr(SAVECAR);
-	lines = term.ws_row;
-	while (lines--)
+	while (y++ != term.ws_row)
 	{
 		ft_putstr(NEXTLIN);
 		ft_putstr(CLEARL);
@@ -104,6 +105,6 @@ void			put_col(t_darr overlap, const DSTRING *buf, t_indch indch)
 	ft_putstr(colstr->txt);
 	ft_putstr("\n");
 	ft_putstr(indch.prompt->txt);
-	sh_rewrite(indch.prompt, buf, indch.ind);
+	sh_rewrite(indch.prompt, buf, indch.ind, -1);
 	dstr_del(&colstr);
 }

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 07:55:01 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/27 23:48:46 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/01 17:32:36 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void			sys_sig_init(void)
 	sigset_t			smask;
 
 	sigemptyset(&smask);
+	sigaddset(&smask, SIGINT);
 	siga.__sigaction_u = ((union __sigaction_u)(sighand));
 	siga.sa_mask = smask;
 	siga.sa_flags = 0;

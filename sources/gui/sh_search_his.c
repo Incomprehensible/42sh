@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_search_his.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 11:29:17 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 02:28:45 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/01 16:14:02 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +15,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
-
-void		skip_escp(void)
-{
-	ft_getch();
-	ft_getch();
-}
-
-void		print_his_line(DSTRING *str_srch, DSTRING *str_over)
-{
-	DSTRING			*prompt;
-	DSTRING			*tmp;
-
-	prompt = dstr_nerr("search in history ");
-	if (!str_srch->strlen)
-		sh_rewrite(prompt, str_srch, 0);
-	else
-	{
-		tmp = dstr_nerr(str_srch->txt);
-		dstr_insert_ch(tmp, '|', 0);
-		dstr_insert_str(tmp, "| ", tmp->strlen);
-		if (str_over != NULL)
-			dstr_insert_str(tmp, str_over->txt, tmp->strlen);
-		else
-			dstr_insert_str(tmp, "", tmp->strlen);
-		sh_rewrite(prompt, tmp, str_srch->strlen);
-		dstr_del(&tmp);
-	}
-	dstr_del(&prompt);
-}
 
 void		bakspace_dstr(DSTRING **str_srch)
 {
@@ -54,71 +25,23 @@ void		bakspace_dstr(DSTRING **str_srch)
 	}
 }
 
-void		print_his_help_col(t_darr overlap)
-{
-	ushort		col;
-	int			iter;
-	DSTRING		*colstr;
-
-	iter = 0;
-	col = get_col(overlap.maxlen + 2);
-	ft_putstr("\n");
-	ft_putstr(MOVEBGN);
-	free_lines_down();
-	colstr = sh_get_col(overlap, col, iter);
-	ft_putstr(colstr->txt);
-	ft_putstr("\n");
-	dstr_del(&colstr);
-}
-
-void		print_his_col(DSTRING *str_srch)
-{
-	int					i;
-	size_t				c;
-	int					j;
-	t_darr				rez;
-	struct winsize		te;
-
-	i = S_DARR_STRINGS;
-	c = (size_t)-1;
-	j = 0;
-	ft_bzero(&rez, sizeof(t_darr));
-	ioctl(0, TIOCGWINSZ, &te);
-	while (++c < g_histr.count)
-	{
-		if (ft_strncmp(str_srch->txt, g_histr.strings[--i]->txt,\
-		str_srch->strlen) == 0 && g_histr.strings[i]->strlen < (te.ws_col - 3))
-		{
-			rez.strings[j++] = g_histr.strings[i];
-			if ((ssize_t)rez.maxlen < g_histr.strings[i]->strlen)
-				rez.maxlen = g_histr.strings[i]->strlen;
-			rez.allsize += g_histr.strings[i]->strlen;
-		}
-	}
-	rez.count = j;
-	if (j)
-		print_his_help_col(rez.count ? rez : g_histr);
-}
-
 void		get_overlap_histr(t_darr *overlap, DSTRING *str_srch)
 {
-	size_t	i;
 	size_t	c;
 	size_t	j;
 
-	c = (size_t)-1;
-	i = S_DARR_STRINGS;
+	c = S_DARR_STRINGS - g_histr.count - 1;
 	j = (size_t)-1;
 	ft_bzero(overlap, sizeof(t_darr));
-	while (++c < g_histr.count)
+	while (++c < S_DARR_STRINGS)
 	{
-		if (g_histr.strings[--i]->txt && ft_strncmp(str_srch->txt, \
-							g_histr.strings[i]->txt, str_srch->strlen) == 0)
+		if (g_histr.strings[c]->txt && \
+		dstr_search_dstr(g_histr.strings[c], str_srch, 0) != SIZE_T_MAX)
 		{
-			overlap->strings[++j] = g_histr.strings[i];
-			if ((ssize_t)overlap->maxlen < g_histr.strings[i]->strlen)
-				overlap->maxlen = g_histr.strings[i]->strlen;
-			overlap->allsize += g_histr.strings[i]->strlen;
+			overlap->strings[++j] = g_histr.strings[c];
+			if ((ssize_t)overlap->maxlen < g_histr.strings[c]->strlen)
+				overlap->maxlen = g_histr.strings[c]->strlen;
+			overlap->allsize += g_histr.strings[c]->strlen;
 			overlap->count++;
 		}
 	}
@@ -130,9 +53,9 @@ t_indch		supplement_srch(DSTRING *str_srch, DSTRING **str_over, \
 	t_darr		overlap;
 	size_t		i;
 
-	i = 0;
+	i = -1;
 	if ((*str_over) != NULL)
-		ft_bzero((*str_over), sizeof(DSTRING));
+		*str_over = NULL;
 	if (indch.ch == TAB)
 		get_overlap_histr(&overlap, str_srch);
 	while (indch.ch == TAB && overlap.count)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_rewrite.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 20:40:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/19 05:08:12 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/29 22:19:20 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "sys_tools/sys_errors.h"
 
 void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
-					int len_p)
+				int *lensi)
 {
 	size_t		ind;
 	size_t		lines;
@@ -27,12 +27,12 @@ void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
 	char		*b_ptr;
 
 	ind = 0;
-	lines = (buf->strlen + (len_p % term.ws_col)) / term.ws_col;
+	lines = (lensi[1] + (lensi[0] % term.ws_col)) / term.ws_col;
 	b_ptr = buf->txt;
 	while (ind < lines)
 	{
 		if (ind == 0)
-			to_print = term.ws_col - (len_p % term.ws_col);
+			to_print = term.ws_col - (lensi[0] % term.ws_col);
 		else
 			to_print = term.ws_col;
 		write(STDOUT_FILENO, b_ptr, to_print);
@@ -43,78 +43,7 @@ void			sh_putstr_term(const DSTRING *buf, struct winsize term, \
 	ft_putstr_fd(b_ptr, STDOUT_FILENO);
 }
 
-void			sh_movec_front(struct winsize term, int len_all, int index)
-{
-	int		lines;
-	int		segment;
-	char	*n;
-	char	*cmd_str;
-
-	lines = 0;
-	segment = len_all % term.ws_col;
-	if ((len_all - segment) > index)
-		lines = ((len_all + (term.ws_col - segment)) - index) / term.ws_col;
-	if (lines)
-	{
-		n = ft_itoa(lines);
-		cmd_str = ft_concat(3, "00", "\x001b[", n, "B");
-		ft_putstr(cmd_str);
-		free(n);
-		free(cmd_str);
-	}
-}
-
-void			sh_clear_line(struct winsize term, int len_all)
-{
-	int		lines;
-
-	lines = len_all / term.ws_col;
-	while (lines--)
-	{
-		ft_putstr("\x001b[2K");
-		ft_putstr(MOVEUP);
-	}
-	ft_putstr("\x001b[2K");
-	ft_putstr(MOVEBGN);
-}
-
-void			sh_clear_buf(struct winsize term, int len_p, int index)
-{
-	int len_all;
-	int mov_front;
-
-	len_all = g_prebuf + len_p;
-	mov_front = len_all - (index + len_p);
-	if (len_all >= term.ws_col)
-		sh_movec_front(term, len_all, g_preind + len_p);
-	sh_clear_line(term, len_all);
-}
-
-void			sh_move_up_lines(int lines)
-{
-	char	*n;
-	char	*cmd_str;
-
-	n = ft_itoa(lines);
-	cmd_str = ft_concat(3, "00", "\x001b[", n, "A");
-	ft_putstr(cmd_str);
-	free(n);
-	free(cmd_str);
-}
-
-void			sh_move_back(int move_back)
-{
-	char	*n;
-	char	*cmd_str;
-
-	n = ft_itoa(move_back);
-	cmd_str = ft_concat(3, "00", "\x001b[", n, "D");
-	ft_putstr(cmd_str);
-	free(n);
-	free(cmd_str);
-}
-
-void			sh_new_move_cors(const DSTRING *buf, struct winsize term, \
+void			sh_new_move_cors(int len_b, struct winsize term, \
 					int len_p, int index)
 {
 	int		move_back;
@@ -123,7 +52,7 @@ void			sh_new_move_cors(const DSTRING *buf, struct winsize term, \
 	int		lines;
 
 	lines = 0;
-	len_all = buf->strlen + len_p;
+	len_all = len_b + len_p;
 	segment = len_all % term.ws_col;
 	move_back = len_all - (index + len_p);
 	if (move_back > segment)
@@ -140,25 +69,11 @@ void			sh_new_move_cors(const DSTRING *buf, struct winsize term, \
 		sh_move_back(move_back);
 }
 
-int				skip_num(char *str)
-{
-	int num;
-
-	if (!str)
-		return (0);
-	num = ft_atoi(str);
-	if (num > 100)
-		return (3);
-	if (num > 10)
-		return (2);
-	return (1);
-}
-
 int				ft_color_strlen(char *str, struct winsize term)
 {
 	int		rez;
 	int		i;
-	int 	fl;
+	int		fl;
 
 	i = -1;
 	fl = 0;
@@ -180,19 +95,47 @@ int				ft_color_strlen(char *str, struct winsize term)
 	return (rez);
 }
 
+void			get_coord_caret(int *x, int *y)
+{
+	char			buf[64];
+	int				i;
+	int				c;
+
+	write(1, "\033[6n", 4);
+	ft_bzero(buf, 64);
+	i = -1;
+	c = 0;
+	while (read(0, &(buf[++i]), 1) && buf[i] != 'R')
+		if (buf[i] == ';')
+			c = i + 1;
+	buf[i] = '\0';
+	*x = ft_atoi(buf + 2);
+	*y = ft_atoi(buf + c);
+}
+
 void			sh_rewrite(const DSTRING *prompt, const DSTRING *buf,\
-						const size_t index)
+						const size_t index, int cli)
 {
 	struct winsize		term;
 	int					len_p;
+	int					len_b;
+	int					lensi[4];
 
 	ioctl(0, TIOCGWINSZ, &term);
 	len_p = ft_color_strlen(prompt->txt, term);
+	len_b = buf->strlen;
 	sh_clear_buf(term, len_p, index);
 	ft_putstr_fd(prompt->txt, STDOUT_FILENO);
-	sh_putstr_term(buf, term, len_p);
-	if (buf->strlen != (ssize_t)index)
-		sh_new_move_cors(buf, term, len_p, index);
-	g_prebuf = buf->strlen;
+	lensi[0] = len_p;
+	lensi[1] = len_b;
+	lensi[2] = (int)index;
+	lensi[3] = cli;
+	if (lensi[3] >= 0)
+		sh_putstr_term_c((DSTRING *)buf, term, lensi);
+	else
+		sh_putstr_term(buf, term, lensi);
+	if (len_b != (ssize_t)index)
+		sh_new_move_cors(len_b, term, len_p, index);
+	g_prebuf = len_b;
 	g_preind = index;
 }

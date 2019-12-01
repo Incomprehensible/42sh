@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_builtns.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:00:14 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/22 13:58:59 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/01 18:28:21 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		exe_execute_pi_b(EXPRESSION *expr, ENV *envr, \
 
 	expr->opipe_fds ? pipe(expr->opipe_fds) : 0;
 	if ((exe_heredoc_check(expr->redirections, envr)))
-		return (0);
+		return (-2);
 	pid = fork();
 	if (pid == 0)
 		exe_b_cbiltn_alg(expr, envr, bltn);

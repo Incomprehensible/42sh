@@ -6,13 +6,13 @@
 /*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:51:57 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/18 22:53:42 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/11/29 22:04:30 by gdaemoni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_readline.h"
 
-t_regpath			help_get_regpath(const int fl, DSTRING *path)
+t_regpath		help_get_regpath(const int fl, DSTRING *path)
 {
 	t_regpath	rez;
 
@@ -29,7 +29,7 @@ t_regpath			help_get_regpath(const int fl, DSTRING *path)
 	return (rez);
 }
 
-static int			cmp(t_astr *rez, int i, t_regpath pth, DSTRING *reg)
+static int		cmp(t_astr *rez, int i, t_regpath pth, DSTRING *reg)
 {
 	DIR				*dir;
 	struct dirent	*entry;
@@ -57,7 +57,7 @@ static int			cmp(t_astr *rez, int i, t_regpath pth, DSTRING *reg)
 	return (i);
 }
 
-static void			addreg(t_astr *rez, DSTRING *r, DSTRING *reg, int j)
+static void		addreg(t_astr *rez, DSTRING *r, DSTRING *reg, int j)
 {
 	size_t		i;
 	DSTRING		*slice;
@@ -77,7 +77,7 @@ static void			addreg(t_astr *rez, DSTRING *r, DSTRING *reg, int j)
 	dstr_del(&slice);
 }
 
-void				loop(DSTRING *reg, int i, t_astr *rez, const int itr)
+void			loop(DSTRING *reg, int i, t_astr *rez, const int itr)
 {
 	DSTRING		*r;
 	int			j;
@@ -96,20 +96,29 @@ void				loop(DSTRING *reg, int i, t_astr *rez, const int itr)
 		loop(rez->strings[itr], rez->count, &(*rez), itr + 1);
 }
 
-void				new_reg_expr(DSTRING **buf, t_indch *indch)
+int				reg_expr(DSTRING **buf, t_indch *indch, ENV *env)
 {
-	DSTRING		*reg;
 	t_astr		rez;
+	t_buf		buffer;
 
-	reg = cut_reg_expr(*buf);
+	if (is_reg(*buf) == -1)
+		return (0);
+	buffer = slicer_reg(buf);
 	ft_bzero(&rez, sizeof(t_astr));
-	loop(reg, 0, &rez, 0);
-	dstr_del(&reg);
+	loop(buffer.sub, 0, &rez, 0);
 	if (rez.count > 0)
-		fill_buf(buf, rez);
-	free_t_darr((t_darr *)&rez);
-	indch->tab = 0;
-	indch->reg = 0;
+		buffer.val = get_dstr_rez(rez);
+	unite_buf(buf, &buffer);
+	dstr_del(&buffer.val);
 	indch->fl = 0;
 	indch->ind = (*buf)->strlen;
+	if (!rez.count)
+	{
+		free_t_astr(&rez);
+		return (0);
+	}
+	free_t_astr(&rez);
+	if (env)
+		return (1);
+	return (1);
 }

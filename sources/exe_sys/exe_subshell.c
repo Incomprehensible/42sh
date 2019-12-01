@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_subshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/01 02:21:34 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 18:28:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 	{
 		subsh->opipe_fds ? pipe(subsh->opipe_fds) : 0;
 		if ((exe_heredoc_check(subsh->redirections, envr)))
-			return (0);
+			return (-2);
 		if ((cpid = fork()) < 0)
 			return (-E_FRKFL);
 		else if (cpid == 0)
