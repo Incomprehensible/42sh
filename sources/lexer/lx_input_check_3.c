@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/30 06:58:35 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 02:22:42 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ short			input_closed(char *str)
 	int	size;
 
 	size = ft_strlen(str);
+	while (size && (*(str + size - 1) == ' ' || *(str + size - 1) == '\t'))
+		--size;
 	if (*(str + size - 1) == '|' && (size - 2 >= 0) &&
 	*(str + size - 2) != '\\')
 	{

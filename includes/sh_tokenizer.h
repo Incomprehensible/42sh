@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/30 07:00:11 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 03:28:58 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,7 @@ short		sep_detected(t_dlist *token_list);
 short       seps_check(t_dlist *token_list);
 short       back_ps_check(t_dlist *token_list);
 short       check_valid_sep(t_dlist *token_list);
+short       args_check(t_dlist *token_list);
 size_t      can_pull_tk(size_t j, char *str, t_dlist **tok, int t);
 int         special_meta(char meta);
 short       special_case(char br, char *str);

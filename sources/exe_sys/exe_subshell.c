@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_subshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/29 22:10:18 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/01 02:21:34 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ int			exe_one_command_lnch(SUBSH *subsh, t_dlist *tl, ENV *envr, int *st)
 	xp = (EXPRESSION *)etab->instruction;
 	xp->ipipe_fds = subsh->ipipe_fds;
 	xp->opipe_fds = subsh->opipe_fds;
+	if (!(xp->args[0]))
+		return (subsh_tok_err("Subshell: syntax error!", 0, 0, envr));
 	if (xp->ipipe_fds || xp->opipe_fds || \
 	!(ft_avl_search(envr->builtns, xp->args[0]) || \
 	ft_avl_search(envr->funcs, xp->args[0])))

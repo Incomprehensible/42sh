@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/21 21:47:21 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 03:25:35 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ short			list_ready_to_go(t_dlist **token_list)
 {
 	t_dlist	*start;
 
-	get_rid_of_void(token_list[0]);
 	exec_on(token_list[0]);
-	if (!seps_check(token_list[0]))
+	get_rid_of_void(token_list[0]);
+	if (!seps_check(token_list[0]) || !args_check(token_list[0]))
 		return (0);
 	trim_separators(token_list[0]);
 	start = token_list[0];

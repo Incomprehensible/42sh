@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:03:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/30 06:58:15 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 02:22:22 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int			subsh_tok_err(char *contx, int rcode, t_dlist **tks, ENV *envr)
 {
 	extern char		*g_last_input;
 
-	ft_dlst_delf(tks, 0, free_token);
+	if (tks && *tks)
+		ft_dlst_delf(tks, 0, free_token);
 	ft_strdel(&g_last_input);
 	input_not_over = -1;
 	g_hsh = 0;

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/30 06:59:54 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 01:49:32 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int				sh_launch_loop(ENV *env)
 	{
 		if (!(prompt = sys_get_prompt_num(env, get_code())))
 			sys_fatal_memerr("PROMPT_ALLOCA_FATAL");
-		INO = -1;
+		// INO = -1;
 		if (!(line = sh_readline(prompt, env)))
 			break ;
 		add_buf_history(line);

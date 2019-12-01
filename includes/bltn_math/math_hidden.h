@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:13:30 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/25 18:36:57 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/11/30 23:19:03 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,9 @@ typedef struct      s_mtx
 //MATH ERRORS
 # define VALUE_TOO_GREAT (int)666
 # define INVALID_OP (int)228
-//# define DOUBLE_NEGATION (int)1488 //double or multiple negation
-//# define INVALID_INFIX (int)2007
 # define DOUBLE_COMPARE (int)1337
-# define OPERAND_EXP (int)2012 //syntax error: operand expected
-# define INVALID_ASSIG (int)1488 //attempted assignment to non-variable
+# define OPERAND_EXP (int)2012
+# define INVALID_ASSIG (int)1488
 # define STR_OPERAND (int)47
 # define DIVISION_ZERO (int)282
 # define WEIRD_ERR (int)2007
@@ -140,7 +138,7 @@ t_dlist     *process_opd_err(t_dlist *opd_stack, ERR *err);
 long        check_result(t_dlist *opd_stack, ENV *env, ERR *err);
 
 //DEBUGGING
-void		DBG_PRINT_MATH(t_dlist *toklst);
+void		dbg_print_math(t_dlist *toklst);
 
 long			math_eval(DSTRING *expr, ENV *envr);
 

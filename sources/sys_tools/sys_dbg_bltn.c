@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_dbg_bltn.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 19:10:28 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/29 16:56:23 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/11/30 23:17:40 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void			dbg_print_tokens(t_dlist *toklst)
 	}
 }
 
-void			DBG_PRINT_MATH(t_dlist *toklst)
+void			dbg_print_math(t_dlist *toklst)
 {
 	t_tok		*token;
 	char		*msg;

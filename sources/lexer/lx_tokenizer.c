@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/30 06:59:04 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 01:38:47 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ short	concatenate_str(char **last_input, char *str)
 		prev = *(*last_input + (len - 2));
 	if (last == ')' && prev == last)
 		last ^= last;
-	if (last != '(' && last != ')')
+	if (last != '(' && last != ')' && !(is_sep_no_space(*(skip_spaces(str)))))
 	{
 		tmp = *last_input;
 		*last_input = ft_strjoin(*last_input, "\n");
