@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/01 02:22:42 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/01 18:38:23 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,17 @@ short			br_closed_n(char *str, short i)
 short			brackets_closed(char *str)
 {
 	short	times;
+	short   math_flag;
 
 	times = br_closed_n(str, 0);
+	math_flag = 0;
+	if (layer_parse_one("((", str) || layer_parse_one("~((", str))
+		math_flag = 1;
 	if (times)
 	{
 		parse_err = times < 0 ? PRO_SUBSH : parse_err;
 		input_not_over = times > 0 ? PRO_SUBSH : input_not_over;
+		input_not_over = (times > 0 && math_flag) ? PRO_MATH : input_not_over;
 		return (times > 0 ? 0 : -1);
 	}
 	return (1);
