@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_get_bins.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 15:22:08 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/19 02:29:07 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/02 20:31:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int			env_get_bins_unq(t_darr *res, char *str)
 	return (1);
 }
 
-t_darr		env_get_bins(ENV *envp)
+t_darr		env_get_bins(ENV *envp, DSTRING *sub)
 {
 	t_darr	res;
 
@@ -38,8 +38,8 @@ t_darr		env_get_bins(ENV *envp)
 	res.maxlen = 0;
 	res.maxlen = 0;
 	res.count = 0;
-	env_get_bins_parsepath(&res, envp);
-	env_get_bins_parsebltn(&res, envp);
-	env_get_bins_parefunc(&res, envp);
+	env_get_bins_parsepath(&res, envp, sub);
+	env_get_bins_parsebltn(&res, envp, sub);
+	env_get_bins_parefunc(&res, envp, sub);
 	return (res);
 }

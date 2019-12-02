@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_get_overlap.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:26:44 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/20 20:22:26 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/12/02 20:37:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,13 @@ t_darr			sh_get_cmd(t_buf *buffer, ENV *env)
 	t_darr		overlap;
 
 	if (is_executable(buffer))
+	{
 		allcmd = get_executable_files(buffer->dir->txt);
-	else
-		allcmd = env_get_bins(env);
+		overlap = sh_cmp_darr(allcmd, buffer->sub);
+		free_t_darr(&allcmd);
+		return (overlap);
+	}
+	allcmd = env_get_bins(env, buffer->sub);
 	overlap = sh_cmp_darr(allcmd, buffer->sub);
 	free_t_darr(&allcmd);
 	return (overlap);

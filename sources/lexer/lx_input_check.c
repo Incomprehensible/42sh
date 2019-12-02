@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_input_check.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/30 06:58:22 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/03 00:58:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ short	quotes_closed(char *str)
 	qa_cls_n(str, &aps, &qts);
 	if (aps)
 	{
-		input_not_over = PRO_APOF;
+		g_input_nover = PRO_APOF;
 		return (0);
 	}
 	if (qts)
 	{
-		input_not_over = PRO_DQUOT;
+		g_input_nover = PRO_DQUOT;
 		return (0);
 	}
 	return (1);

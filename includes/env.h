@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/28 13:17:29 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/02 20:44:03 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "libft.h"
 # include "dstring.h"
 
-# define S_DARR_STRINGS		2096
+# define S_DARR_STRINGS		4096
 # define ENV t_env
 
 typedef struct	s_env
@@ -79,11 +79,11 @@ void			free_spl(char ***spl);
 int				env_core_set(char *key, char *value, t_avl_tree *core);
 int				prs_set_pid(ENV *envr);
 
-void			env_get_bins_parsepath(t_darr *res, ENV *envp);
-void			env_get_bins_parsebltn(t_darr *res, ENV *envp);
-void			env_get_bins_parefunc(t_darr *res, ENV *envp);
+void			env_get_bins_parsepath(t_darr *res, ENV *envp, DSTRING *sub);
+void			env_get_bins_parsebltn(t_darr *res, ENV *envp, DSTRING *str);
+void			env_get_bins_parefunc(t_darr *res, ENV *envp, DSTRING *str);
 
-t_darr			env_get_bins(ENV *env);
+t_darr			env_get_bins(ENV *env, DSTRING *dstr);
 
 int				env_get_bins_unq(t_darr *res, char *str);
 void			env_get_bins_cmp_name(t_darr *res, int namelen);

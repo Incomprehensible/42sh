@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/12/01 14:33:43 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/03 01:02:57 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,10 @@ typedef struct	s_clip_board
 	int			ind;
 }				t_clipbrd;
 
-
 typedef struct	s_indch
 {
 	DSTRING		*prompt;
 	int			ind;
-	// int			his;
 	int			reg;
 	int			var;
 	int			is_var;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_get_bins_parsepath.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 17:11:22 by fnancy            #+#    #+#             */
-/*   Updated: 2019/09/24 18:56:08 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/12/03 00:32:58 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	env_get_bins_setfpath(DSTRING **fpath, char *dir, char *filename)
 	dstr_insert_str((*fpath), filename, (*fpath)->strlen);
 }
 
-static int	env_get_bins_freespl(char ***spl)
+static int	env_get_bins_freespl(char ***spl, DIR *dir)
 {
 	int		i;
 
@@ -32,7 +32,7 @@ static int	env_get_bins_freespl(char ***spl)
 			free((*spl)[i]);
 		free((*spl));
 	}
-	return (1);
+	return (dir ? 1 : 0);
 }
 
 static void	env_get_bins_setstring(t_darr *res, struct dirent *entry)
@@ -42,41 +42,40 @@ static void	env_get_bins_setstring(t_darr *res, struct dirent *entry)
 	env_get_bins_cmp_name(res, (int)entry->d_namlen);
 }
 
-static int	env_get_bins_parse(t_darr *res, char *path)
+static int	env_get_bins_parse(t_darr *res, DSTRING *nm, char *path)
 {
 	DIR				*dir;
 	struct dirent	*entry;
 	DSTRING			*fpath;
-	char			**spl_tmp;
 	char			**spl;
+	size_t			i;
 
 	if ((spl = ft_strsplit(path, ':')) == 0)
 		return (0);
-	spl_tmp = spl;
-	while (*spl)
+	i = -1;
+	while (spl[++i] && (dir = opendir(spl[i])))
 	{
-		if (!(dir = opendir(*spl)))
-			return (0);
 		while ((entry = readdir(dir)) != NULL)
 		{
-			env_get_bins_setfpath(&fpath, *spl, (char *)entry->d_name);
+			if (ft_strnequ(entry->d_name, nm->txt, nm->strlen) == 0)
+				continue ;
+			env_get_bins_setfpath(&fpath, spl[i], (char *)entry->d_name);
 			if (!sys_is_ex_bin(fpath->txt) && env_get_bins_unq(res, fpath->txt))
 				env_get_bins_setstring(res, entry);
 			dstr_del(&fpath);
 		}
 		closedir(dir);
-		spl++;
 	}
-	(res)->strings[(res)->count] = NULL;
-	return (env_get_bins_freespl(&spl_tmp));
+	res->strings[res->count] = NULL;
+	return (env_get_bins_freespl(&spl, dir));
 }
 
-void		env_get_bins_parsepath(t_darr *res, ENV *envp)
+void		env_get_bins_parsepath(t_darr *res, ENV *envp, DSTRING *sub)
 {
 	if (ft_avl_search(envp->globals, "PATH") != 0)
-		env_get_bins_parse(res,\
+		env_get_bins_parse(res, sub,\
 			(char *)ft_avl_search(envp->globals, "PATH")->content);
 	if (ft_avl_search(envp->locals, "PATH") != 0)
-		env_get_bins_parse(res,\
+		env_get_bins_parse(res, sub,\
 			(char *)ft_avl_search(envp->locals, "PATH")->content);
 }

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/01 17:51:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/03 00:58:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int				sh_do_src(char *filename, ENV *env)
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
 	while ((status = get_next_line(fd, &line)) > 0)
 	{
-		if (sh_tokenizer(line->txt, toks) <= 0 && (input_not_over = -1))
+		if (sh_tokenizer(line->txt, toks) <= 0 && (g_input_nover = -1))
 		{
 			dstr_del(&line);
 			continue ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_input_check_3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/01 18:38:23 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/03 00:58:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ short			br_closed_n(char *str, short i)
 short			brackets_closed(char *str)
 {
 	short	times;
-	short   math_flag;
+	short	math_flag;
 
 	times = br_closed_n(str, 0);
 	math_flag = 0;
@@ -39,9 +39,9 @@ short			brackets_closed(char *str)
 		math_flag = 1;
 	if (times)
 	{
-		parse_err = times < 0 ? PRO_SUBSH : parse_err;
-		input_not_over = times > 0 ? PRO_SUBSH : input_not_over;
-		input_not_over = (times > 0 && math_flag) ? PRO_MATH : input_not_over;
+		g_parse_err = times < 0 ? PRO_SUBSH : g_parse_err;
+		g_input_nover = times > 0 ? PRO_SUBSH : g_input_nover;
+		g_input_nover = (times > 0 && math_flag) ? PRO_MATH : g_input_nover;
 		return (times > 0 ? 0 : -1);
 	}
 	return (1);
@@ -68,18 +68,18 @@ short			input_closed(char *str)
 	if (*(str + size - 1) == '|' && (size - 2 >= 0) &&
 	*(str + size - 2) != '\\')
 	{
-		input_not_over = *(str + size - 2) == '|' ? PRO_OR : PRO_PIPE;
+		g_input_nover = *(str + size - 2) == '|' ? PRO_OR : PRO_PIPE;
 		return (0);
 	}
 	if (*(str + size - 1) == '\\' && (size - 2 >= 0) &&
 	*(str + size - 2) != '\\')
 	{
-		input_not_over = PRO_NONE;
+		g_input_nover = PRO_NONE;
 		return (0);
 	}
 	if (!is_and_closed(str, size))
 	{
-		input_not_over = PRO_AND;
+		g_input_nover = PRO_AND;
 		return (0);
 	}
 	return (1);

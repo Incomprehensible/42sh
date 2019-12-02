@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bltn_type_bins_check.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 10:34:05 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/19 02:02:09 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/02 20:19:50 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,15 @@ int					bltn_type_check_bins(char *str, ENV *env, DSTRING **val)
 {
 	t_darr	res;
 	size_t	i;
+	DSTRING	*dstr;
 
 	i = (size_t)-1;
 	res.allsize = 0;
 	res.maxlen = 0;
 	res.count = 0;
-	env_get_bins_parsepath(&res, env);
+	dstr = dstr_new(str);
+	env_get_bins_parsepath(&res, env, dstr);
+	dstr_del(&dstr);
 	while (++i < res.count)
 	{
 		if (ft_strequ(res.strings[i]->txt, str))

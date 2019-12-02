@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 12:17:16 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/01 19:06:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/02 20:54:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int			exe_heredoc_get_buff(DSTRING **buff, REDIRECT *rdr, ENV *env)
 	while ((line = sh_readline(prm, env)) || 1)
 	{
 		if (g_intr == 2 && (status = -1))
-			break;
+			break ;
 		if (!line)
 			break ;
 		if (ft_strequ(line->txt, rdr->file))
@@ -60,7 +60,7 @@ int			exe_heredoc_get_buff(DSTRING **buff, REDIRECT *rdr, ENV *env)
 		dstr_del(&line);
 	}
 	if (status == -1 && buff)
-			dstr_del(buff);
+		dstr_del(buff);
 	if (line)
 		dstr_del(&line);
 	dstr_del((DSTRING **)&prm);

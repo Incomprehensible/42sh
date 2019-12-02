@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 09:00:27 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/01 18:26:13 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/02 20:49:44 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,12 @@ DSTRING			*sys_get_prompt_num(ENV *envr, char type)
 	char		*sprompt;
 
 	sprompt = 0;
-	if (type == 0)
-	{
-		if (!(prm = env_get_variable(SH_VAR_PROMPT, envr)))
-			sys_fatal_memerr("PROMT ALLOC FAILED");
-		if (prm->strlen != 0)
-			return (parse_promt(prm, envr));
-		else
-			dstr_del(&prm);
-	}
+	if (!type && !(prm = env_get_variable(SH_VAR_PROMPT, envr)))
+		sys_fatal_memerr("PROMT ALLOC FAILED");
+	if (!type && prm->strlen != 0)
+		return (parse_promt(prm, envr));
+	else if (!type)
+		dstr_del(&prm);
 	sprompt = type == 'a' ? SH_PROMPT_AP : sprompt;
 	sprompt = type == 'q' ? SH_PROMPT_QT : sprompt;
 	sprompt = type == 'h' ? SH_PROMPT_HD : sprompt;

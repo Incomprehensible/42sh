@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 15:48:08 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/12/01 17:44:43 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/02 20:52:45 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,8 @@ DSTRING			*readline_loop(DSTRING **buf, t_indch indch, ENV *env, \
 			indch = sh_esc(indch, (*buf)->strlen, buf, clip);
 		sh_rewrite(indch.prompt, (*buf), indch.ind, \
 				indch.select ? clip->ind : -1);
-		if (indch.ch == (char)0x04 || (indch.ch == '\n') || indch.ch == (char)0xff)
+		if (indch.ch == (char)0x04 || (indch.ch == '\n') ||
+		indch.ch == (char)0xff)
 			return_line(buf, &indch, env);
 	}
 	return (*buf);

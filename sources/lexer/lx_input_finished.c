@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_input_finished.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/01 18:31:52 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/03 00:58:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ short	func_really_closed(char *str)
 		times = br_closed(str, '{', '}');
 		if (times)
 		{
-			parse_err = times < 0 ? PRO_NONE : parse_err;
+			g_parse_err = times < 0 ? PRO_NONE : g_parse_err;
 			return (times > 0 ? 0 : -1);
 		}
 		return (1);
@@ -63,7 +63,7 @@ short	funcs_closed(char *str)
 		{
 			if (!(i = func_really_closed(str)))
 				return (2);
-			parse_err = i < 0 ? PRO_NONE : parse_err;
+			g_parse_err = i < 0 ? PRO_NONE : g_parse_err;
 			return (i);
 		}
 		str += (*str == '\\') ? mirror_passes(str) : 1;
@@ -71,17 +71,17 @@ short	funcs_closed(char *str)
 	return (1);
 }
 
-short	parse_error(void)
+short	g_parse_error(void)
 {
-	if (parse_err == PRO_SUBSH)
+	if (g_parse_err == PRO_SUBSH)
 		ft_putstr("42sh: parse error in subshell or math: unexpected ')'");
-	else if (parse_err == PRO_SQU)
+	else if (g_parse_err == PRO_SQU)
 		ft_putstr("42sh: parse error: '[' didn't close");
-	else if (parse_err == PRO_NONE)
+	else if (g_parse_err == PRO_NONE)
 		ft_putstr("42sh: parse error in function: unexpected '}'");
 	else
 		ft_putstr("42sh: parse error occured");
-	parse_err = 1;
+	g_parse_err = 1;
 	return (-1);
 }
 
@@ -93,22 +93,22 @@ short	input_finished(char *str)
 		return (0);
 	id = brackets_closed(str);
 	if (id != 1)
-		return (id ? parse_error() : 0);
+		return (id ? g_parse_error() : 0);
 	id = quotes_closed(str);
 	if (id != 1)
-		return (id ? parse_error() : 0);
+		return (id ? g_parse_error() : 0);
 	if (!scripts_closed(str))
 	{
-		input_not_over = PRO_NONE;
+		g_input_nover = PRO_NONE;
 		return (0);
 	}
 	id = funcs_closed(str);
 	if (id != 1)
 	{
-		input_not_over = id ? input_not_over : PRO_NONE;
-		input_not_over = id == 2 ? PRO_LAM : input_not_over;
+		g_input_nover = id ? g_input_nover : PRO_NONE;
+		g_input_nover = id == 2 ? PRO_LAM : g_input_nover;
 		id = id == 2 ? 0 : id;
-		return (id ? parse_error() : 0);
+		return (id ? g_parse_error() : 0);
 	}
 	return (1);
 }
