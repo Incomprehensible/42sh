@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:46:16 by fnancy            #+#    #+#             */
-/*   Updated: 2019/12/01 18:08:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/05 15:13:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,15 @@ static int	setenv_error(char ***str, int errcode)
 	if (errcode == 1488)
 		return (sys_perror("setenv: '=' - bad input", 2, 0));
 	return (errcode);
+}
+
+static void	free_spl_here(char **args)
+{
+	if (args[1])
+		free(args[1]);
+	if (args[0])
+		free(args[0]);
+	free(args);
 }
 
 int			bltn_setenv(char **args, ENV *env)
@@ -43,7 +52,7 @@ int			bltn_setenv(char **args, ENV *env)
 			if (ft_avl_set(env->globals, node) == -1)
 				return (setenv_error(&spl, 210));
 		}
-		free_spl(&spl);
+		free_spl_here(spl);
 	}
 	return (0);
 }

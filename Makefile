@@ -6,7 +6,7 @@
 #    By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/12/01 14:33:03 by hgranule         ###   ########.fr        #
+#    Updated: 2019/12/05 18:41:40 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -161,6 +161,9 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make make_lft
+	@gcc $(FLAGS) -o $(NAME) $(INC) $(INC_LIB) $(OBJ) -L $(LIB_PATH) -lft -lncurses -g
+
+lol:
 	@gcc $(FLAGS) -o $(NAME) $(INC) $(INC_LIB) $(OBJ) -L $(LIB_PATH) -lft -lncurses -g
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
