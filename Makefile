@@ -6,7 +6,7 @@
 #    By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/12/05 18:41:40 by hgranule         ###   ########.fr        #
+#    Updated: 2019/12/06 22:54:06 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ SRC_FILES = sh_main.c sh_launch.c \
 			bltns/bltn_type/bltn_type.c bltns/bltn_type/bltn_type_free.c bltns/bltn_type/bltn_type_alias_check.c bltns/bltn_type/bltn_type_bins_check.c\
 			bltns/bltn_type/bltn_type_help.c bltns/bltn_echo.c \
 			exe_sys/exe_bckgr.c \
-			bltns/bltn_cd/bltn_cd_parser.c bltns/bltn_cd/bltn_cd_pathfuncs.c bltns/bltn_cd/bltn_cd.c bltns/bltn_cd/bltn_cd_helps.c\
+			bltns/bltn_cd/main_cd.c bltns/bltn_cd/parse_path.c bltns/bltn_cd/chdir_cd.c \
 			exe_sys/exe_funcs.c parser/prs_and_or.c parser/prs_assigm.c \
 			parser/prs_funcs.c parser/prs_if_while.c parser/prs_skipers.c \
 			parser/prs_error.c parser/prs_core_setter.c parser/prs_background.c \

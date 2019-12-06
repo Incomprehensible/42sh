@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/03 00:58:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/06 19:03:47 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int				sh_launch_loop(ENV *env)
 	short			tk_status;
 
 	init_histr(env);
+	g_input_nover = -1;
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
 	{

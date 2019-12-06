@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/28 13:18:24 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/06 22:55:20 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,20 @@ int					ft_isodigit(int ch);
 int					bltn_math(char **args, ENV *env);
 
 int					bltn_set(char **argv, ENV *env);
+
+# define CD_MODE_ERROR_ND -3
+# define CD_MODE_ERROR_PD -2
+# define CD_MODE_ERROR_NE -1
+# define CD_MODE_ERROR 0
+# define CD_MODE_LOGIC 1
+# define CD_MODE_PHYSP 2
+# define CD_MODE_TOOMA -1
+
 int					bltn_cd(char **args, ENV *env);
+int					cd_logic(DSTRING **path);
+int					cd_phpath(DSTRING **path);
+int					cd_parse_args(char **args, ENV *env, DSTRING **path);
+
 int					bltn_cd_parser(ENV *env, t_dlist **path);
 DSTRING				*bltn_cd_pathtostr(t_dlist *path);
 void				bltn_cd_destroy_path(t_dlist **path);
@@ -108,6 +121,7 @@ int					bltn_cd_error(DSTRING **oldpath, \
 						DSTRING **newpath, t_dlist	**path);
 void				bltn_cd_concat(char **path);
 int					bltn_cd_countargs(char **args);
+
 int					bltn_pwd(char **args, ENV *env);
 int					bltn_type(char **args, ENV *env);
 int					bltn_echo(char **args, ENV *envr);

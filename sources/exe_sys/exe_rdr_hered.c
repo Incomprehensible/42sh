@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 12:17:16 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/02 20:54:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/06 23:18:46 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int			exe_heredoc_get_buff(DSTRING **buff, REDIRECT *rdr, ENV *env)
 	{
 		if (g_intr == 2 && (status = -1))
 			break ;
-		if (!line)
+		if (!line && write(1, "\n", 1))
 			break ;
 		if (ft_strequ(line->txt, rdr->file))
 			break ;
