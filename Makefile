@@ -6,7 +6,7 @@
 #    By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/12/06 22:54:06 by hgranule         ###   ########.fr        #
+#    Updated: 2019/12/08 17:26:09 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRC_PATH = $(WS_PATH)/sources/
 OBJ_PATH = $(WS_PATH)/objects/
 INC_PATH = $(WS_PATH)/includes/ $(WS_PATH)/includes/printf/
 LIB_PATH = $(WS_PATH)/Libft/
+LIBFT_NAME = $(LIB_PATH)libft.a
 LIB_INC_PATH = $(LIB_PATH)includes/
 
 SRC = $(addprefix $(SRC_PATH), $(SRC_FILES))
@@ -159,8 +160,10 @@ OBJ_FILES = $(SRC_FILES:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	@make make_lft
+$(LIBFT_NAME):
+	@make -C $(LIB_PATH)
+
+$(NAME): $(OBJ) $(LIBFT_NAME)
 	@gcc $(FLAGS) -o $(NAME) $(INC) $(INC_LIB) $(OBJ) -L $(LIB_PATH) -lft -lncurses -g
 
 lol:

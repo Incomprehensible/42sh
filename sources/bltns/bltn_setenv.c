@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:46:16 by fnancy            #+#    #+#             */
-/*   Updated: 2019/12/08 15:14:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/08 16:04:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	free_spl_here(char **args)
 
 static int	setenv_error(char ***str, int errcode)
 {
-	free_spl_here(str);
+	free_spl_here(*str);
 	if (errcode == 1488)
 		return (sys_perror("setenv: '=' - bad input", 2, 0));
 	return (errcode);
