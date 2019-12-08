@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_comm_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/30 00:48:42 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/08 15:15:51 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char			*parse_expr(char *str, t_dlist **tok, t_stx **tr, short sp)
 	i = 0;
 	while (!(special_case(sp, &str[j])) && str[j])
 	{
-		if (*str == '\\' && (++j))
+		if (str[j] == '\\' && (++j))
 			i = 1;
 		if (!i && !j && str[j] == '\n')
 			str = parse_empty(&str[j], 0x0, tok);

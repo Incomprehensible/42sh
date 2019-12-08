@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/06 19:03:47 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/08 15:17:07 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ int				sh_launch_loop(ENV *env)
 	short			tk_status;
 
 	init_histr(env);
-	g_input_nover = -1;
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
 	{
@@ -92,15 +91,16 @@ int				sh_launch_loop(ENV *env)
 			sys_fatal_memerr("PROMPT_ALLOCA_FATAL");
 		if (!(line = sh_readline(prompt, env)))
 			break ;
+		dstr_del(&prompt);
 		add_buf_history(line);
 		tk_status = sh_tokenizer(line->txt, token_list);
-		dstr_del(&prompt);
 		dstr_del(&line);
 		if (!(g_intr = 0) && tk_status <= 0)
 			continue ;
 		sh_tparse(token_list[0], env, TK_EOF, &status);
 		ft_dlst_delf(token_list, 0, free_token);
 	}
+	prompt ? dstr_del(&prompt) : 0;
 	return (sys_perror("Input was closed. Exiting.", 0, env));
 }
 
@@ -124,6 +124,7 @@ int				sh_libs_enbl(t_opt *opt, ENV *env)
 
 int				sh_launch(t_opt *opt, ENV *env)
 {
+	g_input_nover = -1;
 	if (opt->lib_fs)
 		sh_libs_enbl(opt, env);
 	if (opt->params)

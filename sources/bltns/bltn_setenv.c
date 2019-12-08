@@ -6,19 +6,11 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:46:16 by fnancy            #+#    #+#             */
-/*   Updated: 2019/12/05 15:13:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/08 15:14:49 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bltn.h"
-
-static int	setenv_error(char ***str, int errcode)
-{
-	free_spl(str);
-	if (errcode == 1488)
-		return (sys_perror("setenv: '=' - bad input", 2, 0));
-	return (errcode);
-}
 
 static void	free_spl_here(char **args)
 {
@@ -27,6 +19,14 @@ static void	free_spl_here(char **args)
 	if (args[0])
 		free(args[0]);
 	free(args);
+}
+
+static int	setenv_error(char ***str, int errcode)
+{
+	free_spl_here(str);
+	if (errcode == 1488)
+		return (sys_perror("setenv: '=' - bad input", 2, 0));
+	return (errcode);
 }
 
 int			bltn_setenv(char **args, ENV *env)

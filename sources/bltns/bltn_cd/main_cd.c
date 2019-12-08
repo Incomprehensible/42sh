@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 19:14:59 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/06 23:06:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/08 15:19:01 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int				cd_error_put(int mode, DSTRING *path, ENV *env)
 		dstr_insert_str(buf, ": UNDEFINED ERROR", buf->strlen);
 		sys_perror(buf->txt, 2, env);
 	}
+	dstr_del(&buf);
 	return (2);
 }
 
