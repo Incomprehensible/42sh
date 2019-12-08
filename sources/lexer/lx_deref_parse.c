@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_deref_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 01:57:53 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:02:12 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,17 @@ static short	special_reg(char c, short tk)
 			return (1);
 		return (0);
 	}
-	if (c == '!' || c == '*' || c == '$' || c == '#' || c == '?' || c == '/')
+	if (c == '!' || c == '*' || c == '$' || c == '#' ||
+	c == ':' || c == '~' || c == '?' || c == '/')
 		return (1);
 	return (0);
+}
+
+char			*parse_tilda(char *str, t_dlist **tok)
+{
+	make_token(tok, NULL, TK_DEREF);
+	make_token(tok, ft_strdup("HOME"), TK_NAME);
+	return (++str);
 }
 
 char			*parse_nametk(char *str, t_dlist **tok, short tk)
@@ -63,6 +71,8 @@ static char		*parse_curly_br(char *str, t_dlist **tok)
 
 char			*parse_deref(char *str, t_dlist **tok, t_stx **tree, short i)
 {
+	if (*str == '~')
+		return (parse_tilda(str, tok));
 	if (*str++ == '$' && *str && (*str != '\\' || *(str + 1) == '\n'))
 	{
 		if ((is_separator(*str) && *str != '"') || !(*str))

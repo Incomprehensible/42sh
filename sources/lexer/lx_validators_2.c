@@ -3,16 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   lx_validators_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 16:02:25 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:15:34 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
+
+short	is_tok_deref(char *str)
+{
+	if (*str == '$' && !is_separator(*(str + 1)))
+		return (1);
+	if (*str == '~' && (is_separator(*(str + 1)) || *(str + 1) == '/'))
+		return (1);
+	return (0);
+}
 
 char	*pull_legit_math(char *s, t_dlist **tok, t_stx **tr)
 {

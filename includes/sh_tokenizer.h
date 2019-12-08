@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 00:54:50 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/03 01:02:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:07:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,7 @@ short				is_it_q(char c);
 short				is_it_br(char c);
 short				is_prefix(char str);
 short				is_ariphmetic(char str);
+short				is_tok_deref(char *str);
 short				is_redir(char *str);
 short				is_tok_redir(t_tk_type type, short id);
 short				is_sep_token(t_tk_type type);
@@ -241,7 +242,7 @@ short				mirrored(char *arr);
 char				*assig_into_portal(char *str, t_dlist **tok, t_stx **tree);
 void				exec_on(t_dlist *token_list);
 short				following_pipe(t_dlist *token_list);
-short				valid_deref(char *str);
+short				valid_deref(char *str, size_t j);
 short				valid_sep(char *str);
 size_t				validate_simple_struct(char *s, size_t br);
 size_t				validate_triple_struct(char *s, short pass);

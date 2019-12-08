@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_parse_func.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/25 21:21:09 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/08 20:57:42 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,25 @@ char	*parse_str_block(char *str, t_dlist **tok, t_stx **tree, int br)
 {
 	size_t	j;
 	short	i;
+	short	tilda;
 
 	j = 0;
 	i = 0;
+	tilda = 0;
 	while (str[j] && !(!i && special_case(br, &str[j])))
 	{
+		tilda = (str[j] == '~') ? ++tilda : 0;
 		if (str[j] == '\\' && (++j))
 			i = i ? 0 : 1;
-		else if (!i && valid_deref(&str[j]))
+		else if (!i && valid_deref(&str[j], !(tilda == 1)))
 		{
 			str += can_pull_tk(j, &str[j], tok, br);
 			j = 0;
 			if (!(str = parse_deref(str, tok, tree, DQUOTS)))
 				return (NULL);
 		}
-		else
-		{
+		else if (!(i = 0))
 			j++;
-			i = 0;
-		}
 	}
 	str += can_pull_tk(j, &str[j], tok, br);
 	return (trim_str(str, br, tok));

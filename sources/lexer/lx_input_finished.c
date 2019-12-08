@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/03 00:58:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:00:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,13 @@ short	funcs_closed(char *str)
 short	g_parse_error(void)
 {
 	if (g_parse_err == PRO_SUBSH)
-		ft_putstr("42sh: parse error in subshell or math: unexpected ')'");
+		sys_perror("parse error in subshell or math: unexpected ')'", 0, 0);
 	else if (g_parse_err == PRO_SQU)
-		ft_putstr("42sh: parse error: '[' didn't close");
+		sys_perror("parse error: '[' didn't close", 0, 0);
 	else if (g_parse_err == PRO_NONE)
-		ft_putstr("42sh: parse error in function: unexpected '}'");
+		sys_perror("parse error in function: unexpected '}'", 0, 0);
 	else
-		ft_putstr("42sh: parse error occured");
+		sys_perror("parse error occured", 0, 0);
 	g_parse_err = 1;
 	return (-1);
 }

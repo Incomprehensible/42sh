@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/08 15:15:51 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:04:50 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static short	redir_detected(char *str, t_stx **tree, short stop)
 	return (0);
 }
 
-short			time_for_portal(char *str, t_stx **tree, short stop)
+short			time_for_portal(char *str, t_stx **tree, short stop, size_t j)
 {
 	if ((ft_isdigit(*str) || *str == '&') && redir_detected(str, tree, stop))
 		return (1);
@@ -63,7 +63,8 @@ short			time_for_portal(char *str, t_stx **tree, short stop)
 		return (1);
 	else if (*str == '#' || *str == '(' || *str == '"' || *str == '\'')
 		return (1);
-	else if (is_redir(str) || valid_deref(str) || is_token_here(str, "exec"))
+	else if (is_redir(str) || valid_deref(str, j) || \
+	is_token_here(str, "exec"))
 		return (1);
 	return (0);
 }
@@ -81,7 +82,7 @@ char			*parse_expr(char *str, t_dlist **tok, t_stx **tr, short sp)
 			i = 1;
 		if (!i && !j && str[j] == '\n')
 			str = parse_empty(&str[j], 0x0, tok);
-		else if (!i && str[j] && time_for_portal(&str[j], tr, sp))
+		else if (!i && str[j] && time_for_portal(&str[j], tr, sp, j))
 		{
 			str += can_pull_tk(j, &str[j], tok, sp);
 			if (!(str = check_subbranch(str, tok, tr)))

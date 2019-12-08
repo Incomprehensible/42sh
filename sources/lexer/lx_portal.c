@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_portal.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/30 00:50:42 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/08 20:56:22 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char			*check_subbranch(char *str, t_dlist **tok, t_stx **tree)
 		str = block_pass(APOFS, str, tok, tree);
 	else if (*str == '"' && check_branch(str, tree[DQUOTS]))
 		str = block_pass(DQUOTS, str, tok, tree);
-	else if (*str && *str == '$' && !is_separator(*(str + 1)))
+	else if ((*str == '$' || *str == '~') && is_tok_deref(str))
 		str = parse_deref(str, tok, tree, 0);
 	else if (*str == '(' && check_branch(str, tree[MATHS]))
 		str = block_pass(MATHS, str, tok, tree);

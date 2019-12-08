@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_checkers_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/21 23:48:16 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:05:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ short	special_condition(char *patt)
 
 short	mirrored(char *arr)
 {
-	if (*arr != '"' && *arr != '$' && *arr != '\n')
+	if (*arr != '"' && *arr != '$' && *arr != '\n' && *arr != '~')
 		return (0);
 	return (1);
 }

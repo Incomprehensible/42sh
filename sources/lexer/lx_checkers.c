@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_checkers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/24 00:34:05 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/08 21:06:34 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-short	valid_deref(char *str)
+short	valid_deref(char *str, size_t j)
 {
 	if (*str == '$' && *(str + 1) != '=' && !is_separator(*(str + 1)))
+		return (1);
+	if (!j && *str == '~' && (is_separator(*(str + 1)) || *(str + 1) == '/'))
 		return (1);
 	return (0);
 }
