@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_checkers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/08 21:06:34 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/09 10:01:53 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 
 short	valid_deref(char *str, size_t j)
 {
-	if (*str == '$' && *(str + 1) != '=' && !is_separator(*(str + 1)))
+	if (*str == '$' && *(str + 1) != '=' && *(str + 1) != '\\'
+	&& !is_separator(*(str + 1)))
 		return (1);
 	if (!j && *str == '~' && (is_separator(*(str + 1)) || *(str + 1) == '/'))
 		return (1);

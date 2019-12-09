@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/24 00:16:29 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/09 11:42:07 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,6 @@ static char		*parse_expr(char *s, t_dlist **tok, t_stx **tr)
 
 char			*redirect_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
 {
-	short	i;
-
 	if (!(*s))
 		return (s);
 	if (g->next)
@@ -101,11 +99,38 @@ char			*redirect_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
 	{
 		if (is_redir(s))
 			return (s);
-		if ((i = layer_parse_two(g->patt, s)))
-		{
-			make_token(tok, pull_token(s, i), g->type);
-			s = s + i;
-		}
+		if (!(s = filename_pull(s, tr, tok)))
+			return (NULL);
 	}
 	return (s);
 }
+
+// char			*redirect_pull(t_graph *g, char *s, t_stx **tr, t_dlist **tok)
+// {
+// 	short	i;
+// 	char	*new;
+
+// 	if (!(*s))
+// 		return (s);
+// 	if (g->next)
+// 		return (in_redir_blocks(g, s, tr, tok));
+// 	else if (g->type == TK_EXPR)
+// 		s = parse_expr(s, tok, tr);
+// 	else
+// 	{
+// 		if (is_redir(s))
+// 			return (s);
+// 		if ((i = layer_parse_two(g->patt, s)))
+// 		{
+// 			new = pull_token(s, i);
+// 			if (!parse_comm(new, tok, tr, '>'))
+// 			{
+// 				free(new);
+// 				return (NULL);
+// 			}
+// 			free(new);
+// 			s = s + i;
+// 		}
+// 	}
+// 	return (s);
+// }

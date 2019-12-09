@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_comm_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/08 21:04:50 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/09 13:10:44 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,11 @@ char			*parse_expr(char *str, t_dlist **tok, t_stx **tr, short sp)
 				return (str);
 		}
 		else
-			j++;
+			++j;
 		i = 0;
 	}
 	str += can_pull_tk(j, &str[j], tok, sp);
-	return (parse_sep(str, tok, 0));
+	return (str);
 }
 
 char			*parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
@@ -103,5 +103,6 @@ char			*parse_comm(char *str, t_dlist **tok, t_stx **tree, short stop)
 	if (is_token_here(str, "exec") && *str && *(str + 1) != '\\')
 		return (parse_exec(str, tok));
 	str = parse_expr(str, tok, tree, stop);
-	return (str);
+	merge_into_expr(tok[0], tok);
+	return (parse_sep(str, tok, 0));
 }

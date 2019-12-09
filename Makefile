@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+         #
+#    By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/12/08 17:26:09 by hgranule         ###   ########.fr        #
+#    Updated: 2019/12/09 11:46:59 by bomanyte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -119,7 +119,8 @@ SRC_FILES = sh_main.c sh_launch.c \
 			lexer/lx_redir_trace.c lexer/lx_script_trace.c \
 			lexer/lx_script_in_2.c lexer/lx_script_in_3.c \
 			lexer/lx_script_in_4.c lexer/lx_script_in_5.c \
-			lexer/lx_args_check.c \
+			lexer/lx_args_check.c lexer/lx_redir_parse_3.c \
+			lexer/lx_apof_parse.c \
 			\
 			sys_tools/sys_dbg_bltn.c \
 			\

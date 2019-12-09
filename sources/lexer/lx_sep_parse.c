@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 01:30:31 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/09 13:35:34 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char		*parse_sep(char *str, t_dlist **tok, short i)
 	char	*new;
 	short	j;
 
-	if (!(*str))
+	if (!str || !(*str))
 		return (str);
 	new = (char *)ft_memalloc(sizeof(char) * 3);
 	while (i != 2 && str[i])

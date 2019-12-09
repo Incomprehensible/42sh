@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_tokenizer.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 00:54:50 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/08 21:07:55 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/09 12:49:09 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ t_dlist **tok);
 char				*redir_pull(t_graph *g, char *s, t_stx **tr, \
 t_dlist **tok);
 char				*fd_pull(t_graph *g, char *s, t_dlist **tok);
+char				*filename_pull(char *s, t_stx **tr, t_dlist **tok);
 short				graph_forward_only(t_graph *g);
 short				graph_end(t_graph *g, char *str);
 short				graph_type(char *str);
@@ -261,6 +262,10 @@ char				*cook_mirr(char *new, char *add);
 char				*join_mirr(char	*new, char *tmp, char *add);
 void				construct_node(t_graph *g, char **dict, size_t *r);
 short				input_no_over_code(void);
+int					expr_was_last(t_dlist *token_list);
+void				merge_into_expr(t_dlist	*token_list, t_dlist **tok);
+void				merge_expr(t_dlist	*last_token, t_dlist **tok);
+void				yes_we_can(char *s, t_dlist **tk, t_tk_type type, size_t j);
 
 # define TOK_TYPE ((t_tok *)(token_list->content))->type
 # define TOK_VALUE ((t_tok *)(token_list->content))->value

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/25 21:35:02 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/09 12:48:12 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,32 +25,6 @@ void	yes_we_can(char *s, t_dlist **tk, t_tk_type type, size_t j)
 	make_token(tk, new, type);
 	if (tmp)
 		free(tmp);
-}
-
-char	*parse_apofs(char *str, t_dlist **tok, t_stx **tree, short i)
-{
-	size_t	j;
-
-	j = 0;
-	if (!is_q(*str))
-		if (!(str = parse_comm(str, tok, tree, '\'')))
-			return (NULL);
-	if (*str && *str == '\'')
-	{
-		++str;
-		while (*str && *str != '\'')
-		{
-			if (*str == '\\')
-			{
-				str++;
-				j++;
-			}
-			str++;
-			j++;
-		}
-		yes_we_can(str, tok, APOF, j);
-	}
-	return (parse_sep(++str, tok, i));
 }
 
 size_t	can_pull_tk(size_t j, char *str, t_dlist **tok, int t)
@@ -90,6 +64,9 @@ short	special_case(char br, char *str)
 
 char	*parse_dquotes(char *str, t_dlist **tok, t_stx **tree, short i)
 {
+	int		flag;
+	t_dlist	*last_token;
+
 	i = 0;
 	str = parse_empty(str, 0x0, tok);
 	if (*str != '"')
@@ -97,7 +74,11 @@ char	*parse_dquotes(char *str, t_dlist **tok, t_stx **tree, short i)
 	if (!str)
 		return (NULL);
 	str = parse_empty(str, 0x0, tok);
+	flag = expr_was_last(tok[1]) ? 1 : 0;
+	last_token = tok[1];
 	str++;
 	str = parse_str_block(str, tok, tree, '"');
+	if (flag)
+		merge_into_expr(last_token, tok);
 	return (str);
 }

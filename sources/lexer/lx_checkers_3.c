@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/28 22:00:14 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/09 12:02:27 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ short	back_ps_check(t_dlist *token_list)
 {
 	t_tk_type	type;
 
-	while (token_list)
+	while (token_list && token_list->content)
 	{
 		while (token_list && TOK_TYPE != TK_ARSHLOCH)
 		{
