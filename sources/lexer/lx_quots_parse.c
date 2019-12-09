@@ -6,13 +6,21 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/09 12:48:12 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/09 18:29:27 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
+
+int		deref_was_last(t_dlist *token_list)
+{
+	if (token_list && token_list->content)
+		if (TOK_TYPE == TK_DEREF || TOK_TYPE == TK_NAME)
+			return (1);
+	return (0);
+}
 
 void	yes_we_can(char *s, t_dlist **tk, t_tk_type type, size_t j)
 {
@@ -75,10 +83,15 @@ char	*parse_dquotes(char *str, t_dlist **tok, t_stx **tree, short i)
 		return (NULL);
 	str = parse_empty(str, 0x0, tok);
 	flag = expr_was_last(tok[1]) ? 1 : 0;
+	flag = deref_was_last(tok[1]) ? 2 : flag;
 	last_token = tok[1];
 	str++;
 	str = parse_str_block(str, tok, tree, '"');
 	if (flag)
+	{
 		merge_into_expr(last_token, tok);
+		if (flag == 2)
+			merge_into_deref(tok[0]);
+	}
 	return (str);
 }

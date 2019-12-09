@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_first_layer.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/08 21:01:16 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/09 17:45:58 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ short		find_token(t_stx **tree, char *str)
 	choice = 0;
 	if (ft_isspace(*str) || *str == '\n')
 		return (EMPTY);
-	else if (*str == '$' && *str == '~' && valid_deref(str, 0))
+	else if ((*str == '$' || *str == '~') && valid_deref(str, 0))
 		return (DEREF);
 	else if (is_sep_no_space(*str) && *str && !is_redir(str + 1))
 		return (SEPS);

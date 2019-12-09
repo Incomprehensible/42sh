@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/09 10:01:53 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/09 17:47:40 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ short	is_ariphmetic(char str)
 short	is_separator(char str)
 {
 	if (str != ' ' && str != '\t' && str != '\n' && str != ';'
-	&& str != '&' && str != '|' && str != '"' && str)
+	&& str != '&' && str != '|' && str)
 		return (0);
 	return (1);
 }
