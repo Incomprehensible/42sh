@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 00:55:02 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/10 22:41:59 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ char	*parse_assig_block(char *str, t_dlist **tok, t_stx **tree)
 
 	j = 0;
 	i = 0;
-	while (str[j] && !((!i && is_separator(str[j])) && str[j] != '"'))
+	while (str[j] && !(!i && is_separator(str[j])))
 	{
 		if (str[j] == '\\' && ++j)
 			i = 1;
-		else if (!i && (str[j] == '$' || str[j] == '"'))
+		else if (!i && (str[j] == '$' || str[j] == '"' || str[j] == '\''))
 		{
 			str += can_pull_tk(j, &str[j], tok, 0);
 			j = 0;

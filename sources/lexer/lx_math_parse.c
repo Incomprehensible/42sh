@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 01:51:25 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/10 21:52:51 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char		*pull_in_brackets(char br, char *str, t_dlist **tok)
 	return (skip_brackets(str + len, br));
 }
 
-char		*parse_math(char *str, t_dlist **tok, t_stx **tree, short ind)
+char		*parse_math(char *str, t_dlist **tok, t_stx **tree, short i)
 {
 	char	br;
 
@@ -67,5 +67,5 @@ char		*parse_math(char *str, t_dlist **tok, t_stx **tree, short ind)
 		str = pull_in_brackets(br, str, tok);
 	else
 		str = pull_math_seq(str, tok);
-	return (ind < 0 ? "\0" : str);
+	return (str + i);
 }

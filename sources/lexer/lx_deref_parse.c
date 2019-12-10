@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/09 18:45:51 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/10 22:52:33 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@ static short	special_reg(char c, short tk)
 			return (1);
 		return (0);
 	}
-	else if (tk == DQUOTS)
-		return (c == '"' ? 1 : 0);
-	if (c == '!' || c == '*' || c == '$' || c == '#' ||
-	c == ':' || c == '~' || c == '?' || c == '/')
+	if (c == '\'' || c == '"' || c == '!' || c == '*' ||
+	c == '$' || c == '#' || c == ':' || c == '~' || c == '?'
+	|| c == '/')
 		return (1);
 	return (0);
 }
@@ -84,15 +83,15 @@ char			*parse_deref(char *str, t_dlist **tok, t_stx **tree, short i)
 		}
 		make_token(tok, NULL, TK_DEREF);
 		if (check_branch(str, tree[DQUOTS]))
-			return (parse_dquotes(str, tok, tree, i));
+			return (parse_dquotes(str, tok, tree, 0));
 		else if (check_branch(str, tree[APOFS]))
 			return (parse_apofs(str, tok, tree, 0));
 		else if (layer_parse_one("{z}", str))
 			return (parse_curly_br(str, tok));
 		else if (check_branch(str, tree[MATHS]))
-			return (parse_math(str, tok, tree, i));
+			return (parse_math(str, tok, tree, 0));
 		else if (check_branch(str, tree[SUBSHS]))
-			return (parse_subsh(str, tok, tree, i));
+			return (parse_subsh(str, tok, tree, 0));
 		return (parse_nametk(str, tok, i));
 	}
 	return (parse_comm(str, tok, tree, 0));

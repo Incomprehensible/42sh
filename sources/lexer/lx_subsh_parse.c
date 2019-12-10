@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_subsh_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/08 20:54:14 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/10 21:46:50 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*parse_subsh(char *str, t_dlist **tok, t_stx **tree, short ind)
 	if (*str == '\\' || *str != '(')
 		return (parse_comm(str, tok, tree, '('));
 	if (*str == '$' && valid_deref(str, 0))
-		return (parse_deref(str, tok, tree, 0));
+		return (parse_deref(str, tok, tree, 1));
 	if ((tmp = pull_subsh(str, tok, TK_SUBSH)) == str)
 		return (NULL);
 	str = tmp;

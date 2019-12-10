@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 15:56:47 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/10 22:39:34 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@ static char	*get_value(char *str, t_stx **tr, t_dlist **tok)
 
 	if (*str == '\\' && (*(str + 1) == ' ' || *(str + 1) == '\t'))
 		str += 2;
-	if (*str == '\'')
-		new = parse_apofs(str, tok, tr, 0);
-	else
-		new = parse_assig_block(str, tok, tr);
+	// if (*str == '\'')
+	// 	new = parse_apofs(str, tok, tr, 0);
+	//else
+		// new = parse_assig_block(str, tok, tr);
+	new = parse_assig_block(str, tok, tr);
 	if (new != str && new)
 		substitute_value(tok[1]);
 	if (new == str)
