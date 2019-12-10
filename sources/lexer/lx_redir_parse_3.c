@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_redir_parse_3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/09 18:34:28 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/10 18:42:21 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,13 @@ static char		*parse_filename(char *s, size_t i, t_stx **tr, t_dlist **tok)
 
 	last_token = tok[1];
 	new = pull_token(s - i, i);
-	dbg_print_tokens(tok[0]);
 	if (!(parse_comm(new, tok, tr, 0)))
 	{
 		free(new);
 		return (NULL);
 	}
 	free(new);
-	dbg_print_tokens(tok[0]);
 	into_filename(last_token, tok);
-	dbg_print_tokens(tok[0]);
 	return (s);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:46:53 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/10 18:39:50 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int			prs_hrd_word(t_dlist *tl, REDIRECT *redr);
 int			prs_rdr_fdr_file(t_dlist *tokens, REDIRECT *redir, ENV *envr);
 int			prs_rdr_fdl(t_dlist *tokens, REDIRECT *redir);
 int			prs_rdr_is_std_fd(t_dlist *fd_tl);
-char		*rdr_get_filename(t_tok *tok, ENV *envr);
+char		*rdr_get_filename(t_dlist *tks, ENV *envr);
 
 /*
 ** Function returns a full double-list with RDR DESCS

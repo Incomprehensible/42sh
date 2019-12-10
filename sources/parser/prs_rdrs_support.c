@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_rdrs_support.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 09:41:56 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 09:44:56 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/10 18:40:11 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,30 @@
 #include "sys_tools/sys_tools.h"
 #include "sys_tools/sys_errors.h"
 
-char			*rdr_get_filename(t_tok *tok, ENV *envr)
+char			*rdr_get_filename(t_dlist *tks, ENV *envr)
 {
-	char		*ch;
+	DSTRING		*buff;
+	char		*str;
+	t_tok		*tok;
 
-	if ((TK_PROF_IN | TK_PROF_OUT) & tok->type)
-		ch = prc_substitute(tok->value, envr, TK_PROF_IN == tok->type ? 1 : 0);
-	else
+	buff = dstr_new("");
+	while (tks && (tok = tks->content) && \
+	(tok->type & (TK_DEREF | TK_PROF_IN | TK_PROF_OUT | TK_FILENAME)))
 	{
-		if (!(ch = ft_strdup(tok->value)))
-			sys_fatal_memerr("STRDUP_FILENAME_FAIL");
+		if ((TK_PROF_IN | TK_PROF_OUT) & tok->type)
+			str = prc_substitute(tok->value, envr, TK_PROF_IN == tok->type ? 1 : 0);
+		else if (TK_FILENAME == tok->type)
+			str = ft_strdup(tok->value);
+		else if (TK_DEREF == tok->type)
+			str = get_deref((tks = tks->next), envr);
+		if (str)
+		{
+			dstr_insert_str(buff, str, buff->strlen);
+			free(str);
+		}
+		tks = tks->next;
 	}
-	return (ch);
+	return (dstr_flush(&buff));
 }
 
 int				prs_rdr_is_std_fd(t_dlist *fd_tl)
@@ -70,9 +82,9 @@ int				prs_rdr_fdr_file(t_dlist *tokens, REDIRECT *redir, ENV *envr)
 	if (!(tokens = arg_tok_skip(tokens, TK_EMPTY | TK_RDS)))
 		return (-2);
 	tok = tokens->content;
-	if (tok->type & (TK_PROF_IN | TK_PROF_OUT | TK_FILENAME))
+	if (tok->type & (TK_PROF_IN | TK_PROF_OUT | TK_FILENAME | TK_DEREF))
 	{
-		redir->file = rdr_get_filename(tok, envr);
+		redir->file = rdr_get_filename(tokens, envr);
 		return (0);
 	}
 	if (tok->type == TK_FD)
