@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/01 18:51:09 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/11 07:09:11 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,12 +117,12 @@ t_tk_type end_tk, int *status)
 			*status = prs_executor(&etab, envs);
 		if (tok->type & (end_tk | TK_EOF | TK_BREAK | TK_CONTIN))
 			return (tks);
-		tks = sh_tparse_tks(tks, status, &etab, tok->type);
 		if (tks == INTERRUPT_CALL)
 			return (INTERRUPT_CALL);
 		tks = tks && tks->next && tok->type & (TK_ARSHLOCH | TK_SEPS1 | \
 		TK_EMPTY | (TK_FLOWS & ~(TK_IF | TK_WHILE))) & ~TK_EOF ? \
 		tks->next : tks;
+		tks = sh_tparse_tks(tks, status, &etab, tok->type);
 	}
 	return (tks);
 }

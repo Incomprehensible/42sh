@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/10 21:27:52 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/11 07:22:34 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_dlist			*args_get_next_arg(t_dlist *tks)
 	t_tok		*tok;
 
 	while (tks && (tok = tks->content) && !(tok->type & \
-	(TK_DEREF | TK_EXPR | TK_PROC_IN | TK_PROC_OUT | TK_MATH)))
+	(TK_DEREF | TK_EXPR | TK_PROC_IN | TK_PROC_OUT | TK_MATH | TK_VALUE)))
 	{
 		tks = arg_tok_skip(tks, TK_FD | TK_EMPTY);
 		if (tks && (tok = tks->content) && (tok->type & TK_RDS1))
@@ -33,7 +33,7 @@ t_dlist			*args_get_next_arg(t_dlist *tks)
 			tks = arg_tok_skip(tks, TK_HERED | TK_EMPTY);
 			tks = arg_tok_skip(tks, TK_WORD | TK_EMPTY);
 		}
-		if (tok->type & (TK_FLOWS | TK_SEPS1 | TK_EOF))
+		if (tok->type & (TK_FLOWS | TK_SEPS | TK_EOF))
 			return (tks);
 	}
 	return (tks);

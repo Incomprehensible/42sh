@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 17:54:50 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/29 16:52:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/11 07:10:22 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ t_dlist			*prs_and(t_dlist *tks, ENV *envr, int *status)
 {
 	if (*status == EXIT_SUCCESS)
 	{
-		if ((tks = sh_tparse(tks->next, envr, TK_SEP | \
-		TK_EOF | TK_OR, status)) == INTERRUPT_CALL)
-			return (tks);
+		tks = sh_tparse(tks->next, envr, TK_SEP | \
+		TK_EOF | TK_OR | TK_AND, status);
+		return (tks);
 	}
 	*status = EXIT_FAILURE;
 	if (tks->next)
@@ -52,9 +52,9 @@ t_dlist			*prs_or(t_dlist *tks, ENV *envr, int *status)
 {
 	if (*status != EXIT_SUCCESS)
 	{
-		if ((tks = sh_tparse(tks->next, envr, TK_SEP | \
-		TK_EOF | TK_AND, status)) == INTERRUPT_CALL)
-			return (tks);
+		tks = sh_tparse(tks->next, envr, TK_SEP | \
+		TK_EOF | TK_AND | TK_OR, status);
+		return (tks);
 	}
 	*status = EXIT_SUCCESS;
 	if (tks->next)
