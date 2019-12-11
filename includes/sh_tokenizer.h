@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 00:54:50 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/09 18:25:03 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/11 00:20:39 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,7 @@ int					deref_was_last(t_dlist *token_list);
 void				merge_into_expr(t_dlist	*token_list, t_dlist **tok);
 void				merge_into_deref(t_dlist *token_list);
 void				merge_into_name(t_dlist	*token_list, t_dlist **tok);
+void				merge_name(char **first, char **sec);
 void				yes_we_can(char *s, t_dlist **tk, t_tk_type type, size_t j);
 
 # define TOK_TYPE ((t_tok *)(token_list->content))->type

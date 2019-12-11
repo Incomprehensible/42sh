@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/10 18:42:21 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/11 04:54:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,20 @@
 #include "sh_token.h"
 #include "sh_tokenizer.h"
 
-void			merge_into_name(t_dlist	*token_list, t_dlist **tok)
+void			merge_name(char **first, char **sec)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(*first, *sec);
+	free(*first);
+	free(*sec);
+	*first = tmp;
+}
+
+void			merge_into_name(t_dlist *token_list, t_dlist **tok)
 {
 	t_dlist	*next;
 	t_dlist	*current;
-	char	*tmp;
 
 	while (token_list)
 	{
@@ -26,14 +35,14 @@ void			merge_into_name(t_dlist	*token_list, t_dlist **tok)
 		{
 			current = token_list;
 			token_list = token_list->next;
-			if (token_list && (TOK_TYPE == TK_NAME || TOK_TYPE == TK_EXPR))
+			if (token_list && (TOK_TYPE == TK_NAME))
 			{
-				tmp = ft_strjoin(((t_tok *)(current->content))->value, TOK_VALUE);
-				free(((t_tok *)(current->content))->value);
-				((t_tok *)(current->content))->value = tmp;
+				merge_name(&((t_tok *)(current->content))->value, &TOK_VALUE);
 				next = token_list->next;
-				ft_dlstrmelem(&token_list);
+				token_list->next = NULL;
+				del_tokens(token_list);
 				tok[1] = next ? tok[1] : current;
+				current->next = next;
 				token_list = current;
 			}
 		}

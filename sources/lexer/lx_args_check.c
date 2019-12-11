@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_args_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/03 00:58:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/10 23:45:45 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,9 @@ short			args_check(t_dlist *token_list)
 	{
 		while (token_list && TOK_TYPE == TK_EMPTY)
 			token_list = token_list->next;
-		if (token_list && (TOK_TYPE == TK_MATH || TOK_TYPE == TK_SUBSH))
+		if (token_list && TOK_TYPE == TK_DEREF)
+			token_list = token_list->next;
+		else if (token_list && (TOK_TYPE == TK_MATH || TOK_TYPE == TK_SUBSH))
 		{
 			if (!vector_to_left(token_list->prev))
 				return (0);

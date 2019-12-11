@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_portal.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/08 20:56:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/10 22:36:32 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,17 @@ char			*assig_into_portal(char *str, t_dlist **tok, t_stx **tree)
 {
 	if (*str == '$')
 	{
-		if (!(str = parse_deref(str, tok, tree, 0)))
+		if (!(str = parse_deref(str, tok, tree, 1)))
 			return (NULL);
 	}
 	else if (*str == '"')
 	{
 		if (!(str = parse_dquotes(str, tok, tree, 0)))
+			return (NULL);
+	}
+	else if (*str == '\'')
+	{
+		if (!(str = parse_apofs(str, tok, tree, 0)))
 			return (NULL);
 	}
 	return (str);
@@ -78,7 +83,7 @@ char			*check_subbranch(char *str, t_dlist **tok, t_stx **tree)
 	else if (*str == '"' && check_branch(str, tree[DQUOTS]))
 		str = block_pass(DQUOTS, str, tok, tree);
 	else if ((*str == '$' || *str == '~') && is_tok_deref(str))
-		str = parse_deref(str, tok, tree, 0);
+		str = parse_deref(str, tok, tree, 1);
 	else if (*str == '(' && check_branch(str, tree[MATHS]))
 		str = block_pass(MATHS, str, tok, tree);
 	else if (*str == '(' && check_branch(str, tree[SUBSHS]))
