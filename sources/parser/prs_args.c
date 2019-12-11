@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/29 16:54:01 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/10 21:27:52 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,30 @@
 #include "sh_token.h"
 #include "ft_lbuffer.h"
 #include "sys_tools/sys_tools.h"
+
+t_dlist			*args_get_next_arg(t_dlist *tks)
+{
+	t_tok		*tok;
+
+	while (tks && (tok = tks->content) && !(tok->type & \
+	(TK_DEREF | TK_EXPR | TK_PROC_IN | TK_PROC_OUT | TK_MATH)))
+	{
+		tks = arg_tok_skip(tks, TK_FD | TK_EMPTY);
+		if (tks && (tok = tks->content) && (tok->type & TK_RDS1))
+		{
+			tks = arg_tok_skip(tks, TK_RDS1 | TK_EMPTY);
+			tks = arg_tok_skip(tks, TK_DEREF | TK_MATH | TK_NAME | TK_SUBSH | TK_FILENAME);
+		}
+		if (tks && (tok = tks->content) && (tok->type & TK_HERED))
+		{
+			tks = arg_tok_skip(tks, TK_HERED | TK_EMPTY);
+			tks = arg_tok_skip(tks, TK_WORD | TK_EMPTY);
+		}
+		if (tok->type & (TK_FLOWS | TK_SEPS1 | TK_EOF))
+			return (tks);
+	}
+	return (tks);
+}
 
 size_t			args_count(t_dlist *tokens)
 {
@@ -30,8 +54,7 @@ size_t			args_count(t_dlist *tokens)
 	else if (((t_tok *)tokens->content)->type & (TK_SEPS | TK_FLOWS))
 		return (0);
 	else
-		return (args_count(arg_tok_skip(tokens, \
-		TK_FDS_RDS | TK_EMPTY | TK_WORD | TK_HERED)));
+		return (args_count(args_get_next_arg(tokens)));
 }
 
 t_dlist			*arg_sub_df(t_dlist *tokens, DSTRING *expr, ENV *env)
@@ -69,7 +92,7 @@ t_dlist			*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr)
 	t_tok		*tok;
 
 	expr_buff = dstr_new("");
-	tokens = arg_tok_skip(tokens, TK_FDS_RDS | TK_EMPTY | TK_HERED | TK_WORD);
+	tokens = args_get_next_arg(tokens);
 	while (!((tok = tokens->content)->type & \
 	(TK_SEPS | TK_FLOWS | TK_FDS_RDS | TK_EMPTY | TK_WORD | TK_HERED)))
 	{

@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/11 06:49:11 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/11 06:58:55 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void			merge_name(char **first, char *sec)
 
 	tmp = ft_strjoin(*first, sec);
 	free(*first);
-	//free(*sec);
 	*first = tmp;
 }
 
