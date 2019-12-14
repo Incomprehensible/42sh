@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_basename.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 20:45:07 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 08:34:27 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 03:21:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,7 @@ char		*sh_checkpathes(const char *cmd, char **pathes, pid_t *pid)
 
 char		*sh_checkbins(const char *cmd, ENV *envr, pid_t *pid)
 {
-	t_dyn_string	*dstr;
-	char			**pathes;
+	t_avln			*node;
 	char			*str;
 
 	if (((*cmd == '.' && *(cmd + 1) == '/') \
@@ -83,14 +82,10 @@ char		*sh_checkbins(const char *cmd, ENV *envr, pid_t *pid)
 		else
 			return (0);
 	}
-	if (!(dstr = env_get_variable("PATH", envr)))
+	if (!(node = ft_avl_search(envr->cmds, cmd)))
 		return (0);
-	if (!(pathes = ft_strsplit(dstr->txt, ':')))
-		return (0);
-	str = sh_checkpathes(cmd, pathes, pid);
-	dstr_del(&dstr);
-	et_rm_warr(pathes);
-	if (str)
-		return (str);
-	return (0);
+	str = ft_strdup(node->content);
+	if (!str)
+		return (NULL);
+	return (str);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_tools.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:55:44 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 08:21:49 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 19:26:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int			sys_wait_prg_jobs_checks(t_pgrp **ps_grp, int state, int o_state);
 int			math_error_handler(ERR *err, int ret, ENV *env);
 char		*sys_get_prg_iline(char *old_il, char *new_cm);
 int			sys_wait_ps(t_dlist *ps, int *status, pid_t lpid, int mode);
+void		sys_siglog(int sig);
 
 void		put_prompt_new_line(DSTRING **pr_src, \
 size_t ind, size_t *ofs);

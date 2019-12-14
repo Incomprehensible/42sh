@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/02 20:44:03 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 00:33:31 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,13 @@ typedef struct	s_env
 	t_avl_tree	*funcs;
 	t_avl_tree	*aliases;
 	t_avl_tree	*core;
+	t_avl_tree	*cmds;
 }				t_env;
+
+# define CMDEN_BIN 1
+# define CMDEN_BLT 2
+# define CMDEN_FILE 3
+# define CMDEN_FUNC 4
 
 /*
 **strings - array of DSTRING'S(every string is name of command / directory)
@@ -79,14 +85,10 @@ void			free_spl(char ***spl);
 int				env_core_set(char *key, char *value, t_avl_tree *core);
 int				prs_set_pid(ENV *envr);
 
-void			env_get_bins_parsepath(t_darr *res, ENV *envp, DSTRING *sub);
-void			env_get_bins_parsebltn(t_darr *res, ENV *envp, DSTRING *str);
-void			env_get_bins_parefunc(t_darr *res, ENV *envp, DSTRING *str);
-
-t_darr			env_get_bins(ENV *env, DSTRING *dstr);
-
 int				env_get_bins_unq(t_darr *res, char *str);
 void			env_get_bins_cmp_name(t_darr *res, int namelen);
 t_darr			env_get_keys(ENV *envp, char *pref);
+
+t_avl_tree		*cmden_tree_create(ENV *env);
 
 #endif

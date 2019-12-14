@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/12/03 01:02:57 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 19:35:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,5 +360,6 @@ void			sys_term_noecho(void);
 void			add_buf_history(DSTRING *buf);
 void			save_histr(ENV *envr);
 void			del_history_buf(t_darr *histr);
+t_darr			get_overlap_darr(DSTRING *sub, t_avl_tree *avl);
 
 #endif

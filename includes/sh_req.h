@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:34:45 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/27 22:47:08 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 00:47:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int			sh_launch_file(t_opt *opt, ENV *env);
 int			sys_core_set_init(ENV *env, char **argv);
 void		sh_loop(ENV *env);
 int			sh_launch_loop(ENV *env);
+int			sh_libs_enbl(t_opt *opt, ENV *env);
 int			sh_launch(t_opt *opt, ENV *env);
 
 int			sh_do_src(char *filename, ENV *env);

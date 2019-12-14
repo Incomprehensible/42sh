@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_quots_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/10 22:59:30 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/14 19:32:21 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,25 +90,3 @@ char	*parse_dquotes(char *str, t_dlist **tok, t_stx **tree, short i)
 		merge_into_deref(tok[0]);
 	return (str);
 }
-
-//LAST VERSION
-// char	*parse_dquotes(char *str, t_dlist **tok, t_stx **tree, short i)
-// {
-// 	int		flag;
-// 	t_dlist	*last_token;
-
-// 	i = 0;
-// 	str = parse_empty(str, 0x0, tok);
-// 	if (*str != '"')
-// 		str = parse_comm(str, tok, tree, '"');
-// 	if (!str)
-// 		return (NULL);
-// 	str = parse_empty(str, 0x0, tok);
-// 	flag = expr_was_last(tok[1]) ? 1 : 0;
-// 	last_token = tok[1];
-// 	str++;
-// 	str = parse_str_block(str, tok, tree, '"');
-// 	// if (flag)
-// 	// 	merge_into_expr(last_token, tok);
-// 	return (str);
-// }

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/22 15:22:08 by fnancy            #+#    #+#             */
-/*   Updated: 2019/12/02 20:31:54 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 00:07:16 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,4 @@ int			env_get_bins_unq(t_darr *res, char *str)
 		if (ft_strcmp(res->strings[i]->txt, str) == 0)
 			return (0);
 	return (1);
-}
-
-t_darr		env_get_bins(ENV *envp, DSTRING *sub)
-{
-	t_darr	res;
-
-	res.allsize = 0;
-	res.maxlen = 0;
-	res.maxlen = 0;
-	res.count = 0;
-	env_get_bins_parsepath(&res, envp, sub);
-	env_get_bins_parsebltn(&res, envp, sub);
-	env_get_bins_parefunc(&res, envp, sub);
-	return (res);
 }

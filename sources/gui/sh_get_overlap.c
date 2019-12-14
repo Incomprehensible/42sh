@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:26:44 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/12/02 20:37:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 19:34:43 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_darr			sh_get_cmd(t_buf *buffer, ENV *env)
 {
 	t_darr		allcmd;
 	t_darr		overlap;
+	t_avl_tree	*entry_tree;
 
 	if (is_executable(buffer))
 	{
@@ -38,9 +39,8 @@ t_darr			sh_get_cmd(t_buf *buffer, ENV *env)
 		free_t_darr(&allcmd);
 		return (overlap);
 	}
-	allcmd = env_get_bins(env, buffer->sub);
-	overlap = sh_cmp_darr(allcmd, buffer->sub);
-	free_t_darr(&allcmd);
+	entry_tree = env->cmds;
+	overlap = get_overlap_darr(buffer->sub, entry_tree);
 	return (overlap);
 }
 

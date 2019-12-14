@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/10 18:39:50 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 19:44:06 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "exe_prs_defines.h"
 # include "rms.h"
+# include "ft_dlist.h"
 
 char		*ft_basename(const char *path);
 size_t		sizeof_warr(char **arr);
@@ -142,5 +143,7 @@ char		*prc_substitute(char *code, ENV *envr, int is_in);
 int			prs_error_handler(int ecode, size_t type, \
 ENV *envr, EXPRESSION *expr);
 int			prs_set_last_status(int *status, ENV *envr);
+
+t_dlist		*args_get_next_arg(t_dlist *tks);
 
 #endif

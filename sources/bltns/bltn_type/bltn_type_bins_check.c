@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 10:34:05 by fnancy            #+#    #+#             */
-/*   Updated: 2019/12/02 20:19:50 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 00:26:34 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,28 +80,10 @@ static DSTRING		*bltn_type_chbins_parse(char *str, ENV *envp)
 
 int					bltn_type_check_bins(char *str, ENV *env, DSTRING **val)
 {
-	t_darr	res;
-	size_t	i;
-	DSTRING	*dstr;
-
-	i = (size_t)-1;
-	res.allsize = 0;
-	res.maxlen = 0;
-	res.count = 0;
-	dstr = dstr_new(str);
-	env_get_bins_parsepath(&res, env, dstr);
-	dstr_del(&dstr);
-	while (++i < res.count)
+	if (ft_avl_search(env->cmds, str))
 	{
-		if (ft_strequ(res.strings[i]->txt, str))
-		{
-			if ((*val))
-				dstr_del(val);
-			bltn_type_freedstrings(&res);
-			(*val) = bltn_type_chbins_parse(str, env);
-			return (1);
-		}
+		(*val) = bltn_type_chbins_parse(str, env);
+		return (1);
 	}
-	bltn_type_freedstrings(&res);
 	return (0);
 }

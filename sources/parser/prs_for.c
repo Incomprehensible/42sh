@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 09:33:42 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/29 17:21:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 07:05:48 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ int *sts, char **mt_conds)
 	{
 		if ((tks = sh_tparse(loop_bg->next, env, TK_DONE, sts)) \
 		== INTERRUPT_CALL)
+		{
+			et_rm_warr(mt_conds);
 			return (INTERRUPT_CALL);
+		}
 		if ((tok = tks->content)->type == TK_BREAK)
 			break ;
 		do_math_bltn(mt_conds[2], env, &m_err);
@@ -115,8 +118,8 @@ t_dlist			*prs_for(t_dlist *tks, ENV *env, int *sts)
 	if (tok->type == TK_DO)
 		return (0);
 	if (tok->type == TK_VAR)
-		return (prs_forin(cond, env, sts)->next);
+		return (prs_forin(cond, env, sts));
 	if (tok->type == TK_MATH)
-		return (prs_formt(cond, env, sts)->next);
+		return (prs_formt(cond, env, sts));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/02 20:49:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 00:44:39 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,16 @@
 static t_env	g_m_env;
 static t_opt	g_m_opt;
 
-size_t			args_len(char **argv)
+int				sh_launch(t_opt *opt, ENV *env)
 {
-	size_t		i;
-
-	i = 0;
-	while (argv && argv[i])
-	{
-		++i;
-	}
-	return (i);
+	g_input_nover = -1;
+	if (opt->lib_fs)
+		sh_libs_enbl(opt, env);
+	if (opt->params)
+		sh_launch_file(opt, env);
+	else
+		sh_launch_loop(env);
+	return (0);
 }
 
 /*
@@ -77,6 +77,7 @@ int				main(int ac, char **av, char **ev)
 
 	env = &g_m_env;
 	opt = &g_m_opt;
+	env->cmds = NULL;
 	atexit(at_exit_clear);
 	opt_init(ac, av, opt);
 	env_init(ev, env);

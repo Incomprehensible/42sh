@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_cleaners.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/10 23:02:49 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/14 19:32:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ short			list_ready_to_go(t_dlist **token_list)
 	exec_on(token_list[0]);
 	get_rid_of_void(token_list[0]);
 	merge_into_expr(token_list[0], token_list);
-	//merge_into_name(token_list[0], token_list);
 	if (!seps_check(token_list[0]) || !args_check(token_list[0]))
 		return (0);
 	trim_separators(token_list[0]);

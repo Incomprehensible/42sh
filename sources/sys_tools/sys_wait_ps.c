@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sys_wait_ps.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 08:03:51 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 08:06:46 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 19:27:05 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sys_tools/sys_hidden.h"
 #include "sys_tools/sys_tools.h"
+#include "libftprintf.h"
 #include "bltns_jobs.h"
 
 extern t_pgrp	*g_ptab[SYS_PRGS_SIZE];
@@ -34,6 +35,8 @@ void		sys_wtps_sig(t_ps_d *psd, int *status, pid_t lpid, int statloc)
 	int		rstat;
 
 	signal = WTERMSIG(statloc);
+	if (signal == SIGINT)
+		g_intr = SIGINT;
 	rstat = 128 + signal;
 	if (psd->pid == lpid)
 		*status = rstat;
@@ -95,5 +98,7 @@ int			sys_wait_prg(t_pgrp **ps_grp, int *status, pid_t lpid, int mode)
 		(*ps_grp)->state = (*ps_grp)->state < state ? state : (*ps_grp)->state;
 	}
 	sys_prg_sig_set(ps_grp);
+	if ((*ps_grp)->state == PS_S_SIG && (*ps_grp)->mode == PS_M_FG)
+		sys_siglog((*ps_grp)->signal);
 	return (sys_wait_prg_jobs_checks(ps_grp, state, o_state));
 }

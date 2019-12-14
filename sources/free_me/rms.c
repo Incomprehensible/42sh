@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/01 18:52:11 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 19:46:33 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,14 @@ void			et_rm_clear_env(ENV *env)
 		ft_avl_tree_free(env->aliases);
 	if (env->core)
 		ft_avl_tree_free(env->core);
+	if (env->cmds)
+		ft_avl_tree_free(env->cmds);
 	dstr_del(&g_pwd);
 	dstr_del(&g_oldpwd);
+}
+
+void			free_safe(void *ptr)
+{
+	if (ptr)
+		free(ptr);
 }

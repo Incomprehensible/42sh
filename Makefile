@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/12/09 11:46:59 by bomanyte         ###   ########.fr        #
+#    Updated: 2019/12/14 19:36:07 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,8 +87,7 @@ SRC_FILES = sh_main.c sh_launch.c \
 			\
 			$(addprefix gui/, $(GUI_FILES)) \
 			sys_tools/sys_config.c sys_tools/sys_files.c sys_tools/sys_proc_tables.c \
-			env/env_get_bins/env_get_bins_parsebltn.c env/env_get_bins/env_get_bins_parsefunc.c \
-			env/env_get_bins/env_get_bins_parsepath.c env/env_get_bins/env_get_bins.c \
+			env/env_get_bins/env_get_bins.c \
 			\
 			lexer/lx_backgr_offset.c lexer/lx_script_init.c \
 			lexer/lx_script_parse.c lexer/lx_cleaners.c \
@@ -136,7 +135,10 @@ SRC_FILES = sh_main.c sh_launch.c \
 			\
 			options/sh_options_conds.c options/sh_options_fsm.c \
 			options/sh_options_handlers.c \
-			ft_dlst_helper.c sys_tools/sys_core_set.c sh_history_rl.c
+			ft_dlst_helper.c sys_tools/sys_core_set.c sh_history_rl.c \
+			\
+			env/env_cmd_hash.c sys_tools/sys_siglog.c \
+			env/env_get_darr_from_tree.c
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases \
 bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer \

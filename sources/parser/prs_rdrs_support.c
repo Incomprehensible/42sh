@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 09:41:56 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/10 18:40:11 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 19:29:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,22 @@
 
 char			*rdr_get_filename(t_dlist *tks, ENV *envr)
 {
-	DSTRING		*buff;
-	char		*str;
-	t_tok		*tok;
+	t_dyn_string	*buff;
+	char			*str;
+	t_tok			*tok;
 
 	buff = dstr_new("");
 	while (tks && (tok = tks->content) && \
 	(tok->type & (TK_DEREF | TK_PROF_IN | TK_PROF_OUT | TK_FILENAME)))
 	{
 		if ((TK_PROF_IN | TK_PROF_OUT) & tok->type)
-			str = prc_substitute(tok->value, envr, TK_PROF_IN == tok->type ? 1 : 0);
+			str = prc_substitute(tok->value, envr, \
+			TK_PROF_IN == tok->type ? 1 : 0);
 		else if (TK_FILENAME == tok->type)
 			str = ft_strdup(tok->value);
 		else if (TK_DEREF == tok->type)
-			str = get_deref((tks = tks->next), envr);
+			str = get_deref(\
+			(tks = tks->next), envr);
 		if (str)
 		{
 			dstr_insert_str(buff, str, buff->strlen);

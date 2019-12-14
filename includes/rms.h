@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rms.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:56:29 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:29:57 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 19:36:57 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void		et_rm_rdr(void *redir, size_t type);
 ** FREES A CHAR** NULL TERMINATED ARRAY
 */
 void		et_rm_warr(char **args);
+
+void		free_safe(void *ptr);
 
 /*
 ** FREES A EXPRESSION FROM parser.h

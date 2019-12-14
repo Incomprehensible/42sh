@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 04:39:52 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/08 15:17:07 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 00:46:50 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int				sh_do_src(char *filename, ENV *env)
 	if ((fd = sys_file_op(filename, env, O_RDONLY, filename)) < 0)
 		return (-1);
 	ft_bzero(toks, sizeof(t_dlist *) * 2);
+	env->cmds = cmden_tree_create(env);
 	while ((status = get_next_line(fd, &line)) > 0)
 	{
 		if (sh_tokenizer(line->txt, toks) <= 0 && (g_input_nover = -1))
@@ -45,7 +46,6 @@ int				sh_do_src(char *filename, ENV *env)
 			continue ;
 		}
 		dstr_del(&line);
-		dbg_tok_pr_flag ? dbg_print_tokens(toks[0]) : 0;
 		sh_tparse(toks[0], env, TK_EOF, &status);
 		ft_dlst_delf(toks, 0, free_token);
 	}
@@ -75,6 +75,18 @@ int				sh_launch_file(t_opt *opt, ENV *env)
 	return (-1);
 }
 
+void			loop_pre_conf(ENV *env, DSTRING **prompt)
+{
+	if (env->cmds)
+	{
+		ft_avl_tree_free(env->cmds);
+		env->cmds = NULL;
+	}
+	env->cmds = cmden_tree_create(env);
+	if (!((*prompt) = sys_get_prompt_num(env, get_code())))
+		sys_fatal_memerr("PROMPT_ALLOCA_FATAL");
+}
+
 int				sh_launch_loop(ENV *env)
 {
 	t_dyn_string	*line;
@@ -87,8 +99,7 @@ int				sh_launch_loop(ENV *env)
 	ft_bzero(token_list, sizeof(t_dlist *) * 2);
 	while (1)
 	{
-		if (!(prompt = sys_get_prompt_num(env, get_code())))
-			sys_fatal_memerr("PROMPT_ALLOCA_FATAL");
+		loop_pre_conf(env, &prompt);
 		if (!(line = sh_readline(prompt, env)))
 			break ;
 		dstr_del(&prompt);
@@ -119,17 +130,5 @@ int				sh_libs_enbl(t_opt *opt, ENV *env)
 			sh_do_src(lib_lst->content, env);
 		lib_lst = lib_lst->next;
 	}
-	return (0);
-}
-
-int				sh_launch(t_opt *opt, ENV *env)
-{
-	g_input_nover = -1;
-	if (opt->lib_fs)
-		sh_libs_enbl(opt, env);
-	if (opt->params)
-		sh_launch_file(opt, env);
-	else
-		sh_launch_loop(env);
 	return (0);
 }

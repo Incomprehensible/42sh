@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/11 07:09:11 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/14 06:56:31 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,10 @@ t_tk_type end_tk, int *status)
 
 	etab = 0;
 	g_env = envs;
-	while (tks && (tok = tks->content))
+	while (tks && tks != INTERRUPT_CALL && (tok = tks->content))
 	{
 		if (g_intr)
 		{
-			g_intr = 0;
 			ft_dlst_delf((t_dlist **)(&etab), 0, et_rm_ett);
 			return (INTERRUPT_CALL);
 		}
