@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 18:42:17 by fnancy            #+#    #+#             */
-/*   Updated: 2019/12/06 22:55:20 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/16 13:38:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 static char	*g_bltns_str[] = {"setenv", "env", "getenv", "unsetenv", "exit",\
 	"cd", "pwd", "type", "((", "echo", "fg", "bg", "jobs",\
-	"export", "unset", "set", "source"};
+	"export", "unset", "set", "source", "hash"};
 
 t_dyn_string		*g_pwd;
 t_dyn_string		*g_oldpwd;
@@ -134,10 +134,13 @@ int					bltn_source(char **args, ENV *envr);
 
 void				et_rm_str(void *cont, size_t ske);
 
+int					bltn_hash(char **args, ENV *env);
+
 static int	(*g_bltns_func[]) (char **, ENV *) = {&bltn_setenv,\
 	&bltn_env, &bltn_getenv, &bltn_unsetenv, &bltn_exit,\
 	&bltn_cd, &bltn_pwd, &bltn_type,\
 	&bltn_math, &bltn_echo, &bltn_fg, &bltn_bg,\
-	&bltn_jobs, &bltn_export, &bltn_unset, &bltn_set, &bltn_source};
+	&bltn_jobs, &bltn_export, &bltn_unset, &bltn_set,\
+	&bltn_source, &bltn_hash};
 
 #endif

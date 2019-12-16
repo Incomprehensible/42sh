@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 22:01:32 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/01 18:49:10 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/16 21:03:50 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int				exe_execute_pi(EXPRESSION *cmd, ENV *envr)
 	pid = -1;
 	cmd->opipe_fds ? pipe(cmd->opipe_fds) : 0;
 	if (!(path = sh_checkbins(cmd->args[0], envr, &pid)))
-		return (exe_xpr_cleanup(path, -1));
+		return (exe_xpr_cleanup(path, pid));
 	if ((exe_heredoc_check(cmd->redirections, envr)))
 		return (exe_xpr_cleanup(path, 0));
 	if (!(envp = ft_avl_tree_to_warr(envr->globals, avln_todstring_key_val)))

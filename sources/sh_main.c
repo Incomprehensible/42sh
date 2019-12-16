@@ -6,11 +6,12 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/14 00:44:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/16 19:26:16 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_token.h"
+#include "bltn_hash.h"
 #include "sh_req.h"
 #include "sh_readline.h"
 #include "env.h"
@@ -32,6 +33,7 @@ static t_opt	g_m_opt;
 int				sh_launch(t_opt *opt, ENV *env)
 {
 	g_input_nover = -1;
+	env->htid = ht_create(free, hs_fnv1a_64, CACHE_STD_SIZE);
 	if (opt->lib_fs)
 		sh_libs_enbl(opt, env);
 	if (opt->params)

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/22 15:54:49 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/14 19:46:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/16 18:29:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,9 @@ void			et_rm_clear_env(ENV *env)
 		node = ft_avl_search(env->builtns, g_bltns_str[i]);
 		node->content = NULL;
 	}
-	if (env->globals)
-		ft_avl_tree_free(env->globals);
-	if (env->locals)
-		ft_avl_tree_free(env->locals);
+	env->globals ? ft_avl_tree_free(env->globals) : 0;
+	env->locals ? ft_avl_tree_free(env->locals) : 0;
+	env->htid ? ht_free(env->htid) : 0;
 	if (env->builtns)
 		ft_avl_tree_free(env->builtns);
 	if (env->funcs)

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 20:45:07 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/14 03:21:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/16 20:52:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "ft_string.h"
 #include "parser.h"
 #include "sys_tools/sys_tools.h"
+
+#include "bltn_hash.h"
 
 char		*ft_basename(const char *path)
 {
@@ -70,22 +72,18 @@ char		*sh_checkpathes(const char *cmd, char **pathes, pid_t *pid)
 
 char		*sh_checkbins(const char *cmd, ENV *envr, pid_t *pid)
 {
-	t_avln			*node;
 	char			*str;
+	t_hentr			entry;
 
-	if (((*cmd == '.' && *(cmd + 1) == '/') \
-	|| *cmd == '/'))
+	if (((*cmd == '.' && *(cmd + 1) == '/') || *cmd == '/'))
+		return (path_check(cmd, envr, pid));
+	if ((str = cache_check(cmd, envr, pid)))
+		return (str);
+	if ((str = tree_check(cmd, envr, pid)))
 	{
-		*pid = set_pid_err(*pid, (char *)cmd);
-		if (!(*pid))
-			return (ft_strdup(cmd));
-		else
-			return (0);
+		entry.hits = 1;
+		ft_strncpy(entry.path, str, PATH_MAX);
+		ht_add(envr->htid, (char *const)cmd, &entry, sizeof(t_hentr));
 	}
-	if (!(node = ft_avl_search(envr->cmds, cmd)))
-		return (0);
-	str = ft_strdup(node->content);
-	if (!str)
-		return (NULL);
 	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 15:25:05 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/14 00:33:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/16 18:29:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "ft_avl_tree.h"
 # include "libft.h"
 # include "dstring.h"
+# include "hashtable.h"
+# include <limits.h>
 
 # define S_DARR_STRINGS		4096
 # define ENV t_env
@@ -29,6 +31,7 @@ typedef struct	s_env
 	t_avl_tree	*aliases;
 	t_avl_tree	*core;
 	t_avl_tree	*cmds;
+	t_ht_id		htid;
 }				t_env;
 
 # define CMDEN_BIN 1
@@ -55,7 +58,6 @@ typedef struct	s_darr
 **-if success return 1
 **-else (errcode)
 */
-
 int				env_init(char **envp, ENV *env);
 
 /*

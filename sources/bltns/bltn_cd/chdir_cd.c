@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 22:53:19 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/06 23:14:26 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/16 14:46:25 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@ static DSTRING	*cd_path_maker(char **lpath)
 		dstr_insert_ch(path, '/', path->strlen);
 		if (ft_strequ("..", lpath[i]) && path->strlen)
 			dstr_slice_del(&path, j, path->strlen);
-		else
+		else if (!(ft_strequ(".", lpath[i]) && path->strlen))
 			dstr_insert_str(path, lpath[i], path->strlen);
+		else if (path->strlen)
+			dstr_slice_del(&path, path->strlen - 1, path->strlen);
 		j = path->strlen;
 		while (j && path->txt[j] != '/')
 			--j;

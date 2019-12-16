@@ -6,7 +6,7 @@
 #    By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/12/14 19:36:07 by hgranule         ###   ########.fr        #
+#    Updated: 2019/12/16 21:02:38 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -138,11 +138,14 @@ SRC_FILES = sh_main.c sh_launch.c \
 			ft_dlst_helper.c sys_tools/sys_core_set.c sh_history_rl.c \
 			\
 			env/env_cmd_hash.c sys_tools/sys_siglog.c \
-			env/env_get_darr_from_tree.c
+			env/env_get_darr_from_tree.c \
+			\
+			bltns/hash/bltn_hash.c bltns/hash/bltn_setreset.c \
+			exe_sys/exe_checkers.c bltns/hash/bltn_hash_actions.c
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases \
 bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer \
-printf bltns/bltn_jobs options)
+printf bltns/bltn_jobs options bltns/hash)
 
 GUI_FILES = sh_control_term.c sh_dir_content.c \
 			sh_rewrite.c sh_rewrite_help.c sh_rewrite_clip.c\
