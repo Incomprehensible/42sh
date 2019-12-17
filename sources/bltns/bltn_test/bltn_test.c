@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/23 13:31:37 by fnancy            #+#    #+#             */
-/*   Updated: 2019/12/17 16:07:40 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/12/17 18:00:25 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 #include "sys_tools/sys_tools.h"
 #include "sys_tools/sys_errors.h"
 
-static int			bltn_test_margs(char **args)
+static int			bltn_test_margs(char **args, ENV *env)
 {
+	if (!env->builtns)
+		return (-128);
 	if (bltn_cd_countargs(args) > 2)
 		return (bltn_test_expr(args));
 	else
@@ -31,12 +33,12 @@ int					bltn_test(char **args, ENV *env)
 
 	rez = 0;
 	ft_bzero(&f_flgs, sizeof(t_flags_file));
-	if (!env->builtns)
-		return (-128);
-	if ((c_args = bltn_cd_countargs(args)) < 2)
-		return (1);
+	if ((c_args = bltn_cd_countargs(args)) <= 2)
+		return (0);
 	if (ft_strequ(args[1], "!"))
 		f_flgs.neg = 1;
+	if (f_flgs.neg && c_args == 3 && args[2][0] != '-')
+		return (1);
 	if ((rez = bltn_test_prsfileflgs(&f_flgs,\
 			(f_flgs.neg) ? args[2] : args[1])) == 1)
 	{
@@ -45,7 +47,7 @@ int					bltn_test(char **args, ENV *env)
 		return (bltn_test_file(args, &f_flgs));
 	}
 	else if (rez == -2)
-		return (bltn_test_margs(args));
+		return (bltn_test_margs(args, env));
 	else if (rez == -1)
 		return (bltn_test_expr(args));
 	return (0);
