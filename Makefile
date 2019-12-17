@@ -6,7 +6,7 @@
 #    By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/12/16 21:02:38 by hgranule         ###   ########.fr        #
+#    Updated: 2019/12/17 18:10:16 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ OBJ = $(addprefix $(OBJ_PATH), $(OBJ_FILES))
 INC = $(addprefix -I, $(INC_PATH))
 INC_LIB = $(addprefix -I, $(LIB_INC_PATH))
 
-SRC_FILES = sh_main.c sh_launch.c \
+SRC_FILES = sh_main.c sh_launch.c sh_launch_srcs.c \
 			ft_flagsparser.c exe_sys/exe_calls.c free_me/rms.c free_me/rms_2.c \
 			ft_basename.c exe_sys/exe_binaries.c exe_sys/exe_builtns.c \
 			exe_sys/exe_load_save_rdr.c exe_sys/exe_rdr_hered.c \
@@ -141,7 +141,8 @@ SRC_FILES = sh_main.c sh_launch.c \
 			env/env_get_darr_from_tree.c \
 			\
 			bltns/hash/bltn_hash.c bltns/hash/bltn_setreset.c \
-			exe_sys/exe_checkers.c bltns/hash/bltn_hash_actions.c
+			exe_sys/exe_checkers.c bltns/hash/bltn_hash_actions.c \
+			exe_sys/exe_heredoc_getline.c
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases \
 bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer \

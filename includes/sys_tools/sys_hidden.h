@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sys_hidden.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 08:56:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/20 07:43:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:53:54 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ pid_t				g_hsh;
 char				*g_hbg;
 int					g_jid;
 int					g_intr;
+int					g_input_file;
 
 int					sys_wait_prg(t_pgrp **ps_grp, \
 int *status, pid_t lpid, int mode);

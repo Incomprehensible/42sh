@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:26:19 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/17 15:27:27 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 16:44:44 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs)
 	if (!(nrow->instruction = ft_memalloc(sizeof(EXPRESSION))))
 		sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0");
 	expr = (EXPRESSION *)nrow->instruction;
+	ft_dlstpush((t_dlist **)tab, (t_dlist *)nrow);
 	if (nrow->prev_e && nrow->prev_e->type == ET_PIPE)
 		expr->ipipe_fds = ((PIPE *)nrow->prev_e->instruction)->pirw;
 	tks = tokens;
 	if (!(expr->args = prs_args(tks, envs)))
 	{
-		ft_dlst_delf((t_dlist **)&nrow, 1, et_rm_ett);
+		ft_dlst_delcut((t_dlist **)&nrow, et_rm_ett);
 		return (0);
 	}
 	expr->redirections = prs_rdrs(&tokens, envs);
-	ft_dlstpush((t_dlist **)tab, (t_dlist *)nrow);
 	return (tokens);
 }
 

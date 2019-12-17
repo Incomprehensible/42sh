@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 12:17:16 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/06 23:18:46 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:08:15 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int			exe_heredoc_get_buff(DSTRING **buff, REDIRECT *rdr, ENV *env)
 	line = 0;
 	status = 0;
 	prm = dstr_new("hered> ");
-	while ((line = sh_readline(prm, env)) || 1)
+	while ((line = hered_getline(prm, env)) || 1)
 	{
 		if (g_intr == 2 && (status = -1))
 			break ;

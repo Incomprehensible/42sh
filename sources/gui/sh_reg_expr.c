@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_reg_expr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/27 00:51:57 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/29 22:04:30 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:44:28 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ int				reg_expr(DSTRING **buf, t_indch *indch, ENV *env)
 		buffer.val = get_dstr_rez(rez);
 	unite_buf(buf, &buffer);
 	dstr_del(&buffer.val);
-	indch->fl = 0;
-	indch->ind = (*buf)->strlen;
+	indch ? indch->fl = 0 : 0;
+	indch ? indch->ind = (*buf)->strlen : 0;
 	if (!rez.count)
 	{
 		free_t_astr(&rez);

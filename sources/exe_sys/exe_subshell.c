@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 11:41:36 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/01 18:28:51 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 16:59:16 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,8 @@ int			exe_subshell_expr(SUBSH *subsh, ENV *envr, int *status)
 		subsh->ipipe_fds ? close(subsh->ipipe_fds[0]) : 0;
 		subsh->ipipe_fds ? close(subsh->ipipe_fds[1]) : 0;
 	}
+	ft_dlst_delf(toks, 0, free_token);
 	if (!(g_hsh = 0) && cpid < 0)
 		return ((int)cpid);
-	ft_dlst_delf(toks, 0, free_token);
 	return ((int)cpid);
 }

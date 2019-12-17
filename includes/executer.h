@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 09:09:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/29 22:10:39 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:08:36 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int			sbsh_is_fork_n_need(t_dlist *tok, t_dlist *rdrs);
 
 int			exe_redir_list(t_dlist *lst, ENV *envr);
 int			exe_heredoc_check(t_dlist *lst, ENV *envr);
+DSTRING		*hered_getline(DSTRING *prm, ENV *env);
 
 void		exe_redir_save420(t_dlist *redrs);
 void		exe_redir_load420(t_dlist *redrs);

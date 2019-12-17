@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:29:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/03 00:44:27 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:15:13 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,10 @@ typedef size_t		t_tk_type;
 # define TK_FLS_FDR		(t_tk_type)(TK_PROF_IN | TK_PROF_OUT | TK_FILENAME)
 
 # define TK_SEPS1		(TK_SEPS & ~TK_PIPE)
+
+# define TK_CND_1 (TK_FLOWS & ~(TK_IF | TK_WHILE))
+
+# define TK_CND_2 (TK_ARSHLOCH | TK_SEPS1 | TK_EMPTY | TK_CND_1) & ~TK_EOF
 
 typedef struct		s_token
 {

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/17 16:23:58 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:07:12 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ ETAB **etab, t_tk_type type)
 	tks = type == TK_AND ? prs_and(tks, g_env, status) : tks;
 	tks = type == TK_OR ? prs_or(tks, g_env, status) : tks;
 	tks = type == TK_SUBSH ? prs_subsh(etab, tks, g_env) : tks;
-	tks = type == TK_LAMBDA ? prs_lambda(tks, g_env, etab): tks;
+	tks = type == TK_LAMBDA ? prs_lambda(tks, g_env, etab) : tks;
 	return (tks);
 }
 
@@ -108,6 +108,8 @@ t_tk_type end_tk, int *status)
 	g_env = envs;
 	while (tks && tks != INTERRUPT_CALL && (tok = tks->content))
 	{
+		if (tok->type == TK_RETURN)
+			return (prs_return(status, tks, envs));
 		if (g_intr)
 		{
 			ft_dlst_delf((t_dlist **)(&etab), 0, et_rm_ett);
@@ -119,9 +121,7 @@ t_tk_type end_tk, int *status)
 			return (tks);
 		if (tks == INTERRUPT_CALL)
 			return (INTERRUPT_CALL);
-		tks = tks && tks->next && tok->type & (TK_ARSHLOCH | TK_SEPS1 | \
-		TK_EMPTY | (TK_FLOWS & ~(TK_IF | TK_WHILE))) & ~TK_EOF ? \
-		tks->next : tks;
+		tks = tks && tks->next && tok->type & TK_CND_2 ? tks->next : tks;
 		tks = sh_tparse_tks(tks, status, &etab, tok->type);
 	}
 	return (tks);

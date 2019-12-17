@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/17 16:22:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:33:23 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ t_dlist		*prs_math(ETAB **tab, t_dlist *tokens, ENV *envs);
 t_dlist		*prs_subsh(ETAB **tab, t_dlist *tokens, ENV *envs);
 t_dlist		*prs_bkgr(ETAB **tab, t_dlist *tokens, ENV *envr);
 t_dlist		*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr);
+t_dlist		*prs_return(int *status, t_dlist *tks, ENV *env);
 
 /*
 ** TOKEN SKIPERS (returns an pointer ro a t_dlist (end_token))

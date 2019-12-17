@@ -6,12 +6,31 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 17:59:40 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/17 16:27:05 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:07:08 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "sys_tools/sys_errors.h"
+
+t_dlist			*prs_return(int *status, t_dlist *tks, ENV *env)
+{
+	t_tok		*tok;
+	char		*val;
+
+	tks = arg_tok_skip(tks, TK_RETURN | TK_EMPTY);
+	val = NULL;
+	if (tks && (tok = tks->content) &&
+	(tok->type & (TK_DEREF | TK_EXPR | TK_PROC_IN |
+	TK_PROC_OUT | TK_MATH | TK_VALUE | TK_SUBSH)))
+		tks = arg_sub(tks, &val, 0, env);
+	if (val)
+	{
+		*status = atoi(val);
+		free(val);
+	}
+	return (0);
+}
 
 static t_dlist	*prs_f_dup_tks(t_dlist *tks, t_dlist **fcode)
 {
@@ -65,6 +84,7 @@ ETAB **etab, ENV *env, t_dlist *tks)
 
 	if (!(nrow = (ETAB *)ft_dlstnew_cc(0, 0)))
 		sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0");
+	ft_dlstpush((t_dlist **)etab, (t_dlist *)nrow);
 	nrow->type = ET_EXPR;
 	if (!(nrow->instruction = ft_memalloc(sizeof(EXPRESSION))))
 		sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0");
@@ -73,7 +93,6 @@ ETAB **etab, ENV *env, t_dlist *tks)
 		expr->ipipe_fds = ((PIPE *)nrow->prev_e->instruction)->pirw;
 	expr->args = args;
 	expr->redirections = prs_rdrs(&tks, env);
-	ft_dlstpush((t_dlist **)etab, (t_dlist *)nrow);
 	return (tks);
 }
 
