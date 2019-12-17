@@ -6,13 +6,30 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/01 03:32:33 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:51:59 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_req.h"
 #include "sh_token.h"
 #include "sh_tokenizer.h"
+
+short	parse_err_check(char *str, size_t size)
+{
+	if (*(str + size - 2) == '|')
+	{
+		if (check_input_seq(str, '|'))
+			g_input_nover = PRO_OR;
+		else
+		{
+			g_parse_err = 1;
+			return (-1);
+		}
+	}
+	else
+		g_input_nover = PRO_PIPE;
+	return (g_input_nover == -1 ? 1 : 0);
+}
 
 short	q_closed(char *str, char q, char q1, char q2)
 {

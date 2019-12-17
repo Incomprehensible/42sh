@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/17 16:36:36 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:53:29 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,22 @@ short			input_closed(char *str)
 		--size;
 	if (*(str + size - 1) == '|' && (size - 2 >= 0) &&
 	*(str + size - 2) != '\\')
-		g_input_nover = *(str + size - 2) == '|' ? PRO_OR : PRO_PIPE;
-	if (*(str + size - 1) == '\\')
+		return (parse_err_check(str, size));
+	else if (*(str + size - 1) == '\\')
 	{
-		if (size == 1 || ((size - 2 >= 0) && *(str + size - 2) != '\\'))
-			g_input_nover = PRO_NONE;
+		if (size == 1 || !check_input_mir(str, '\\'))
+			g_input_nover = PRO_MIRR;
 	}
-	if (!is_and_closed(str, size))
-		g_input_nover = PRO_AND;
+	else if (!is_and_closed(str, size))
+	{
+		if (check_input_seq(str, '&'))
+			g_input_nover = PRO_AND;
+		else
+		{
+			g_parse_err = 1;
+			return (-1);
+		}
+	}
 	return (g_input_nover == -1 ? 1 : 0);
 }
 

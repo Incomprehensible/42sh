@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/10 23:45:45 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:38:58 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 short			input_no_over_code(void)
 {
 	if (g_input_nover == PRO_SUBSH || g_input_nover == PRO_MATH ||
-	g_input_nover == PRO_PIPE
+	g_input_nover == PRO_PIPE || g_input_nover == PRO_MIRR
 	|| g_input_nover == PRO_AND || g_input_nover == PRO_OR ||
 	g_input_nover == PRO_SQU)
 		return (1);
