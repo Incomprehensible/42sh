@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/10 21:52:51 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/17 12:20:15 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,10 @@ char		*pull_math_seq(char *str, t_dlist **tok)
 char		*pull_in_brackets(char br, char *str, t_dlist **tok)
 {
 	size_t	len;
+	size_t	count;
 
-	len = (br == '(') ? cut_brackets(str) : cut_quots(str);
-	str += 2;
+	len = (br == '(') ? cut_brackets(str, &count) : cut_quots(str, &count);
+	str += count;
 	make_token(tok, pull_token(str, len), TK_MATH);
 	br = (br == '(') ? ')' : br;
 	return (skip_brackets(str + len, br));
