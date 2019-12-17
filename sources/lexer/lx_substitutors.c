@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lx_substituters.c                                  :+:      :+:    :+:   */
+/*   lx_substitutors.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/22 15:35:04 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/17 16:30:05 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	exec_on(t_dlist *token_list)
 {
 	while (token_list)
 	{
-		if (TOK_TYPE == TK_EXPR)
+		if (TOK_TYPE == TK_EXPR && TOK_VALUE)
 			if (!ft_strcmp(TOK_VALUE, "exec"))
 				TOK_TYPE = TK_EXEC;
 		token_list = token_list->next;
