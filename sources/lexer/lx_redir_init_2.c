@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/23 20:09:34 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:16:17 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_graph		*fd_in(void)
 
 	if (start)
 		return (start);
-	redir = ft_strsplit("@123456789@ @123456789@- -", ' ');
+	redir = ft_strsplit("@0123456789@ @0123456789@- -", ' ');
 	red = (t_graph *)malloc(sizeof(t_graph));
 	red->patt = ft_strdup(redir[0]);
 	start = red;
