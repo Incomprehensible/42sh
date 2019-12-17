@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 20:45:07 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/16 20:52:37 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 19:43:11 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ char		*sh_checkbins(const char *cmd, ENV *envr, pid_t *pid)
 	char			*str;
 	t_hentr			entry;
 
-	if (((*cmd == '.' && *(cmd + 1) == '/') || *cmd == '/'))
+	if (((*cmd == '.' && *(cmd + 1) == '/') || *cmd == '/') ||
+	(cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'))
 		return (path_check(cmd, envr, pid));
 	if ((str = cache_check(cmd, envr, pid)))
 		return (str);

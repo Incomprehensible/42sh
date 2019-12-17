@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_input_check_3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/17 17:53:29 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/17 19:20:18 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,15 @@ short			input_closed(char *str)
 	size = ft_strlen(str);
 	while (size && (*(str + size - 1) == ' ' || *(str + size - 1) == '\t'))
 		--size;
-	if (*(str + size - 1) == '|' && (size - 2 >= 0) &&
+	if (size && *(str + size - 1) == '|' && (size - 2 >= 0) &&
 	*(str + size - 2) != '\\')
 		return (parse_err_check(str, size));
-	else if (*(str + size - 1) == '\\')
+	else if (size && *(str + size - 1) == '\\')
 	{
 		if (size == 1 || !check_input_mir(str, '\\'))
 			g_input_nover = PRO_MIRR;
 	}
-	else if (!is_and_closed(str, size))
+	else if (size && !is_and_closed(str, size))
 	{
 		if (check_input_seq(str, '&'))
 			g_input_nover = PRO_AND;
