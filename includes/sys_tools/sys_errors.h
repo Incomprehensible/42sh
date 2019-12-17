@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:29:10 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/27 21:00:21 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:15:56 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,18 @@
 */
 # define E_UNFLG 19
 
+# define E_MFLTS 20
+
+# define E_BNEXP 21
+
+# define E_INTEX 22
+
 /*
 ** zero length
 */
 # define E_ARGZL 42
 
-# define ERR_CNT (E_UNFLG + 1)
+# define ERR_CNT (E_INTEX + 1)
 
 /*
 ** Returns a standart error message string with code {ECODE}

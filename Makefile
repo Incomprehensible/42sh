@@ -6,7 +6,7 @@
 #    By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/06 08:51:16 by hgranule          #+#    #+#              #
-#    Updated: 2019/12/17 18:10:16 by hgranule         ###   ########.fr        #
+#    Updated: 2019/12/17 18:14:52 by hgranule         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,10 @@ SRC_FILES = sh_main.c sh_launch.c sh_launch_srcs.c \
 			bltns/math/math_operands.c bltns/math/math_checkers.c \
 			bltns/math/math_optable.c bltns/math/math_useful_func.c \
 			bltns/math/math_obliczac.c \
+			\
+			bltns/bltn_test/bltn_test.c bltns/bltn_test/bltn_test_parser/bltn_test_fileflgs.c\
+			bltns/bltn_test/bltn_test_expr/bltn_test_expr.c bltns/bltn_test/bltn_test_expr/test_expr.c bltns/bltn_test/bltn_test_expr/test_expr_action.c\
+			bltns/bltn_test/bltn_test_file/bltn_test_file.c bltns/bltn_test/bltn_test_file/test_checkfile.c\
 			\
 			sys_tools/sys_init.c sys_tools/sys_pipes.c parser/prs_subsh.c \
 			sys_tools/sys_proc_wait.c sys_tools/sys_errors.c sys_tools/sys_io.c \
@@ -146,7 +150,8 @@ SRC_FILES = sh_main.c sh_launch.c sh_launch_srcs.c \
 
 ADD_OBJ = $(addprefix $(OBJ_PATH), exe_sys free_me parser env bltns aliases \
 bltns/math sys_tools gui env/env_get_bins bltns/bltn_type bltns/bltn_cd lexer \
-printf bltns/bltn_jobs options bltns/hash)
+printf bltns/bltn_jobs options bltns/hash bltns/bltn_test \
+bltns/bltn_test/bltn_test_parser bltns/bltn_test/bltn_test_expr bltns/bltn_test/bltn_test_file)
 
 GUI_FILES = sh_control_term.c sh_dir_content.c \
 			sh_rewrite.c sh_rewrite_help.c sh_rewrite_clip.c\

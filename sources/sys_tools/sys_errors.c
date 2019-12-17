@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/20 20:37:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/17 14:49:48 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 18:50:39 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ char		*g_errmess[ERR_CNT] =
 	"no such file or directory",
 	"too many arguments",
 	"invalid options",
-	"cannot simultaneously unset a function and a variable"
+	"cannot simultaneously unset a function and a variable",
+	"unary operator expected",
+	"binary operator expected",
+	"integer expression expected"
 };
 
 char		*sys_get_std_message(int ecode)
