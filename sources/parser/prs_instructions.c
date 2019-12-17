@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_instructions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:26:19 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 09:35:55 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 15:27:27 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs)
 
 	if (!(nrow = (ETAB *)ft_dlstnew_cc(0, 0)))
 		sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0");
-	ft_dlstpush((t_dlist **)tab, (t_dlist *)nrow);
 	nrow->type = ET_EXPR;
 	if (!(nrow->instruction = ft_memalloc(sizeof(EXPRESSION))))
 		sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0");
@@ -30,8 +29,12 @@ t_dlist			*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs)
 		expr->ipipe_fds = ((PIPE *)nrow->prev_e->instruction)->pirw;
 	tks = tokens;
 	if (!(expr->args = prs_args(tks, envs)))
-		sys_fatal_memerr("PARSING FAILED, MALLOC RETURNED 0");
+	{
+		ft_dlst_delf((t_dlist **)&nrow, 1, et_rm_ett);
+		return (0);
+	}
 	expr->redirections = prs_rdrs(&tokens, envs);
+	ft_dlstpush((t_dlist **)tab, (t_dlist *)nrow);
 	return (tokens);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:17:54 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/14 19:42:22 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 15:19:58 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,10 @@ t_dlist			*arg_sub(t_dlist *tokens, char **args, size_t ind, ENV *envr)
 		else if (tok->type & (TK_PROC_OUT | TK_PROC_IN))
 			tokens = arg_sub_pr_sb(tokens, expr_buff, envr, tok);
 		if (!tokens)
+		{
+			dstr_del(&expr_buff);
 			return (tokens);
+		}
 		tokens = tokens->next;
 	}
 	args[ind] = ft_strdup(expr_buff->txt);

@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/13 21:53:02 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/12/14 19:35:15 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 15:00:14 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ t_darr			get_executable_files(char *path);
 int				is_executable(t_buf *bufffer);
 DSTRING			*get_path(DSTRING *file, int fl);
 void			check_spec_symbols(DSTRING **str);
+int				skip_math(char *str, int i);
 
 char			is_sysdir(char *name, char *sub);
 int				ft_isdir(DSTRING *buf);

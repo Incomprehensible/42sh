@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:03:53 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/14 06:56:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 15:16:19 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,10 @@ char			*prs_forin_vals(t_dlist *tks, ENV *env)
 	while (tks && (tok = tks->content) && (tok->type & (TK_EXPR | TK_DEREF)))
 	{
 		if (!(tks = arg_sub(tks, &tmp, 0, env)))
+		{
+			dstr_del(&valbuff);
 			return (0);
+		}
 		dstr_insert_str(valbuff, " ", valbuff->strlen);
 		dstr_insert_str(valbuff, tmp, valbuff->strlen);
 		free(tmp);

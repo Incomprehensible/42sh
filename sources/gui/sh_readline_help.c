@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_readline_help.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdaemoni <gdaemoni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 22:16:24 by gdaemoni          #+#    #+#             */
-/*   Updated: 2019/11/29 22:35:12 by gdaemoni         ###   ########.fr       */
+/*   Updated: 2019/12/17 15:05:38 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,24 @@ int				is_reg(DSTRING *buf)
 {
 	int			i;
 	int			sp;
+	int			apof;
+	int			dqoute;
 
 	sp = 0;
 	i = -1;
+	apof = 0;
+	dqoute = 0;
 	while (++i < buf->strlen)
 	{
+		if (buf->txt[i] == '\'')
+			apof = !apof;
+		if (buf->txt[i] == '\"')
+			dqoute = !dqoute;
+		if (buf->txt[i] == '(' && buf->txt[i + 1] == '(')
+			i = skip_math(buf->txt, i + 2);
 		if (buf->txt[i] == ' ' || buf->txt[i] == '/')
 			sp = i;
-		if (ft_memchr("*[?", buf->txt[i], 3))
+		if (!apof && !dqoute && ft_memchr("*[?", buf->txt[i], 3))
 			return (sp);
 	}
 	return (-1);

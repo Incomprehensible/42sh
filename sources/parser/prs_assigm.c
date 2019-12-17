@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prs_assigm.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 18:01:26 by hgranule          #+#    #+#             */
-/*   Updated: 2019/11/19 09:20:32 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 15:23:55 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static char		*prs_assigm_val_get(t_dlist **tks, ENV *envs)
 	char		*val;
 
 	tki = *tks;
+	val = NULL;
 	tki = arg_sub(tki, &val, 0, envs);
 	*tks = tki;
 	return (val);
@@ -57,11 +58,13 @@ t_dlist			*prs_assigm(t_dlist *tks, ENV *envs, int *status)
 		assigm_type = tok->value[0];
 	else
 		return (0);
-	tks = tks->next;
-	tks = tks->next;
-	var_val[1] = prs_assigm_val_get(&tks, envs);
+	tks = tks->next->next;
+	if (!(var_val[1] = prs_assigm_val_get(&tks, envs)))
+	{
+		*status = 225;
+		return (tks);
+	}
 	*status = prs_assigm_do(var_val[0], var_val[1], assigm_type, envs);
-	if (var_val[1])
-		free(var_val[1]);
+	free(var_val[1]);
 	return (tks);
 }
