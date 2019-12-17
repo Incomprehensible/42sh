@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/23 18:08:34 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/17 12:19:21 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ char	*cut_mirr(char **splitted)
 	return (new);
 }
 
-size_t	cut_quots(char *str)
+size_t	cut_quots(char *str, size_t *q)
 {
-	int		counter;
+	size_t		counter;
 	size_t	len;
 
 	counter = 0;
@@ -72,20 +72,20 @@ size_t	cut_quots(char *str)
 		len = (str[len] == '\\') ? len + 2 : ++len;
 	while (is_q(str[len++]))
 		counter++;
-	while (counter && str[len] && !is_sep_no_space(str[len]))
+	*q = counter;
+	while (counter && str[len])
 	{
 		if (is_q(str[len]))
 			--counter;
 		len = (str[len] == '\\') ? len + 2 : ++len;
 	}
-	return (len - 2);
+	return (len - (*q * 2));
 }
 
-size_t	cut_brackets(char *str)
+size_t	cut_brackets(char *str, size_t *br)
 {
-	int		counter;
+	size_t	counter;
 	size_t	len;
-	size_t	br;
 
 	counter = 0;
 	len = 0;
@@ -93,7 +93,7 @@ size_t	cut_brackets(char *str)
 		len = (str[len] == '\\') ? len + 2 : ++len;
 	while (str[len++] == '(')
 		counter++;
-	br = 2;
+	*br = 2;
 	while (counter && str[len])
 	{
 		if (str[len] == '(')
@@ -102,5 +102,5 @@ size_t	cut_brackets(char *str)
 			--counter;
 		len = (str[len] == '\\') ? len + 2 : ++len;
 	}
-	return (len - (br * 2));
+	return (len - (*br * 2));
 }

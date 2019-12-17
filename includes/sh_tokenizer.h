@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 00:54:50 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/11 06:49:15 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/17 12:19:38 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,8 +255,8 @@ void				substitute_value(t_dlist *token_list);
 char				*cook_err_msg(char *insertion);
 char				*markup_station(char *str, t_tk_type type);
 char				*cutting_mirr_station(char *str, t_tk_type type);
-size_t				cut_brackets(char *str);
-size_t				cut_quots(char *str);
+size_t				cut_brackets(char *str, size_t *br);
+size_t				cut_quots(char *str, size_t *q);
 char				*cut_mirr(char **splitted);
 char				*cook_mirr(char *new, char *add);
 char				*join_mirr(char	*new, char *tmp, char *add);
