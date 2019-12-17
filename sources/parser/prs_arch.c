@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 04:13:35 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/14 06:56:31 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 16:23:58 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ ETAB **etab, t_tk_type type)
 	tks = type == TK_AND ? prs_and(tks, g_env, status) : tks;
 	tks = type == TK_OR ? prs_or(tks, g_env, status) : tks;
 	tks = type == TK_SUBSH ? prs_subsh(etab, tks, g_env) : tks;
+	tks = type == TK_LAMBDA ? prs_lambda(tks, g_env, etab): tks;
 	return (tks);
 }
 
