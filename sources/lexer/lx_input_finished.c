@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_input_finished.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/08 21:00:40 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:40:55 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ short	input_finished(char *str)
 {
 	short	id;
 
-	if (!input_closed(str))
-		return (0);
+	if (!(id = input_closed(str)) || id == -1)
+		return (id ? g_parse_error() : 0);
 	id = brackets_closed(str);
 	if (id != 1)
 		return (id ? g_parse_error() : 0);

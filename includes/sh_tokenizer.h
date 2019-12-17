@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 00:54:50 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/17 12:19:38 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:54:15 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,6 +269,9 @@ void				merge_into_deref(t_dlist *token_list);
 void				merge_into_name(t_dlist	*token_list, t_dlist **tok);
 void				merge_name(char **first, char *sec);
 void				yes_we_can(char *s, t_dlist **tk, t_tk_type type, size_t j);
+short				parse_err_check(char *str, size_t size);
+short				check_input_mir(char *str, char ch);
+short				check_input_seq(char *str, char ch);
 
 # define TOK_TYPE ((t_tok *)(token_list->content))->type
 # define TOK_VALUE ((t_tok *)(token_list->content))->value
@@ -295,6 +298,7 @@ short				g_input_nover;
 # define PRO_SQU	7
 # define PRO_LAM	8
 # define PRO_MATH   9
+# define PRO_MIRR   10
 
 /*
 ** SYNTAX ERROR DEFINES

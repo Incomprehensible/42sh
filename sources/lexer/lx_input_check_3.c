@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lx_input_check_3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
+/*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/03 00:58:38 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 17:53:29 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,23 @@ short			input_closed(char *str)
 		--size;
 	if (*(str + size - 1) == '|' && (size - 2 >= 0) &&
 	*(str + size - 2) != '\\')
+		return (parse_err_check(str, size));
+	else if (*(str + size - 1) == '\\')
 	{
-		g_input_nover = *(str + size - 2) == '|' ? PRO_OR : PRO_PIPE;
-		return (0);
+		if (size == 1 || !check_input_mir(str, '\\'))
+			g_input_nover = PRO_MIRR;
 	}
-	if (*(str + size - 1) == '\\' && (size - 2 >= 0) &&
-	*(str + size - 2) != '\\')
+	else if (!is_and_closed(str, size))
 	{
-		g_input_nover = PRO_NONE;
-		return (0);
+		if (check_input_seq(str, '&'))
+			g_input_nover = PRO_AND;
+		else
+		{
+			g_parse_err = 1;
+			return (-1);
+		}
 	}
-	if (!is_and_closed(str, size))
-	{
-		g_input_nover = PRO_AND;
-		return (0);
-	}
-	return (1);
+	return (g_input_nover == -1 ? 1 : 0);
 }
 
 short			are_tokens_here(char *str)
