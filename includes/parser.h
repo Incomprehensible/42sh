@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/17 08:41:37 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/14 19:44:06 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 16:22:40 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ REDIRECT	*prs_rdr_wa(t_dlist *tokens, ENV *envs);
 */
 
 t_dlist		*prs_expr(ETAB **tab, t_dlist *tokens, ENV *envs);
-
+t_dlist		*prs_lambda(t_dlist *tks, ENV *envr, ETAB **etab);
 /*
 ** PARSING OF A PIPES ETT
 */
