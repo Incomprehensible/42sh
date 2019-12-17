@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/25 02:05:31 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/18 00:51:20 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ char		*pull_number(char *expr, t_dlist **math, ERR *err)
 		init_num_bases(bases);
 	operand = get_operand(expr);
 	expr += ft_strlen(operand);
-	if (layer_parse_two(bases[0]->strt_meta, operand))
+	if (layer_parse_two(bases[0]->strt_meta, operand) ||
+	layer_parse_two(bases[1]->strt_meta, operand))
 	{
 		if (get_hex_or_bin(math, bases, operand))
 			return (expr);
