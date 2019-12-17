@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/23 13:31:37 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/26 16:54:23 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/12/17 16:07:40 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,18 @@ int					bltn_test(char **args, ENV *env)
 	int				rez;
 
 	rez = 0;
+	ft_bzero(&f_flgs, sizeof(t_flags_file));
 	if (!env->builtns)
 		return (-128);
 	if ((c_args = bltn_cd_countargs(args)) < 2)
 		return (1);
-	if ((rez = bltn_test_prsfileflgs(&f_flgs, args[1])) == 1)
+	if (ft_strequ(args[1], "!"))
+		f_flgs.neg = 1;
+	if ((rez = bltn_test_prsfileflgs(&f_flgs,\
+			(f_flgs.neg) ? args[2] : args[1])) == 1)
 	{
 		if (c_args < 3)
-			return (0);
+			return (f_flgs.neg);
 		return (bltn_test_file(args, &f_flgs));
 	}
 	else if (rez == -2)

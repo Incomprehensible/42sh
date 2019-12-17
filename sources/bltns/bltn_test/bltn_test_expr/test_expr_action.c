@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/26 16:40:30 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/26 17:25:41 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/12/17 16:09:46 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,15 @@ static int	return_res(t_eq_args *exp, int res)
 {
 	dstr_del(&exp->secon_arg);
 	dstr_del(&exp->first_arg);
-	return (res);
+	return ((exp->neg) ? !res : res);
 }
 
 static int	exp_strings(t_eq_args *exp)
 {
 	if (exp->acti == 1 && ft_strequ(exp->first_arg->txt, exp->secon_arg->txt))
 		return (return_res(exp, 0));
-	else if (exp->acti == 2 && !ft_strequ(exp->first_arg->txt, exp->secon_arg->txt))
+	else if (exp->acti == 2 &&\
+			!ft_strequ(exp->first_arg->txt, exp->secon_arg->txt))
 		return (return_res(exp, 0));
 	return (return_res(exp, 1));
 }
@@ -66,8 +67,6 @@ int			test_exp_doact(t_eq_args *exp)
 	if (exp->acti > 0 && exp->acti < 3)
 		return (exp_strings(exp));
 	else if (exp->acti > 2 && exp->acti < 9)
-	 	return (exp_digits(exp));
-	// else if (exp->acti > 8 && exp->acti < 12)
-	// 	return (exp_files(exp));
+		return (exp_digits(exp));
 	return (return_res(exp, 1));
 }

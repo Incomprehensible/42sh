@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/23 14:33:59 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/24 16:08:58 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/12/17 16:06:24 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ static int	bltn_test_chflghlp(t_flags_file *flgs, char c)
 		flgs->f_notnull = 1;
 	else if (c == 'S')
 		flgs->f_sckt = 1;
-	else if (c == 't')
-		flgs->fd = 1;
 	else if (c == 'u')
 		flgs->f_suid = 1;
 	else if (c == 'w')
@@ -59,7 +57,9 @@ static int	bltn_test_checkflgs(t_flags_file *flgs, char c)
 		flgs->f_symb = 1;
 	else if (c == 'p')
 		flgs->f_chnl = 1;
-	return (bltn_test_chflghlp(flgs, c));
+	else
+		return (bltn_test_chflghlp(flgs, c));
+	return (1);
 }
 
 int			bltn_test_prsfileflgs(t_flags_file *flgs, char *str)
@@ -69,7 +69,6 @@ int			bltn_test_prsfileflgs(t_flags_file *flgs, char *str)
 
 	i = 0;
 	fl = 0;
-	ft_bzero(flgs, sizeof(t_flags_file));
 	if (str[0] != '-')
 		return (-1);
 	while (str[++i])

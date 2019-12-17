@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/23 15:15:55 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/26 17:33:36 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/12/17 16:08:46 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,13 @@ static int			bltn_t_expr_err(int i)
 int					bltn_test_expr(char **args)
 {
 	int				c_args;
-	
+
 	c_args = bltn_cd_countargs(args);
 	if (c_args == 3)
 		return (bltn_t_expr_err(2));
-	if (c_args > 4 && (!ft_strequ(args[4], "-a") || !ft_strequ(args[4], "-o")))
+	if (c_args > 4 && !ft_strequ(args[1], "!"))
 		return (bltn_t_expr_err(1));
-	else if (c_args == 4)
+	else if (c_args == 4 || (c_args == 5 && ft_strequ(args[1], "!")))
 		return (bltn_test_makeexpr(args));
-	else //-a -o
-	{
-		
-	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: fnancy <fnancy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/26 15:34:46 by fnancy            #+#    #+#             */
-/*   Updated: 2019/11/26 16:47:45 by fnancy           ###   ########.fr       */
+/*   Updated: 2019/12/17 16:09:08 by fnancy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,6 @@ static int		get_action(char *str, t_eq_args *exp)
 		exp->acti = 7;
 	else if (ft_strequ(str, "-ne"))
 		exp->acti = 8;
-	else if (ft_strequ(str, "-ef"))
-		exp->acti = 9;
-	else if (ft_strequ(str, "-nt"))
-		exp->acti = 10;
-	else if (ft_strequ(str, "-ot"))
-		exp->acti = 11;
 	else
 		return (-1);
 	return (1);
@@ -56,9 +50,12 @@ int				bltn_test_makeexpr(char **argv)
 	t_eq_args	exp;
 
 	exp.acti = 0;
-	exp.first_arg = dstr_new(argv[1]);
-	exp.secon_arg = dstr_new(argv[3]);
-	if (get_action(argv[2], &exp) == -1)
+	exp.neg = 0;
+	if (ft_strequ(argv[1], "!"))
+		exp.neg = 1;
+	exp.first_arg = dstr_new((exp.neg) ? argv[2] : argv[1]);
+	exp.secon_arg = dstr_new((exp.neg) ? argv[4] : argv[3]);
+	if (get_action((exp.neg) ? argv[3] : argv[2], &exp) == -1)
 		return (expt_err(&exp));
 	return (test_exp_doact(&exp));
 }
