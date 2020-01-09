@@ -1,3 +1,6 @@
 [submodule "Libft"]
 	path = Libft
 	url = https://github.com/hgranule/Libft.git
+[submodule "printf"]
+	path = printf
+	url = https://github.com/hgranule/ft_printf.git
