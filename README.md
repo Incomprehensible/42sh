@@ -12,13 +12,13 @@ is system-calls, or some basic functions like `malloc`, `free`, etc.
 
 ## Compilation
 
-'''
+```
 # clone it and use `make`
 
 $> git clone
 $> make
 $> ./42sh
-'''
+```
 
 Some errors and warnings could be ocured at the compilation on Linux with `gcc`.
 Project have been written at macOS Sierra with `clang`.
