@@ -6,13 +6,14 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 07:55:01 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/01 17:32:36 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 20:03:17 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 
 extern int		g_intr;
+extern int		g_input_file;
 
 void			sighand(int s)
 {
@@ -21,6 +22,8 @@ void			sighand(int s)
 
 void			sys_sig_dfl(void)
 {
+	if (g_input_file >= 0)
+		return ;
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
@@ -33,6 +36,8 @@ void			sys_sig_init(void)
 	struct sigaction	siga;
 	sigset_t			smask;
 
+	if (g_input_file >= 0)
+		return ;
 	sigemptyset(&smask);
 	sigaddset(&smask, SIGINT);
 	siga.__sigaction_u = ((union __sigaction_u)(sighand));

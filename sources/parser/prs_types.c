@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/25 03:14:58 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/17 17:26:33 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/25 09:31:35 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_dlist			*args_get_next_arg(t_dlist *tks)
 		{
 			tks = arg_tok_skip(tks, TK_RDS1 | TK_EMPTY);
 			tks = arg_tok_skip(tks, TK_DEREF | TK_MATH | TK_NAME \
-			| TK_SUBSH | TK_FILENAME);
+			| TK_SUBSH | TK_FILENAME | TK_PROF_IN | TK_PROF_OUT);
 		}
 		if (tks && (tok = tks->content) && (tok->type & TK_HERED))
 		{

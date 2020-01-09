@@ -6,7 +6,7 @@
 /*   By: hgranule <hgranule@21-school.ru>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/12 01:25:09 by hgranule          #+#    #+#             */
-/*   Updated: 2019/12/16 19:26:16 by hgranule         ###   ########.fr       */
+/*   Updated: 2019/12/17 20:03:37 by hgranule         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int				main(int ac, char **av, char **ev)
 	t_env		*env;
 	t_opt		*opt;
 
+	g_input_file = -1;
 	env = &g_m_env;
 	opt = &g_m_opt;
 	env->cmds = NULL;
