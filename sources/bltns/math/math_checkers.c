@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/30 06:49:33 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/18 00:41:29 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_tk_type	is_number(char *value)
 
 	if (value && (*value == '-' || *value == '+'))
 		value++;
-	if (parse_base("0x@01@", value))
+	if (parse_base("0b@01@", value))
 		type = BIN;
 	else if (parse_base("0x@0123456789abcdefABCDEF@", value))
 		type = HEX;

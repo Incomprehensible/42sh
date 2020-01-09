@@ -6,7 +6,7 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/11/24 00:43:02 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/18 00:42:06 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ t_mtx	*init_binary(void)
 	t_mtx *base;
 
 	base = (t_mtx *)malloc(sizeof(t_mtx));
-	base->strt_meta = ft_strdup("0x~");
-	base->fin_meta = ft_strdup("0x@01@");
+	base->strt_meta = ft_strdup("0b~");
+	base->fin_meta = ft_strdup("0b@01@");
 	base->base = BIN;
 	base->next = NULL;
 	return (base);
